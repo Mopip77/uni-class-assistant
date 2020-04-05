@@ -1,0 +1,9 @@
+{
+  "component": true,
+  "usingComponents": {
+    "van-button": "/wxcomponents/vant/dist/button/index",
+    "van-image": "/wxcomponents/vant/dist/image/index",
+    "van-overlay": "/wxcomponents/vant/dist/overlay/index",
+    "van-cell-group": "/wxcomponents/vant/dist/cell-group/index"
+  }
+}

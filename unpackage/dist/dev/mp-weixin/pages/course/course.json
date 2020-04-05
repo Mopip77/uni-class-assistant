@@ -1,0 +1,15 @@
+{
+  "usingComponents": {
+    "single-submit-popup": "/components/SingleSubmitPopup",
+    "van-grid": "/wxcomponents/vant/dist/grid/index",
+    "van-grid-item": "/wxcomponents/vant/dist/grid-item/index",
+    "van-notify": "/wxcomponents/vant/dist/notify/index",
+    "van-icon": "/wxcomponents/vant/dist/icon/index",
+    "van-tab": "/wxcomponents/vant/dist/tab/index",
+    "van-tabs": "/wxcomponents/vant/dist/tabs/index",
+    "van-button": "/wxcomponents/vant/dist/button/index",
+    "van-action-sheet": "/wxcomponents/vant/dist/action-sheet/index",
+    "van-divider": "/wxcomponents/vant/dist/divider/index",
+    "van-steps": "/wxcomponents/vant/dist/steps/index"
+  }
+}

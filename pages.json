@@ -1,0 +1,60 @@
+{
+	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		{
+			// "path": "pages/index/index"
+			"path": "pages/course/course"
+		},
+		{
+			"path": "pages/message/message"
+		},
+		{
+			"path": "pages/login/login"
+		},
+		{
+			"path": "pages/me/me"
+		}, {
+			"path": "pages/favorite/favorite",
+			"style": {}
+		}, {
+			"path": "pages/conurse_ware/course_ware",
+			"style": {}
+		}, {
+			"path": "pages/contest/contest",
+			"style": {}
+		}, {
+			"path": "pages/helpme/helpme",
+			"style": {}
+		}, {
+			"path": "pages/index/index",
+			// "path" : "pages/course/course",
+			"style": {}
+		}
+	],
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "小课堂",
+		"navigationBarBackgroundColor": "#F8F8F8",
+		"backgroundColor": "#F2F2F2"
+	},
+	"tabBar": {
+		"list": [{
+				"text": "首页",
+				"pagePath": "pages/index/index",
+				"iconPath": "static/img/home.png",
+				"selectedIconPath": "static/img/homeHL.png"
+			},
+			{
+				"text": "消息",
+				"pagePath": "pages/message/message",
+				"iconPath": "static/img/user.png",
+				"selectedIconPath": "static/img/userHL.png"
+			},
+			{
+				"text": "我的",
+				"pagePath": "pages/me/me",
+				"iconPath": "static/img/user.png",
+				"selectedIconPath": "static/img/userHL.png"
+			}
+		]
+	}
+}
