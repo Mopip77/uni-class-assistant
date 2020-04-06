@@ -1,5 +1,13 @@
 @mixin common-input {
+	font-size: 30rpx;
 	background-color: #fafafa;
 	padding: 20rpx 14rpx;
 	margin-top: 6rpx;
+}
+
+@mixin common-textarea {
+	font-size: 30rpx;
+	background-color: #fafafa;
+	width: 100%;
+	padding: 10rpx;
 }

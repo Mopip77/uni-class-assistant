@@ -129,4 +129,33 @@ export default {
 			})
 		});
 	},
+
+	/**
+	 * 更新course 信息，服务端会校验，只允许更新courseName和classInfo
+	 * 
+	 * @param {Object} course 
+	 */
+	updateCourse: function(course) {
+		return new Promise((resolve, reject) => {
+			uni.request({
+				url: ApiReference.UPDATE_COURSE,
+				method: "PUT",
+				header: HttpCommons.getAuthenticationHeader(),
+				data: {
+					id: course.id,
+					courseName: course.courseName,
+					classInfo: course.classInfo
+				},
+				success: (resp) => {
+					if (HttpCommons.successCheck(resp)) {
+						resolve(resp.data.data)
+					}
+				},
+				fail: (err) => {
+					HttpCommons.commonFailHanlder(err)
+					reject(err)
+				}
+			})
+		});
+	}
 }

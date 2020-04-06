@@ -54,6 +54,7 @@
       color: gray;
 }
 .update-userinfo-box .name-field input {
+      font-size: 30rpx;
       background-color: #fafafa;
       padding: 20rpx 14rpx;
       margin-top: 6rpx;
@@ -66,6 +67,7 @@
       color: gray;
 }
 .update-userinfo-box .school-field input {
+      font-size: 30rpx;
       background-color: #fafafa;
       padding: 20rpx 14rpx;
       margin-top: 6rpx;

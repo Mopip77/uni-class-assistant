@@ -1,4 +1,5 @@
 {
+  "navigationBarTitleText": "讨论区",
   "usingComponents": {
     "create-course-modal": "/components/CreateCourse",
     "join-course-modal": "/components/JoinCourse",

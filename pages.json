@@ -1,8 +1,14 @@
 {
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
 		{
-			// "path": "pages/index/index"
-			"path": "pages/course/course"
+			"path": "pages/index/index",
+			// "path": "pages/course/course"
+			// "path" : "pages/topics/topics",
+			// "path" : "pages/topic/topic",
+			// "path" : "pages/sub_comments/sub_comments",
+			"style": {
+				"navigationBarTitleText": "讨论区"
+			}
 		},
 		{
 			"path": "pages/message/message"
@@ -25,11 +31,34 @@
 			"path": "pages/helpme/helpme",
 			"style": {}
 		}, {
-			"path": "pages/index/index",
-			// "path" : "pages/course/course",
+			// "path": "pages/index/index",
+			"path" : "pages/course/course",
 			"style": {}
 		}
-	],
+	    ,{
+            "path" : "pages/course_settings/course_settings",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/topics/topics",
+			// "path": "pages/index/index",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/create_topic/create_topic",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/topic/topic",
+            // "path" : "pages/topics/topics",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/sub_comments/sub_comments",
+			// "path" : "pages/topic/topic",
+            "style" : {}
+        }
+    ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "小课堂",

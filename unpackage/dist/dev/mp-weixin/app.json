@@ -1,6 +1,6 @@
 {
   "pages": [
-    "pages/course/course",
+    "pages/index/index",
     "pages/message/message",
     "pages/login/login",
     "pages/me/me",
@@ -8,7 +8,12 @@
     "pages/conurse_ware/course_ware",
     "pages/contest/contest",
     "pages/helpme/helpme",
-    "pages/index/index"
+    "pages/course/course",
+    "pages/course_settings/course_settings",
+    "pages/topics/topics",
+    "pages/create_topic/create_topic",
+    "pages/topic/topic",
+    "pages/sub_comments/sub_comments"
   ],
   "subPackages": [],
   "window": {
@@ -39,6 +44,5 @@
       }
     ]
   },
-  "usingComponents": {},
-  "sitemapLocation": "sitemap50.json"
+  "usingComponents": {}
 }

@@ -8508,7 +8508,7 @@ module.exports = {"_from":"@dcloudio/uni-stat@alpha","_id":"@dcloudio/uni-stat@2
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _default = { "pages": { "pages/course/course": {}, "pages/message/message": {}, "pages/login/login": {}, "pages/me/me": {}, "pages/favorite/favorite": {}, "pages/conurse_ware/course_ware": {}, "pages/contest/contest": {}, "pages/helpme/helpme": {}, "pages/index/index": {} }, "globalStyle": { "navigationBarTextStyle": "black", "navigationBarTitleText": "小课堂", "navigationBarBackgroundColor": "#F8F8F8", "backgroundColor": "#F2F2F2" } };exports.default = _default;
+Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _default = { "pages": { "pages/topic/topic": { "usingComponents": { "ms-dropdown-menu": "/components/ms-dropdown/dropdown-menu", "ms-dropdown-item": "/components/ms-dropdown/dropdown-item", "s-tabs": "/components/s-tabs/index", "s-tab": "/components/s-tab/index", "single-submit-popup": "/components/SingleSubmitPopup", "van-dropdown-menu": "/wxcomponents/vant/dist/dropdown-menu/index", "van-dropdown-item": "/wxcomponents/vant/dist/dropdown-item/index", "van-notify": "/wxcomponents/vant/dist/notify/index", "uni-load-more": "/components/uni-load-more/uni-load-more", "van-icon": "/wxcomponents/vant/dist/icon/index", "van-image": "/wxcomponents/vant/dist/image/index" }, "usingAutoImportComponents": {} }, "pages/message/message": { "usingComponents": { "van-tab": "/wxcomponents/vant/dist/tab/index", "van-tabs": "/wxcomponents/vant/dist/tabs/index", "van-dropdown-menu": "/wxcomponents/vant/dist/dropdown-menu/index", "van-dropdown-item": "/wxcomponents/vant/dist/dropdown-item/index", "van-tabbar": "/wxcomponents/vant/dist/tabbar/index", "van-tabbar-item": "/wxcomponents/vant/dist/tabbar-item/index" }, "usingAutoImportComponents": {} }, "pages/login/login": { "usingComponents": { "update-user-info": "/components/UpdateUserInfo", "van-popup": "/wxcomponents/vant/dist/popup/index" }, "usingAutoImportComponents": {} }, "pages/me/me": { "usingComponents": { "update-user-info": "/components/UpdateUserInfo", "van-button": "/wxcomponents/vant/dist/button/index", "van-notify": "/wxcomponents/vant/dist/notify/index", "van-image": "/wxcomponents/vant/dist/image/index" }, "usingAutoImportComponents": {} }, "pages/favorite/favorite": { "usingComponents": {}, "usingAutoImportComponents": {} }, "pages/conurse_ware/course_ware": { "usingComponents": {}, "usingAutoImportComponents": {} }, "pages/contest/contest": { "usingComponents": {}, "usingAutoImportComponents": {} }, "pages/helpme/helpme": { "usingComponents": {}, "usingAutoImportComponents": {} }, "pages/course/course": { "usingComponents": { "single-submit-popup": "/components/SingleSubmitPopup", "uni-load-more": "/components/uni-load-more/uni-load-more", "s-tabs": "/components/s-tabs/index", "s-tab": "/components/s-tab/index", "van-grid": "/wxcomponents/vant/dist/grid/index", "van-grid-item": "/wxcomponents/vant/dist/grid-item/index", "van-notify": "/wxcomponents/vant/dist/notify/index", "van-icon": "/wxcomponents/vant/dist/icon/index", "van-tab": "/wxcomponents/vant/dist/tab/index", "van-tabs": "/wxcomponents/vant/dist/tabs/index", "van-button": "/wxcomponents/vant/dist/button/index", "van-action-sheet": "/wxcomponents/vant/dist/action-sheet/index", "van-divider": "/wxcomponents/vant/dist/divider/index", "van-steps": "/wxcomponents/vant/dist/steps/index" }, "usingAutoImportComponents": {} }, "pages/course_settings/course_settings": { "usingComponents": { "van-notify": "/wxcomponents/vant/dist/notify/index", "van-button": "/wxcomponents/vant/dist/button/index" }, "usingAutoImportComponents": {} }, "pages/index/index": { "navigationBarTitleText": "讨论区", "usingComponents": { "create-course-modal": "/components/CreateCourse", "join-course-modal": "/components/JoinCourse", "van-grid": "/wxcomponents/vant/dist/grid/index", "van-grid-item": "/wxcomponents/vant/dist/grid-item/index", "van-tab": "/wxcomponents/vant/dist/tab/index", "van-tabs": "/wxcomponents/vant/dist/tabs/index", "van-divider": "/wxcomponents/vant/dist/divider/index", "van-notify": "/wxcomponents/vant/dist/notify/index", "van-icon": "/wxcomponents/vant/dist/icon/index", "van-button": "/wxcomponents/vant/dist/button/index", "van-swipe-cell": "/wxcomponents/vant/dist/swipe-cell/index", "van-dialog": "/wxcomponents/vant/dist/dialog/index" }, "usingAutoImportComponents": {} }, "pages/create_topic/create_topic": { "usingComponents": { "van-notify": "/wxcomponents/vant/dist/notify/index", "van-button": "/wxcomponents/vant/dist/button/index" }, "usingAutoImportComponents": {} }, "pages/topics/topics": { "usingComponents": { "ms-dropdown-menu": "/components/ms-dropdown/dropdown-menu", "ms-dropdown-item": "/components/ms-dropdown/dropdown-item", "s-tabs": "/components/s-tabs/index", "s-tab": "/components/s-tab/index", "van-dropdown-menu": "/wxcomponents/vant/dist/dropdown-menu/index", "van-dropdown-item": "/wxcomponents/vant/dist/dropdown-item/index", "van-notify": "/wxcomponents/vant/dist/notify/index", "uni-load-more": "/components/uni-load-more/uni-load-more", "van-icon": "/wxcomponents/vant/dist/icon/index", "van-image": "/wxcomponents/vant/dist/image/index" }, "usingAutoImportComponents": {} }, "pages/sub_comments/sub_comments": { "usingComponents": { "single-submit-popup": "/components/SingleSubmitPopup", "van-notify": "/wxcomponents/vant/dist/notify/index", "uni-load-more": "/components/uni-load-more/uni-load-more", "van-icon": "/wxcomponents/vant/dist/icon/index", "van-image": "/wxcomponents/vant/dist/image/index" }, "usingAutoImportComponents": {} } }, "globalStyle": { "navigationBarTextStyle": "black", "navigationBarTitleText": "小课堂", "navigationBarBackgroundColor": "#F8F8F8", "backgroundColor": "#F2F2F2" } };exports.default = _default;
 
 /***/ }),
 /* 8 */
@@ -9781,6 +9781,7 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
   GET_JOINED_COURSE: API_SERVER + 'course/study',
   GET_COURSE: API_SERVER + 'course',
   CREATE_COURSE: API_SERVER + 'course/create',
+  UPDATE_COURSE: API_SERVER + 'course/update',
   JOIN_COURSE: API_SERVER + 'course/join',
   DELETE_COURSE: API_SERVER + 'course/delete',
   EXIT_COURSE: API_SERVER + 'course/exit',
@@ -9788,6 +9789,18 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
   // bulltin
   CREATE_BULLETIN: API_SERVER + 'bulletin/create',
   GET_BULLETIN: API_SERVER + 'bulletin',
+
+  // topic
+  TOPIC: API_SERVER + 'topic',
+  GET_TOPIC: API_SERVER + 'topic',
+  GET_TOPICS_BY_COURSE: API_SERVER + 'topic/course',
+
+  // comment
+  COMMENT: API_SERVER + 'comment',
+  GET_COMMENT_LIST: API_SERVER + 'comment/list',
+
+  // like
+  LIKE: API_SERVER + 'like',
 
 
   TEST_URL: API_SERVER + 'test' };exports.default = _default;
@@ -10150,6 +10163,295 @@ function normalizeComponent (
 /* 28 */,
 /* 29 */,
 /* 30 */
+/*!****************************************************************************************!*\
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/static/js/topic.js ***!
+  \****************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _api_reference = _interopRequireDefault(__webpack_require__(/*! ./api_reference.js */ 15));
+var _http_commons = _interopRequireDefault(__webpack_require__(/*! ./http_commons.js */ 18));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var _default =
+
+{
+  /**
+   * @param {Number} courseId
+   * @param {String} title
+   * @param {String} content
+   * @return {Promise}
+   */
+  createTopic: function createTopic(courseId, title, content) {
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: _api_reference.default.TOPIC + '?courseId=' + courseId,
+        method: "POST",
+        header: _http_commons.default.getAuthenticationHeader(),
+        data: {
+          title: title,
+          content: content },
+
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+          reject(err);
+        } });
+
+    });
+  },
+
+  /**
+      * @param {String} courseId
+      * @param {String} sortBy {createTime, updateTime, like, comment}
+      */
+  getTopics: function getTopics(courseId, sortBy, offset, count) {
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: _api_reference.default.GET_TOPICS_BY_COURSE + '?courseId=' + courseId + '&sortBy=' + sortBy + '&offset=' + offset +
+        '&count=' + count,
+        method: "GET",
+        header: _http_commons.default.getAuthenticationHeader(),
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+          reject(err);
+        } });
+
+    });
+  },
+
+  getTopic: function getTopic(topicId) {
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: _api_reference.default.GET_TOPIC + '?topicId=' + topicId,
+        header: _http_commons.default.getAuthenticationHeader(),
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+          reject(err);
+        } });
+
+    });
+  },
+
+  likeTopic: function likeTopic(topicId) {
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: _api_reference.default.LIKE + '?targetId=' + topicId + '&type=0',
+        method: "POST",
+        header: _http_commons.default.getAuthenticationHeader(),
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+          reject(err);
+        } });
+
+    });
+  },
+
+  unlikeTopic: function unlikeTopic(topicId) {
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: _api_reference.default.LIKE + '?targetId=' + topicId + '&type=0',
+        method: "DELETE",
+        header: _http_commons.default.getAuthenticationHeader(),
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+          reject(err);
+        } });
+
+    });
+  },
+
+  likeComment: function likeComment(commentId) {
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: _api_reference.default.LIKE + '?targetId=' + commentId + '&type=1',
+        method: "POST",
+        header: _http_commons.default.getAuthenticationHeader(),
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+          reject(err);
+        } });
+
+    });
+  },
+
+  unlikeComment: function unlikeComment(commentId) {
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: _api_reference.default.LIKE + '?targetId=' + commentId + '&type=1',
+        method: "DELETE",
+        header: _http_commons.default.getAuthenticationHeader(),
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+          reject(err);
+        } });
+
+    });
+  },
+
+  /**
+      * 
+      * @param {String} content
+      * @param {Number} parentId 根据type不同,传入topicId 或者 parentCommentId
+      * @param {Number} type 0 === 帖子评论  1 === 子评论
+      */
+  createComment: function createComment(content, parentId, type) {
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: _api_reference.default.COMMENT,
+        method: "POST",
+        header: _http_commons.default.getAuthenticationHeader(),
+        data: {
+          content: content,
+          parentId: parentId,
+          type: type },
+
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+          reject(err);
+        } });
+
+    });
+  },
+
+  /**
+      * @param {Number} commentId
+      */
+  getComment: function getComment(commentId) {
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: _api_reference.default.COMMENT + '?id=' + commentId,
+        header: _http_commons.default.getAuthenticationHeader(),
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+          reject(err);
+        } });
+
+    });
+  },
+
+  /**
+      * @param {Number} parentId  type == 0 topicId,    type == 1 topTopicCommentId
+      * @param {Number} type  0 --- 帖子评论   1 --- 子评论
+      * @param {Number} offset
+      * @param {Number} count
+      */
+  getComments: function getComments(parentId, type, offset, count) {
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: _api_reference.default.GET_COMMENT_LIST + '?parentId=' + parentId + '&type=' + type + '&offset=' + offset +
+        '&count=' + count,
+        header: _http_commons.default.getAuthenticationHeader(),
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+          reject(err);
+        } });
+
+    });
+  } };exports.default = _default;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
+
+/***/ }),
+/* 31 */,
+/* 32 */,
+/* 33 */,
+/* 34 */,
+/* 35 */,
+/* 36 */,
+/* 37 */,
+/* 38 */,
+/* 39 */,
+/* 40 */,
+/* 41 */,
+/* 42 */,
+/* 43 */,
+/* 44 */,
+/* 45 */,
+/* 46 */,
+/* 47 */,
+/* 48 */,
+/* 49 */,
+/* 50 */,
+/* 51 */,
+/* 52 */,
+/* 53 */,
+/* 54 */,
+/* 55 */,
+/* 56 */,
+/* 57 */,
+/* 58 */,
+/* 59 */,
+/* 60 */,
+/* 61 */,
+/* 62 */,
+/* 63 */,
+/* 64 */,
+/* 65 */,
+/* 66 */,
+/* 67 */,
+/* 68 */,
+/* 69 */,
+/* 70 */,
+/* 71 */,
+/* 72 */,
+/* 73 */,
+/* 74 */,
+/* 75 */,
+/* 76 */,
+/* 77 */,
+/* 78 */,
+/* 79 */,
+/* 80 */,
+/* 81 */,
+/* 82 */,
+/* 83 */
 /*!*****************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/static/js/course.js ***!
   \*****************************************************************************************/
@@ -10287,11 +10589,40 @@ var _http_commons = _interopRequireDefault(__webpack_require__(/*! ./http_common
         } });
 
     });
+  },
+
+  /**
+      * 更新course 信息，服务端会校验，只允许更新courseName和classInfo
+      * 
+      * @param {Object} course 
+      */
+  updateCourse: function updateCourse(course) {
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: _api_reference.default.UPDATE_COURSE,
+        method: "PUT",
+        header: _http_commons.default.getAuthenticationHeader(),
+        data: {
+          id: course.id,
+          courseName: course.courseName,
+          classInfo: course.classInfo },
+
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+          reject(err);
+        } });
+
+    });
   } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 
 /***/ }),
-/* 31 */
+/* 84 */
 /*!*******************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/static/js/bulletin.js ***!
   \*******************************************************************************************/
@@ -10353,59 +10684,23 @@ var _http_commons = _interopRequireDefault(__webpack_require__(/*! ./http_common
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 
 /***/ }),
-/* 32 */,
-/* 33 */,
-/* 34 */,
-/* 35 */,
-/* 36 */,
-/* 37 */,
-/* 38 */,
-/* 39 */,
-/* 40 */,
-/* 41 */,
-/* 42 */,
-/* 43 */,
-/* 44 */,
-/* 45 */,
-/* 46 */,
-/* 47 */,
-/* 48 */,
-/* 49 */,
-/* 50 */,
-/* 51 */,
-/* 52 */,
-/* 53 */,
-/* 54 */,
-/* 55 */,
-/* 56 */,
-/* 57 */,
-/* 58 */,
-/* 59 */,
-/* 60 */,
-/* 61 */,
-/* 62 */,
-/* 63 */,
-/* 64 */,
-/* 65 */,
-/* 66 */,
-/* 67 */,
-/* 68 */,
-/* 69 */,
-/* 70 */,
-/* 71 */,
-/* 72 */,
-/* 73 */,
-/* 74 */,
-/* 75 */,
-/* 76 */,
-/* 77 */,
-/* 78 */,
-/* 79 */,
-/* 80 */,
-/* 81 */,
-/* 82 */,
-/* 83 */,
-/* 84 */
+/* 85 */,
+/* 86 */,
+/* 87 */,
+/* 88 */,
+/* 89 */,
+/* 90 */,
+/* 91 */,
+/* 92 */,
+/* 93 */,
+/* 94 */,
+/* 95 */,
+/* 96 */,
+/* 97 */,
+/* 98 */,
+/* 99 */,
+/* 100 */,
+/* 101 */
 /*!**********************************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/card/index.js ***!
   \**********************************************************************************************************/
@@ -10413,8 +10708,8 @@ var _http_commons = _interopRequireDefault(__webpack_require__(/*! ./http_common
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-var _link = __webpack_require__(/*! ../mixins/link */ 85);
-var _component = __webpack_require__(/*! ../common/component */ 86);
+var _link = __webpack_require__(/*! ../mixins/link */ 102);
+var _component = __webpack_require__(/*! ../common/component */ 103);
 (0, _component.VantComponent)({
   classes: [
   'num-class',
@@ -10462,7 +10757,7 @@ var _component = __webpack_require__(/*! ../common/component */ 86);
     } } });
 
 /***/ }),
-/* 85 */
+/* 102 */
 /*!***********************************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/mixins/link.js ***!
   \***********************************************************************************************************/
@@ -10487,7 +10782,7 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.link = voi
     } } });exports.link = link;
 
 /***/ }),
-/* 86 */
+/* 103 */
 /*!****************************************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/common/component.js ***!
   \****************************************************************************************************************/
@@ -10495,7 +10790,7 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.link = voi
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.VantComponent = VantComponent;var _basic = __webpack_require__(/*! ../mixins/basic */ 87);function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
+Object.defineProperty(exports, "__esModule", { value: true });exports.VantComponent = VantComponent;var _basic = __webpack_require__(/*! ../mixins/basic */ 104);function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 var relationFunctions = {
   ancestor: {
     linked: function linked(parent) {
@@ -10589,7 +10884,7 @@ function VantComponent() {var vantOptions = arguments.length > 0 && arguments[0]
 }
 
 /***/ }),
-/* 87 */
+/* 104 */
 /*!************************************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/mixins/basic.js ***!
   \************************************************************************************************************/
@@ -10623,7 +10918,7 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.basic = vo
     } } });exports.basic = basic;
 
 /***/ }),
-/* 88 */
+/* 105 */
 /*!*************************************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/dialog/dialog.js ***!
   \*************************************************************************************************************/
@@ -10696,74 +10991,160 @@ Dialog.resetDefaultOptions();var _default =
 Dialog;exports.default = _default;
 
 /***/ }),
-/* 89 */,
-/* 90 */,
-/* 91 */
-/*!**********************************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/grid/index.js ***!
-  \**********************************************************************************************************/
+/* 106 */,
+/* 107 */,
+/* 108 */,
+/* 109 */,
+/* 110 */,
+/* 111 */,
+/* 112 */,
+/* 113 */,
+/* 114 */,
+/* 115 */,
+/* 116 */,
+/* 117 */,
+/* 118 */,
+/* 119 */,
+/* 120 */,
+/* 121 */,
+/* 122 */,
+/* 123 */,
+/* 124 */,
+/* 125 */,
+/* 126 */,
+/* 127 */,
+/* 128 */,
+/* 129 */,
+/* 130 */,
+/* 131 */,
+/* 132 */
+/*!*******************************************************************************************************************!*\
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/dropdown-menu/index.js ***!
+  \*******************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-var _component = __webpack_require__(/*! ../common/component */ 86);
-var _utils = __webpack_require__(/*! ../common/utils */ 92);
+var _component = __webpack_require__(/*! ../common/component */ 103);
+var _utils = __webpack_require__(/*! ../common/utils */ 133);
+var ARRAY = [];
 (0, _component.VantComponent)({
+  field: true,
   relation: {
-    name: 'grid-item',
+    name: 'dropdown-item',
     type: 'descendant',
-    current: 'grid' },
+    current: 'dropdown-menu',
+    linked: function linked() {
+      this.updateItemListData();
+    },
+    unlinked: function unlinked() {
+      this.updateItemListData();
+    } },
 
   props: {
-    square: {
+    activeColor: {
+      type: String,
+      observer: 'updateChildrenData' },
+
+    overlay: {
       type: Boolean,
-      observer: 'updateChildren' },
+      value: true,
+      observer: 'updateChildrenData' },
 
-    gutter: {
-      type: [Number, String],
-      value: 0,
-      observer: 'updateChildren' },
-
-    clickable: {
-      type: Boolean,
-      observer: 'updateChildren' },
-
-    columnNum: {
+    zIndex: {
       type: Number,
-      value: 4,
-      observer: 'updateChildren' },
+      value: 10 },
 
-    center: {
+    duration: {
+      type: Number,
+      value: 200,
+      observer: 'updateChildrenData' },
+
+    direction: {
+      type: String,
+      value: 'down',
+      observer: 'updateChildrenData' },
+
+    closeOnClickOverlay: {
       type: Boolean,
       value: true,
-      observer: 'updateChildren' },
+      observer: 'updateChildrenData' },
 
-    border: {
+    closeOnClickOutside: {
       type: Boolean,
-      value: true,
-      observer: 'updateChildren' } },
+      value: true } },
 
 
   data: {
-    viewStyle: '' },
+    itemListData: [] },
 
-  created: function created() {var
-    gutter = this.data.gutter;
-    if (gutter) {
-      this.setData({
-        viewStyle: "padding-left: ".concat((0, _utils.addUnit)(gutter)) });
-
-    }
+  beforeCreate: function beforeCreate() {var _wx$getSystemInfoSync =
+    wx.getSystemInfoSync(),windowHeight = _wx$getSystemInfoSync.windowHeight;
+    this.windowHeight = windowHeight;
+    ARRAY.push(this);
+  },
+  destroyed: function destroyed() {var _this = this;
+    ARRAY = ARRAY.filter(function (item) {return item !== _this;});
   },
   methods: {
-    updateChildren: function updateChildren() {
+    updateItemListData: function updateItemListData() {
+      this.setData({
+        itemListData: this.children.map(function (child) {return child.data;}) });
+
+    },
+    updateChildrenData: function updateChildrenData() {
       this.children.forEach(function (child) {
-        child.updateStyle();
+        child.updateDataFromParent();
       });
+    },
+    toggleItem: function toggleItem(active) {
+      this.children.forEach(function (item, index) {var
+        showPopup = item.data.showPopup;
+        if (index === active) {
+          item.toggle();
+        } else
+        if (showPopup) {
+          item.toggle(false, { immediate: true });
+        }
+      });
+    },
+    close: function close() {
+      this.children.forEach(function (child) {
+        child.toggle(false, { immediate: true });
+      });
+    },
+    getChildWrapperStyle: function getChildWrapperStyle() {var _this2 = this;var _this$data =
+      this.data,zIndex = _this$data.zIndex,direction = _this$data.direction;
+      return this.getRect('.van-dropdown-menu').then(function (rect) {var _rect$top =
+        rect.top,top = _rect$top === void 0 ? 0 : _rect$top,_rect$bottom = rect.bottom,bottom = _rect$bottom === void 0 ? 0 : _rect$bottom;
+        var offset = direction === 'down' ? bottom : _this2.windowHeight - top;
+        var wrapperStyle = "z-index: ".concat(zIndex, ";");
+        if (direction === 'down') {
+          wrapperStyle += "top: ".concat((0, _utils.addUnit)(offset), ";");
+        } else
+        {
+          wrapperStyle += "bottom: ".concat((0, _utils.addUnit)(offset), ";");
+        }
+        return wrapperStyle;
+      });
+    },
+    onTitleTap: function onTitleTap(event) {var _this3 = this;var
+      index = event.currentTarget.dataset.index;
+      var child = this.children[index];
+      if (!child.data.disabled) {
+        ARRAY.forEach(function (menuItem) {
+          if (menuItem &&
+          menuItem.data.closeOnClickOutside &&
+          menuItem !== _this3) {
+            menuItem.close();
+          }
+        });
+        this.toggleItem(index);
+      }
     } } });
 
 /***/ }),
-/* 92 */
+/* 133 */
 /*!************************************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/common/utils.js ***!
   \************************************************************************************************************/
@@ -10805,84 +11186,119 @@ function addUnit(value) {
 }
 
 /***/ }),
-/* 93 */
-/*!***************************************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/grid-item/index.js ***!
-  \***************************************************************************************************************/
+/* 134 */
+/*!*******************************************************************************************************************!*\
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/dropdown-item/index.js ***!
+  \*******************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-var _link = __webpack_require__(/*! ../mixins/link */ 85);
-var _component = __webpack_require__(/*! ../common/component */ 86);
-var _utils = __webpack_require__(/*! ../common/utils */ 92);
+var _component = __webpack_require__(/*! ../common/component */ 103);
 (0, _component.VantComponent)({
+  field: true,
   relation: {
-    name: 'grid',
+    name: 'dropdown-menu',
     type: 'ancestor',
-    current: 'grid-item' },
+    current: 'dropdown-item',
+    linked: function linked() {
+      this.updateDataFromParent();
+    } },
 
-  mixins: [_link.link],
   props: {
-    icon: String,
-    dot: Boolean,
-    info: null,
-    text: String,
-    useSlot: Boolean },
+    value: {
+      type: null,
+      observer: 'rerender' },
+
+    title: {
+      type: String,
+      observer: 'rerender' },
+
+    disabled: Boolean,
+    titleClass: {
+      type: String,
+      observer: 'rerender' },
+
+    options: {
+      type: Array,
+      value: [],
+      observer: 'rerender' },
+
+    popupStyle: String },
 
   data: {
-    viewStyle: '' },
+    transition: true,
+    showPopup: false,
+    showWrapper: false,
+    displayTitle: '' },
 
-  mounted: function mounted() {
-    this.updateStyle();
-  },
   methods: {
-    updateStyle: function updateStyle() {
-      if (!this.parent) {
+    rerender: function rerender() {var _this = this;
+      wx.nextTick(function () {
+        _this.parent && _this.parent.updateItemListData();
+      });
+    },
+    updateDataFromParent: function updateDataFromParent() {
+      if (this.parent) {var _this$parent$data =
+        this.parent.data,overlay = _this$parent$data.overlay,duration = _this$parent$data.duration,activeColor = _this$parent$data.activeColor,closeOnClickOverlay = _this$parent$data.closeOnClickOverlay,direction = _this$parent$data.direction;
+        this.setData({
+          overlay: overlay,
+          duration: duration,
+          activeColor: activeColor,
+          closeOnClickOverlay: closeOnClickOverlay,
+          direction: direction });
+
+      }
+    },
+    onOpen: function onOpen() {
+      this.$emit('open');
+    },
+    onOpened: function onOpened() {
+      this.$emit('opened');
+    },
+    onClose: function onClose() {
+      this.$emit('close');
+    },
+    onClosed: function onClosed() {
+      this.$emit('closed');
+      this.setData({ showWrapper: false });
+    },
+    onOptionTap: function onOptionTap(event) {var
+      option = event.currentTarget.dataset.option;var
+      value = option.value;
+      var shouldEmitChange = this.data.value !== value;
+      this.setData({ showPopup: false, value: value });
+      this.$emit('close');
+      this.rerender();
+      if (shouldEmitChange) {
+        this.$emit('change', value);
+      }
+    },
+    toggle: function toggle(show) {var _this2 = this;var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};var
+      showPopup = this.data.showPopup;
+      if (typeof show !== 'boolean') {
+        show = !showPopup;
+      }
+      if (show === showPopup) {
         return;
-      }var _this$parent =
-      this.parent,data = _this$parent.data,children = _this$parent.children;var
-      columnNum = data.columnNum,border = data.border,square = data.square,gutter = data.gutter,clickable = data.clickable,center = data.center;
-      var width = "".concat(100 / columnNum, "%");
-      var styleWrapper = [];
-      styleWrapper.push("width: ".concat(width));
-      if (square) {
-        styleWrapper.push("padding-top: ".concat(width));
-      }
-      if (gutter) {
-        var gutterValue = (0, _utils.addUnit)(gutter);
-        styleWrapper.push("padding-right: ".concat(gutterValue));
-        var index = children.indexOf(this);
-        if (index >= columnNum) {
-          styleWrapper.push("margin-top: ".concat(gutterValue));
-        }
-      }
-      var contentStyle = '';
-      if (square && gutter) {
-        var _gutterValue = (0, _utils.addUnit)(gutter);
-        contentStyle = "\n          right: ".concat(
-        _gutterValue, ";\n          bottom: ").concat(
-        _gutterValue, ";\n          height: auto;\n        ");
-
-
       }
       this.setData({
-        viewStyle: styleWrapper.join('; '),
-        contentStyle: contentStyle,
-        center: center,
-        border: border,
-        square: square,
-        gutter: gutter,
-        clickable: clickable });
+        transition: !options.immediate,
+        showPopup: show });
 
-    },
-    onClick: function onClick() {
-      this.$emit('click');
-      this.jumpLink();
+      if (show) {
+        this.parent.getChildWrapperStyle().then(function (wrapperStyle) {
+          _this2.setData({ wrapperStyle: wrapperStyle, showWrapper: true });
+          _this2.rerender();
+        });
+      } else
+      {
+        this.rerender();
+      }
     } } });
 
 /***/ }),
-/* 94 */
+/* 135 */
 /*!************************************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/notify/index.js ***!
   \************************************************************************************************************/
@@ -10890,7 +11306,7 @@ var _utils = __webpack_require__(/*! ../common/utils */ 92);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-var _component = __webpack_require__(/*! ../common/component */ 86);
+var _component = __webpack_require__(/*! ../common/component */ 103);
 var _color = __webpack_require__(/*! ../common/color */ 20);
 (0, _component.VantComponent)({
   props: {
@@ -10950,7 +11366,7 @@ var _color = __webpack_require__(/*! ../common/color */ 20);
     } } });
 
 /***/ }),
-/* 95 */
+/* 136 */
 /*!**********************************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/icon/index.js ***!
   \**********************************************************************************************************/
@@ -10958,7 +11374,7 @@ var _color = __webpack_require__(/*! ../common/color */ 20);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-var _component = __webpack_require__(/*! ../common/component */ 86);
+var _component = __webpack_require__(/*! ../common/component */ 103);
 (0, _component.VantComponent)({
   props: {
     dot: Boolean,
@@ -10985,7 +11401,215 @@ var _component = __webpack_require__(/*! ../common/component */ 86);
     } } });
 
 /***/ }),
-/* 96 */
+/* 137 */
+/*!***********************************************************************************************************!*\
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/image/index.js ***!
+  \***********************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+var _utils = __webpack_require__(/*! ../common/utils */ 133);
+var _component = __webpack_require__(/*! ../common/component */ 103);
+var _button = __webpack_require__(/*! ../mixins/button */ 138);
+var _openType = __webpack_require__(/*! ../mixins/open-type */ 139);
+var FIT_MODE_MAP = {
+  none: 'center',
+  fill: 'scaleToFill',
+  cover: 'aspectFill',
+  contain: 'aspectFit' };
+
+(0, _component.VantComponent)({
+  mixins: [_button.button, _openType.openType],
+  classes: ['custom-class', 'loading-class', 'error-class', 'image-class'],
+  props: {
+    src: {
+      type: String,
+      observer: function observer() {
+        this.setData({
+          error: false,
+          loading: true });
+
+      } },
+
+    round: Boolean,
+    width: {
+      type: null,
+      observer: 'setStyle' },
+
+    height: {
+      type: null,
+      observer: 'setStyle' },
+
+    radius: null,
+    lazyLoad: Boolean,
+    useErrorSlot: Boolean,
+    useLoadingSlot: Boolean,
+    showMenuByLongpress: Boolean,
+    fit: {
+      type: String,
+      value: 'fill',
+      observer: 'setMode' },
+
+    showError: {
+      type: Boolean,
+      value: true },
+
+    showLoading: {
+      type: Boolean,
+      value: true } },
+
+
+  data: {
+    error: false,
+    loading: true,
+    viewStyle: '' },
+
+  mounted: function mounted() {
+    this.setMode();
+    this.setStyle();
+  },
+  methods: {
+    setMode: function setMode() {
+      this.setData({
+        mode: FIT_MODE_MAP[this.data.fit] });
+
+    },
+    setStyle: function setStyle() {var _this$data =
+      this.data,width = _this$data.width,height = _this$data.height,radius = _this$data.radius;
+      var style = '';
+      if ((0, _utils.isDef)(width)) {
+        style += "width: ".concat((0, _utils.addUnit)(width), ";");
+      }
+      if ((0, _utils.isDef)(height)) {
+        style += "height: ".concat((0, _utils.addUnit)(height), ";");
+      }
+      if ((0, _utils.isDef)(radius)) {
+        style += 'overflow: hidden;';
+        style += "border-radius: ".concat((0, _utils.addUnit)(radius), ";");
+      }
+      this.setData({ viewStyle: style });
+    },
+    onLoad: function onLoad(event) {
+      this.setData({
+        loading: false });
+
+      this.$emit('load', event.detail);
+    },
+    onError: function onError(event) {
+      this.setData({
+        loading: false,
+        error: true });
+
+      this.$emit('error', event.detail);
+    },
+    onClick: function onClick(event) {
+      this.$emit('click', event.detail);
+    } } });
+
+/***/ }),
+/* 138 */
+/*!*************************************************************************************************************!*\
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/mixins/button.js ***!
+  \*************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });exports.button = void 0;var button = Behavior({
+  externalClasses: ['hover-class'],
+  properties: {
+    id: String,
+    lang: {
+      type: String,
+      value: 'en' },
+
+    businessId: Number,
+    sessionFrom: String,
+    sendMessageTitle: String,
+    sendMessagePath: String,
+    sendMessageImg: String,
+    showMessageCard: Boolean,
+    appParameter: String,
+    ariaLabel: String } });exports.button = button;
+
+/***/ }),
+/* 139 */
+/*!****************************************************************************************************************!*\
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/mixins/open-type.js ***!
+  \****************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });exports.openType = void 0;var openType = Behavior({
+  properties: {
+    openType: String },
+
+  methods: {
+    bindGetUserInfo: function bindGetUserInfo(event) {
+      this.$emit('getuserinfo', event.detail);
+    },
+    bindContact: function bindContact(event) {
+      this.$emit('contact', event.detail);
+    },
+    bindGetPhoneNumber: function bindGetPhoneNumber(event) {
+      this.$emit('getphonenumber', event.detail);
+    },
+    bindError: function bindError(event) {
+      this.$emit('error', event.detail);
+    },
+    bindLaunchApp: function bindLaunchApp(event) {
+      this.$emit('launchapp', event.detail);
+    },
+    bindOpenSetting: function bindOpenSetting(event) {
+      this.$emit('opensetting', event.detail);
+    } } });exports.openType = openType;
+
+/***/ }),
+/* 140 */,
+/* 141 */,
+/* 142 */,
+/* 143 */,
+/* 144 */,
+/* 145 */,
+/* 146 */,
+/* 147 */,
+/* 148 */,
+/* 149 */,
+/* 150 */,
+/* 151 */,
+/* 152 */,
+/* 153 */,
+/* 154 */,
+/* 155 */,
+/* 156 */,
+/* 157 */,
+/* 158 */,
+/* 159 */,
+/* 160 */,
+/* 161 */,
+/* 162 */,
+/* 163 */,
+/* 164 */,
+/* 165 */,
+/* 166 */,
+/* 167 */,
+/* 168 */,
+/* 169 */,
+/* 170 */,
+/* 171 */,
+/* 172 */,
+/* 173 */,
+/* 174 */,
+/* 175 */,
+/* 176 */,
+/* 177 */,
+/* 178 */,
+/* 179 */,
+/* 180 */,
+/* 181 */,
+/* 182 */
 /*!*********************************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/tab/index.js ***!
   \*********************************************************************************************************/
@@ -10993,7 +11617,7 @@ var _component = __webpack_require__(/*! ../common/component */ 86);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-var _component = __webpack_require__(/*! ../common/component */ 86);
+var _component = __webpack_require__(/*! ../common/component */ 103);
 (0, _component.VantComponent)({
   relation: {
     name: 'tabs',
@@ -11052,7 +11676,7 @@ var _component = __webpack_require__(/*! ../common/component */ 86);
     } } });
 
 /***/ }),
-/* 97 */
+/* 183 */
 /*!**********************************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/tabs/index.js ***!
   \**********************************************************************************************************/
@@ -11060,9 +11684,9 @@ var _component = __webpack_require__(/*! ../common/component */ 86);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-var _component = __webpack_require__(/*! ../common/component */ 86);
-var _touch = __webpack_require__(/*! ../mixins/touch */ 98);
-var _utils = __webpack_require__(/*! ../common/utils */ 92);function _slicedToArray(arr, i) {return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest();}function _nonIterableRest() {throw new TypeError("Invalid attempt to destructure non-iterable instance");}function _iterableToArrayLimit(arr, i) {var _arr = [];var _n = true;var _d = false;var _e = undefined;try {for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {_arr.push(_s.value);if (i && _arr.length === i) break;}} catch (err) {_d = true;_e = err;} finally {try {if (!_n && _i["return"] != null) _i["return"]();} finally {if (_d) throw _e;}}return _arr;}function _arrayWithHoles(arr) {if (Array.isArray(arr)) return arr;}
+var _component = __webpack_require__(/*! ../common/component */ 103);
+var _touch = __webpack_require__(/*! ../mixins/touch */ 184);
+var _utils = __webpack_require__(/*! ../common/utils */ 133);function _slicedToArray(arr, i) {return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest();}function _nonIterableRest() {throw new TypeError("Invalid attempt to destructure non-iterable instance");}function _iterableToArrayLimit(arr, i) {var _arr = [];var _n = true;var _d = false;var _e = undefined;try {for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {_arr.push(_s.value);if (i && _arr.length === i) break;}} catch (err) {_d = true;_e = err;} finally {try {if (!_n && _i["return"] != null) _i["return"]();} finally {if (_d) throw _e;}}return _arr;}function _arrayWithHoles(arr) {if (Array.isArray(arr)) return arr;}
 (0, _component.VantComponent)({
   mixins: [_touch.touch],
   classes: ['nav-class', 'tab-class', 'tab-active-class', 'line-class'],
@@ -11334,7 +11958,7 @@ var _utils = __webpack_require__(/*! ../common/utils */ 92);function _slicedToAr
     } } });
 
 /***/ }),
-/* 98 */
+/* 184 */
 /*!************************************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/mixins/touch.js ***!
   \************************************************************************************************************/
@@ -11377,533 +12001,7 @@ var touch = Behavior({
     } } });exports.touch = touch;
 
 /***/ }),
-/* 99 */
-/*!************************************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/button/index.js ***!
-  \************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-var _component = __webpack_require__(/*! ../common/component */ 86);
-var _button = __webpack_require__(/*! ../mixins/button */ 100);
-var _openType = __webpack_require__(/*! ../mixins/open-type */ 101);
-(0, _component.VantComponent)({
-  mixins: [_button.button, _openType.openType],
-  classes: ['hover-class', 'loading-class'],
-  data: {
-    baseStyle: '' },
-
-  props: {
-    icon: String,
-    plain: Boolean,
-    block: Boolean,
-    round: Boolean,
-    square: Boolean,
-    loading: Boolean,
-    hairline: Boolean,
-    disabled: Boolean,
-    loadingText: String,
-    customStyle: String,
-    loadingType: {
-      type: String,
-      value: 'circular' },
-
-    type: {
-      type: String,
-      value: 'default' },
-
-    size: {
-      type: String,
-      value: 'normal' },
-
-    loadingSize: {
-      type: String,
-      value: '20px' },
-
-    color: {
-      type: String,
-      observer: function observer(color) {
-        var style = '';
-        if (color) {
-          style += "color: ".concat(this.data.plain ? color : 'white', ";");
-          if (!this.data.plain) {
-            // Use background instead of backgroundColor to make linear-gradient work
-            style += "background: ".concat(color, ";");
-          }
-          // hide border when color is linear-gradient
-          if (color.indexOf('gradient') !== -1) {
-            style += 'border: 0;';
-          } else
-          {
-            style += "border-color: ".concat(color, ";");
-          }
-        }
-        if (style !== this.data.baseStyle) {
-          this.setData({ baseStyle: style });
-        }
-      } } },
-
-
-  methods: {
-    onClick: function onClick() {
-      if (!this.data.disabled && !this.data.loading) {
-        this.$emit('click');
-      }
-    } } });
-
-/***/ }),
-/* 100 */
-/*!*************************************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/mixins/button.js ***!
-  \*************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.button = void 0;var button = Behavior({
-  externalClasses: ['hover-class'],
-  properties: {
-    id: String,
-    lang: {
-      type: String,
-      value: 'en' },
-
-    businessId: Number,
-    sessionFrom: String,
-    sendMessageTitle: String,
-    sendMessagePath: String,
-    sendMessageImg: String,
-    showMessageCard: Boolean,
-    appParameter: String,
-    ariaLabel: String } });exports.button = button;
-
-/***/ }),
-/* 101 */
-/*!****************************************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/mixins/open-type.js ***!
-  \****************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.openType = void 0;var openType = Behavior({
-  properties: {
-    openType: String },
-
-  methods: {
-    bindGetUserInfo: function bindGetUserInfo(event) {
-      this.$emit('getuserinfo', event.detail);
-    },
-    bindContact: function bindContact(event) {
-      this.$emit('contact', event.detail);
-    },
-    bindGetPhoneNumber: function bindGetPhoneNumber(event) {
-      this.$emit('getphonenumber', event.detail);
-    },
-    bindError: function bindError(event) {
-      this.$emit('error', event.detail);
-    },
-    bindLaunchApp: function bindLaunchApp(event) {
-      this.$emit('launchapp', event.detail);
-    },
-    bindOpenSetting: function bindOpenSetting(event) {
-      this.$emit('opensetting', event.detail);
-    } } });exports.openType = openType;
-
-/***/ }),
-/* 102 */
-/*!******************************************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/action-sheet/index.js ***!
-  \******************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-var _component = __webpack_require__(/*! ../common/component */ 86);
-var _button = __webpack_require__(/*! ../mixins/button */ 100);
-var _openType = __webpack_require__(/*! ../mixins/open-type */ 101);
-(0, _component.VantComponent)({
-  mixins: [_button.button, _openType.openType],
-  props: {
-    show: Boolean,
-    title: String,
-    cancelText: String,
-    description: String,
-    round: {
-      type: Boolean,
-      value: true },
-
-    zIndex: {
-      type: Number,
-      value: 100 },
-
-    actions: {
-      type: Array,
-      value: [] },
-
-    overlay: {
-      type: Boolean,
-      value: true },
-
-    closeOnClickOverlay: {
-      type: Boolean,
-      value: true },
-
-    closeOnClickAction: {
-      type: Boolean,
-      value: true },
-
-    safeAreaInsetBottom: {
-      type: Boolean,
-      value: true } },
-
-
-  methods: {
-    onSelect: function onSelect(event) {var
-      index = event.currentTarget.dataset.index;
-      var item = this.data.actions[index];
-      if (item && !item.disabled && !item.loading) {
-        this.$emit('select', item);
-        if (this.data.closeOnClickAction) {
-          this.onClose();
-        }
-      }
-    },
-    onCancel: function onCancel() {
-      this.$emit('cancel');
-    },
-    onClose: function onClose() {
-      this.$emit('close');
-    },
-    onClickOverlay: function onClickOverlay() {
-      this.$emit('click-overlay');
-      this.onClose();
-    } } });
-
-/***/ }),
-/* 103 */
-/*!*************************************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/divider/index.js ***!
-  \*************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-var _component = __webpack_require__(/*! ../common/component */ 86);
-(0, _component.VantComponent)({
-  props: {
-    dashed: {
-      type: Boolean,
-      value: false },
-
-    hairline: {
-      type: Boolean,
-      value: false },
-
-    contentPosition: {
-      type: String,
-      value: '' },
-
-    fontSize: {
-      type: Number,
-      value: '' },
-
-    borderColor: {
-      type: String,
-      value: '' },
-
-    textColor: {
-      type: String,
-      value: '' },
-
-    customStyle: {
-      type: String,
-      value: '' } } });
-
-/***/ }),
-/* 104 */
-/*!***********************************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/steps/index.js ***!
-  \***********************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-var _component = __webpack_require__(/*! ../common/component */ 86);
-var _color = __webpack_require__(/*! ../common/color */ 20);
-(0, _component.VantComponent)({
-  classes: ['desc-class'],
-  props: {
-    icon: String,
-    steps: Array,
-    active: Number,
-    direction: {
-      type: String,
-      value: 'horizontal' },
-
-    activeColor: {
-      type: String,
-      value: _color.GREEN },
-
-    inactiveColor: {
-      type: String,
-      value: _color.GRAY_DARK },
-
-    activeIcon: {
-      type: String,
-      value: 'checked' },
-
-    inactiveIcon: String } });
-
-/***/ }),
-/* 105 */,
-/* 106 */,
-/* 107 */,
-/* 108 */,
-/* 109 */,
-/* 110 */,
-/* 111 */,
-/* 112 */
-/*!*******************************************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/dropdown-menu/index.js ***!
-  \*******************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-var _component = __webpack_require__(/*! ../common/component */ 86);
-var _utils = __webpack_require__(/*! ../common/utils */ 92);
-var ARRAY = [];
-(0, _component.VantComponent)({
-  field: true,
-  relation: {
-    name: 'dropdown-item',
-    type: 'descendant',
-    current: 'dropdown-menu',
-    linked: function linked() {
-      this.updateItemListData();
-    },
-    unlinked: function unlinked() {
-      this.updateItemListData();
-    } },
-
-  props: {
-    activeColor: {
-      type: String,
-      observer: 'updateChildrenData' },
-
-    overlay: {
-      type: Boolean,
-      value: true,
-      observer: 'updateChildrenData' },
-
-    zIndex: {
-      type: Number,
-      value: 10 },
-
-    duration: {
-      type: Number,
-      value: 200,
-      observer: 'updateChildrenData' },
-
-    direction: {
-      type: String,
-      value: 'down',
-      observer: 'updateChildrenData' },
-
-    closeOnClickOverlay: {
-      type: Boolean,
-      value: true,
-      observer: 'updateChildrenData' },
-
-    closeOnClickOutside: {
-      type: Boolean,
-      value: true } },
-
-
-  data: {
-    itemListData: [] },
-
-  beforeCreate: function beforeCreate() {var _wx$getSystemInfoSync =
-    wx.getSystemInfoSync(),windowHeight = _wx$getSystemInfoSync.windowHeight;
-    this.windowHeight = windowHeight;
-    ARRAY.push(this);
-  },
-  destroyed: function destroyed() {var _this = this;
-    ARRAY = ARRAY.filter(function (item) {return item !== _this;});
-  },
-  methods: {
-    updateItemListData: function updateItemListData() {
-      this.setData({
-        itemListData: this.children.map(function (child) {return child.data;}) });
-
-    },
-    updateChildrenData: function updateChildrenData() {
-      this.children.forEach(function (child) {
-        child.updateDataFromParent();
-      });
-    },
-    toggleItem: function toggleItem(active) {
-      this.children.forEach(function (item, index) {var
-        showPopup = item.data.showPopup;
-        if (index === active) {
-          item.toggle();
-        } else
-        if (showPopup) {
-          item.toggle(false, { immediate: true });
-        }
-      });
-    },
-    close: function close() {
-      this.children.forEach(function (child) {
-        child.toggle(false, { immediate: true });
-      });
-    },
-    getChildWrapperStyle: function getChildWrapperStyle() {var _this2 = this;var _this$data =
-      this.data,zIndex = _this$data.zIndex,direction = _this$data.direction;
-      return this.getRect('.van-dropdown-menu').then(function (rect) {var _rect$top =
-        rect.top,top = _rect$top === void 0 ? 0 : _rect$top,_rect$bottom = rect.bottom,bottom = _rect$bottom === void 0 ? 0 : _rect$bottom;
-        var offset = direction === 'down' ? bottom : _this2.windowHeight - top;
-        var wrapperStyle = "z-index: ".concat(zIndex, ";");
-        if (direction === 'down') {
-          wrapperStyle += "top: ".concat((0, _utils.addUnit)(offset), ";");
-        } else
-        {
-          wrapperStyle += "bottom: ".concat((0, _utils.addUnit)(offset), ";");
-        }
-        return wrapperStyle;
-      });
-    },
-    onTitleTap: function onTitleTap(event) {var _this3 = this;var
-      index = event.currentTarget.dataset.index;
-      var child = this.children[index];
-      if (!child.data.disabled) {
-        ARRAY.forEach(function (menuItem) {
-          if (menuItem &&
-          menuItem.data.closeOnClickOutside &&
-          menuItem !== _this3) {
-            menuItem.close();
-          }
-        });
-        this.toggleItem(index);
-      }
-    } } });
-
-/***/ }),
-/* 113 */
-/*!*******************************************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/dropdown-item/index.js ***!
-  \*******************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-var _component = __webpack_require__(/*! ../common/component */ 86);
-(0, _component.VantComponent)({
-  field: true,
-  relation: {
-    name: 'dropdown-menu',
-    type: 'ancestor',
-    current: 'dropdown-item',
-    linked: function linked() {
-      this.updateDataFromParent();
-    } },
-
-  props: {
-    value: {
-      type: null,
-      observer: 'rerender' },
-
-    title: {
-      type: String,
-      observer: 'rerender' },
-
-    disabled: Boolean,
-    titleClass: {
-      type: String,
-      observer: 'rerender' },
-
-    options: {
-      type: Array,
-      value: [],
-      observer: 'rerender' },
-
-    popupStyle: String },
-
-  data: {
-    transition: true,
-    showPopup: false,
-    showWrapper: false,
-    displayTitle: '' },
-
-  methods: {
-    rerender: function rerender() {var _this = this;
-      wx.nextTick(function () {
-        _this.parent && _this.parent.updateItemListData();
-      });
-    },
-    updateDataFromParent: function updateDataFromParent() {
-      if (this.parent) {var _this$parent$data =
-        this.parent.data,overlay = _this$parent$data.overlay,duration = _this$parent$data.duration,activeColor = _this$parent$data.activeColor,closeOnClickOverlay = _this$parent$data.closeOnClickOverlay,direction = _this$parent$data.direction;
-        this.setData({
-          overlay: overlay,
-          duration: duration,
-          activeColor: activeColor,
-          closeOnClickOverlay: closeOnClickOverlay,
-          direction: direction });
-
-      }
-    },
-    onOpen: function onOpen() {
-      this.$emit('open');
-    },
-    onOpened: function onOpened() {
-      this.$emit('opened');
-    },
-    onClose: function onClose() {
-      this.$emit('close');
-    },
-    onClosed: function onClosed() {
-      this.$emit('closed');
-      this.setData({ showWrapper: false });
-    },
-    onOptionTap: function onOptionTap(event) {var
-      option = event.currentTarget.dataset.option;var
-      value = option.value;
-      var shouldEmitChange = this.data.value !== value;
-      this.setData({ showPopup: false, value: value });
-      this.$emit('close');
-      this.rerender();
-      if (shouldEmitChange) {
-        this.$emit('change', value);
-      }
-    },
-    toggle: function toggle(show) {var _this2 = this;var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};var
-      showPopup = this.data.showPopup;
-      if (typeof show !== 'boolean') {
-        show = !showPopup;
-      }
-      if (show === showPopup) {
-        return;
-      }
-      this.setData({
-        transition: !options.immediate,
-        showPopup: show });
-
-      if (show) {
-        this.parent.getChildWrapperStyle().then(function (wrapperStyle) {
-          _this2.setData({ wrapperStyle: wrapperStyle, showWrapper: true });
-          _this2.rerender();
-        });
-      } else
-      {
-        this.rerender();
-      }
-    } } });
-
-/***/ }),
-/* 114 */
+/* 185 */
 /*!************************************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/tabbar/index.js ***!
   \************************************************************************************************************/
@@ -11911,7 +12009,7 @@ var _component = __webpack_require__(/*! ../common/component */ 86);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-var _component = __webpack_require__(/*! ../common/component */ 86);
+var _component = __webpack_require__(/*! ../common/component */ 103);
 (0, _component.VantComponent)({
   relation: {
     name: 'tabbar-item',
@@ -11972,7 +12070,7 @@ var _component = __webpack_require__(/*! ../common/component */ 86);
     } } });
 
 /***/ }),
-/* 115 */
+/* 186 */
 /*!*****************************************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/tabbar-item/index.js ***!
   \*****************************************************************************************************************/
@@ -11980,7 +12078,7 @@ var _component = __webpack_require__(/*! ../common/component */ 86);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-var _component = __webpack_require__(/*! ../common/component */ 86);
+var _component = __webpack_require__(/*! ../common/component */ 103);
 (0, _component.VantComponent)({
   props: {
     info: null,
@@ -12028,14 +12126,14 @@ var _component = __webpack_require__(/*! ../common/component */ 86);
     } } });
 
 /***/ }),
-/* 116 */,
-/* 117 */,
-/* 118 */,
-/* 119 */,
-/* 120 */,
-/* 121 */,
-/* 122 */,
-/* 123 */
+/* 187 */,
+/* 188 */,
+/* 189 */,
+/* 190 */,
+/* 191 */,
+/* 192 */,
+/* 193 */,
+/* 194 */
 /*!***********************************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/popup/index.js ***!
   \***********************************************************************************************************/
@@ -12043,8 +12141,8 @@ var _component = __webpack_require__(/*! ../common/component */ 86);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-var _component = __webpack_require__(/*! ../common/component */ 86);
-var _transition = __webpack_require__(/*! ../mixins/transition */ 124);
+var _component = __webpack_require__(/*! ../common/component */ 103);
+var _transition = __webpack_require__(/*! ../mixins/transition */ 195);
 (0, _component.VantComponent)({
   classes: [
   'enter-class',
@@ -12123,7 +12221,7 @@ var _transition = __webpack_require__(/*! ../mixins/transition */ 124);
     } } });
 
 /***/ }),
-/* 124 */
+/* 195 */
 /*!*****************************************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/mixins/transition.js ***!
   \*****************************************************************************************************************/
@@ -12131,7 +12229,7 @@ var _transition = __webpack_require__(/*! ../mixins/transition */ 124);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.transition = void 0;var _utils = __webpack_require__(/*! ../common/utils */ 92);
+Object.defineProperty(exports, "__esModule", { value: true });exports.transition = void 0;var _utils = __webpack_require__(/*! ../common/utils */ 133);
 var getClassNames = function getClassNames(name) {return {
     enter: "van-".concat(name, "-enter van-").concat(name, "-enter-active enter-class enter-active-class"),
     'enter-to': "van-".concat(name, "-enter-to van-").concat(name, "-enter-active enter-to-class enter-active-class"),
@@ -12251,114 +12349,370 @@ var transition = function transition(showDefaultValue) {
 };exports.transition = transition;
 
 /***/ }),
-/* 125 */
+/* 196 */
+/*!************************************************************************************************************!*\
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/button/index.js ***!
+  \************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+var _component = __webpack_require__(/*! ../common/component */ 103);
+var _button = __webpack_require__(/*! ../mixins/button */ 138);
+var _openType = __webpack_require__(/*! ../mixins/open-type */ 139);
+(0, _component.VantComponent)({
+  mixins: [_button.button, _openType.openType],
+  classes: ['hover-class', 'loading-class'],
+  data: {
+    baseStyle: '' },
+
+  props: {
+    icon: String,
+    plain: Boolean,
+    block: Boolean,
+    round: Boolean,
+    square: Boolean,
+    loading: Boolean,
+    hairline: Boolean,
+    disabled: Boolean,
+    loadingText: String,
+    customStyle: String,
+    loadingType: {
+      type: String,
+      value: 'circular' },
+
+    type: {
+      type: String,
+      value: 'default' },
+
+    size: {
+      type: String,
+      value: 'normal' },
+
+    loadingSize: {
+      type: String,
+      value: '20px' },
+
+    color: {
+      type: String,
+      observer: function observer(color) {
+        var style = '';
+        if (color) {
+          style += "color: ".concat(this.data.plain ? color : 'white', ";");
+          if (!this.data.plain) {
+            // Use background instead of backgroundColor to make linear-gradient work
+            style += "background: ".concat(color, ";");
+          }
+          // hide border when color is linear-gradient
+          if (color.indexOf('gradient') !== -1) {
+            style += 'border: 0;';
+          } else
+          {
+            style += "border-color: ".concat(color, ";");
+          }
+        }
+        if (style !== this.data.baseStyle) {
+          this.setData({ baseStyle: style });
+        }
+      } } },
+
+
+  methods: {
+    onClick: function onClick() {
+      if (!this.data.disabled && !this.data.loading) {
+        this.$emit('click');
+      }
+    } } });
+
+/***/ }),
+/* 197 */
+/*!**********************************************************************************************************!*\
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/grid/index.js ***!
+  \**********************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+var _component = __webpack_require__(/*! ../common/component */ 103);
+var _utils = __webpack_require__(/*! ../common/utils */ 133);
+(0, _component.VantComponent)({
+  relation: {
+    name: 'grid-item',
+    type: 'descendant',
+    current: 'grid' },
+
+  props: {
+    square: {
+      type: Boolean,
+      observer: 'updateChildren' },
+
+    gutter: {
+      type: [Number, String],
+      value: 0,
+      observer: 'updateChildren' },
+
+    clickable: {
+      type: Boolean,
+      observer: 'updateChildren' },
+
+    columnNum: {
+      type: Number,
+      value: 4,
+      observer: 'updateChildren' },
+
+    center: {
+      type: Boolean,
+      value: true,
+      observer: 'updateChildren' },
+
+    border: {
+      type: Boolean,
+      value: true,
+      observer: 'updateChildren' } },
+
+
+  data: {
+    viewStyle: '' },
+
+  created: function created() {var
+    gutter = this.data.gutter;
+    if (gutter) {
+      this.setData({
+        viewStyle: "padding-left: ".concat((0, _utils.addUnit)(gutter)) });
+
+    }
+  },
+  methods: {
+    updateChildren: function updateChildren() {
+      this.children.forEach(function (child) {
+        child.updateStyle();
+      });
+    } } });
+
+/***/ }),
+/* 198 */
+/*!***************************************************************************************************************!*\
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/grid-item/index.js ***!
+  \***************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+var _link = __webpack_require__(/*! ../mixins/link */ 102);
+var _component = __webpack_require__(/*! ../common/component */ 103);
+var _utils = __webpack_require__(/*! ../common/utils */ 133);
+(0, _component.VantComponent)({
+  relation: {
+    name: 'grid',
+    type: 'ancestor',
+    current: 'grid-item' },
+
+  mixins: [_link.link],
+  props: {
+    icon: String,
+    dot: Boolean,
+    info: null,
+    text: String,
+    useSlot: Boolean },
+
+  data: {
+    viewStyle: '' },
+
+  mounted: function mounted() {
+    this.updateStyle();
+  },
+  methods: {
+    updateStyle: function updateStyle() {
+      if (!this.parent) {
+        return;
+      }var _this$parent =
+      this.parent,data = _this$parent.data,children = _this$parent.children;var
+      columnNum = data.columnNum,border = data.border,square = data.square,gutter = data.gutter,clickable = data.clickable,center = data.center;
+      var width = "".concat(100 / columnNum, "%");
+      var styleWrapper = [];
+      styleWrapper.push("width: ".concat(width));
+      if (square) {
+        styleWrapper.push("padding-top: ".concat(width));
+      }
+      if (gutter) {
+        var gutterValue = (0, _utils.addUnit)(gutter);
+        styleWrapper.push("padding-right: ".concat(gutterValue));
+        var index = children.indexOf(this);
+        if (index >= columnNum) {
+          styleWrapper.push("margin-top: ".concat(gutterValue));
+        }
+      }
+      var contentStyle = '';
+      if (square && gutter) {
+        var _gutterValue = (0, _utils.addUnit)(gutter);
+        contentStyle = "\n          right: ".concat(
+        _gutterValue, ";\n          bottom: ").concat(
+        _gutterValue, ";\n          height: auto;\n        ");
+
+
+      }
+      this.setData({
+        viewStyle: styleWrapper.join('; '),
+        contentStyle: contentStyle,
+        center: center,
+        border: border,
+        square: square,
+        gutter: gutter,
+        clickable: clickable });
+
+    },
+    onClick: function onClick() {
+      this.$emit('click');
+      this.jumpLink();
+    } } });
+
+/***/ }),
+/* 199 */
+/*!******************************************************************************************************************!*\
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/action-sheet/index.js ***!
+  \******************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+var _component = __webpack_require__(/*! ../common/component */ 103);
+var _button = __webpack_require__(/*! ../mixins/button */ 138);
+var _openType = __webpack_require__(/*! ../mixins/open-type */ 139);
+(0, _component.VantComponent)({
+  mixins: [_button.button, _openType.openType],
+  props: {
+    show: Boolean,
+    title: String,
+    cancelText: String,
+    description: String,
+    round: {
+      type: Boolean,
+      value: true },
+
+    zIndex: {
+      type: Number,
+      value: 100 },
+
+    actions: {
+      type: Array,
+      value: [] },
+
+    overlay: {
+      type: Boolean,
+      value: true },
+
+    closeOnClickOverlay: {
+      type: Boolean,
+      value: true },
+
+    closeOnClickAction: {
+      type: Boolean,
+      value: true },
+
+    safeAreaInsetBottom: {
+      type: Boolean,
+      value: true } },
+
+
+  methods: {
+    onSelect: function onSelect(event) {var
+      index = event.currentTarget.dataset.index;
+      var item = this.data.actions[index];
+      if (item && !item.disabled && !item.loading) {
+        this.$emit('select', item);
+        if (this.data.closeOnClickAction) {
+          this.onClose();
+        }
+      }
+    },
+    onCancel: function onCancel() {
+      this.$emit('cancel');
+    },
+    onClose: function onClose() {
+      this.$emit('close');
+    },
+    onClickOverlay: function onClickOverlay() {
+      this.$emit('click-overlay');
+      this.onClose();
+    } } });
+
+/***/ }),
+/* 200 */
+/*!*************************************************************************************************************!*\
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/divider/index.js ***!
+  \*************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+var _component = __webpack_require__(/*! ../common/component */ 103);
+(0, _component.VantComponent)({
+  props: {
+    dashed: {
+      type: Boolean,
+      value: false },
+
+    hairline: {
+      type: Boolean,
+      value: false },
+
+    contentPosition: {
+      type: String,
+      value: '' },
+
+    fontSize: {
+      type: Number,
+      value: '' },
+
+    borderColor: {
+      type: String,
+      value: '' },
+
+    textColor: {
+      type: String,
+      value: '' },
+
+    customStyle: {
+      type: String,
+      value: '' } } });
+
+/***/ }),
+/* 201 */
 /*!***********************************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/image/index.js ***!
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/steps/index.js ***!
   \***********************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-var _utils = __webpack_require__(/*! ../common/utils */ 92);
-var _component = __webpack_require__(/*! ../common/component */ 86);
-var _button = __webpack_require__(/*! ../mixins/button */ 100);
-var _openType = __webpack_require__(/*! ../mixins/open-type */ 101);
-var FIT_MODE_MAP = {
-  none: 'center',
-  fill: 'scaleToFill',
-  cover: 'aspectFill',
-  contain: 'aspectFit' };
-
+var _component = __webpack_require__(/*! ../common/component */ 103);
+var _color = __webpack_require__(/*! ../common/color */ 20);
 (0, _component.VantComponent)({
-  mixins: [_button.button, _openType.openType],
-  classes: ['custom-class', 'loading-class', 'error-class', 'image-class'],
+  classes: ['desc-class'],
   props: {
-    src: {
+    icon: String,
+    steps: Array,
+    active: Number,
+    direction: {
       type: String,
-      observer: function observer() {
-        this.setData({
-          error: false,
-          loading: true });
+      value: 'horizontal' },
 
-      } },
-
-    round: Boolean,
-    width: {
-      type: null,
-      observer: 'setStyle' },
-
-    height: {
-      type: null,
-      observer: 'setStyle' },
-
-    radius: null,
-    lazyLoad: Boolean,
-    useErrorSlot: Boolean,
-    useLoadingSlot: Boolean,
-    showMenuByLongpress: Boolean,
-    fit: {
+    activeColor: {
       type: String,
-      value: 'fill',
-      observer: 'setMode' },
+      value: _color.GREEN },
 
-    showError: {
-      type: Boolean,
-      value: true },
+    inactiveColor: {
+      type: String,
+      value: _color.GRAY_DARK },
 
-    showLoading: {
-      type: Boolean,
-      value: true } },
+    activeIcon: {
+      type: String,
+      value: 'checked' },
 
-
-  data: {
-    error: false,
-    loading: true,
-    viewStyle: '' },
-
-  mounted: function mounted() {
-    this.setMode();
-    this.setStyle();
-  },
-  methods: {
-    setMode: function setMode() {
-      this.setData({
-        mode: FIT_MODE_MAP[this.data.fit] });
-
-    },
-    setStyle: function setStyle() {var _this$data =
-      this.data,width = _this$data.width,height = _this$data.height,radius = _this$data.radius;
-      var style = '';
-      if ((0, _utils.isDef)(width)) {
-        style += "width: ".concat((0, _utils.addUnit)(width), ";");
-      }
-      if ((0, _utils.isDef)(height)) {
-        style += "height: ".concat((0, _utils.addUnit)(height), ";");
-      }
-      if ((0, _utils.isDef)(radius)) {
-        style += 'overflow: hidden;';
-        style += "border-radius: ".concat((0, _utils.addUnit)(radius), ";");
-      }
-      this.setData({ viewStyle: style });
-    },
-    onLoad: function onLoad(event) {
-      this.setData({
-        loading: false });
-
-      this.$emit('load', event.detail);
-    },
-    onError: function onError(event) {
-      this.setData({
-        loading: false,
-        error: true });
-
-      this.$emit('error', event.detail);
-    },
-    onClick: function onClick(event) {
-      this.$emit('click', event.detail);
-    } } });
+    inactiveIcon: String } });
 
 /***/ }),
-/* 126 */
+/* 202 */
 /*!****************************************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/swipe-cell/index.js ***!
   \****************************************************************************************************************/
@@ -12366,9 +12720,9 @@ var FIT_MODE_MAP = {
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-var _component = __webpack_require__(/*! ../common/component */ 86);
-var _touch = __webpack_require__(/*! ../mixins/touch */ 98);
-var _utils = __webpack_require__(/*! ../common/utils */ 92);
+var _component = __webpack_require__(/*! ../common/component */ 103);
+var _touch = __webpack_require__(/*! ../mixins/touch */ 184);
+var _utils = __webpack_require__(/*! ../common/utils */ 133);
 var THRESHOLD = 0.3;
 var ARRAY = [];
 (0, _component.VantComponent)({
@@ -12498,7 +12852,7 @@ var ARRAY = [];
     } } });
 
 /***/ }),
-/* 127 */
+/* 203 */
 /*!************************************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/dialog/index.js ***!
   \************************************************************************************************************/
@@ -12506,9 +12860,9 @@ var ARRAY = [];
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-var _component = __webpack_require__(/*! ../common/component */ 86);
-var _button = __webpack_require__(/*! ../mixins/button */ 100);
-var _openType = __webpack_require__(/*! ../mixins/open-type */ 101);
+var _component = __webpack_require__(/*! ../common/component */ 103);
+var _button = __webpack_require__(/*! ../mixins/button */ 138);
+var _openType = __webpack_require__(/*! ../mixins/open-type */ 139);
 var _color = __webpack_require__(/*! ../common/color */ 20);function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 (0, _component.VantComponent)({
   mixins: [_button.button, _openType.openType],
@@ -12616,21 +12970,21 @@ var _color = __webpack_require__(/*! ../common/color */ 20);function _defineProp
     } } });
 
 /***/ }),
-/* 128 */,
-/* 129 */,
-/* 130 */,
-/* 131 */,
-/* 132 */,
-/* 133 */,
-/* 134 */,
-/* 135 */,
-/* 136 */,
-/* 137 */,
-/* 138 */,
-/* 139 */,
-/* 140 */,
-/* 141 */,
-/* 142 */
+/* 204 */,
+/* 205 */,
+/* 206 */,
+/* 207 */,
+/* 208 */,
+/* 209 */,
+/* 210 */,
+/* 211 */,
+/* 212 */,
+/* 213 */,
+/* 214 */,
+/* 215 */,
+/* 216 */,
+/* 217 */,
+/* 218 */
 /*!*************************************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/overlay/index.js ***!
   \*************************************************************************************************************/
@@ -12638,7 +12992,7 @@ var _color = __webpack_require__(/*! ../common/color */ 20);function _defineProp
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-var _component = __webpack_require__(/*! ../common/component */ 86);
+var _component = __webpack_require__(/*! ../common/component */ 103);
 (0, _component.VantComponent)({
   props: {
     show: Boolean,
@@ -12660,7 +13014,7 @@ var _component = __webpack_require__(/*! ../common/component */ 86);
     noop: function noop() {} } });
 
 /***/ }),
-/* 143 */
+/* 219 */
 /*!****************************************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/cell-group/index.js ***!
   \****************************************************************************************************************/
@@ -12668,7 +13022,7 @@ var _component = __webpack_require__(/*! ../common/component */ 86);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-var _component = __webpack_require__(/*! ../common/component */ 86);
+var _component = __webpack_require__(/*! ../common/component */ 103);
 (0, _component.VantComponent)({
   props: {
     title: String,

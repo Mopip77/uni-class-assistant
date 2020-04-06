@@ -15,6 +15,7 @@ export default {
 	GET_JOINED_COURSE: API_SERVER + 'course/study',
 	GET_COURSE: API_SERVER + 'course',
 	CREATE_COURSE: API_SERVER + 'course/create',
+	UPDATE_COURSE: API_SERVER + 'course/update',
 	JOIN_COURSE: API_SERVER + 'course/join',
 	DELETE_COURSE: API_SERVER + 'course/delete',
 	EXIT_COURSE: API_SERVER + 'course/exit',
@@ -22,6 +23,18 @@ export default {
 	// bulltin
 	CREATE_BULLETIN: API_SERVER + 'bulletin/create',
 	GET_BULLETIN: API_SERVER + 'bulletin',
+	
+	// topic
+	TOPIC: API_SERVER + 'topic',
+	GET_TOPIC: API_SERVER + 'topic',
+	GET_TOPICS_BY_COURSE: API_SERVER + 'topic/course',
+	
+	// comment
+	COMMENT: API_SERVER + 'comment',
+	GET_COMMENT_LIST: API_SERVER + 'comment/list',
+	
+	// like
+	LIKE: API_SERVER + 'like',
 	
 	
 	TEST_URL: API_SERVER + 'test'

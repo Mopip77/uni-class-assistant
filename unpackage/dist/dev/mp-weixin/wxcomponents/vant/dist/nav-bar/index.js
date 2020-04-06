@@ -17,7 +17,7 @@ VantComponent({
         },
         safeAreaInsetTop: {
             type: Boolean,
-            value: true
+            value: false
         },
     },
     data: {

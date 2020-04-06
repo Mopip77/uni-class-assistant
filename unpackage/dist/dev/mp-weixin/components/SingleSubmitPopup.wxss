@@ -52,6 +52,7 @@
       margin-left: 11rpx;
 }
 .box .field input {
+      font-size: 30rpx;
       background-color: #fafafa;
       padding: 20rpx 14rpx;
       margin-top: 6rpx;
@@ -59,6 +60,9 @@
 .box .field textarea {
       background-color: #fafafa;
       margin-top: 7rpx;
+      width: auto;
+      padding-top: 4rpx;
+      padding-left: 10rpx;
 }
 .box .field textarea .placeholder {
         color: gray;

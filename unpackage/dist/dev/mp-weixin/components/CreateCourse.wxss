@@ -45,6 +45,7 @@
       color: gray;
 }
 .create-course-box .name-field input {
+      font-size: 30rpx;
       background-color: #fafafa;
       padding: 20rpx 14rpx;
       margin-top: 6rpx;
@@ -57,6 +58,7 @@
       color: gray;
 }
 .create-course-box .class-info-field input {
+      font-size: 30rpx;
       background-color: #fafafa;
       padding: 20rpx 14rpx;
       margin-top: 6rpx;

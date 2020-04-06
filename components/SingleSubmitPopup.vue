@@ -18,7 +18,7 @@
 				<view v-else class="field textarea-field">
 					<text>{{fieldName}}</text>
 					<view>
-						<textarea  :placeholder="placeHolder" v-model="content" />
+						<textarea  :placeholder="realPlaceHolder" v-model="content" />
 					</view>
 				</view>
 
@@ -31,13 +31,13 @@
 	</view>
 </template>
 <script>
-	import LoginUtils from '../static/js/login.js'
-	import CourseUtils from '../static/js/course.js'
+	import LoginUtils from '@/static/js/login.js'
+	import CourseUtils from '@/static/js/course.js'
 	
-	import Notify from '../wxcomponents/vant/dist/notify/notify.js'
-	import Buttonuu from '../wxcomponents/vant/dist/button'
-	import Overlay from '../wxcomponents/vant/dist/overlay/index.js'
-	import CellGroup from '../wxcomponents/vant/dist/cell-group/index.js'
+	import Notify from '@/wxcomponents/vant/dist/notify/notify.js'
+	import Buttonuu from '@/wxcomponents/vant/dist/button'
+	import Overlay from '@/wxcomponents/vant/dist/overlay/index.js'
+	import CellGroup from '@/wxcomponents/vant/dist/cell-group/index.js'
 
 	export default {
 		components: {
@@ -114,6 +114,11 @@
 				this.$emit('closeModal');
 				this.$emit('successCallBack', content)
 			}
+		},
+		computed: {
+			realPlaceHolder() {
+				return this.placeHolder ? this.placeHolder : '请输入' + this.fieldName
+			}
 		}
 	}
 </script>
@@ -157,7 +162,9 @@
 			textarea {
 				background-color: #fafafa;
 				margin-top: 7rpx;
-				
+				width: auto;
+				padding-top: 4rpx;
+				padding-left: 10rpx;
 				
 				.placeholder {
 					color: gray;
