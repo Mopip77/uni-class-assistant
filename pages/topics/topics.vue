@@ -78,8 +78,6 @@
 </template>
 
 <script>
-	import DropdownMenu from '@/wxcomponents/vant/dist/dropdown-menu/index.js'
-	import DropdownItem from '@/wxcomponents/vant/dist/dropdown-item/index.js'
 	import VanNotify from "@/wxcomponents/vant/dist/notify/index.js";
 	import Notify from "@/wxcomponents/vant/dist/notify/notify.js";
 	import Icon from "@/wxcomponents/vant/dist/icon/index.js";
@@ -100,8 +98,6 @@
 			"ms-dropdown-item": msDropdownItem,
 			STabs,
 			STab,
-			"van-dropdown-menu": DropdownMenu,
-			"van-dropdown-item": DropdownItem,
 			"van-notify": VanNotify,
 			"uni-load-more": UniLoadMore,
 			"van-icon": Icon,

@@ -29,6 +29,7 @@ export default {
 
 						console.log("server log:", infoRes)
 
+						uni.setStorageSync(LSReference.ID, infoRes.data.data['id'])
 						uni.setStorageSync(LSReference.JWT_TOKEN, infoRes.data.data['jwt_token'])
 						uni.setStorageSync(LSReference.EXPIRE_TIMESTAMP, Number(infoRes.data.data['expiration_at']))
 						let needUploadUserInfo = infoRes.data.data['need_user_info'] === "false" ? false : true; // js string bool 问题
@@ -76,8 +77,9 @@ export default {
 					},
 					fail: (e) => {
 						console.error(e)
-						uni.showToast({
-							title: '登录失败,请重试'
+						Notify({
+							type: 'danger',
+							message: "登录失败,请重试"
 						});
 					}
 				})

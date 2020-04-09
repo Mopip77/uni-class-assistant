@@ -19,6 +19,9 @@ export default {
 	JOIN_COURSE: API_SERVER + 'course/join',
 	DELETE_COURSE: API_SERVER + 'course/delete',
 	EXIT_COURSE: API_SERVER + 'course/exit',
+	GET_MEMBERS: API_SERVER + 'course/members',
+	KICK_OUT_MEMBER: API_SERVER + 'course/kick',
+	ASSIGN_TEACHER: API_SERVER + 'course/assign-teacher',
 	
 	// bulltin
 	CREATE_BULLETIN: API_SERVER + 'bulletin/create',
@@ -36,6 +39,12 @@ export default {
 	// like
 	LIKE: API_SERVER + 'like',
 	
+	// chat
+	CHAT: API_SERVER + 'chat',
+	LATEST_CHAT_PAIR: API_SERVER + 'chat/latest',
+	
+	// upload
+	UPLOAD_AVATAR: API_SERVER + 'upload/avatar',
 	
 	TEST_URL: API_SERVER + 'test'
 }

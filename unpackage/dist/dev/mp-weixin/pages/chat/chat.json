@@ -1,0 +1,8 @@
+{
+  "usingComponents": {
+    "uni-load-more": "/components/uni-load-more/uni-load-more",
+    "van-notify": "/wxcomponents/vant/dist/notify/index",
+    "van-icon": "/wxcomponents/vant/dist/icon/index",
+    "van-image": "/wxcomponents/vant/dist/image/index"
+  }
+}

@@ -20,6 +20,10 @@ export default {
 			uni.setStorageSync(LSReference.JWT_TOKEN, resp.data.auth['token'])
 			uni.setStorageSync(LSReference.EXPIRE_TIMESTAMP, resp.data.auth['expireTimestamp'])
 		}
+		
+		if (typeof resp.data === 'string') {
+			resp.data = JSON.parse(resp.data)
+		}
 
 		if (resp.data.code === 3002) {
 			// 用户未登录

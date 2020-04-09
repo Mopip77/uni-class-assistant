@@ -24,17 +24,34 @@
 /* 垂直间距 */
 /* 透明度 */
 /* 文章场景相关 */
+.on-top {
+  position: fixed;
+  z-index: 9988;
+}
 .user-box {
   margin: 50rpx 30rpx 100rpx 30rpx;
+}
+.user-box .user-login-box {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+            flex-direction: column;
+}
+.user-box .user-login-box .inner-button {
+      margin: 10rpx 10rpx;
+}
+.user-box .user-login-box .inner-button button {
+        padding: 0 1.8rem;
+        height: 2rem;
 }
 .user-box text {
     margin-bottom: 10rpx;
     font-size: 40rpx;
     font-weight: bold;
     display: block;
-}
-.user-box .inner-button {
-    margin: 10rpx 30rpx;
 }
 .user-box .user-info {
     display: -webkit-box;
@@ -66,5 +83,24 @@
 .select-box .select-item image {
     width: 60rpx;
     height: 60rpx;
+}
+.select-box .list {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+          align-items: center;
+}
+.select-box .list .list-info {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+            align-items: center;
+}
+.select-box .list .list-info text {
+      margin-left: 10rpx;
 }
 

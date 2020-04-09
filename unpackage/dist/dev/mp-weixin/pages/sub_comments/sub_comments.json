@@ -1,8 +1,8 @@
 {
   "usingComponents": {
+    "uni-load-more": "/components/uni-load-more/uni-load-more",
     "single-submit-popup": "/components/SingleSubmitPopup",
     "van-notify": "/wxcomponents/vant/dist/notify/index",
-    "uni-load-more": "/components/uni-load-more/uni-load-more",
     "van-icon": "/wxcomponents/vant/dist/icon/index",
     "van-image": "/wxcomponents/vant/dist/image/index"
   }

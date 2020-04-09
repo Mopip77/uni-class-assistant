@@ -157,5 +157,61 @@ export default {
 				}
 			})
 		});
+	},
+	
+	getCourseMembers(courseId) {
+		return new Promise((resolve, reject) => {
+			uni.request({
+				url: ApiReference.GET_MEMBERS + '?courseId=' + courseId,
+				header: HttpCommons.getAuthenticationHeader(),
+				success: (resp) => {
+					if (HttpCommons.successCheck(resp)) {
+						resolve(resp.data.data)
+					}
+				},
+				fail: (err) => {
+					HttpCommons.commonFailHanlder(err)
+					reject(err)
+				}
+			})
+		});
+	},
+	
+	kickoutUser(kickedUserId, courseId) {
+		return new Promise((resolve, reject) => {
+			uni.request({
+				url: ApiReference.KICK_OUT_MEMBER + '?courseId=' + courseId + '&kickedUserId=' + kickedUserId,
+				method: "DELETE",
+				header: HttpCommons.getAuthenticationHeader(),
+				success: (resp) => {
+					if (HttpCommons.successCheck(resp)) {
+						resolve(resp.data.data)
+					}
+				},
+				fail: (err) => {
+					HttpCommons.commonFailHanlder(err)
+					reject(err)
+				}
+			})
+		});
+	},
+	
+	assignTeacher(assignedUserId, courseId) {
+		return new Promise((resolve, reject) => {
+			uni.request({
+				url: ApiReference.ASSIGN_TEACHER + '?targetUserId=' + assignedUserId + '&courseId=' + courseId,
+				method: "PUT",
+				header: HttpCommons.getAuthenticationHeader(),
+				success: (resp) => {
+					if (HttpCommons.successCheck(resp)) {
+						resolve(resp.data.data)
+					}
+				},
+				fail: (err) => {
+					HttpCommons.commonFailHanlder(err)
+					reject(err)
+				}
+			})
+		});
 	}
 }

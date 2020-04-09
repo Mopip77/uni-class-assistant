@@ -19,17 +19,12 @@
 					<swiper class="swiper" :indicator-dots="true" :autoplay="true" :interval="4000" :duration="500">
 						<swiper-item>
 							<view class="swiper-item">
-								<image src="../../static/img/AD1.png"></image>
+								<image src="https://i.loli.net/2020/04/09/9ZtaF6oB7pyM8xG.png"></image>
 							</view>
 						</swiper-item>
 						<swiper-item>
 							<view class="swiper-item ">
-								<image src="../../static/img/AD2.png"></image>
-							</view>
-						</swiper-item>
-						<swiper-item>
-							<view class="swiper-item ">
-								<image src="../../static/img/AD3.png"></image>
+								<image src="https://i.loli.net/2020/04/09/V6tnwgUiSmrpdGv.png"></image>
 							</view>
 						</swiper-item>
 					</swiper>
@@ -129,7 +124,6 @@
 	import GridItem from '../../wxcomponents/vant/dist/grid-item/index.js'
 	import Tab from '../../wxcomponents/vant/dist/tab/index.js'
 	import Tabs from '../../wxcomponents/vant/dist/tabs/index.js'
-	import Divider from '../../wxcomponents/vant/dist/divider/index.js'
 	import VanNotify from '../../wxcomponents/vant/dist/notify/index.js'
 	import Notify from '../../wxcomponents/vant/dist/notify/notify.js'
 	import Icon from '../../wxcomponents/vant/dist/icon/index.js'
@@ -153,7 +147,6 @@
 			'van-grid-item': GridItem,
 			'van-tab': Tab,
 			'van-tabs': Tabs,
-			'van-divider': Divider,
 			'van-notify': VanNotify,
 			'van-icon': Icon,
 			'van-button': Button,
@@ -305,7 +298,7 @@
 		}
 
 		.uni-padding-wrap {
-			height: 275rpx;
+			// height: 275rpx;
 
 			swiper-item {
 				image {
@@ -343,7 +336,8 @@
 				width: 680rpx;
 				margin: 20rpx auto 0 auto;
 				border-radius: 14rpx;
-				background-color: #CDDC39;
+				// background-color: #CDDC39;
+				background-image: url(~@/static/img/course-card-background.png);
 				box-shadow: 10rpx 10rpx 8rpx #9E9E9E;
 
 				.swipe-cell-field {
@@ -378,7 +372,7 @@
 				.footer {
 					display: flex;
 					justify-content: space-between;
-					margin: 60rpx 30rpx 0 30rpx;
+					margin: 60rpx 20rpx 0 25rpx;
 
 					.info {
 						font-size: 30rpx;
@@ -390,6 +384,8 @@
 
 					.user-count {
 						font-size: 30rpx;
+						display: flex;
+						align-items: center;
 					}
 				}
 

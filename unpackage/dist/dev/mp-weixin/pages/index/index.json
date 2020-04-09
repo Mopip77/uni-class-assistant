@@ -1,5 +1,4 @@
 {
-  "navigationBarTitleText": "讨论区",
   "usingComponents": {
     "create-course-modal": "/components/CreateCourse",
     "join-course-modal": "/components/JoinCourse",
@@ -7,7 +6,6 @@
     "van-grid-item": "/wxcomponents/vant/dist/grid-item/index",
     "van-tab": "/wxcomponents/vant/dist/tab/index",
     "van-tabs": "/wxcomponents/vant/dist/tabs/index",
-    "van-divider": "/wxcomponents/vant/dist/divider/index",
     "van-notify": "/wxcomponents/vant/dist/notify/index",
     "van-icon": "/wxcomponents/vant/dist/icon/index",
     "van-button": "/wxcomponents/vant/dist/button/index",

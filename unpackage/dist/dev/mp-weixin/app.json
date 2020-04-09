@@ -1,9 +1,9 @@
 {
   "pages": [
-    "pages/index/index",
+    "pages/me/me",
     "pages/message/message",
     "pages/login/login",
-    "pages/me/me",
+    "pages/index/index",
     "pages/favorite/favorite",
     "pages/conurse_ware/course_ware",
     "pages/contest/contest",
@@ -13,7 +13,9 @@
     "pages/topics/topics",
     "pages/create_topic/create_topic",
     "pages/topic/topic",
-    "pages/sub_comments/sub_comments"
+    "pages/sub_comments/sub_comments",
+    "pages/member_list/member_list",
+    "pages/chat/chat"
   ],
   "subPackages": [],
   "window": {

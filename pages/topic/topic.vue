@@ -14,7 +14,7 @@
 					<view class="creator-name">{{topic.creatorName}}</view>
 					<view class="create-time">{{topic.createGmt}}</view>
 				</view>
-				
+
 				<!-- 使用懒加载，即like后不刷新页面，直接修改对应值 -->
 				<view v-if="!topic.like" class="like-count" @tap="likeTopic">
 					<van-icon name="good-job-o" /> <text>{{topic.likeCount}}</text>
@@ -58,27 +58,23 @@
 			<uni-load-more :status="onloadingStatus" @clickLoadMore="loadMore" :contentText="onloadingText"></uni-load-more>
 		</view>
 
-<view class="dock-row-box">
-		<view class="dock-row">
-			<view class="input-column" @tap="showModal(0)">我有一个大胆的想法...</view>
-			<view class="favorite-column">
-				<van-icon name="star-o" />
+		<view class="dock-row-box">
+			<view class="dock-row">
+				<view class="input-column" @tap="showModal(0)">我有一个大胆的想法...</view>
+				<view class="favorite-column">
+					<van-icon name="star-o" />
+				</view>
 			</view>
 		</view>
-	</view>
 	</view>
 </template>
 
 <script>
-	import DropdownMenu from '@/wxcomponents/vant/dist/dropdown-menu/index.js'
-	import DropdownItem from '@/wxcomponents/vant/dist/dropdown-item/index.js'
 	import VanNotify from "@/wxcomponents/vant/dist/notify/index.js";
 	import Notify from "@/wxcomponents/vant/dist/notify/notify.js";
 	import Icon from "@/wxcomponents/vant/dist/icon/index.js";
 	import Image from "@/wxcomponents/vant/dist/image/index.js";
 
-	import msDropdownMenu from '@/components/ms-dropdown/dropdown-menu.vue'
-	import msDropdownItem from '@/components/ms-dropdown/dropdown-item.vue'
 	import UniLoadMore from "@/components/uni-load-more/uni-load-more.vue";
 	import STabs from "@/components/s-tabs";
 	import STab from "@/components/s-tab";
@@ -90,13 +86,9 @@
 	export default {
 
 		components: {
-			"ms-dropdown-menu": msDropdownMenu,
-			"ms-dropdown-item": msDropdownItem,
 			STabs,
 			STab,
 			SingleSubmitPopup,
-			"van-dropdown-menu": DropdownMenu,
-			"van-dropdown-item": DropdownItem,
 			"van-notify": VanNotify,
 			"uni-load-more": UniLoadMore,
 			"van-icon": Icon,
@@ -184,45 +176,45 @@
 				if (this.topic.like) {
 					return;
 				}
-				
+
 				let promise = TopicUtils.likeTopic(this.topic.id)
 				promise
-				.then(() => {
-					this.topic.like = true
-				})
+					.then(() => {
+						this.topic.like = true
+					})
 			},
 			unlikeTopic() {
 				if (!this.topic.like) {
 					return;
 				}
-				
+
 				let promise = TopicUtils.unlikeTopic(this.topic.id)
 				promise
-				.then(() => {
-					this.topic.like = false
-				})
+					.then(() => {
+						this.topic.like = false
+					})
 			},
 			likeComment(commentIdx) {
 				if (commentIdx >= this.comments.length || this.comments[commentIdx].like) {
 					return;
 				}
-				
+
 				let promise = TopicUtils.likeComment(this.comments[commentIdx].id)
 				promise
-				.then(() => {
-					this.comments[commentIdx].like = true
-				})
+					.then(() => {
+						this.comments[commentIdx].like = true
+					})
 			},
 			unlikeComment(commentIdx) {
 				if (commentIdx >= this.comments.length || !this.comments[commentIdx].like) {
 					return;
 				}
-				
+
 				let promise = TopicUtils.unlikeComment(this.comments[commentIdx].id)
 				promise
-				.then(() => {
-					this.comments[commentIdx].like = false
-				})
+					.then(() => {
+						this.comments[commentIdx].like = false
+					})
 			},
 
 			createComment(content, parentId, type) {
@@ -398,34 +390,34 @@
 
 	.dock-row-box {
 		height: 80rpx;
-		
-	.dock-row {
-		position: fixed;
-		bottom: 0;
-		// border: 1rpx solid black;
-		width: 100%;
-		display: flex;
-		justify-content: space-between;
-		padding: 8rpx 4rpx;
-		background-color: white;
-		align-items: center;
-		box-shadow: -1rpx -1rpx .8rpx #9E9E9E;
 
-		.input-column {
-			font-size: 30rpx;
-			width: 80%;
-			line-height: 1.5rem;
-			background-color: #E0E0E0;
-			border-radius: 25rpx;
-			padding: 2rpx 25rpx;
-			color: #616161;
-		}
+		.dock-row {
+			position: fixed;
+			bottom: 0;
+			// border: 1rpx solid black;
+			width: 100%;
+			display: flex;
+			justify-content: space-between;
+			padding: 8rpx 4rpx;
+			background-color: white;
+			align-items: center;
+			box-shadow: -1rpx -1rpx .8rpx #9E9E9E;
 
-		.favorite-column {
-			font-size: 40rpx;
-			margin-right: 28rpx;
-			padding-top: 5rpx;
+			.input-column {
+				font-size: 30rpx;
+				width: 80%;
+				line-height: 1.5rem;
+				background-color: #E0E0E0;
+				border-radius: 25rpx;
+				padding: 2rpx 25rpx;
+				color: #616161;
+			}
+
+			.favorite-column {
+				font-size: 40rpx;
+				margin-right: 28rpx;
+				padding-top: 5rpx;
+			}
 		}
-	}
 	}
 </style>

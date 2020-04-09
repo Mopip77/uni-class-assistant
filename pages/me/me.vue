@@ -1,10 +1,10 @@
 <template>
 	<view class="container">
-		<van-notify id="van-notify" />
+		<van-notify class="on-top" id="van-notify" />
 		<UpdateUserInfo v-if="showUpdateUserInfo" @closeUpdateUserInfoModal="closeUpdateUserInfoModal" :loginUser="loginUser"></UpdateUserInfo>
 
 		<view class="user-box">
-			<view v-if="!hasLogin">
+			<view class="user-login-box" v-if="!hasLogin">
 				<text>用户未登录</text>
 				<view class="inner-button">
 					<van-button round color="linear-gradient(to right, #4bb0ff, #6149f6)" open-type="getUserInfo" @tap="login()">登录</van-button>
@@ -26,32 +26,32 @@
 		</view>
 		<view class="select-box">
 			<navigator url="../conurse_ware/course_ware">
-				<view class="select-item">
-					<view>
+				<view class="list select-item">
+					<view class="list-info">
 						<image src="../../static/img/icon/book.png" /><text>课件</text></view>
 					<view>></view>
 				</view>
 			</navigator>
 
 			<navigator url="../contest/contest">
-				<view class="select-item">
-					<view>
+				<view class="list select-item">
+					<view class="list-info">
 						<image src="../../static/img/icon/paper.png" /><text>试卷</text></view>
 					<view>></view>
 				</view>
 			</navigator>
 
 			<navigator url="../favorite/favorite">
-				<view class="select-item">
-					<view>
+				<view class="list select-item">
+					<view class="list-info">
 						<image src="../../static/img/icon/fav.png" /> <text>收藏</text></view>
 					<view>></view>
 				</view>
 			</navigator>
 
 			<navigator url="../helpme/helpme">
-				<view class="select-item" style="margin-top: 120rpx; border-top: 1rpx #CFD8DC solid;">
-					<view>
+				<view class="list select-item" style="margin-top: 120rpx; border-top: 1rpx #CFD8DC solid;">
+					<view class="list-info">
 						<image src="../../static/img/icon/help.png" /> <text>帮助</text></view>
 					<view>></view>
 				</view>
@@ -89,8 +89,6 @@
 				return this.$store.state.hasLogin
 			},
 			loginUser(tryLogin) {
-				console.log("computed loginUser in me.vue", tryLogin);
-				console.log(this.$store.state.loginUser);
 				return this.$store.state.loginUser
 			},
 			needLoginAlert() {
@@ -112,16 +110,8 @@
 				this.showUpdateUserInfo = false
 			}
 		},
-
-		onLoad() {
-			// console.log("me on load invoked", this.hasLogin);
-			// LoginUtils.checkLoginState()
-			// LoginUtils.getUserInfo()
-		},
 		onShow() {
-			console.log("on show in me.vue");
 			if (this.needLoginAlert) {
-				console.log("为登录提醒");
 				Notify({
 					type: 'danger',
 					message: "请先登录"
@@ -138,19 +128,35 @@
 </script>
 
 <style lang="scss">
+	.on-top {
+		position: fixed;
+		z-index: 9988;
+	}
+	
 	.user-box {
 
 		margin: 50rpx 30rpx 100rpx 30rpx;
+
+		.user-login-box {
+			display: flex;
+			flex-direction: column;
+
+			.inner-button {
+				margin: 10rpx 10rpx;
+				
+				button {
+	
+					padding: 0 1.8rem;
+					height: 2rem;
+				}
+			}
+		}
 
 		text {
 			margin-bottom: 10rpx;
 			font-size: 40rpx;
 			font-weight: bold;
 			display: block;
-		}
-
-		.inner-button {
-			margin: 10rpx 30rpx;
 		}
 
 		.user-info {
@@ -181,6 +187,20 @@
 				width: 60rpx;
 				height: 60rpx;
 
+			}
+		}
+		
+		.list {
+			display: flex;
+			align-items: center;
+			
+			.list-info {
+				display: flex;
+				align-items: center;
+				
+				text {
+					margin-left: 10rpx;
+				}
 			}
 		}
 	}

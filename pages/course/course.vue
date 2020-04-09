@@ -31,7 +31,7 @@
 
 		<view class="func-select-box">
 			<van-grid column-num="3">
-				<navigator url="../conurse_ware/course_ware">
+				<navigator :url="'../member_list/member_list?courseId=' + course.id">
 					<van-grid-item use-slot>
 						<image src="../../static/img/icon/book.png" />
 						<text>成员列表</text>
@@ -55,7 +55,7 @@
 		<view class="resource-select-box">
 			<view class="label">
 				<view><text>课程资源</text></view>
-				<view>
+				<view v-if="course.creatorId === userId">
 					<van-button custom-class="button" square type="primary" @tap="onOpen">+</van-button>
 				</view>
 			</view>
@@ -95,16 +95,13 @@
 	import VanNotify from "@/wxcomponents/vant/dist/notify/index.js";
 	import Notify from "@/wxcomponents/vant/dist/notify/notify.js";
 	import Icon from "@/wxcomponents/vant/dist/icon/index.js";
-	import Tab from "@/wxcomponents/vant/dist/tab/index.js";
-	import Tabs from "@/wxcomponents/vant/dist/tabs/index.js";
 	import Button from "@/wxcomponents/vant/dist/button/index.js";
-	import ActionSheet from "@/wxcomponents/vant/dist/action-sheet/index.js";
-	import Divider from "@/wxcomponents/vant/dist/divider/index.js";
 	import Steps from "@/wxcomponents/vant/dist/steps/index.js";
 
 	import CourseUtils from "@/static/js/course.js";
 	import BulletinUtils from "@/static/js/bulletin.js";
 	import Utils from "@/static/js/utils.js";
+	import LSReference from '@/static/js/local_storage_reference.js';
 
 	import SingleSubmitPopup from "@/components/SingleSubmitPopup.vue";
 	import UniLoadMore from "@/components/uni-load-more/uni-load-more.vue";
@@ -121,11 +118,7 @@
 			"van-grid-item": GridItem,
 			"van-notify": VanNotify,
 			"van-icon": Icon,
-			"van-tab": Tab,
-			"van-tabs": Tabs,
 			"van-button": Button,
-			"van-action-sheet": ActionSheet,
-			"van-divider": Divider,
 			"van-steps": Steps
 		},
 		data() {
@@ -133,6 +126,7 @@
 				// 从其他页面回退回来，是否需要刷新本页，在其他页面回退之前通过page更改，刷新完再置回false
 				refreshOnShow: false,
 
+				userId: 0,
 				course: {},
 				resourceSelectIndex: 0,
 				bulletins: [],
@@ -314,8 +308,9 @@
 		},
 		onLoad(option) {
 			// 传入id
-			let courseId = 7;
-			// let courseId = option.id;
+			// let courseId = 7;
+			this.userId = parseInt(uni.getStorageSync(LSReference.ID))
+			let courseId = option.id;
 			if (!courseId) {
 				Notify({
 					type: "danger",

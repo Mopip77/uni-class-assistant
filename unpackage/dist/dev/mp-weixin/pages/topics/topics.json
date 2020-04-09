@@ -1,13 +1,11 @@
 {
   "usingComponents": {
+    "uni-load-more": "/components/uni-load-more/uni-load-more",
     "ms-dropdown-menu": "/components/ms-dropdown/dropdown-menu",
     "ms-dropdown-item": "/components/ms-dropdown/dropdown-item",
     "s-tabs": "/components/s-tabs/index",
     "s-tab": "/components/s-tab/index",
-    "van-dropdown-menu": "/wxcomponents/vant/dist/dropdown-menu/index",
-    "van-dropdown-item": "/wxcomponents/vant/dist/dropdown-item/index",
     "van-notify": "/wxcomponents/vant/dist/notify/index",
-    "uni-load-more": "/components/uni-load-more/uni-load-more",
     "van-icon": "/wxcomponents/vant/dist/icon/index",
     "van-image": "/wxcomponents/vant/dist/image/index"
   }

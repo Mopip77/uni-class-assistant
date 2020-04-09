@@ -46,6 +46,9 @@
     -webkit-justify-content: center;
             justify-content: center;
 }
+.update-userinfo-box .avatar .box .edit-avatar {
+      color: red;
+}
 .update-userinfo-box .name-field {
     margin: 60rpx 0;
 }

@@ -104,11 +104,11 @@
 /******/
 /******/
 /******/ 		// mini-css-extract-plugin CSS loading
-/******/ 		var cssChunks = {"components/CreateCourse":1,"components/JoinCourse":1,"components/UpdateUserInfo":1,"components/SingleSubmitPopup":1,"components/s-tab/index":1,"components/s-tabs/index":1,"components/uni-load-more/uni-load-more":1,"components/ms-dropdown/dropdown-item":1,"components/ms-dropdown/dropdown-menu":1};
+/******/ 		var cssChunks = {"components/UpdateUserInfo":1,"components/s-tab/index":1,"components/s-tabs/index":1,"components/uni-load-more/uni-load-more":1,"components/CreateCourse":1,"components/JoinCourse":1,"components/SingleSubmitPopup":1,"components/ms-dropdown/dropdown-item":1,"components/ms-dropdown/dropdown-menu":1};
 /******/ 		if(installedCssChunks[chunkId]) promises.push(installedCssChunks[chunkId]);
 /******/ 		else if(installedCssChunks[chunkId] !== 0 && cssChunks[chunkId]) {
 /******/ 			promises.push(installedCssChunks[chunkId] = new Promise(function(resolve, reject) {
-/******/ 				var href = "" + ({"components/CreateCourse":"components/CreateCourse","components/JoinCourse":"components/JoinCourse","components/UpdateUserInfo":"components/UpdateUserInfo","components/SingleSubmitPopup":"components/SingleSubmitPopup","components/s-tab/index":"components/s-tab/index","components/s-tabs/index":"components/s-tabs/index","components/uni-load-more/uni-load-more":"components/uni-load-more/uni-load-more","components/ms-dropdown/dropdown-item":"components/ms-dropdown/dropdown-item","components/ms-dropdown/dropdown-menu":"components/ms-dropdown/dropdown-menu"}[chunkId]||chunkId) + ".wxss";
+/******/ 				var href = "" + ({"components/UpdateUserInfo":"components/UpdateUserInfo","components/s-tab/index":"components/s-tab/index","components/s-tabs/index":"components/s-tabs/index","components/uni-load-more/uni-load-more":"components/uni-load-more/uni-load-more","components/CreateCourse":"components/CreateCourse","components/JoinCourse":"components/JoinCourse","components/SingleSubmitPopup":"components/SingleSubmitPopup","components/ms-dropdown/dropdown-item":"components/ms-dropdown/dropdown-item","components/ms-dropdown/dropdown-menu":"components/ms-dropdown/dropdown-menu"}[chunkId]||chunkId) + ".wxss";
 /******/ 				var fullhref = __webpack_require__.p + href;
 /******/ 				var existingLinkTags = document.getElementsByTagName("link");
 /******/ 				for(var i = 0; i < existingLinkTags.length; i++) {
@@ -129,6 +129,7 @@
 /******/ 				linkTag.onerror = function(event) {
 /******/ 					var request = event && event.target && event.target.src || fullhref;
 /******/ 					var err = new Error("Loading CSS chunk " + chunkId + " failed.\n(" + request + ")");
+/******/ 					err.code = "CSS_CHUNK_LOAD_FAILED";
 /******/ 					err.request = request;
 /******/ 					delete installedCssChunks[chunkId]
 /******/ 					linkTag.parentNode.removeChild(linkTag)
