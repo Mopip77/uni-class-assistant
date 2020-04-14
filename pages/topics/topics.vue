@@ -186,12 +186,7 @@
 							}
 						});
 
-						// 如果offset为0就直接更新，否则append
-						if (this.offset) {
-							this.topics = this.topics.concat(data);
-						} else {
-							this.topics = data;
-						}
+						this.topics.push(...data);
 
 						// 更新offset 和 onLoading 类型（是否有更多加载）
 						this.offset += this.count;
@@ -217,8 +212,8 @@
 			},
 		},
 		onLoad(option) {
-			let courseId = 7
-			// let courseId = option.courseId
+			// let courseId = 7
+			let courseId = option.courseId
 			this.courseId = courseId
 			if (courseId) {
 				this.getTopicsByTab()

@@ -108,12 +108,7 @@
 						}
 					});
 
-					// 如果offset为0就直接更新，否则append
-					if (this.offsets[IDX]) {
-						this.chats = this.chats.concat(data);
-					} else {
-						this.chats = data;
-					}
+					this.chats.push(...data)
 
 					console.log("data", IDX, this.chats);
 

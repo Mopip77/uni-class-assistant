@@ -18,7 +18,7 @@
 				<view v-else class="field textarea-field">
 					<text>{{fieldName}}</text>
 					<view>
-						<textarea  :placeholder="realPlaceHolder" v-model="content" />
+						<textarea maxlength="-1" :placeholder="realPlaceHolder" v-model="content" />
 					</view>
 				</view>
 

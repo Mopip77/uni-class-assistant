@@ -43,8 +43,17 @@ export default {
 	CHAT: API_SERVER + 'chat',
 	LATEST_CHAT_PAIR: API_SERVER + 'chat/latest',
 	
+	// contest
+	CONTEST: API_SERVER + 'contest',
+	GET_CONTESTS_BY_COURSEID: API_SERVER + 'contest/course',
+	GET_CONTEST_DETAIL: API_SERVER + 'contest/detail',
+	ANSWER: API_SERVER + 'contest/answer',
+	ANSWER_LIST: API_SERVER + 'contest/answer/list',
+	REVISE_ANSWER: API_SERVER + 'contest/revise',
+	
 	// upload
 	UPLOAD_AVATAR: API_SERVER + 'upload/avatar',
+	UPLOAD_QUESTION: API_SERVER + 'upload/question',
 	
 	TEST_URL: API_SERVER + 'test'
 }

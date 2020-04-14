@@ -146,13 +146,7 @@
 						}
 					});
 
-					// 如果offset为0就直接更新，否则append
-					data.messages = data.messages.reverse()
-					if (this.offset) {
-						this.messages = data.messages.concat(this.messages);
-					} else {
-						this.messages = data.messages;
-					}
+					this.messages.push(...data.messages.reverse())
 
 					this.oppositeUserInfo = data.oppositeUser
 					this.meUserInfo = data.me

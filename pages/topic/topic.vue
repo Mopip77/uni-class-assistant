@@ -272,13 +272,11 @@
 								e.createGmt = dateObj.defaultDatetime;
 							}
 						});
-
-						// 如果offset为0就直接更新，否则append
-						if (this.offset) {
-							this.comments = this.comments.concat(data);
-						} else {
-							this.comments = data;
+						
+						if (this.offset === 0) {
+							this.comments.splice(0)
 						}
+						this.comments.push(...data);
 
 						// 更新offset 和 onLoading 类型（是否有更多加载）
 						this.offset += this.count;
@@ -290,8 +288,8 @@
 		},
 
 		onLoad(option) {
-			let topicId = 4
-			// let topicId = option.topicId
+			// let topicId = 4
+			let topicId = option.topicId
 			if (topicId) {
 				this.getTopic(topicId)
 			} else {

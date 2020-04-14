@@ -1,0 +1,8 @@
+{
+  "usingComponents": {
+    "create-revise": "/components/CreateRevise",
+    "van-index-bar": "/wxcomponents/vant/dist/index-bar/index",
+    "van-index-anchor": "/wxcomponents/vant/dist/index-anchor/index",
+    "van-notify": "/wxcomponents/vant/dist/notify/index"
+  }
+}

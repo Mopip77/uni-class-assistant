@@ -20,7 +20,7 @@ export default {
 			uni.setStorageSync(LSReference.JWT_TOKEN, resp.data.auth['token'])
 			uni.setStorageSync(LSReference.EXPIRE_TIMESTAMP, resp.data.auth['expireTimestamp'])
 		}
-		
+
 		if (typeof resp.data === 'string') {
 			resp.data = JSON.parse(resp.data)
 		}
@@ -45,7 +45,7 @@ export default {
 
 		return true;
 	},
-	
+
 	/**
 	 * 返回包含jwt token的http header
 	 * 
@@ -74,6 +74,32 @@ export default {
 			type: 'danger',
 			message: err
 		});
-	}
+	},
 
+	/**
+	 * 上传图片
+	 */
+	uploadImage(url, imgUrl, formData = null, imgName = 'image') {
+		const that = this;
+		return new Promise((resolve, reject) => {
+			uni.uploadFile({
+				url,
+				filePath: imgUrl,
+				name: imgName,
+				header: that.getAuthenticationHeader(),
+				formData,
+				success: (resp) => {
+					if (that.successCheck(resp)) {
+						resolve(resp.data.data);
+					} else {
+						reject(resp)
+					}
+				},
+				fail: (err) => {
+					that.commonFailHanlder(err)
+					reject(err)
+				}
+			});
+		})
+	}
 }

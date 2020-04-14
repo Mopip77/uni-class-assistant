@@ -1,5 +1,4 @@
 {
-  "navigationBarTitleText": "讨论区",
   "usingComponents": {
     "update-user-info": "/components/UpdateUserInfo",
     "van-button": "/wxcomponents/vant/dist/button/index",

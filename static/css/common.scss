@@ -11,3 +11,12 @@
 	width: 100%;
 	padding: 10rpx;
 }
+
+@mixin common-card {
+	height: 220rpx;
+	width: 680rpx;
+	margin: 20rpx auto 0 auto;
+	border-radius: 14rpx;
+	background-color: #fff;
+	box-shadow: 10rpx 10rpx 8rpx #9E9E9E;
+}

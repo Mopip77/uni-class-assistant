@@ -1,0 +1,11 @@
+{
+  "usingComponents": {
+    "w-picker": "/components/w-picker/w-picker",
+    "create-question": "/components/CreateQuestion",
+    "van-button": "/wxcomponents/vant/dist/button/index",
+    "van-icon": "/wxcomponents/vant/dist/icon/index",
+    "van-dialog": "/wxcomponents/vant/dist/dialog/index",
+    "van-divider": "/wxcomponents/vant/dist/divider/index",
+    "van-notify": "/wxcomponents/vant/dist/notify/index"
+  }
+}

@@ -227,13 +227,8 @@
 								e.createGmt = dateObj.defaultDatetime;
 							}
 						});
-
-						// 如果offset为0就直接更新，否则append
-						if (this.offset) {
-							this.subComments = this.subComments.concat(data);
-						} else {
-							this.subComments = data;
-						}
+						
+						this.subComments.push(...data)
 
 						// 更新offset 和 onLoading 类型（是否有更多加载）
 						this.offset += this.count;

@@ -1,0 +1,8 @@
+{
+  "component": true,
+  "usingComponents": {
+    "revise-subjective-question": "/components/ReviseSubjectiveQuestion",
+    "van-button": "/wxcomponents/vant/dist/button/index",
+    "van-notify": "/wxcomponents/vant/dist/notify/index"
+  }
+}

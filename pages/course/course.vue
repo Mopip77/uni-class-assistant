@@ -4,10 +4,10 @@
 			<van-notify class="on-top" id="van-notify" />
 		</view>
 
-		<view v-if="showNewResourceModal" class="on-top">
-			<SingleSubmitPopup :type="newResourceType" :title="newResourceTitle" :fieldName="newResourceFieldName" :placeHolder="newResourcePlaceHolder"
-			 :contentNullable="newResourceNullable" :contentIsNumber="newResourceIsNumber" @closeModal="closeNewResourceModal"
-			 @successCallBack="submitCallBack" />
+		<view v-if="showNewBulletinModal" class="on-top">
+			<!-- 只用于新建公告 -->
+			<SingleSubmitPopup type="textarea" title="发布公告" fieldName="公告内容" placeHolder="请输入公告内容..." :contentNullable="false"
+			 :contentIsNumber="false" @closeModal="closeNewBulletinModal" @successCallBack="newBulletinSubmitCallBack" />
 		</view>
 
 		<view class="course-info">
@@ -56,7 +56,7 @@
 			<view class="label">
 				<view><text>课程资源</text></view>
 				<view v-if="course.creatorId === userId">
-					<van-button custom-class="button" square type="primary" @tap="onOpen">+</van-button>
+					<van-button custom-class="button" square type="primary" @tap="createNewResourceBtn">+</van-button>
 				</view>
 			</view>
 			<!-- <van-tabs
@@ -68,21 +68,37 @@
       > -->
 			<STabs effect="true" navPerView="4" v-model="resourceSelectIndex" @change="changeResourceTab">
 				<STab title="公告">
-					<!-- <van-divider v-if="bulletins.length === 0" contentPosition="center">暂无公告</van-divider> -->
 					<view class="list bulletin-list">
-						<!-- <view class="item bulletin-item" v-for="(bulletin, idx) in bulletins" :key="idx">
-							<text>{{bulletin.content}}</text>
-							<text>{{bulletin.createGmt}}</text>
-							
-							
-						</view> -->
-
-						<van-steps custom-class="bulletin-body" desc-class="bulletin-desc" :steps="bulletins" direction="vertical" />
-						<uni-load-more :status="onloadingStatus" @clickLoadMore="loadMore('公告')" :contentText="bulletinOnloadingText"></uni-load-more>
+						<van-steps custom-class="bulletin-body" desc-class="bulletin-desc" :steps="datas[0]" direction="vertical" />
+						<uni-load-more :status="onloadingStatuses[0]" @clickLoadMore="loadMore" :contentText="onloadingTexts[0]"></uni-load-more>
 					</view>
 				</STab>
 				<STab title="课件">课件</STab>
-				<STab title="试卷">试卷</STab>
+				<STab title="试卷">
+					<view class="list contest-list">
+						<view class="contest-item" v-for="(contest, idx) in datas[2]" :key="idx" @tap="goToContest(idx)">
+							<view class="header">
+								<view v-if="contest.status === '未开始'" class="status" style="color: #607D8B;">未开始</view>
+								<view v-if="contest.status === '已结束'" class="status" style="font-style: italic;">已结束</view>
+								<view v-if="contest.status === '进行中'" class="status" style="color: red;">进行中</view>
+								<view v-if="contest.status === '可进行'" class="status" style="color: #e57373;">可进行</view>
+								<view class="time-box">
+									<view v-if="contest.publishDate" class="publish-date">开始时间:{{contest.publishDate}}</view>
+									<view v-if="contest.deadline" class="publish-date">截止时间:{{contest.deadline}}</view>
+								</view>
+							</view>
+							<view class="footer">
+								<view class="user-box">
+									<image :src="contest.creator.avatarUrl"></image>
+									<text>{{contest.creator.nickname}}</text>
+								</view>
+
+								<view v-if="contest.limitMinutes > 0" class="limit-time">限时: {{contest.limitMinutes}}分钟</view>
+							</view>
+						</view>
+						<uni-load-more :status="onloadingStatuses[2]" @clickLoadMore="loadMore" :contentText="onloadingTexts[2]"></uni-load-more>
+					</view>
+				</STab>
 				<STab title="课堂">课堂</STab>
 			</STabs>
 		</view>
@@ -102,6 +118,7 @@
 	import BulletinUtils from "@/static/js/bulletin.js";
 	import Utils from "@/static/js/utils.js";
 	import LSReference from '@/static/js/local_storage_reference.js';
+	import ContestUtils from '@/static/js/contest.js'
 
 	import SingleSubmitPopup from "@/components/SingleSubmitPopup.vue";
 	import UniLoadMore from "@/components/uni-load-more/uni-load-more.vue";
@@ -126,94 +143,106 @@
 				// 从其他页面回退回来，是否需要刷新本页，在其他页面回退之前通过page更改，刷新完再置回false
 				refreshOnShow: false,
 
+				// 该页面加载内容
 				userId: 0,
 				course: {},
 				resourceSelectIndex: 0,
-				bulletins: [],
-				steps: [],
-
-				// 四个tab使用同一个offset和count，每次获取数据传入offset和count，并且更新offset = offset + count，如果offset和所选tab的累计数量不同表示没有更多了。
-				// onloadingStatus表示下拉刷新的状态，有more（loading前）、loading（loading中）、noMore（没有更多了）
-				offset: 0,
-				count: 10,
-				onloadingStatus: "more",
-				bulletinOnloadingText: {
-					contentdown: "点击加载更多公告",
-					contentrefresh: "加载中...",
-					contentnomore: "没有更多公告了"
-				},
-
-				// new resource
-				newResourceMap: [{
-						title: "新建课堂",
-						type: "input",
-						fieldName: "课程名",
-						placeHolder: "请输入课程名",
-						isNumber: false,
-						nullable: false
-					},
-					{
-						title: "发布课件",
-						type: "input",
-						fieldName: "课件名",
-						placeHolder: "请输入课件名",
-						isNumber: false,
-						nullable: false
-					},
-					{
-						title: "发布试卷",
-						type: "input",
-						fieldName: "试卷名",
-						placeHolder: "请输入试卷名",
-						isNumber: false,
-						nullable: false
-					},
-					{
-						title: "发布公告",
-						type: "textarea",
-						fieldName: "公告内容",
-						placeHolder: "请输入公告内容",
-						isNumber: false,
-						nullable: false
-					},
-					{
-						title: "发布通知",
-						type: "input",
-						fieldName: "通知内容",
-						placeHolder: "请输入通知内容",
-						isNumber: false,
-						nullable: false
-					}
+				datas: [
+					[],
+					[],
+					[],
+					[]
 				],
+				steps: [],
+				offsets: [0, 0, 0, 0],
+				counts: [10, 10, 10, 10],
+				onloadingStatuses: ["more", "more", "more", "more"],
+				onloadingTexts: [{
+						contentdown: "点击加载更多公告",
+						contentrefresh: "加载中...",
+						contentnomore: "没有更多公告了"
+					},
+					{
+						contentdown: "点击加载更多课件",
+						contentrefresh: "加载中...",
+						contentnomore: "没有更多课件了"
+					},
+					{
+						contentdown: "点击加载更多试卷",
+						contentrefresh: "加载中...",
+						contentnomore: "没有更多试卷了"
+					},
+					{
+						contentdown: "点击加载更多课堂",
+						contentrefresh: "加载中...",
+						contentnomore: "没有更多课堂了"
+					},
+				],
+
+				// 新建课程资源的相关内容
+				newResourceMap: [{
+					title: "新建课堂"
+				}, {
+					title: "发布课件"
+				}, {
+					title: "发布试卷"
+				}, {
+					title: "发布公告"
+				}, {
+					title: "发布通知"
+				}],
 				newResourceIdx: 0,
-				showNewResourceModal: false,
-				newResourceType: "input",
-				newResourceTitle: "",
-				newResourceFieldName: "",
-				newResourcePlaceHolder: "",
-				newResourceIsNumber: "",
-				newResourceNullable: false
+				showNewBulletinModal: false,
 			};
 		},
 		methods: {
-			// 四个tab公用一个loadMore, 传入值分别为 公告，课件，试卷，课堂
-			loadMore(tabName) {
-				if (this.onloadingStatus === "noMore") {
+			// , 传入值分别为 
+			/**
+			 * 四个tab公用一个loadMore加载函数
+			 */
+			async loadMore() {
+				// 处理当前tab的loadmore, tab顺序为 公告，课件，试卷，课堂
+				let idx = this.resourceSelectIndex
+				console.log("load more offset:", this.offsets[idx]);
+
+				if (this.offsets[idx] > this.datas[idx].length) {
 					return;
 				}
 
-				// onLoading状态的修改下方到各个加载函数中
-				if (tabName === "公告") {
+				this.onloadingStatuses[idx] = "loading";
+
+				let data = []
+				if (idx === 0) {
 					// 加载公告
-					this.getBulletins(this.course.id);
-				} else {
-					console.log("其他");
+					data = await this.getBulletins();
+					console.log("获得公告", data);
+				} else if (idx === 1) {
+					// 加载课件
+					console.log("获得课件");
+					return;
+				} else if (idx === 2) {
+					// 加载试卷
+					data = await this.getContestsByCourseId()
+					console.log("获得试卷", data);
+				} else if (idx === 3) {
+					// 加载课堂
+					console.log("获得课堂");
+					return;
 				}
+
+				console.log("获取后插入前", this.offsets[idx], this.datas[idx]);
+				this.datas[idx].push(...data)
+
+				// 更新offset 和 onLoading 类型（是否有更多加载）
+				this.offsets[idx] += this.counts[idx];
+				this.onloadingStatuses[idx] = this.offsets[idx] === this.datas[idx].length ? "more" : "noMore";
+				console.log("晚晚晨晨 offset:", this.offsets[idx], " datas:", this.datas[idx], " status:", this.onloadingStatuses[idx]);
 			},
-			closeNewResourceModal() {
-				this.showNewResourceModal = false;
+			closeNewBulletinModal() {
+				this.showNewBulletinModal = false;
 			},
-			onOpen() {
+			// 点击新建课程资源按钮
+			createNewResourceBtn() {
 				uni.showActionSheet({
 					itemList: this.newResourceMap.map(e => e["title"]),
 					success: res => {
@@ -222,88 +251,122 @@
 							return;
 						}
 
-						let newResourceObj = this.newResourceMap[idx];
+						// 使用统一modal创建简单内容
+						// 公告
+						if (idx === 3) {
+							this.showNewBulletinModal = true;
+						} else if (idx === 2) {
+							// 试卷
+							uni.navigateTo({
+								url: '../create_contest/create_contest?courseId=' + this.course.id
+							})
+						}
 
-						this.newResourceIdx = idx;
-						this.newResourceTitle = newResourceObj["title"];
-						this.newResourceType = newResourceObj["type"];
-						this.newResourceFieldName = newResourceObj["fieldName"];
-						this.newResourcePlaceHolder = newResourceObj["placeHolder"];
-						this.newResourceIsNumber = newResourceObj["isNumber"];
-						this.newResourceNullable = newResourceObj["nullable"];
-
-						this.showNewResourceModal = true;
 					}
 				});
 			},
 
 			// popup提交的callback函数，提交完，如果当前tab正好是所提交的类型，则重置offset并刷新
-			submitCallBack(content) {
-				if (this.newResourceIdx === 3) {
-					// 发布公告
-					let promise = BulletinUtils.createBulletin(this.course.id, content);
-					promise.then(data => {
-						if (this.resourceSelectIndex === 0) {
-							// 并且正好当前选择了公告tab
-							this.changeResourceTab();
-						}
-					});
-				}
+			newBulletinSubmitCallBack(content) {
+				let promise = BulletinUtils.createBulletin(this.course.id, content);
+				promise.then(data => {
+					if (this.resourceSelectIndex === 0) {
+						// 并且正好当前选择了公告tab
+						this.offsets[0] = 0
+						this.datas[0].splice(0)
+						this.loadMore();
+					}
+				});
 			},
 
 			// 获取资源栏内容
 			changeResourceTab() {
-				// 重置offset
-				this.offset = 0;
-
-				let idx = this.resourceSelectIndex;
-				if (idx === 0) {
-					// 公告
-					this.getBulletins(this.course.id);
+				// 如果本tab没有任何内容(初次调用或本来就没有内容)，加载
+				let idx = this.resourceSelectIndex
+				console.log("change Tab: ", idx);
+				if (this.offsets[idx] === 0) {
+					console.log("看看现在如何", this.offsets[0], this.datas[0]);
+					this.loadMore()
 				}
+			},
+			
+			// 进入contest界面
+			goToContest(idx) {
+				let contest = this.datas[2][idx]
+				if (contest.status === '未开始') {
+					// 可能时间已经到了，还是要判断一下发布时间
+					if (new Date() - new Date(contest.publishDate) < 0) {
+						Notify({
+							type: 'danger',
+							message: '测试还未开始'
+						})
+						return;
+					}
+				}
+				
+				uni.navigateTo({
+					url: '../contest/contest?contestId=' + contest.id
+				})
 			},
 
 			// bulletin
-			getBulletins(courseId) {
-				this.onloadingStatus = "loading";
+			getBulletins() {
+				let that = this
+				let idx = this.resourceSelectIndex
+				console.log("getBulletins offset:", that.offsets[idx], " data:", that.datas[idx]);
+				return new Promise((resolve, reject) => {
+					let promise = BulletinUtils.listBulletin(
+						that.course.id,
+						that.offsets[idx],
+						that.counts[idx]
+					);
+					promise.then(data => {
+						data.forEach(e => {
+							let dateObj = Utils.dateConverter(e.createGmt);
+							if (null !== dateObj) {
+								e.createGmt = dateObj.defaultDate;
+							}
+						});
 
-				let promise = BulletinUtils.listBulletin(
-					courseId,
-					this.offset,
-					this.count
-				);
-				promise.then(data => {
-					console.log("获得bulletins", data);
-					data.forEach(e => {
-						let dateObj = Utils.dateConverter(e.createGmt);
-						if (null !== dateObj) {
-							e.createGmt = dateObj.defaultDate;
-						}
+						// 重置字段为van-steps所需的字段
+						data = data.map(e => {
+							return {
+								text: e.content,
+								desc: e.createGmt
+							};
+						});
+
+						resolve(data);
 					});
+				})
+			},
 
-					// 重置字段为van-steps所需的字段
-					data = data.map(e => {
-						return {
-							text: e.content,
-							desc: e.createGmt
-						};
+			// 通过课程号获取课程
+			getContestsByCourseId() {
+				let that = this
+				let idx = this.resourceSelectIndex
+				console.log("获取课程中... idx:", idx, " offsets:", this.offsets[idx]);
+				return new Promise((resolve, reject) => {
+					let promise = ContestUtils.getContestByCourseId(
+						that.course.id,
+						that.offsets[idx],
+						that.counts[idx]
+					);
+					promise.then(data => {
+						data.forEach(e => {
+							let dateObj = Utils.dateConverter(e.publishDate, false);
+							if (null !== dateObj) {
+								e.publishDate = dateObj.defaultDatetime;
+							}
+
+							dateObj = Utils.dateConverter(e.deadline, false);
+							if (null !== dateObj) {
+								e.deadline = dateObj.defaultDatetime;
+							}
+						});
+						resolve(data);
 					});
-
-					// 如果offset为0就直接更新，否则append
-					if (this.offset) {
-						this.bulletins = this.bulletins.concat(data);
-						console.log("offset有值", this.offset, this.bulletins);
-					} else {
-						this.bulletins = data;
-						console.log("offset没值", this.offset, this.bulletins);
-					}
-
-					// 更新offset 和 onLoading 类型（是否有更多加载）
-					this.offset += this.count;
-					this.onloadingStatus =
-						this.offset === this.bulletins.length ? "more" : "noMore";
-					console.log("更新状态", this.offset, this.onloadingStatus);
-				});
+				})
 			}
 		},
 		onLoad(option) {
@@ -323,7 +386,6 @@
 					this.course = data;
 
 					// 获取资源栏的内容
-					this.offset = 0;
 					this.changeResourceTab();
 				});
 			}
@@ -331,6 +393,8 @@
 		onShow() {
 			if (this.refreshOnShow) {
 				let courseId = this.course.id;
+				
+				let that = this
 				if (!courseId) {
 					Notify({
 						type: "danger",
@@ -340,11 +404,13 @@
 					let promise = CourseUtils.getCourse(courseId);
 					promise.then(data => {
 						console.log("获取到course", data);
-						this.course = data;
+						that.course = data;
 
 						// 获取资源栏的内容
-						this.offset = 0;
-						this.changeResourceTab();
+						that.offsets[that.resourceSelectIndex] = 0;
+						that.datas[that.resourceSelectIndex].splice(0);
+						console.log("refresh by page", that.resourceSelectIndex, that.offsets, that.datas);
+						that.changeResourceTab();
 					});
 				}
 
@@ -355,6 +421,8 @@
 </script>
 
 <style lang="scss">
+	@import "~@../../static/css/common.scss";
+
 	.on-top {
 		position: fixed;
 		z-index: 99988;
@@ -457,6 +525,58 @@
 
 			.bulletin-desc {
 				font-size: 24rpx;
+			}
+		}
+
+		.contest-list {
+			.contest-item {
+				@include common-card;
+				display: flex;
+				flex-direction: column;
+				height: 200rpx;
+				background-image: url(~@/static/img/course-card-background.png);
+
+				.header {
+					display: flex;
+					justify-content: space-between;
+					padding: 10rpx 10rpx;
+					
+					.status {
+						font-size: 50rpx;
+						font-weight: 600;
+					}
+					
+					.time-box {
+						font-size: 24rpx;
+						color: #424242;
+						display: flex;
+						flex-direction: column;
+					}
+				}
+
+				.footer {
+					display: flex;
+					justify-content: space-between;
+					align-items: center;
+					margin-top: auto;
+					margin-bottom: 6rpx;
+					padding: 0 10rpx;
+					
+					.user-box {
+						display: flex;
+						align-items: center;
+						
+						image {
+							width: 60rpx;
+							height: 60rpx;
+							border-radius: 50%;
+						}
+						
+						text {
+							margin-left: 10rpx;
+						}
+					}
+				}
 			}
 		}
 	}

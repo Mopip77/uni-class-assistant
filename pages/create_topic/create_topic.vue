@@ -13,7 +13,7 @@
 			<view>
 				<text>帖子正文</text>
 				<van-cell-group>
-					<textarea v-model="content" placeholder="请输入帖子正文(可留空)" />
+					<textarea maxlength="-1" v-model="content" placeholder="请输入帖子正文(可留空)" />
 				</van-cell-group>
 			</view>
 		</view>
