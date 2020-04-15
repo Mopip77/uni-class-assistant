@@ -50,6 +50,8 @@ export default {
 	ANSWER: API_SERVER + 'contest/answer',
 	ANSWER_LIST: API_SERVER + 'contest/answer/list',
 	REVISE_ANSWER: API_SERVER + 'contest/revise',
+	GET_CONTEST_AS_CREATOR: API_SERVER + 'contest/creator',
+	GET_CONTEST_AS_PARTICIPATOR: API_SERVER + 'contest/participator',
 	
 	// upload
 	UPLOAD_AVATAR: API_SERVER + 'upload/avatar',

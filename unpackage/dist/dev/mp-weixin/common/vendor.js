@@ -1555,7 +1555,7 @@ uni$1;exports.default = _default;
 
 /***/ }),
 
-/***/ 110:
+/***/ 114:
 /*!****************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/static/js/topic.js ***!
   \****************************************************************************************/
@@ -3089,6 +3089,8 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
   ANSWER: API_SERVER + 'contest/answer',
   ANSWER_LIST: API_SERVER + 'contest/answer/list',
   REVISE_ANSWER: API_SERVER + 'contest/revise',
+  GET_CONTEST_AS_CREATOR: API_SERVER + 'contest/creator',
+  GET_CONTEST_AS_PARTICIPATOR: API_SERVER + 'contest/participator',
 
   // upload
   UPLOAD_AVATAR: API_SERVER + 'upload/avatar',
@@ -3111,193 +3113,6 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
   ID: "id",
   JWT_TOKEN: "jwtToken",
   EXPIRE_TIMESTAMP: "expireTimestamp" };exports.default = _default;
-
-/***/ }),
-
-/***/ 167:
-/*!**********************************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/card/index.js ***!
-  \**********************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-var _link = __webpack_require__(/*! ../mixins/link */ 168);
-var _component = __webpack_require__(/*! ../common/component */ 169);
-(0, _component.VantComponent)({
-  classes: [
-  'num-class',
-  'desc-class',
-  'thumb-class',
-  'title-class',
-  'price-class',
-  'origin-price-class'],
-
-  mixins: [_link.link],
-  props: {
-    tag: String,
-    num: String,
-    desc: String,
-    thumb: String,
-    title: String,
-    price: {
-      type: String,
-      observer: 'updatePrice' },
-
-    centered: Boolean,
-    lazyLoad: Boolean,
-    thumbLink: String,
-    originPrice: String,
-    thumbMode: {
-      type: String,
-      value: 'aspectFit' },
-
-    currency: {
-      type: String,
-      value: '¥' } },
-
-
-  methods: {
-    updatePrice: function updatePrice() {var
-      price = this.data.price;
-      var priceArr = price.toString().split('.');
-      this.setData({
-        integerStr: priceArr[0],
-        decimalStr: priceArr[1] ? ".".concat(priceArr[1]) : '' });
-
-    },
-    onClickThumb: function onClickThumb() {
-      this.jumpLink('thumbLink');
-    } } });
-
-/***/ }),
-
-/***/ 168:
-/*!***********************************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/mixins/link.js ***!
-  \***********************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.link = void 0;var link = Behavior({
-  properties: {
-    url: String,
-    linkType: {
-      type: String,
-      value: 'navigateTo' } },
-
-
-  methods: {
-    jumpLink: function jumpLink() {var urlKey = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'url';
-      var url = this.data[urlKey];
-      if (url) {
-        wx[this.data.linkType]({ url: url });
-      }
-    } } });exports.link = link;
-
-/***/ }),
-
-/***/ 169:
-/*!****************************************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/common/component.js ***!
-  \****************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.VantComponent = VantComponent;var _basic = __webpack_require__(/*! ../mixins/basic */ 170);function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
-var relationFunctions = {
-  ancestor: {
-    linked: function linked(parent) {
-      this.parent = parent;
-    },
-    unlinked: function unlinked() {
-      this.parent = null;
-    } },
-
-  descendant: {
-    linked: function linked(child) {
-      this.children = this.children || [];
-      this.children.push(child);
-    },
-    unlinked: function unlinked(child) {
-      this.children = (this.children || []).filter(function (it) {return it !== child;});
-    } } };
-
-
-function mapKeys(source, target, map) {
-  Object.keys(map).forEach(function (key) {
-    if (source[key]) {
-      target[map[key]] = source[key];
-    }
-  });
-}
-function makeRelation(options, vantOptions, relation) {var
-  type = relation.type,name = relation.name,_linked = relation.linked,_unlinked = relation.unlinked,_linkChanged = relation.linkChanged;var
-  beforeCreate = vantOptions.beforeCreate,destroyed = vantOptions.destroyed;
-  if (type === 'descendant') {
-    options.created = function () {
-      beforeCreate && beforeCreate.bind(this)();
-      this.children = this.children || [];
-    };
-    options.detached = function () {
-      this.children = [];
-      destroyed && destroyed.bind(this)();
-    };
-  }
-  options.relations = Object.assign(options.relations || {}, _defineProperty({}, "../".concat(
-  name, "/index"), {
-    type: type,
-    linked: function linked(node) {
-      relationFunctions[type].linked.bind(this)(node);
-      _linked && _linked.bind(this)(node);
-    },
-    linkChanged: function linkChanged(node) {
-      _linkChanged && _linkChanged.bind(this)(node);
-    },
-    unlinked: function unlinked(node) {
-      relationFunctions[type].unlinked.bind(this)(node);
-      _unlinked && _unlinked.bind(this)(node);
-    } }));
-
-
-}
-function VantComponent() {var vantOptions = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  var options = {};
-  mapKeys(vantOptions, options, {
-    data: 'data',
-    props: 'properties',
-    mixins: 'behaviors',
-    methods: 'methods',
-    beforeCreate: 'created',
-    created: 'attached',
-    mounted: 'ready',
-    relations: 'relations',
-    destroyed: 'detached',
-    classes: 'externalClasses' });var
-
-  relation = vantOptions.relation;
-  if (relation) {
-    makeRelation(options, vantOptions, relation);
-  }
-  // add default externalClasses
-  options.externalClasses = options.externalClasses || [];
-  options.externalClasses.push('custom-class');
-  // add default behaviors
-  options.behaviors = options.behaviors || [];
-  options.behaviors.push(_basic.basic);
-  // map field to form-field behavior
-  if (vantOptions.field) {
-    options.behaviors.push('wx://form-field');
-  }
-  // add default options
-  options.options = {
-    multipleSlots: true,
-    addGlobalClass: true };
-
-  Component(options);
-}
 
 /***/ }),
 
@@ -3411,325 +3226,589 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
 /***/ }),
 
-/***/ 170:
-/*!************************************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/mixins/basic.js ***!
-  \************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.basic = void 0;var basic = Behavior({
-  methods: {
-    $emit: function $emit() {
-      this.triggerEvent.apply(this, arguments);
-    },
-    set: function set(data, callback) {
-      this.setData(data, callback);
-      return new Promise(function (resolve) {return wx.nextTick(resolve);});
-    },
-    getRect: function getRect(selector, all) {var _this = this;
-      return new Promise(function (resolve) {
-        wx.createSelectorQuery().
-        in(_this)[all ? 'selectAll' : 'select'](selector).
-        boundingClientRect(function (rect) {
-          if (all && Array.isArray(rect) && rect.length) {
-            resolve(rect);
-          }
-          if (!all && rect) {
-            resolve(rect);
-          }
-        }).
-        exec();
-      });
-    } } });exports.basic = basic;
-
-/***/ }),
-
 /***/ 173:
-/*!***************************************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/index-bar/index.js ***!
-  \***************************************************************************************************************/
+/*!**********************************************************************************************************!*\
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/grid/index.js ***!
+  \**********************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-var _component = __webpack_require__(/*! ../common/component */ 169);
-var _color = __webpack_require__(/*! ../common/color */ 20);
-var indexList = function indexList() {
-  var indexList = [];
-  var charCodeOfA = 'A'.charCodeAt(0);
-  for (var i = 0; i < 26; i++) {
-    indexList.push(String.fromCharCode(charCodeOfA + i));
-  }
-  return indexList;
-};
+var _component = __webpack_require__(/*! ../common/component */ 32);
+var _utils = __webpack_require__(/*! ../common/utils */ 174);
 (0, _component.VantComponent)({
   relation: {
-    name: 'index-anchor',
+    name: 'grid-item',
     type: 'descendant',
-    current: 'index-bar',
-    linked: function linked() {
-      this.updateData();
-    },
-    linkChanged: function linkChanged() {
-      this.updateData();
-    },
-    unlinked: function unlinked() {
-      this.updateData();
-    } },
+    current: 'grid' },
 
   props: {
-    sticky: {
+    square: {
       type: Boolean,
-      value: true },
+      observer: 'updateChildren' },
 
-    zIndex: {
-      type: Number,
-      value: 1 },
-
-    highlightColor: {
-      type: String,
-      value: _color.GREEN },
-
-    scrollTop: {
-      type: Number,
+    gutter: {
+      type: [Number, String],
       value: 0,
-      observer: 'onScroll' },
+      observer: 'updateChildren' },
 
-    stickyOffsetTop: {
+    clickable: {
+      type: Boolean,
+      observer: 'updateChildren' },
+
+    columnNum: {
       type: Number,
-      value: 0 },
+      value: 4,
+      observer: 'updateChildren' },
 
-    indexList: {
-      type: Array,
-      value: indexList() } },
+    center: {
+      type: Boolean,
+      value: true,
+      observer: 'updateChildren' },
+
+    border: {
+      type: Boolean,
+      value: true,
+      observer: 'updateChildren' } },
 
 
   data: {
-    activeAnchorIndex: null,
-    showSidebar: false },
+    viewStyle: '' },
 
+  created: function created() {var
+    gutter = this.data.gutter;
+    if (gutter) {
+      this.setData({
+        viewStyle: "padding-left: ".concat((0, _utils.addUnit)(gutter)) });
+
+    }
+  },
   methods: {
-    updateData: function updateData() {var _this = this;
-      this.timer && clearTimeout(this.timer);
-      this.timer = setTimeout(function () {
-        _this.children = _this.getRelationNodes('../index-anchor/index');
-        _this.setData({
-          showSidebar: !!_this.children.length });
-
-        _this.setRect().then(function () {
-          _this.onScroll();
-        });
-      }, 0);
-    },
-    setRect: function setRect() {
-      return Promise.all([
-      this.setAnchorsRect(),
-      this.setListRect(),
-      this.setSiderbarRect()]);
-
-    },
-    setAnchorsRect: function setAnchorsRect() {var _this2 = this;
-      return Promise.all(this.children.map(function (anchor) {return anchor.
-        getRect('.van-index-anchor-wrapper').
-        then(function (rect) {
-          Object.assign(anchor, {
-            height: rect.height,
-            top: rect.top + _this2.data.scrollTop });
-
-        });}));
-    },
-    setListRect: function setListRect() {var _this3 = this;
-      return this.getRect('.van-index-bar').then(function (rect) {
-        Object.assign(_this3, {
-          height: rect.height,
-          top: rect.top + _this3.data.scrollTop });
-
+    updateChildren: function updateChildren() {
+      this.children.forEach(function (child) {
+        child.updateStyle();
       });
-    },
-    setSiderbarRect: function setSiderbarRect() {var _this4 = this;
-      return this.getRect('.van-index-bar__sidebar').then(function (res) {
-        _this4.sidebar = {
-          height: res.height,
-          top: res.top };
-
-      });
-    },
-    setDiffData: function setDiffData(_ref) {var target = _ref.target,data = _ref.data;
-      var diffData = {};
-      Object.keys(data).forEach(function (key) {
-        if (target.data[key] !== data[key]) {
-          diffData[key] = data[key];
-        }
-      });
-      if (Object.keys(diffData).length) {
-        target.setData(diffData);
-      }
-    },
-    getAnchorRect: function getAnchorRect(anchor) {
-      return anchor.
-      getRect('.van-index-anchor-wrapper').
-      then(function (rect) {return {
-          height: rect.height,
-          top: rect.top };});
-
-    },
-    getActiveAnchorIndex: function getActiveAnchorIndex() {var
-      children = this.children;var _this$data =
-      this.data,sticky = _this$data.sticky,scrollTop = _this$data.scrollTop,stickyOffsetTop = _this$data.stickyOffsetTop;
-      for (var i = this.children.length - 1; i >= 0; i--) {
-        var preAnchorHeight = i > 0 ? children[i - 1].height : 0;
-        var reachTop = sticky ? preAnchorHeight + stickyOffsetTop : 0;
-        if (reachTop + scrollTop >= children[i].top) {
-          return i;
-        }
-      }
-      return -1;
-    },
-    onScroll: function onScroll() {var _this5 = this;var _this$children =
-      this.children,children = _this$children === void 0 ? [] : _this$children;
-      if (!children.length) {
-        return;
-      }var _this$data2 =
-      this.data,sticky = _this$data2.sticky,stickyOffsetTop = _this$data2.stickyOffsetTop,zIndex = _this$data2.zIndex,highlightColor = _this$data2.highlightColor,scrollTop = _this$data2.scrollTop;
-      var active = this.getActiveAnchorIndex();
-      this.setDiffData({
-        target: this,
-        data: {
-          activeAnchorIndex: active } });
-
-
-      if (sticky) {
-        var isActiveAnchorSticky = false;
-        if (active !== -1) {
-          isActiveAnchorSticky =
-          children[active].top <= stickyOffsetTop + scrollTop;
-        }
-        children.forEach(function (item, index) {
-          if (index === active) {
-            var wrapperStyle = '';
-            var anchorStyle = "\n              color: ".concat(
-            highlightColor, ";\n            ");
-
-            if (isActiveAnchorSticky) {
-              wrapperStyle = "\n                height: ".concat(
-              children[index].height, "px;\n              ");
-
-              anchorStyle = "\n                position: fixed;\n                top: ".concat(
-
-              stickyOffsetTop, "px;\n                z-index: ").concat(
-              zIndex, ";\n                color: ").concat(
-              highlightColor, ";\n              ");
-
-            }
-            _this5.setDiffData({
-              target: item,
-              data: {
-                active: true,
-                anchorStyle: anchorStyle,
-                wrapperStyle: wrapperStyle } });
-
-
-          } else
-          if (index === active - 1) {
-            var currentAnchor = children[index];
-            var currentOffsetTop = currentAnchor.top;
-            var targetOffsetTop = index === children.length - 1 ?
-            _this5.top :
-            children[index + 1].top;
-            var parentOffsetHeight = targetOffsetTop - currentOffsetTop;
-            var translateY = parentOffsetHeight - currentAnchor.height;
-            var _anchorStyle = "\n              position: relative;\n              transform: translate3d(0, ".concat(
-
-            translateY, "px, 0);\n              z-index: ").concat(
-            zIndex, ";\n              color: ").concat(
-            highlightColor, ";\n            ");
-
-            _this5.setDiffData({
-              target: item,
-              data: {
-                active: true,
-                anchorStyle: _anchorStyle } });
-
-
-          } else
-          {
-            _this5.setDiffData({
-              target: item,
-              data: {
-                active: false,
-                anchorStyle: '',
-                wrapperStyle: '' } });
-
-
-          }
-        });
-      }
-    },
-    onClick: function onClick(event) {
-      this.scrollToAnchor(event.target.dataset.index);
-    },
-    onTouchMove: function onTouchMove(event) {
-      var sidebarLength = this.children.length;
-      var touch = event.touches[0];
-      var itemHeight = this.sidebar.height / sidebarLength;
-      var index = Math.floor((touch.clientY - this.sidebar.top) / itemHeight);
-      if (index < 0) {
-        index = 0;
-      } else
-      if (index > sidebarLength - 1) {
-        index = sidebarLength - 1;
-      }
-      this.scrollToAnchor(index);
-    },
-    onTouchStop: function onTouchStop() {
-      this.scrollToAnchorIndex = null;
-    },
-    scrollToAnchor: function scrollToAnchor(index) {var _this6 = this;
-      if (typeof index !== 'number' || this.scrollToAnchorIndex === index) {
-        return;
-      }
-      this.scrollToAnchorIndex = index;
-      var anchor = this.children.find(function (item) {return item.data.index === _this6.data.indexList[index];});
-      if (anchor) {
-        this.$emit('select', anchor.data.index);
-        wx.pageScrollTo({
-          duration: 0,
-          scrollTop: anchor.top });
-
-      }
     } } });
 
 /***/ }),
 
 /***/ 174:
-/*!******************************************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/index-anchor/index.js ***!
-  \******************************************************************************************************************/
+/*!************************************************************************************************************!*\
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/common/utils.js ***!
+  \************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-var _component = __webpack_require__(/*! ../common/component */ 169);
-(0, _component.VantComponent)({
-  relation: {
-    name: 'index-bar',
-    type: 'ancestor',
-    current: 'index-anchor' },
-
-  props: {
-    useSlot: Boolean,
-    index: null },
-
-  data: {
-    active: false,
-    wrapperStyle: '',
-    anchorStyle: '' } });
+Object.defineProperty(exports, "__esModule", { value: true });exports.isDef = isDef;exports.isObj = isObj;exports.isNumber = isNumber;exports.range = range;exports.nextTick = nextTick;exports.getSystemInfoSync = getSystemInfoSync;exports.addUnit = addUnit;function isDef(value) {
+  return value !== undefined && value !== null;
+}
+function isObj(x) {
+  var type = typeof x;
+  return x !== null && (type === 'object' || type === 'function');
+}
+function isNumber(value) {
+  return /^\d+(\.\d+)?$/.test(value);
+}
+function range(num, min, max) {
+  return Math.min(Math.max(num, min), max);
+}
+function nextTick(fn) {
+  setTimeout(function () {
+    fn();
+  }, 1000 / 30);
+}
+var systemInfo = null;
+function getSystemInfoSync() {
+  if (systemInfo == null) {
+    systemInfo = wx.getSystemInfoSync();
+  }
+  return systemInfo;
+}
+function addUnit(value) {
+  if (!isDef(value)) {
+    return undefined;
+  }
+  value = String(value);
+  return isNumber(value) ? "".concat(value, "px") : value;
+}
 
 /***/ }),
 
 /***/ 175:
+/*!***************************************************************************************************************!*\
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/grid-item/index.js ***!
+  \***************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+var _link = __webpack_require__(/*! ../mixins/link */ 31);
+var _component = __webpack_require__(/*! ../common/component */ 32);
+var _utils = __webpack_require__(/*! ../common/utils */ 174);
+(0, _component.VantComponent)({
+  relation: {
+    name: 'grid',
+    type: 'ancestor',
+    current: 'grid-item' },
+
+  mixins: [_link.link],
+  props: {
+    icon: String,
+    dot: Boolean,
+    info: null,
+    text: String,
+    useSlot: Boolean },
+
+  data: {
+    viewStyle: '' },
+
+  mounted: function mounted() {
+    this.updateStyle();
+  },
+  methods: {
+    updateStyle: function updateStyle() {
+      if (!this.parent) {
+        return;
+      }var _this$parent =
+      this.parent,data = _this$parent.data,children = _this$parent.children;var
+      columnNum = data.columnNum,border = data.border,square = data.square,gutter = data.gutter,clickable = data.clickable,center = data.center;
+      var width = "".concat(100 / columnNum, "%");
+      var styleWrapper = [];
+      styleWrapper.push("width: ".concat(width));
+      if (square) {
+        styleWrapper.push("padding-top: ".concat(width));
+      }
+      if (gutter) {
+        var gutterValue = (0, _utils.addUnit)(gutter);
+        styleWrapper.push("padding-right: ".concat(gutterValue));
+        var index = children.indexOf(this);
+        if (index >= columnNum) {
+          styleWrapper.push("margin-top: ".concat(gutterValue));
+        }
+      }
+      var contentStyle = '';
+      if (square && gutter) {
+        var _gutterValue = (0, _utils.addUnit)(gutter);
+        contentStyle = "\n          right: ".concat(
+        _gutterValue, ";\n          bottom: ").concat(
+        _gutterValue, ";\n          height: auto;\n        ");
+
+
+      }
+      this.setData({
+        viewStyle: styleWrapper.join('; '),
+        contentStyle: contentStyle,
+        center: center,
+        border: border,
+        square: square,
+        gutter: gutter,
+        clickable: clickable });
+
+    },
+    onClick: function onClick() {
+      this.$emit('click');
+      this.jumpLink();
+    } } });
+
+/***/ }),
+
+/***/ 176:
+/*!*********************************************************************************************************!*\
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/tab/index.js ***!
+  \*********************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+var _component = __webpack_require__(/*! ../common/component */ 32);
+(0, _component.VantComponent)({
+  relation: {
+    name: 'tabs',
+    type: 'ancestor',
+    current: 'tab' },
+
+  props: {
+    dot: {
+      type: Boolean,
+      observer: 'update' },
+
+    info: {
+      type: null,
+      observer: 'update' },
+
+    title: {
+      type: String,
+      observer: 'update' },
+
+    disabled: {
+      type: Boolean,
+      observer: 'update' },
+
+    titleStyle: {
+      type: String,
+      observer: 'update' },
+
+    name: {
+      type: [Number, String],
+      value: '' } },
+
+
+  data: {
+    active: false },
+
+  methods: {
+    getComputedName: function getComputedName() {
+      if (this.data.name !== '') {
+        return this.data.name;
+      }
+      return this.index;
+    },
+    updateRender: function updateRender(active, parent) {var
+      parentData = parent.data;
+      this.inited = this.inited || active;
+      this.setData({
+        active: active,
+        shouldRender: this.inited || !parentData.lazyRender,
+        shouldShow: active || parentData.animated });
+
+    },
+    update: function update() {
+      if (this.parent) {
+        this.parent.updateTabs();
+      }
+    } } });
+
+/***/ }),
+
+/***/ 177:
+/*!**********************************************************************************************************!*\
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/tabs/index.js ***!
+  \**********************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+var _component = __webpack_require__(/*! ../common/component */ 32);
+var _touch = __webpack_require__(/*! ../mixins/touch */ 178);
+var _utils = __webpack_require__(/*! ../common/utils */ 174);function _slicedToArray(arr, i) {return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest();}function _nonIterableRest() {throw new TypeError("Invalid attempt to destructure non-iterable instance");}function _iterableToArrayLimit(arr, i) {if (!(Symbol.iterator in Object(arr) || Object.prototype.toString.call(arr) === "[object Arguments]")) {return;}var _arr = [];var _n = true;var _d = false;var _e = undefined;try {for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {_arr.push(_s.value);if (i && _arr.length === i) break;}} catch (err) {_d = true;_e = err;} finally {try {if (!_n && _i["return"] != null) _i["return"]();} finally {if (_d) throw _e;}}return _arr;}function _arrayWithHoles(arr) {if (Array.isArray(arr)) return arr;}
+(0, _component.VantComponent)({
+  mixins: [_touch.touch],
+  classes: ['nav-class', 'tab-class', 'tab-active-class', 'line-class'],
+  relation: {
+    name: 'tab',
+    type: 'descendant',
+    current: 'tabs',
+    linked: function linked(target) {
+      target.index = this.children.length - 1;
+      this.updateTabs();
+    },
+    unlinked: function unlinked() {
+      this.children = this.children.
+      map(function (child, index) {
+        child.index = index;
+        return child;
+      });
+      this.updateTabs();
+    } },
+
+  props: {
+    color: {
+      type: String,
+      observer: 'setLine' },
+
+    sticky: Boolean,
+    animated: {
+      type: Boolean,
+      observer: function observer() {var _this = this;
+        this.children.forEach(function (child, index) {return child.updateRender(index === _this.data.currentIndex, _this);});
+      } },
+
+    swipeable: Boolean,
+    lineWidth: {
+      type: [String, Number],
+      value: -1,
+      observer: 'setLine' },
+
+    lineHeight: {
+      type: [String, Number],
+      value: -1,
+      observer: 'setLine' },
+
+    titleActiveColor: String,
+    titleInactiveColor: String,
+    active: {
+      type: [String, Number],
+      value: 0,
+      observer: function observer(name) {
+        if (name !== this.getCurrentName()) {
+          this.setCurrentIndexByName(name);
+        }
+      } },
+
+    type: {
+      type: String,
+      value: 'line' },
+
+    border: {
+      type: Boolean,
+      value: true },
+
+    ellipsis: {
+      type: Boolean,
+      value: true },
+
+    duration: {
+      type: Number,
+      value: 0.3 },
+
+    zIndex: {
+      type: Number,
+      value: 1 },
+
+    swipeThreshold: {
+      type: Number,
+      value: 4,
+      observer: function observer(value) {
+        this.setData({
+          scrollable: this.children.length > value || !this.data.ellipsis });
+
+      } },
+
+    offsetTop: {
+      type: Number,
+      value: 0 },
+
+    lazyRender: {
+      type: Boolean,
+      value: true } },
+
+
+  data: {
+    tabs: [],
+    lineStyle: '',
+    scrollLeft: 0,
+    scrollable: false,
+    trackStyle: '',
+    currentIndex: null,
+    container: null },
+
+  mounted: function mounted() {var _this2 = this;
+    wx.nextTick(function () {
+      _this2.setLine(true);
+      _this2.scrollIntoView();
+    });
+  },
+  methods: {
+    updateContainer: function updateContainer() {var _this3 = this;
+      this.setData({
+        container: function container() {return _this3.createSelectorQuery().select('.van-tabs');} });
+
+    },
+    updateTabs: function updateTabs() {var _this$children =
+      this.children,children = _this$children === void 0 ? [] : _this$children,data = this.data;
+      this.setData({
+        tabs: children.map(function (child) {return child.data;}),
+        scrollable: this.children.length > data.swipeThreshold || !data.ellipsis });
+
+      this.setCurrentIndexByName(this.getCurrentName() || data.active);
+    },
+    trigger: function trigger(eventName, child) {var
+      currentIndex = this.data.currentIndex;
+      var currentChild = child || this.children[currentIndex];
+      if (!(0, _utils.isDef)(currentChild)) {
+        return;
+      }
+      this.$emit(eventName, {
+        index: currentChild.index,
+        name: currentChild.getComputedName(),
+        title: currentChild.data.title });
+
+    },
+    onTap: function onTap(event) {var _this4 = this;var
+      index = event.currentTarget.dataset.index;
+      var child = this.children[index];
+      if (child.data.disabled) {
+        this.trigger('disabled', child);
+      } else
+      {
+        this.setCurrentIndex(index);
+        wx.nextTick(function () {
+          _this4.trigger('click');
+        });
+      }
+    },
+    // correct the index of active tab
+    setCurrentIndexByName: function setCurrentIndexByName(name) {var _this$children2 =
+      this.children,children = _this$children2 === void 0 ? [] : _this$children2;
+      var matched = children.filter(function (child) {return child.getComputedName() === name;});
+      if (matched.length) {
+        this.setCurrentIndex(matched[0].index);
+      }
+    },
+    setCurrentIndex: function setCurrentIndex(currentIndex) {var _this5 = this;var
+      data = this.data,_this$children3 = this.children,children = _this$children3 === void 0 ? [] : _this$children3;
+      if (!(0, _utils.isDef)(currentIndex) ||
+      currentIndex >= children.length ||
+      currentIndex < 0) {
+        return;
+      }
+      children.forEach(function (item, index) {
+        var active = index === currentIndex;
+        if (active !== item.data.active || !item.inited) {
+          item.updateRender(active, _this5);
+        }
+      });
+      if (currentIndex === data.currentIndex) {
+        return;
+      }
+      var shouldEmitChange = data.currentIndex !== null;
+      this.setData({ currentIndex: currentIndex });
+      wx.nextTick(function () {
+        _this5.setLine();
+        _this5.scrollIntoView();
+        _this5.updateContainer();
+        _this5.trigger('input');
+        if (shouldEmitChange) {
+          _this5.trigger('change');
+        }
+      });
+    },
+    getCurrentName: function getCurrentName() {
+      var activeTab = this.children[this.data.currentIndex];
+      if (activeTab) {
+        return activeTab.getComputedName();
+      }
+    },
+    setLine: function setLine(skipTransition) {var _this6 = this;
+      if (this.data.type !== 'line') {
+        return;
+      }var _this$data =
+      this.data,color = _this$data.color,duration = _this$data.duration,currentIndex = _this$data.currentIndex,lineWidth = _this$data.lineWidth,lineHeight = _this$data.lineHeight;
+      this.getRect('.van-tab', true).then(function () {var rects = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+        var rect = rects[currentIndex];
+        if (rect == null) {
+          return;
+        }
+        var width = lineWidth !== -1 ? lineWidth : rect.width / 2;
+        var height = lineHeight !== -1 ? "height: ".concat(
+        (0, _utils.addUnit)(lineHeight), "; border-radius: ").concat((0, _utils.addUnit)(lineHeight), ";") :
+        '';
+        var left = rects.
+        slice(0, currentIndex).
+        reduce(function (prev, curr) {return prev + curr.width;}, 0);
+        left += (rect.width - width) / 2;
+        var transition = skipTransition ?
+        '' : "transition-duration: ".concat(
+        duration, "s; -webkit-transition-duration: ").concat(duration, "s;");
+        _this6.setData({
+          lineStyle: "\n            ".concat(
+          height, "\n            width: ").concat(
+          (0, _utils.addUnit)(width), ";\n            background-color: ").concat(
+          color, ";\n            -webkit-transform: translateX(").concat(
+          left, "px);\n            transform: translateX(").concat(
+          left, "px);\n            ").concat(
+          transition, "\n          ") });
+
+
+      });
+    },
+    // scroll active tab into view
+    scrollIntoView: function scrollIntoView() {var _this7 = this;var _this$data2 =
+      this.data,currentIndex = _this$data2.currentIndex,scrollable = _this$data2.scrollable;
+      if (!scrollable) {
+        return;
+      }
+      Promise.all([
+      this.getRect('.van-tab', true),
+      this.getRect('.van-tabs__nav')]).
+      then(function (_ref) {var _ref2 = _slicedToArray(_ref, 2),tabRects = _ref2[0],navRect = _ref2[1];
+        var tabRect = tabRects[currentIndex];
+        var offsetLeft = tabRects.
+        slice(0, currentIndex).
+        reduce(function (prev, curr) {return prev + curr.width;}, 0);
+        _this7.setData({
+          scrollLeft: offsetLeft - (navRect.width - tabRect.width) / 2 });
+
+      });
+    },
+    onTouchScroll: function onTouchScroll(event) {
+      this.$emit('scroll', event.detail);
+    },
+    onTouchStart: function onTouchStart(event) {
+      if (!this.data.swipeable)
+      return;
+      this.touchStart(event);
+    },
+    onTouchMove: function onTouchMove(event) {
+      if (!this.data.swipeable)
+      return;
+      this.touchMove(event);
+    },
+    // watch swipe touch end
+    onTouchEnd: function onTouchEnd() {
+      if (!this.data.swipeable)
+      return;var _this$data3 =
+      this.data,tabs = _this$data3.tabs,currentIndex = _this$data3.currentIndex;var
+      direction = this.direction,deltaX = this.deltaX,offsetX = this.offsetX;
+      var minSwipeDistance = 50;
+      if (direction === 'horizontal' && offsetX >= minSwipeDistance) {
+        if (deltaX > 0 && currentIndex !== 0) {
+          this.setCurrentIndex(currentIndex - 1);
+        } else
+        if (deltaX < 0 && currentIndex !== tabs.length - 1) {
+          this.setCurrentIndex(currentIndex + 1);
+        }
+      }
+    } } });
+
+/***/ }),
+
+/***/ 178:
+/*!************************************************************************************************************!*\
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/mixins/touch.js ***!
+  \************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });exports.touch = void 0;var MIN_DISTANCE = 10;
+function getDirection(x, y) {
+  if (x > y && x > MIN_DISTANCE) {
+    return 'horizontal';
+  }
+  if (y > x && y > MIN_DISTANCE) {
+    return 'vertical';
+  }
+  return '';
+}
+var touch = Behavior({
+  methods: {
+    resetTouchStatus: function resetTouchStatus() {
+      this.direction = '';
+      this.deltaX = 0;
+      this.deltaY = 0;
+      this.offsetX = 0;
+      this.offsetY = 0;
+    },
+    touchStart: function touchStart(event) {
+      this.resetTouchStatus();
+      var touch = event.touches[0];
+      this.startX = touch.clientX;
+      this.startY = touch.clientY;
+    },
+    touchMove: function touchMove(event) {
+      var touch = event.touches[0];
+      this.deltaX = touch.clientX - this.startX;
+      this.deltaY = touch.clientY - this.startY;
+      this.offsetX = Math.abs(this.deltaX);
+      this.offsetY = Math.abs(this.deltaY);
+      this.direction = this.direction || getDirection(this.offsetX, this.offsetY);
+    } } });exports.touch = touch;
+
+/***/ }),
+
+/***/ 179:
 /*!************************************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/notify/index.js ***!
   \************************************************************************************************************/
@@ -3737,7 +3816,7 @@ var _component = __webpack_require__(/*! ../common/component */ 169);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-var _component = __webpack_require__(/*! ../common/component */ 169);
+var _component = __webpack_require__(/*! ../common/component */ 32);
 var _color = __webpack_require__(/*! ../common/color */ 20);
 (0, _component.VantComponent)({
   props: {
@@ -3911,6 +3990,440 @@ var _notify = _interopRequireDefault(__webpack_require__(/*! ../../wxcomponents/
     });
   } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
+
+/***/ }),
+
+/***/ 180:
+/*!**********************************************************************************************************!*\
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/icon/index.js ***!
+  \**********************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+var _component = __webpack_require__(/*! ../common/component */ 32);
+(0, _component.VantComponent)({
+  props: {
+    dot: Boolean,
+    info: null,
+    size: null,
+    color: String,
+    customStyle: String,
+    classPrefix: {
+      type: String,
+      value: 'van-icon' },
+
+    name: {
+      type: String,
+      observer: function observer(val) {
+        this.setData({
+          isImageName: val.indexOf('/') !== -1 });
+
+      } } },
+
+
+  methods: {
+    onClick: function onClick() {
+      this.$emit('click');
+    } } });
+
+/***/ }),
+
+/***/ 181:
+/*!************************************************************************************************************!*\
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/button/index.js ***!
+  \************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+var _component = __webpack_require__(/*! ../common/component */ 32);
+var _button = __webpack_require__(/*! ../mixins/button */ 182);
+var _openType = __webpack_require__(/*! ../mixins/open-type */ 183);
+(0, _component.VantComponent)({
+  mixins: [_button.button, _openType.openType],
+  classes: ['hover-class', 'loading-class'],
+  data: {
+    baseStyle: '' },
+
+  props: {
+    icon: String,
+    plain: Boolean,
+    block: Boolean,
+    round: Boolean,
+    square: Boolean,
+    loading: Boolean,
+    hairline: Boolean,
+    disabled: Boolean,
+    loadingText: String,
+    customStyle: String,
+    loadingType: {
+      type: String,
+      value: 'circular' },
+
+    type: {
+      type: String,
+      value: 'default' },
+
+    size: {
+      type: String,
+      value: 'normal' },
+
+    loadingSize: {
+      type: String,
+      value: '20px' },
+
+    color: {
+      type: String,
+      observer: function observer(color) {
+        var style = '';
+        if (color) {
+          style += "color: ".concat(this.data.plain ? color : 'white', ";");
+          if (!this.data.plain) {
+            // Use background instead of backgroundColor to make linear-gradient work
+            style += "background: ".concat(color, ";");
+          }
+          // hide border when color is linear-gradient
+          if (color.indexOf('gradient') !== -1) {
+            style += 'border: 0;';
+          } else
+          {
+            style += "border-color: ".concat(color, ";");
+          }
+        }
+        if (style !== this.data.baseStyle) {
+          this.setData({ baseStyle: style });
+        }
+      } } },
+
+
+  methods: {
+    onClick: function onClick() {
+      if (!this.data.disabled && !this.data.loading) {
+        this.$emit('click');
+      }
+    } } });
+
+/***/ }),
+
+/***/ 182:
+/*!*************************************************************************************************************!*\
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/mixins/button.js ***!
+  \*************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });exports.button = void 0;var button = Behavior({
+  externalClasses: ['hover-class'],
+  properties: {
+    id: String,
+    lang: {
+      type: String,
+      value: 'en' },
+
+    businessId: Number,
+    sessionFrom: String,
+    sendMessageTitle: String,
+    sendMessagePath: String,
+    sendMessageImg: String,
+    showMessageCard: Boolean,
+    appParameter: String,
+    ariaLabel: String } });exports.button = button;
+
+/***/ }),
+
+/***/ 183:
+/*!****************************************************************************************************************!*\
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/mixins/open-type.js ***!
+  \****************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });exports.openType = void 0;var openType = Behavior({
+  properties: {
+    openType: String },
+
+  methods: {
+    bindGetUserInfo: function bindGetUserInfo(event) {
+      this.$emit('getuserinfo', event.detail);
+    },
+    bindContact: function bindContact(event) {
+      this.$emit('contact', event.detail);
+    },
+    bindGetPhoneNumber: function bindGetPhoneNumber(event) {
+      this.$emit('getphonenumber', event.detail);
+    },
+    bindError: function bindError(event) {
+      this.$emit('error', event.detail);
+    },
+    bindLaunchApp: function bindLaunchApp(event) {
+      this.$emit('launchapp', event.detail);
+    },
+    bindOpenSetting: function bindOpenSetting(event) {
+      this.$emit('opensetting', event.detail);
+    } } });exports.openType = openType;
+
+/***/ }),
+
+/***/ 184:
+/*!****************************************************************************************************************!*\
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/swipe-cell/index.js ***!
+  \****************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+var _component = __webpack_require__(/*! ../common/component */ 32);
+var _touch = __webpack_require__(/*! ../mixins/touch */ 178);
+var _utils = __webpack_require__(/*! ../common/utils */ 174);
+var THRESHOLD = 0.3;
+var ARRAY = [];
+(0, _component.VantComponent)({
+  props: {
+    disabled: Boolean,
+    leftWidth: {
+      type: Number,
+      value: 0,
+      observer: function observer() {var leftWidth = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
+        if (this.offset > 0) {
+          this.swipeMove(leftWidth);
+        }
+      } },
+
+    rightWidth: {
+      type: Number,
+      value: 0,
+      observer: function observer() {var rightWidth = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
+        if (this.offset < 0) {
+          this.swipeMove(-rightWidth);
+        }
+      } },
+
+    asyncClose: Boolean,
+    name: {
+      type: [Number, String],
+      value: '' } },
+
+
+  mixins: [_touch.touch],
+  data: {
+    catchMove: false },
+
+  created: function created() {
+    this.offset = 0;
+    ARRAY.push(this);
+  },
+  destroyed: function destroyed() {var _this = this;
+    ARRAY = ARRAY.filter(function (item) {return item !== _this;});
+  },
+  methods: {
+    open: function open(position) {var _this$data =
+      this.data,leftWidth = _this$data.leftWidth,rightWidth = _this$data.rightWidth;
+      var offset = position === 'left' ? leftWidth : -rightWidth;
+      this.swipeMove(offset);
+      this.$emit('open', {
+        position: position,
+        name: this.data.name });
+
+    },
+    close: function close() {
+      this.swipeMove(0);
+    },
+    swipeMove: function swipeMove() {var offset = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
+      this.offset = (0, _utils.range)(offset, -this.data.rightWidth, this.data.leftWidth);
+      var transform = "translate3d(".concat(this.offset, "px, 0, 0)");
+      var transition = this.dragging ?
+      'none' :
+      'transform .6s cubic-bezier(0.18, 0.89, 0.32, 1)';
+      this.setData({
+        wrapperStyle: "\n        -webkit-transform: ".concat(
+        transform, ";\n        -webkit-transition: ").concat(
+        transition, ";\n        transform: ").concat(
+        transform, ";\n        transition: ").concat(
+        transition, ";\n      ") });
+
+
+    },
+    swipeLeaveTransition: function swipeLeaveTransition() {var _this$data2 =
+      this.data,leftWidth = _this$data2.leftWidth,rightWidth = _this$data2.rightWidth;var
+      offset = this.offset;
+      if (rightWidth > 0 && -offset > rightWidth * THRESHOLD) {
+        this.open('right');
+      } else
+      if (leftWidth > 0 && offset > leftWidth * THRESHOLD) {
+        this.open('left');
+      } else
+      {
+        this.swipeMove(0);
+      }
+      this.setData({ catchMove: false });
+    },
+    startDrag: function startDrag(event) {
+      if (this.data.disabled) {
+        return;
+      }
+      this.startOffset = this.offset;
+      this.touchStart(event);
+    },
+    noop: function noop() {},
+    onDrag: function onDrag(event) {var _this2 = this;
+      if (this.data.disabled) {
+        return;
+      }
+      this.touchMove(event);
+      if (this.direction !== 'horizontal') {
+        return;
+      }
+      this.dragging = true;
+      ARRAY.filter(function (item) {return item !== _this2;}).forEach(function (item) {return item.close();});
+      this.setData({ catchMove: true });
+      this.swipeMove(this.startOffset + this.deltaX);
+    },
+    endDrag: function endDrag() {
+      if (this.data.disabled) {
+        return;
+      }
+      this.dragging = false;
+      this.swipeLeaveTransition();
+    },
+    onClick: function onClick(event) {var _event$currentTarget$ =
+      event.currentTarget.dataset.key,position = _event$currentTarget$ === void 0 ? 'outside' : _event$currentTarget$;
+      this.$emit('click', position);
+      if (!this.offset) {
+        return;
+      }
+      if (this.data.asyncClose) {
+        this.$emit('close', {
+          position: position,
+          instance: this,
+          name: this.data.name });
+
+      } else
+      {
+        this.swipeMove(0);
+      }
+    } } });
+
+/***/ }),
+
+/***/ 185:
+/*!************************************************************************************************************!*\
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/dialog/index.js ***!
+  \************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+var _component = __webpack_require__(/*! ../common/component */ 32);
+var _button = __webpack_require__(/*! ../mixins/button */ 182);
+var _openType = __webpack_require__(/*! ../mixins/open-type */ 183);
+var _color = __webpack_require__(/*! ../common/color */ 20);function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
+(0, _component.VantComponent)({
+  mixins: [_button.button, _openType.openType],
+  props: {
+    show: {
+      type: Boolean,
+      observer: function observer(show) {
+        !show && this.stopLoading();
+      } },
+
+    title: String,
+    message: String,
+    useSlot: Boolean,
+    className: String,
+    customStyle: String,
+    asyncClose: Boolean,
+    messageAlign: String,
+    overlayStyle: String,
+    useTitleSlot: Boolean,
+    showCancelButton: Boolean,
+    closeOnClickOverlay: Boolean,
+    confirmButtonOpenType: String,
+    width: null,
+    zIndex: {
+      type: Number,
+      value: 2000 },
+
+    confirmButtonText: {
+      type: String,
+      value: '确认' },
+
+    cancelButtonText: {
+      type: String,
+      value: '取消' },
+
+    confirmButtonColor: {
+      type: String,
+      value: _color.BLUE },
+
+    cancelButtonColor: {
+      type: String,
+      value: _color.GRAY },
+
+    showConfirmButton: {
+      type: Boolean,
+      value: true },
+
+    overlay: {
+      type: Boolean,
+      value: true },
+
+    transition: {
+      type: String,
+      value: 'scale' } },
+
+
+  data: {
+    loading: {
+      confirm: false,
+      cancel: false } },
+
+
+  methods: {
+    onConfirm: function onConfirm() {
+      this.handleAction('confirm');
+    },
+    onCancel: function onCancel() {
+      this.handleAction('cancel');
+    },
+    onClickOverlay: function onClickOverlay() {
+      this.onClose('overlay');
+    },
+    handleAction: function handleAction(action) {
+      if (this.data.asyncClose) {
+        this.setData(_defineProperty({}, "loading.".concat(
+        action), true));
+
+      }
+      this.onClose(action);
+    },
+    close: function close() {
+      this.setData({
+        show: false });
+
+    },
+    stopLoading: function stopLoading() {
+      this.setData({
+        loading: {
+          confirm: false,
+          cancel: false } });
+
+
+    },
+    onClose: function onClose(action) {
+      if (!this.data.asyncClose) {
+        this.close();
+      }
+      this.$emit('close', action);
+      // 把 dialog 实例传递出去，可以通过 stopLoading() 在外部关闭按钮的 loading
+      this.$emit(action, { dialog: this });
+      var callback = this.data[action === 'confirm' ? 'onConfirm' : 'onCancel'];
+      if (callback) {
+        callback(this);
+      }
+    } } });
 
 /***/ }),
 
@@ -10015,7 +10528,7 @@ var GRAY_DARK = '#969799';exports.GRAY_DARK = GRAY_DARK;
 
 /***/ }),
 
-/***/ 204:
+/***/ 221:
 /*!***********************************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/image/index.js ***!
   \***********************************************************************************************************/
@@ -10023,10 +10536,10 @@ var GRAY_DARK = '#969799';exports.GRAY_DARK = GRAY_DARK;
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-var _utils = __webpack_require__(/*! ../common/utils */ 205);
-var _component = __webpack_require__(/*! ../common/component */ 169);
-var _button = __webpack_require__(/*! ../mixins/button */ 206);
-var _openType = __webpack_require__(/*! ../mixins/open-type */ 207);
+var _utils = __webpack_require__(/*! ../common/utils */ 174);
+var _component = __webpack_require__(/*! ../common/component */ 32);
+var _button = __webpack_require__(/*! ../mixins/button */ 182);
+var _openType = __webpack_require__(/*! ../mixins/open-type */ 183);
 var FIT_MODE_MAP = {
   none: 'center',
   fill: 'scaleToFill',
@@ -10123,147 +10636,7 @@ var FIT_MODE_MAP = {
 
 /***/ }),
 
-/***/ 205:
-/*!************************************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/common/utils.js ***!
-  \************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.isDef = isDef;exports.isObj = isObj;exports.isNumber = isNumber;exports.range = range;exports.nextTick = nextTick;exports.getSystemInfoSync = getSystemInfoSync;exports.addUnit = addUnit;function isDef(value) {
-  return value !== undefined && value !== null;
-}
-function isObj(x) {
-  var type = typeof x;
-  return x !== null && (type === 'object' || type === 'function');
-}
-function isNumber(value) {
-  return /^\d+(\.\d+)?$/.test(value);
-}
-function range(num, min, max) {
-  return Math.min(Math.max(num, min), max);
-}
-function nextTick(fn) {
-  setTimeout(function () {
-    fn();
-  }, 1000 / 30);
-}
-var systemInfo = null;
-function getSystemInfoSync() {
-  if (systemInfo == null) {
-    systemInfo = wx.getSystemInfoSync();
-  }
-  return systemInfo;
-}
-function addUnit(value) {
-  if (!isDef(value)) {
-    return undefined;
-  }
-  value = String(value);
-  return isNumber(value) ? "".concat(value, "px") : value;
-}
-
-/***/ }),
-
-/***/ 206:
-/*!*************************************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/mixins/button.js ***!
-  \*************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.button = void 0;var button = Behavior({
-  externalClasses: ['hover-class'],
-  properties: {
-    id: String,
-    lang: {
-      type: String,
-      value: 'en' },
-
-    businessId: Number,
-    sessionFrom: String,
-    sendMessageTitle: String,
-    sendMessagePath: String,
-    sendMessageImg: String,
-    showMessageCard: Boolean,
-    appParameter: String,
-    ariaLabel: String } });exports.button = button;
-
-/***/ }),
-
-/***/ 207:
-/*!****************************************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/mixins/open-type.js ***!
-  \****************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.openType = void 0;var openType = Behavior({
-  properties: {
-    openType: String },
-
-  methods: {
-    bindGetUserInfo: function bindGetUserInfo(event) {
-      this.$emit('getuserinfo', event.detail);
-    },
-    bindContact: function bindContact(event) {
-      this.$emit('contact', event.detail);
-    },
-    bindGetPhoneNumber: function bindGetPhoneNumber(event) {
-      this.$emit('getphonenumber', event.detail);
-    },
-    bindError: function bindError(event) {
-      this.$emit('error', event.detail);
-    },
-    bindLaunchApp: function bindLaunchApp(event) {
-      this.$emit('launchapp', event.detail);
-    },
-    bindOpenSetting: function bindOpenSetting(event) {
-      this.$emit('opensetting', event.detail);
-    } } });exports.openType = openType;
-
-/***/ }),
-
-/***/ 213:
-/*!**********************************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/icon/index.js ***!
-  \**********************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-var _component = __webpack_require__(/*! ../common/component */ 169);
-(0, _component.VantComponent)({
-  props: {
-    dot: Boolean,
-    info: null,
-    size: null,
-    color: String,
-    customStyle: String,
-    classPrefix: {
-      type: String,
-      value: 'van-icon' },
-
-    name: {
-      type: String,
-      observer: function observer(val) {
-        this.setData({
-          isImageName: val.indexOf('/') !== -1 });
-
-      } } },
-
-
-  methods: {
-    onClick: function onClick() {
-      this.$emit('click');
-    } } });
-
-/***/ }),
-
-/***/ 216:
+/***/ 229:
 /*!***********************************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/popup/index.js ***!
   \***********************************************************************************************************/
@@ -10271,8 +10644,8 @@ var _component = __webpack_require__(/*! ../common/component */ 169);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-var _component = __webpack_require__(/*! ../common/component */ 169);
-var _transition = __webpack_require__(/*! ../mixins/transition */ 217);
+var _component = __webpack_require__(/*! ../common/component */ 32);
+var _transition = __webpack_require__(/*! ../mixins/transition */ 230);
 (0, _component.VantComponent)({
   classes: [
   'enter-class',
@@ -10349,372 +10722,6 @@ var _transition = __webpack_require__(/*! ../mixins/transition */ 217);
       }
       this.setData(updateData);
     } } });
-
-/***/ }),
-
-/***/ 217:
-/*!*****************************************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/mixins/transition.js ***!
-  \*****************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.transition = void 0;var _utils = __webpack_require__(/*! ../common/utils */ 205);
-var getClassNames = function getClassNames(name) {return {
-    enter: "van-".concat(name, "-enter van-").concat(name, "-enter-active enter-class enter-active-class"),
-    'enter-to': "van-".concat(name, "-enter-to van-").concat(name, "-enter-active enter-to-class enter-active-class"),
-    leave: "van-".concat(name, "-leave van-").concat(name, "-leave-active leave-class leave-active-class"),
-    'leave-to': "van-".concat(name, "-leave-to van-").concat(name, "-leave-active leave-to-class leave-active-class") };};
-
-var nextTick = function nextTick() {return new Promise(function (resolve) {return setTimeout(resolve, 1000 / 30);});};
-var transition = function transition(showDefaultValue) {
-  return Behavior({
-    properties: {
-      customStyle: String,
-      // @ts-ignore
-      show: {
-        type: Boolean,
-        value: showDefaultValue,
-        observer: 'observeShow' },
-
-      // @ts-ignore
-      duration: {
-        type: null,
-        value: 300,
-        observer: 'observeDuration' },
-
-      name: {
-        type: String,
-        value: 'fade' } },
-
-
-    data: {
-      type: '',
-      inited: false,
-      display: false },
-
-    methods: {
-      observeShow: function observeShow(value, old) {
-        if (value === old) {
-          return;
-        }
-        value ? this.enter() : this.leave();
-      },
-      enter: function enter() {var _this = this;var _this$data =
-        this.data,duration = _this$data.duration,name = _this$data.name;
-        var classNames = getClassNames(name);
-        var currentDuration = (0, _utils.isObj)(duration) ? duration.enter : duration;
-        this.status = 'enter';
-        this.$emit('before-enter');
-        Promise.resolve().
-        then(nextTick).
-        then(function () {
-          _this.checkStatus('enter');
-          _this.$emit('enter');
-          _this.setData({
-            inited: true,
-            display: true,
-            classes: classNames.enter,
-            currentDuration: currentDuration });
-
-        }).
-        then(nextTick).
-        then(function () {
-          _this.checkStatus('enter');
-          _this.transitionEnded = false;
-          _this.setData({
-            classes: classNames['enter-to'] });
-
-        }).
-        catch(function () {});
-      },
-      leave: function leave() {var _this2 = this;
-        if (!this.data.display) {
-          return;
-        }var _this$data2 =
-        this.data,duration = _this$data2.duration,name = _this$data2.name;
-        var classNames = getClassNames(name);
-        var currentDuration = (0, _utils.isObj)(duration) ? duration.leave : duration;
-        this.status = 'leave';
-        this.$emit('before-leave');
-        Promise.resolve().
-        then(nextTick).
-        then(function () {
-          _this2.checkStatus('leave');
-          _this2.$emit('leave');
-          _this2.setData({
-            classes: classNames.leave,
-            currentDuration: currentDuration });
-
-        }).
-        then(nextTick).
-        then(function () {
-          _this2.checkStatus('leave');
-          _this2.transitionEnded = false;
-          setTimeout(function () {return _this2.onTransitionEnd();}, currentDuration);
-          _this2.setData({
-            classes: classNames['leave-to'] });
-
-        }).
-        catch(function () {});
-      },
-      checkStatus: function checkStatus(status) {
-        if (status !== this.status) {
-          throw new Error("incongruent status: ".concat(status));
-        }
-      },
-      onTransitionEnd: function onTransitionEnd() {
-        if (this.transitionEnded) {
-          return;
-        }
-        this.transitionEnded = true;
-        this.$emit("after-".concat(this.status));var _this$data3 =
-        this.data,show = _this$data3.show,display = _this$data3.display;
-        if (!show && display) {
-          this.setData({ display: false });
-        }
-      } } });
-
-
-};exports.transition = transition;
-
-/***/ }),
-
-/***/ 218:
-/*!************************************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/button/index.js ***!
-  \************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-var _component = __webpack_require__(/*! ../common/component */ 169);
-var _button = __webpack_require__(/*! ../mixins/button */ 206);
-var _openType = __webpack_require__(/*! ../mixins/open-type */ 207);
-(0, _component.VantComponent)({
-  mixins: [_button.button, _openType.openType],
-  classes: ['hover-class', 'loading-class'],
-  data: {
-    baseStyle: '' },
-
-  props: {
-    icon: String,
-    plain: Boolean,
-    block: Boolean,
-    round: Boolean,
-    square: Boolean,
-    loading: Boolean,
-    hairline: Boolean,
-    disabled: Boolean,
-    loadingText: String,
-    customStyle: String,
-    loadingType: {
-      type: String,
-      value: 'circular' },
-
-    type: {
-      type: String,
-      value: 'default' },
-
-    size: {
-      type: String,
-      value: 'normal' },
-
-    loadingSize: {
-      type: String,
-      value: '20px' },
-
-    color: {
-      type: String,
-      observer: function observer(color) {
-        var style = '';
-        if (color) {
-          style += "color: ".concat(this.data.plain ? color : 'white', ";");
-          if (!this.data.plain) {
-            // Use background instead of backgroundColor to make linear-gradient work
-            style += "background: ".concat(color, ";");
-          }
-          // hide border when color is linear-gradient
-          if (color.indexOf('gradient') !== -1) {
-            style += 'border: 0;';
-          } else
-          {
-            style += "border-color: ".concat(color, ";");
-          }
-        }
-        if (style !== this.data.baseStyle) {
-          this.setData({ baseStyle: style });
-        }
-      } } },
-
-
-  methods: {
-    onClick: function onClick() {
-      if (!this.data.disabled && !this.data.loading) {
-        this.$emit('click');
-      }
-    } } });
-
-/***/ }),
-
-/***/ 226:
-/*!************************************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/dialog/index.js ***!
-  \************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-var _component = __webpack_require__(/*! ../common/component */ 169);
-var _button = __webpack_require__(/*! ../mixins/button */ 206);
-var _openType = __webpack_require__(/*! ../mixins/open-type */ 207);
-var _color = __webpack_require__(/*! ../common/color */ 20);function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
-(0, _component.VantComponent)({
-  mixins: [_button.button, _openType.openType],
-  props: {
-    show: {
-      type: Boolean,
-      observer: function observer(show) {
-        !show && this.stopLoading();
-      } },
-
-    title: String,
-    message: String,
-    useSlot: Boolean,
-    className: String,
-    customStyle: String,
-    asyncClose: Boolean,
-    messageAlign: String,
-    overlayStyle: String,
-    useTitleSlot: Boolean,
-    showCancelButton: Boolean,
-    closeOnClickOverlay: Boolean,
-    confirmButtonOpenType: String,
-    width: null,
-    zIndex: {
-      type: Number,
-      value: 2000 },
-
-    confirmButtonText: {
-      type: String,
-      value: '确认' },
-
-    cancelButtonText: {
-      type: String,
-      value: '取消' },
-
-    confirmButtonColor: {
-      type: String,
-      value: _color.BLUE },
-
-    cancelButtonColor: {
-      type: String,
-      value: _color.GRAY },
-
-    showConfirmButton: {
-      type: Boolean,
-      value: true },
-
-    overlay: {
-      type: Boolean,
-      value: true },
-
-    transition: {
-      type: String,
-      value: 'scale' } },
-
-
-  data: {
-    loading: {
-      confirm: false,
-      cancel: false } },
-
-
-  methods: {
-    onConfirm: function onConfirm() {
-      this.handleAction('confirm');
-    },
-    onCancel: function onCancel() {
-      this.handleAction('cancel');
-    },
-    onClickOverlay: function onClickOverlay() {
-      this.onClose('overlay');
-    },
-    handleAction: function handleAction(action) {
-      if (this.data.asyncClose) {
-        this.setData(_defineProperty({}, "loading.".concat(
-        action), true));
-
-      }
-      this.onClose(action);
-    },
-    close: function close() {
-      this.setData({
-        show: false });
-
-    },
-    stopLoading: function stopLoading() {
-      this.setData({
-        loading: {
-          confirm: false,
-          cancel: false } });
-
-
-    },
-    onClose: function onClose(action) {
-      if (!this.data.asyncClose) {
-        this.close();
-      }
-      this.$emit('close', action);
-      // 把 dialog 实例传递出去，可以通过 stopLoading() 在外部关闭按钮的 loading
-      this.$emit(action, { dialog: this });
-      var callback = this.data[action === 'confirm' ? 'onConfirm' : 'onCancel'];
-      if (callback) {
-        callback(this);
-      }
-    } } });
-
-/***/ }),
-
-/***/ 227:
-/*!*************************************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/divider/index.js ***!
-  \*************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-var _component = __webpack_require__(/*! ../common/component */ 169);
-(0, _component.VantComponent)({
-  props: {
-    dashed: {
-      type: Boolean,
-      value: false },
-
-    hairline: {
-      type: Boolean,
-      value: false },
-
-    contentPosition: {
-      type: String,
-      value: '' },
-
-    fontSize: {
-      type: Number,
-      value: '' },
-
-    borderColor: {
-      type: String,
-      value: '' },
-
-    textColor: {
-      type: String,
-      value: '' },
-
-    customStyle: {
-      type: String,
-      value: '' } } });
 
 /***/ }),
 
@@ -10847,151 +10854,177 @@ function normalizeComponent (
 
 /***/ }),
 
-/***/ 242:
-/*!**********************************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/grid/index.js ***!
-  \**********************************************************************************************************/
+/***/ 230:
+/*!*****************************************************************************************************************!*\
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/mixins/transition.js ***!
+  \*****************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-var _component = __webpack_require__(/*! ../common/component */ 169);
-var _utils = __webpack_require__(/*! ../common/utils */ 205);
-(0, _component.VantComponent)({
-  relation: {
-    name: 'grid-item',
-    type: 'descendant',
-    current: 'grid' },
+Object.defineProperty(exports, "__esModule", { value: true });exports.transition = void 0;var _utils = __webpack_require__(/*! ../common/utils */ 174);
+var getClassNames = function getClassNames(name) {return {
+    enter: "van-".concat(name, "-enter van-").concat(name, "-enter-active enter-class enter-active-class"),
+    'enter-to': "van-".concat(name, "-enter-to van-").concat(name, "-enter-active enter-to-class enter-active-class"),
+    leave: "van-".concat(name, "-leave van-").concat(name, "-leave-active leave-class leave-active-class"),
+    'leave-to': "van-".concat(name, "-leave-to van-").concat(name, "-leave-active leave-to-class leave-active-class") };};
 
-  props: {
-    square: {
-      type: Boolean,
-      observer: 'updateChildren' },
+var nextTick = function nextTick() {return new Promise(function (resolve) {return setTimeout(resolve, 1000 / 30);});};
+var transition = function transition(showDefaultValue) {
+  return Behavior({
+    properties: {
+      customStyle: String,
+      // @ts-ignore
+      show: {
+        type: Boolean,
+        value: showDefaultValue,
+        observer: 'observeShow' },
 
-    gutter: {
-      type: [Number, String],
-      value: 0,
-      observer: 'updateChildren' },
+      // @ts-ignore
+      duration: {
+        type: null,
+        value: 300,
+        observer: 'observeDuration' },
 
-    clickable: {
-      type: Boolean,
-      observer: 'updateChildren' },
-
-    columnNum: {
-      type: Number,
-      value: 4,
-      observer: 'updateChildren' },
-
-    center: {
-      type: Boolean,
-      value: true,
-      observer: 'updateChildren' },
-
-    border: {
-      type: Boolean,
-      value: true,
-      observer: 'updateChildren' } },
+      name: {
+        type: String,
+        value: 'fade' } },
 
 
-  data: {
-    viewStyle: '' },
+    data: {
+      type: '',
+      inited: false,
+      display: false },
 
-  created: function created() {var
-    gutter = this.data.gutter;
-    if (gutter) {
-      this.setData({
-        viewStyle: "padding-left: ".concat((0, _utils.addUnit)(gutter)) });
-
-    }
-  },
-  methods: {
-    updateChildren: function updateChildren() {
-      this.children.forEach(function (child) {
-        child.updateStyle();
-      });
-    } } });
-
-/***/ }),
-
-/***/ 243:
-/*!***************************************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/grid-item/index.js ***!
-  \***************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-var _link = __webpack_require__(/*! ../mixins/link */ 168);
-var _component = __webpack_require__(/*! ../common/component */ 169);
-var _utils = __webpack_require__(/*! ../common/utils */ 205);
-(0, _component.VantComponent)({
-  relation: {
-    name: 'grid',
-    type: 'ancestor',
-    current: 'grid-item' },
-
-  mixins: [_link.link],
-  props: {
-    icon: String,
-    dot: Boolean,
-    info: null,
-    text: String,
-    useSlot: Boolean },
-
-  data: {
-    viewStyle: '' },
-
-  mounted: function mounted() {
-    this.updateStyle();
-  },
-  methods: {
-    updateStyle: function updateStyle() {
-      if (!this.parent) {
-        return;
-      }var _this$parent =
-      this.parent,data = _this$parent.data,children = _this$parent.children;var
-      columnNum = data.columnNum,border = data.border,square = data.square,gutter = data.gutter,clickable = data.clickable,center = data.center;
-      var width = "".concat(100 / columnNum, "%");
-      var styleWrapper = [];
-      styleWrapper.push("width: ".concat(width));
-      if (square) {
-        styleWrapper.push("padding-top: ".concat(width));
-      }
-      if (gutter) {
-        var gutterValue = (0, _utils.addUnit)(gutter);
-        styleWrapper.push("padding-right: ".concat(gutterValue));
-        var index = children.indexOf(this);
-        if (index >= columnNum) {
-          styleWrapper.push("margin-top: ".concat(gutterValue));
+    methods: {
+      observeShow: function observeShow(value, old) {
+        if (value === old) {
+          return;
         }
-      }
-      var contentStyle = '';
-      if (square && gutter) {
-        var _gutterValue = (0, _utils.addUnit)(gutter);
-        contentStyle = "\n          right: ".concat(
-        _gutterValue, ";\n          bottom: ").concat(
-        _gutterValue, ";\n          height: auto;\n        ");
+        value ? this.enter() : this.leave();
+      },
+      enter: function enter() {var _this = this;var _this$data =
+        this.data,duration = _this$data.duration,name = _this$data.name;
+        var classNames = getClassNames(name);
+        var currentDuration = (0, _utils.isObj)(duration) ? duration.enter : duration;
+        this.status = 'enter';
+        this.$emit('before-enter');
+        Promise.resolve().
+        then(nextTick).
+        then(function () {
+          _this.checkStatus('enter');
+          _this.$emit('enter');
+          _this.setData({
+            inited: true,
+            display: true,
+            classes: classNames.enter,
+            currentDuration: currentDuration });
+
+        }).
+        then(nextTick).
+        then(function () {
+          _this.checkStatus('enter');
+          _this.transitionEnded = false;
+          _this.setData({
+            classes: classNames['enter-to'] });
+
+        }).
+        catch(function () {});
+      },
+      leave: function leave() {var _this2 = this;
+        if (!this.data.display) {
+          return;
+        }var _this$data2 =
+        this.data,duration = _this$data2.duration,name = _this$data2.name;
+        var classNames = getClassNames(name);
+        var currentDuration = (0, _utils.isObj)(duration) ? duration.leave : duration;
+        this.status = 'leave';
+        this.$emit('before-leave');
+        Promise.resolve().
+        then(nextTick).
+        then(function () {
+          _this2.checkStatus('leave');
+          _this2.$emit('leave');
+          _this2.setData({
+            classes: classNames.leave,
+            currentDuration: currentDuration });
+
+        }).
+        then(nextTick).
+        then(function () {
+          _this2.checkStatus('leave');
+          _this2.transitionEnded = false;
+          setTimeout(function () {return _this2.onTransitionEnd();}, currentDuration);
+          _this2.setData({
+            classes: classNames['leave-to'] });
+
+        }).
+        catch(function () {});
+      },
+      checkStatus: function checkStatus(status) {
+        if (status !== this.status) {
+          throw new Error("incongruent status: ".concat(status));
+        }
+      },
+      onTransitionEnd: function onTransitionEnd() {
+        if (this.transitionEnded) {
+          return;
+        }
+        this.transitionEnded = true;
+        this.$emit("after-".concat(this.status));var _this$data3 =
+        this.data,show = _this$data3.show,display = _this$data3.display;
+        if (!show && display) {
+          this.setData({ display: false });
+        }
+      } } });
 
 
-      }
-      this.setData({
-        viewStyle: styleWrapper.join('; '),
-        contentStyle: contentStyle,
-        center: center,
-        border: border,
-        square: square,
-        gutter: gutter,
-        clickable: clickable });
-
-    },
-    onClick: function onClick() {
-      this.$emit('click');
-      this.jumpLink();
-    } } });
+};exports.transition = transition;
 
 /***/ }),
 
-/***/ 244:
+/***/ 238:
+/*!*************************************************************************************************************!*\
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/divider/index.js ***!
+  \*************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+var _component = __webpack_require__(/*! ../common/component */ 32);
+(0, _component.VantComponent)({
+  props: {
+    dashed: {
+      type: Boolean,
+      value: false },
+
+    hairline: {
+      type: Boolean,
+      value: false },
+
+    contentPosition: {
+      type: String,
+      value: '' },
+
+    fontSize: {
+      type: Number,
+      value: '' },
+
+    borderColor: {
+      type: String,
+      value: '' },
+
+    textColor: {
+      type: String,
+      value: '' },
+
+    customStyle: {
+      type: String,
+      value: '' } } });
+
+/***/ }),
+
+/***/ 253:
 /*!***********************************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/steps/index.js ***!
   \***********************************************************************************************************/
@@ -10999,7 +11032,7 @@ var _utils = __webpack_require__(/*! ../common/utils */ 205);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-var _component = __webpack_require__(/*! ../common/component */ 169);
+var _component = __webpack_require__(/*! ../common/component */ 32);
 var _color = __webpack_require__(/*! ../common/color */ 20);
 (0, _component.VantComponent)({
   classes: ['desc-class'],
@@ -11027,7 +11060,290 @@ var _color = __webpack_require__(/*! ../common/color */ 20);
 
 /***/ }),
 
-/***/ 266:
+/***/ 275:
+/*!***************************************************************************************************************!*\
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/index-bar/index.js ***!
+  \***************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+var _component = __webpack_require__(/*! ../common/component */ 32);
+var _color = __webpack_require__(/*! ../common/color */ 20);
+var indexList = function indexList() {
+  var indexList = [];
+  var charCodeOfA = 'A'.charCodeAt(0);
+  for (var i = 0; i < 26; i++) {
+    indexList.push(String.fromCharCode(charCodeOfA + i));
+  }
+  return indexList;
+};
+(0, _component.VantComponent)({
+  relation: {
+    name: 'index-anchor',
+    type: 'descendant',
+    current: 'index-bar',
+    linked: function linked() {
+      this.updateData();
+    },
+    linkChanged: function linkChanged() {
+      this.updateData();
+    },
+    unlinked: function unlinked() {
+      this.updateData();
+    } },
+
+  props: {
+    sticky: {
+      type: Boolean,
+      value: true },
+
+    zIndex: {
+      type: Number,
+      value: 1 },
+
+    highlightColor: {
+      type: String,
+      value: _color.GREEN },
+
+    scrollTop: {
+      type: Number,
+      value: 0,
+      observer: 'onScroll' },
+
+    stickyOffsetTop: {
+      type: Number,
+      value: 0 },
+
+    indexList: {
+      type: Array,
+      value: indexList() } },
+
+
+  data: {
+    activeAnchorIndex: null,
+    showSidebar: false },
+
+  methods: {
+    updateData: function updateData() {var _this = this;
+      this.timer && clearTimeout(this.timer);
+      this.timer = setTimeout(function () {
+        _this.children = _this.getRelationNodes('../index-anchor/index');
+        _this.setData({
+          showSidebar: !!_this.children.length });
+
+        _this.setRect().then(function () {
+          _this.onScroll();
+        });
+      }, 0);
+    },
+    setRect: function setRect() {
+      return Promise.all([
+      this.setAnchorsRect(),
+      this.setListRect(),
+      this.setSiderbarRect()]);
+
+    },
+    setAnchorsRect: function setAnchorsRect() {var _this2 = this;
+      return Promise.all(this.children.map(function (anchor) {return anchor.
+        getRect('.van-index-anchor-wrapper').
+        then(function (rect) {
+          Object.assign(anchor, {
+            height: rect.height,
+            top: rect.top + _this2.data.scrollTop });
+
+        });}));
+    },
+    setListRect: function setListRect() {var _this3 = this;
+      return this.getRect('.van-index-bar').then(function (rect) {
+        Object.assign(_this3, {
+          height: rect.height,
+          top: rect.top + _this3.data.scrollTop });
+
+      });
+    },
+    setSiderbarRect: function setSiderbarRect() {var _this4 = this;
+      return this.getRect('.van-index-bar__sidebar').then(function (res) {
+        _this4.sidebar = {
+          height: res.height,
+          top: res.top };
+
+      });
+    },
+    setDiffData: function setDiffData(_ref) {var target = _ref.target,data = _ref.data;
+      var diffData = {};
+      Object.keys(data).forEach(function (key) {
+        if (target.data[key] !== data[key]) {
+          diffData[key] = data[key];
+        }
+      });
+      if (Object.keys(diffData).length) {
+        target.setData(diffData);
+      }
+    },
+    getAnchorRect: function getAnchorRect(anchor) {
+      return anchor.
+      getRect('.van-index-anchor-wrapper').
+      then(function (rect) {return {
+          height: rect.height,
+          top: rect.top };});
+
+    },
+    getActiveAnchorIndex: function getActiveAnchorIndex() {var
+      children = this.children;var _this$data =
+      this.data,sticky = _this$data.sticky,scrollTop = _this$data.scrollTop,stickyOffsetTop = _this$data.stickyOffsetTop;
+      for (var i = this.children.length - 1; i >= 0; i--) {
+        var preAnchorHeight = i > 0 ? children[i - 1].height : 0;
+        var reachTop = sticky ? preAnchorHeight + stickyOffsetTop : 0;
+        if (reachTop + scrollTop >= children[i].top) {
+          return i;
+        }
+      }
+      return -1;
+    },
+    onScroll: function onScroll() {var _this5 = this;var _this$children =
+      this.children,children = _this$children === void 0 ? [] : _this$children;
+      if (!children.length) {
+        return;
+      }var _this$data2 =
+      this.data,sticky = _this$data2.sticky,stickyOffsetTop = _this$data2.stickyOffsetTop,zIndex = _this$data2.zIndex,highlightColor = _this$data2.highlightColor,scrollTop = _this$data2.scrollTop;
+      var active = this.getActiveAnchorIndex();
+      this.setDiffData({
+        target: this,
+        data: {
+          activeAnchorIndex: active } });
+
+
+      if (sticky) {
+        var isActiveAnchorSticky = false;
+        if (active !== -1) {
+          isActiveAnchorSticky =
+          children[active].top <= stickyOffsetTop + scrollTop;
+        }
+        children.forEach(function (item, index) {
+          if (index === active) {
+            var wrapperStyle = '';
+            var anchorStyle = "\n              color: ".concat(
+            highlightColor, ";\n            ");
+
+            if (isActiveAnchorSticky) {
+              wrapperStyle = "\n                height: ".concat(
+              children[index].height, "px;\n              ");
+
+              anchorStyle = "\n                position: fixed;\n                top: ".concat(
+
+              stickyOffsetTop, "px;\n                z-index: ").concat(
+              zIndex, ";\n                color: ").concat(
+              highlightColor, ";\n              ");
+
+            }
+            _this5.setDiffData({
+              target: item,
+              data: {
+                active: true,
+                anchorStyle: anchorStyle,
+                wrapperStyle: wrapperStyle } });
+
+
+          } else
+          if (index === active - 1) {
+            var currentAnchor = children[index];
+            var currentOffsetTop = currentAnchor.top;
+            var targetOffsetTop = index === children.length - 1 ?
+            _this5.top :
+            children[index + 1].top;
+            var parentOffsetHeight = targetOffsetTop - currentOffsetTop;
+            var translateY = parentOffsetHeight - currentAnchor.height;
+            var _anchorStyle = "\n              position: relative;\n              transform: translate3d(0, ".concat(
+
+            translateY, "px, 0);\n              z-index: ").concat(
+            zIndex, ";\n              color: ").concat(
+            highlightColor, ";\n            ");
+
+            _this5.setDiffData({
+              target: item,
+              data: {
+                active: true,
+                anchorStyle: _anchorStyle } });
+
+
+          } else
+          {
+            _this5.setDiffData({
+              target: item,
+              data: {
+                active: false,
+                anchorStyle: '',
+                wrapperStyle: '' } });
+
+
+          }
+        });
+      }
+    },
+    onClick: function onClick(event) {
+      this.scrollToAnchor(event.target.dataset.index);
+    },
+    onTouchMove: function onTouchMove(event) {
+      var sidebarLength = this.children.length;
+      var touch = event.touches[0];
+      var itemHeight = this.sidebar.height / sidebarLength;
+      var index = Math.floor((touch.clientY - this.sidebar.top) / itemHeight);
+      if (index < 0) {
+        index = 0;
+      } else
+      if (index > sidebarLength - 1) {
+        index = sidebarLength - 1;
+      }
+      this.scrollToAnchor(index);
+    },
+    onTouchStop: function onTouchStop() {
+      this.scrollToAnchorIndex = null;
+    },
+    scrollToAnchor: function scrollToAnchor(index) {var _this6 = this;
+      if (typeof index !== 'number' || this.scrollToAnchorIndex === index) {
+        return;
+      }
+      this.scrollToAnchorIndex = index;
+      var anchor = this.children.find(function (item) {return item.data.index === _this6.data.indexList[index];});
+      if (anchor) {
+        this.$emit('select', anchor.data.index);
+        wx.pageScrollTo({
+          duration: 0,
+          scrollTop: anchor.top });
+
+      }
+    } } });
+
+/***/ }),
+
+/***/ 276:
+/*!******************************************************************************************************************!*\
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/index-anchor/index.js ***!
+  \******************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+var _component = __webpack_require__(/*! ../common/component */ 32);
+(0, _component.VantComponent)({
+  relation: {
+    name: 'index-bar',
+    type: 'ancestor',
+    current: 'index-anchor' },
+
+  props: {
+    useSlot: Boolean,
+    index: null },
+
+  data: {
+    active: false,
+    wrapperStyle: '',
+    anchorStyle: '' } });
+
+/***/ }),
+
+/***/ 277:
 /*!**********************************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/cell/index.js ***!
   \**********************************************************************************************************/
@@ -11035,8 +11351,8 @@ var _color = __webpack_require__(/*! ../common/color */ 20);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-var _link = __webpack_require__(/*! ../mixins/link */ 168);
-var _component = __webpack_require__(/*! ../common/component */ 169);
+var _link = __webpack_require__(/*! ../mixins/link */ 31);
+var _component = __webpack_require__(/*! ../common/component */ 32);
 (0, _component.VantComponent)({
   classes: [
   'title-class',
@@ -11073,7 +11389,7 @@ var _component = __webpack_require__(/*! ../common/component */ 169);
 
 /***/ }),
 
-/***/ 267:
+/***/ 278:
 /*!****************************************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/cell-group/index.js ***!
   \****************************************************************************************************************/
@@ -11081,549 +11397,13 @@ var _component = __webpack_require__(/*! ../common/component */ 169);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-var _component = __webpack_require__(/*! ../common/component */ 169);
+var _component = __webpack_require__(/*! ../common/component */ 32);
 (0, _component.VantComponent)({
   props: {
     title: String,
     border: {
       type: Boolean,
       value: true } } });
-
-/***/ }),
-
-/***/ 268:
-/*!****************************************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/swipe-cell/index.js ***!
-  \****************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-var _component = __webpack_require__(/*! ../common/component */ 169);
-var _touch = __webpack_require__(/*! ../mixins/touch */ 269);
-var _utils = __webpack_require__(/*! ../common/utils */ 205);
-var THRESHOLD = 0.3;
-var ARRAY = [];
-(0, _component.VantComponent)({
-  props: {
-    disabled: Boolean,
-    leftWidth: {
-      type: Number,
-      value: 0,
-      observer: function observer() {var leftWidth = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
-        if (this.offset > 0) {
-          this.swipeMove(leftWidth);
-        }
-      } },
-
-    rightWidth: {
-      type: Number,
-      value: 0,
-      observer: function observer() {var rightWidth = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
-        if (this.offset < 0) {
-          this.swipeMove(-rightWidth);
-        }
-      } },
-
-    asyncClose: Boolean,
-    name: {
-      type: [Number, String],
-      value: '' } },
-
-
-  mixins: [_touch.touch],
-  data: {
-    catchMove: false },
-
-  created: function created() {
-    this.offset = 0;
-    ARRAY.push(this);
-  },
-  destroyed: function destroyed() {var _this = this;
-    ARRAY = ARRAY.filter(function (item) {return item !== _this;});
-  },
-  methods: {
-    open: function open(position) {var _this$data =
-      this.data,leftWidth = _this$data.leftWidth,rightWidth = _this$data.rightWidth;
-      var offset = position === 'left' ? leftWidth : -rightWidth;
-      this.swipeMove(offset);
-      this.$emit('open', {
-        position: position,
-        name: this.data.name });
-
-    },
-    close: function close() {
-      this.swipeMove(0);
-    },
-    swipeMove: function swipeMove() {var offset = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
-      this.offset = (0, _utils.range)(offset, -this.data.rightWidth, this.data.leftWidth);
-      var transform = "translate3d(".concat(this.offset, "px, 0, 0)");
-      var transition = this.dragging ?
-      'none' :
-      'transform .6s cubic-bezier(0.18, 0.89, 0.32, 1)';
-      this.setData({
-        wrapperStyle: "\n        -webkit-transform: ".concat(
-        transform, ";\n        -webkit-transition: ").concat(
-        transition, ";\n        transform: ").concat(
-        transform, ";\n        transition: ").concat(
-        transition, ";\n      ") });
-
-
-    },
-    swipeLeaveTransition: function swipeLeaveTransition() {var _this$data2 =
-      this.data,leftWidth = _this$data2.leftWidth,rightWidth = _this$data2.rightWidth;var
-      offset = this.offset;
-      if (rightWidth > 0 && -offset > rightWidth * THRESHOLD) {
-        this.open('right');
-      } else
-      if (leftWidth > 0 && offset > leftWidth * THRESHOLD) {
-        this.open('left');
-      } else
-      {
-        this.swipeMove(0);
-      }
-      this.setData({ catchMove: false });
-    },
-    startDrag: function startDrag(event) {
-      if (this.data.disabled) {
-        return;
-      }
-      this.startOffset = this.offset;
-      this.touchStart(event);
-    },
-    noop: function noop() {},
-    onDrag: function onDrag(event) {var _this2 = this;
-      if (this.data.disabled) {
-        return;
-      }
-      this.touchMove(event);
-      if (this.direction !== 'horizontal') {
-        return;
-      }
-      this.dragging = true;
-      ARRAY.filter(function (item) {return item !== _this2;}).forEach(function (item) {return item.close();});
-      this.setData({ catchMove: true });
-      this.swipeMove(this.startOffset + this.deltaX);
-    },
-    endDrag: function endDrag() {
-      if (this.data.disabled) {
-        return;
-      }
-      this.dragging = false;
-      this.swipeLeaveTransition();
-    },
-    onClick: function onClick(event) {var _event$currentTarget$ =
-      event.currentTarget.dataset.key,position = _event$currentTarget$ === void 0 ? 'outside' : _event$currentTarget$;
-      this.$emit('click', position);
-      if (!this.offset) {
-        return;
-      }
-      if (this.data.asyncClose) {
-        this.$emit('close', {
-          position: position,
-          instance: this,
-          name: this.data.name });
-
-      } else
-      {
-        this.swipeMove(0);
-      }
-    } } });
-
-/***/ }),
-
-/***/ 269:
-/*!************************************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/mixins/touch.js ***!
-  \************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.touch = void 0;var MIN_DISTANCE = 10;
-function getDirection(x, y) {
-  if (x > y && x > MIN_DISTANCE) {
-    return 'horizontal';
-  }
-  if (y > x && y > MIN_DISTANCE) {
-    return 'vertical';
-  }
-  return '';
-}
-var touch = Behavior({
-  methods: {
-    resetTouchStatus: function resetTouchStatus() {
-      this.direction = '';
-      this.deltaX = 0;
-      this.deltaY = 0;
-      this.offsetX = 0;
-      this.offsetY = 0;
-    },
-    touchStart: function touchStart(event) {
-      this.resetTouchStatus();
-      var touch = event.touches[0];
-      this.startX = touch.clientX;
-      this.startY = touch.clientY;
-    },
-    touchMove: function touchMove(event) {
-      var touch = event.touches[0];
-      this.deltaX = touch.clientX - this.startX;
-      this.deltaY = touch.clientY - this.startY;
-      this.offsetX = Math.abs(this.deltaX);
-      this.offsetY = Math.abs(this.deltaY);
-      this.direction = this.direction || getDirection(this.offsetX, this.offsetY);
-    } } });exports.touch = touch;
-
-/***/ }),
-
-/***/ 277:
-/*!*********************************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/tab/index.js ***!
-  \*********************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-var _component = __webpack_require__(/*! ../common/component */ 169);
-(0, _component.VantComponent)({
-  relation: {
-    name: 'tabs',
-    type: 'ancestor',
-    current: 'tab' },
-
-  props: {
-    dot: {
-      type: Boolean,
-      observer: 'update' },
-
-    info: {
-      type: null,
-      observer: 'update' },
-
-    title: {
-      type: String,
-      observer: 'update' },
-
-    disabled: {
-      type: Boolean,
-      observer: 'update' },
-
-    titleStyle: {
-      type: String,
-      observer: 'update' },
-
-    name: {
-      type: [Number, String],
-      value: '' } },
-
-
-  data: {
-    active: false },
-
-  methods: {
-    getComputedName: function getComputedName() {
-      if (this.data.name !== '') {
-        return this.data.name;
-      }
-      return this.index;
-    },
-    updateRender: function updateRender(active, parent) {var
-      parentData = parent.data;
-      this.inited = this.inited || active;
-      this.setData({
-        active: active,
-        shouldRender: this.inited || !parentData.lazyRender,
-        shouldShow: active || parentData.animated });
-
-    },
-    update: function update() {
-      if (this.parent) {
-        this.parent.updateTabs();
-      }
-    } } });
-
-/***/ }),
-
-/***/ 278:
-/*!**********************************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/tabs/index.js ***!
-  \**********************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-var _component = __webpack_require__(/*! ../common/component */ 169);
-var _touch = __webpack_require__(/*! ../mixins/touch */ 269);
-var _utils = __webpack_require__(/*! ../common/utils */ 205);function _slicedToArray(arr, i) {return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest();}function _nonIterableRest() {throw new TypeError("Invalid attempt to destructure non-iterable instance");}function _iterableToArrayLimit(arr, i) {if (!(Symbol.iterator in Object(arr) || Object.prototype.toString.call(arr) === "[object Arguments]")) {return;}var _arr = [];var _n = true;var _d = false;var _e = undefined;try {for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {_arr.push(_s.value);if (i && _arr.length === i) break;}} catch (err) {_d = true;_e = err;} finally {try {if (!_n && _i["return"] != null) _i["return"]();} finally {if (_d) throw _e;}}return _arr;}function _arrayWithHoles(arr) {if (Array.isArray(arr)) return arr;}
-(0, _component.VantComponent)({
-  mixins: [_touch.touch],
-  classes: ['nav-class', 'tab-class', 'tab-active-class', 'line-class'],
-  relation: {
-    name: 'tab',
-    type: 'descendant',
-    current: 'tabs',
-    linked: function linked(target) {
-      target.index = this.children.length - 1;
-      this.updateTabs();
-    },
-    unlinked: function unlinked() {
-      this.children = this.children.
-      map(function (child, index) {
-        child.index = index;
-        return child;
-      });
-      this.updateTabs();
-    } },
-
-  props: {
-    color: {
-      type: String,
-      observer: 'setLine' },
-
-    sticky: Boolean,
-    animated: {
-      type: Boolean,
-      observer: function observer() {var _this = this;
-        this.children.forEach(function (child, index) {return child.updateRender(index === _this.data.currentIndex, _this);});
-      } },
-
-    swipeable: Boolean,
-    lineWidth: {
-      type: [String, Number],
-      value: -1,
-      observer: 'setLine' },
-
-    lineHeight: {
-      type: [String, Number],
-      value: -1,
-      observer: 'setLine' },
-
-    titleActiveColor: String,
-    titleInactiveColor: String,
-    active: {
-      type: [String, Number],
-      value: 0,
-      observer: function observer(name) {
-        if (name !== this.getCurrentName()) {
-          this.setCurrentIndexByName(name);
-        }
-      } },
-
-    type: {
-      type: String,
-      value: 'line' },
-
-    border: {
-      type: Boolean,
-      value: true },
-
-    ellipsis: {
-      type: Boolean,
-      value: true },
-
-    duration: {
-      type: Number,
-      value: 0.3 },
-
-    zIndex: {
-      type: Number,
-      value: 1 },
-
-    swipeThreshold: {
-      type: Number,
-      value: 4,
-      observer: function observer(value) {
-        this.setData({
-          scrollable: this.children.length > value || !this.data.ellipsis });
-
-      } },
-
-    offsetTop: {
-      type: Number,
-      value: 0 },
-
-    lazyRender: {
-      type: Boolean,
-      value: true } },
-
-
-  data: {
-    tabs: [],
-    lineStyle: '',
-    scrollLeft: 0,
-    scrollable: false,
-    trackStyle: '',
-    currentIndex: null,
-    container: null },
-
-  mounted: function mounted() {var _this2 = this;
-    wx.nextTick(function () {
-      _this2.setLine(true);
-      _this2.scrollIntoView();
-    });
-  },
-  methods: {
-    updateContainer: function updateContainer() {var _this3 = this;
-      this.setData({
-        container: function container() {return _this3.createSelectorQuery().select('.van-tabs');} });
-
-    },
-    updateTabs: function updateTabs() {var _this$children =
-      this.children,children = _this$children === void 0 ? [] : _this$children,data = this.data;
-      this.setData({
-        tabs: children.map(function (child) {return child.data;}),
-        scrollable: this.children.length > data.swipeThreshold || !data.ellipsis });
-
-      this.setCurrentIndexByName(this.getCurrentName() || data.active);
-    },
-    trigger: function trigger(eventName, child) {var
-      currentIndex = this.data.currentIndex;
-      var currentChild = child || this.children[currentIndex];
-      if (!(0, _utils.isDef)(currentChild)) {
-        return;
-      }
-      this.$emit(eventName, {
-        index: currentChild.index,
-        name: currentChild.getComputedName(),
-        title: currentChild.data.title });
-
-    },
-    onTap: function onTap(event) {var _this4 = this;var
-      index = event.currentTarget.dataset.index;
-      var child = this.children[index];
-      if (child.data.disabled) {
-        this.trigger('disabled', child);
-      } else
-      {
-        this.setCurrentIndex(index);
-        wx.nextTick(function () {
-          _this4.trigger('click');
-        });
-      }
-    },
-    // correct the index of active tab
-    setCurrentIndexByName: function setCurrentIndexByName(name) {var _this$children2 =
-      this.children,children = _this$children2 === void 0 ? [] : _this$children2;
-      var matched = children.filter(function (child) {return child.getComputedName() === name;});
-      if (matched.length) {
-        this.setCurrentIndex(matched[0].index);
-      }
-    },
-    setCurrentIndex: function setCurrentIndex(currentIndex) {var _this5 = this;var
-      data = this.data,_this$children3 = this.children,children = _this$children3 === void 0 ? [] : _this$children3;
-      if (!(0, _utils.isDef)(currentIndex) ||
-      currentIndex >= children.length ||
-      currentIndex < 0) {
-        return;
-      }
-      children.forEach(function (item, index) {
-        var active = index === currentIndex;
-        if (active !== item.data.active || !item.inited) {
-          item.updateRender(active, _this5);
-        }
-      });
-      if (currentIndex === data.currentIndex) {
-        return;
-      }
-      var shouldEmitChange = data.currentIndex !== null;
-      this.setData({ currentIndex: currentIndex });
-      wx.nextTick(function () {
-        _this5.setLine();
-        _this5.scrollIntoView();
-        _this5.updateContainer();
-        _this5.trigger('input');
-        if (shouldEmitChange) {
-          _this5.trigger('change');
-        }
-      });
-    },
-    getCurrentName: function getCurrentName() {
-      var activeTab = this.children[this.data.currentIndex];
-      if (activeTab) {
-        return activeTab.getComputedName();
-      }
-    },
-    setLine: function setLine(skipTransition) {var _this6 = this;
-      if (this.data.type !== 'line') {
-        return;
-      }var _this$data =
-      this.data,color = _this$data.color,duration = _this$data.duration,currentIndex = _this$data.currentIndex,lineWidth = _this$data.lineWidth,lineHeight = _this$data.lineHeight;
-      this.getRect('.van-tab', true).then(function () {var rects = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
-        var rect = rects[currentIndex];
-        if (rect == null) {
-          return;
-        }
-        var width = lineWidth !== -1 ? lineWidth : rect.width / 2;
-        var height = lineHeight !== -1 ? "height: ".concat(
-        (0, _utils.addUnit)(lineHeight), "; border-radius: ").concat((0, _utils.addUnit)(lineHeight), ";") :
-        '';
-        var left = rects.
-        slice(0, currentIndex).
-        reduce(function (prev, curr) {return prev + curr.width;}, 0);
-        left += (rect.width - width) / 2;
-        var transition = skipTransition ?
-        '' : "transition-duration: ".concat(
-        duration, "s; -webkit-transition-duration: ").concat(duration, "s;");
-        _this6.setData({
-          lineStyle: "\n            ".concat(
-          height, "\n            width: ").concat(
-          (0, _utils.addUnit)(width), ";\n            background-color: ").concat(
-          color, ";\n            -webkit-transform: translateX(").concat(
-          left, "px);\n            transform: translateX(").concat(
-          left, "px);\n            ").concat(
-          transition, "\n          ") });
-
-
-      });
-    },
-    // scroll active tab into view
-    scrollIntoView: function scrollIntoView() {var _this7 = this;var _this$data2 =
-      this.data,currentIndex = _this$data2.currentIndex,scrollable = _this$data2.scrollable;
-      if (!scrollable) {
-        return;
-      }
-      Promise.all([
-      this.getRect('.van-tab', true),
-      this.getRect('.van-tabs__nav')]).
-      then(function (_ref) {var _ref2 = _slicedToArray(_ref, 2),tabRects = _ref2[0],navRect = _ref2[1];
-        var tabRect = tabRects[currentIndex];
-        var offsetLeft = tabRects.
-        slice(0, currentIndex).
-        reduce(function (prev, curr) {return prev + curr.width;}, 0);
-        _this7.setData({
-          scrollLeft: offsetLeft - (navRect.width - tabRect.width) / 2 });
-
-      });
-    },
-    onTouchScroll: function onTouchScroll(event) {
-      this.$emit('scroll', event.detail);
-    },
-    onTouchStart: function onTouchStart(event) {
-      if (!this.data.swipeable)
-      return;
-      this.touchStart(event);
-    },
-    onTouchMove: function onTouchMove(event) {
-      if (!this.data.swipeable)
-      return;
-      this.touchMove(event);
-    },
-    // watch swipe touch end
-    onTouchEnd: function onTouchEnd() {
-      if (!this.data.swipeable)
-      return;var _this$data3 =
-      this.data,tabs = _this$data3.tabs,currentIndex = _this$data3.currentIndex;var
-      direction = this.direction,deltaX = this.deltaX,offsetX = this.offsetX;
-      var minSwipeDistance = 50;
-      if (direction === 'horizontal' && offsetX >= minSwipeDistance) {
-        if (deltaX > 0 && currentIndex !== 0) {
-          this.setCurrentIndex(currentIndex - 1);
-        } else
-        if (deltaX < 0 && currentIndex !== tabs.length - 1) {
-          this.setCurrentIndex(currentIndex + 1);
-        }
-      }
-    } } });
 
 /***/ }),
 
@@ -11635,7 +11415,7 @@ var _utils = __webpack_require__(/*! ../common/utils */ 205);function _slicedToA
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-var _component = __webpack_require__(/*! ../common/component */ 169);
+var _component = __webpack_require__(/*! ../common/component */ 32);
 (0, _component.VantComponent)({
   props: {
     show: Boolean,
@@ -11690,319 +11470,298 @@ module.exports = g;
 /***/ }),
 
 /***/ 30:
-/*!******************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/static/js/contest.js ***!
-  \******************************************************************************************/
+/*!**********************************************************************************************************!*\
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/card/index.js ***!
+  \**********************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _api_reference = _interopRequireDefault(__webpack_require__(/*! ./api_reference.js */ 15));
-var _http_commons = _interopRequireDefault(__webpack_require__(/*! ./http_commons.js */ 18));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var _default =
+var _link = __webpack_require__(/*! ../mixins/link */ 31);
+var _component = __webpack_require__(/*! ../common/component */ 32);
+(0, _component.VantComponent)({
+  classes: [
+  'num-class',
+  'desc-class',
+  'thumb-class',
+  'title-class',
+  'price-class',
+  'origin-price-class'],
 
-{
+  mixins: [_link.link],
+  props: {
+    tag: String,
+    num: String,
+    desc: String,
+    thumb: String,
+    title: String,
+    price: {
+      type: String,
+      observer: 'updatePrice' },
 
-  /**
-   * 检查测试(只包括作业和考试)的各个时间的逻辑是否合理。
-   * 
-   * 1、边界检查
-   * 2、搭配类型检查
-   * 3、时间范围检查
-   * 
-   * @param {Date} publishDate
-   * @param {Date} deadlineDate
-   * @param {Number} limitMinutes
-   * @return {Object} {"value": bool, "msg": 错误信息}
-   */
-  isDateRelationValid: function isDateRelationValid(publishDate, deadlineDate, limitMinutes) {
-    console.log("params", publishDate, deadlineDate, limitMinutes);
-    var now = new Date();
+    centered: Boolean,
+    lazyLoad: Boolean,
+    thumbLink: String,
+    originPrice: String,
+    thumbMode: {
+      type: String,
+      value: 'aspectFit' },
 
-    // 两者必有一
-    if (null === publishDate && null === deadlineDate) {
-      return { value: false, msg: '开始和截止时间必有一个' };
-    }
+    currency: {
+      type: String,
+      value: '¥' } },
 
-    // 只有publishDate
-    if (null === deadlineDate && publishDate) {
-      if (publishDate < now) {
-        return { value: false, msg: '开始时间早于现在' };
+
+  methods: {
+    updatePrice: function updatePrice() {var
+      price = this.data.price;
+      var priceArr = price.toString().split('.');
+      this.setData({
+        integerStr: priceArr[0],
+        decimalStr: priceArr[1] ? ".".concat(priceArr[1]) : '' });
+
+    },
+    onClickThumb: function onClickThumb() {
+      this.jumpLink('thumbLink');
+    } } });
+
+/***/ }),
+
+/***/ 31:
+/*!***********************************************************************************************************!*\
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/mixins/link.js ***!
+  \***********************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });exports.link = void 0;var link = Behavior({
+  properties: {
+    url: String,
+    linkType: {
+      type: String,
+      value: 'navigateTo' } },
+
+
+  methods: {
+    jumpLink: function jumpLink() {var urlKey = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'url';
+      var url = this.data[urlKey];
+      if (url) {
+        wx[this.data.linkType]({ url: url });
       }
+    } } });exports.link = link;
 
-      if (null == limitMinutes || limitMinutes <= 0) {
-        return { value: false, msg: '只有开始时间, 未设置限时' };
-      }
-      return { value: true, msg: '' };
+/***/ }),
+
+/***/ 32:
+/*!****************************************************************************************************************!*\
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/common/component.js ***!
+  \****************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });exports.VantComponent = VantComponent;var _basic = __webpack_require__(/*! ../mixins/basic */ 33);function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
+var relationFunctions = {
+  ancestor: {
+    linked: function linked(parent) {
+      this.parent = parent;
+    },
+    unlinked: function unlinked() {
+      this.parent = null;
+    } },
+
+  descendant: {
+    linked: function linked(child) {
+      this.children = this.children || [];
+      this.children.push(child);
+    },
+    unlinked: function unlinked(child) {
+      this.children = (this.children || []).filter(function (it) {return it !== child;});
+    } } };
+
+
+function mapKeys(source, target, map) {
+  Object.keys(map).forEach(function (key) {
+    if (source[key]) {
+      target[map[key]] = source[key];
     }
+  });
+}
+function makeRelation(options, vantOptions, relation) {var
+  type = relation.type,name = relation.name,_linked = relation.linked,_unlinked = relation.unlinked,_linkChanged = relation.linkChanged;var
+  beforeCreate = vantOptions.beforeCreate,destroyed = vantOptions.destroyed;
+  if (type === 'descendant') {
+    options.created = function () {
+      beforeCreate && beforeCreate.bind(this)();
+      this.children = this.children || [];
+    };
+    options.detached = function () {
+      this.children = [];
+      destroyed && destroyed.bind(this)();
+    };
+  }
+  options.relations = Object.assign(options.relations || {}, _defineProperty({}, "../".concat(
+  name, "/index"), {
+    type: type,
+    linked: function linked(node) {
+      relationFunctions[type].linked.bind(this)(node);
+      _linked && _linked.bind(this)(node);
+    },
+    linkChanged: function linkChanged(node) {
+      _linkChanged && _linkChanged.bind(this)(node);
+    },
+    unlinked: function unlinked(node) {
+      relationFunctions[type].unlinked.bind(this)(node);
+      _unlinked && _unlinked.bind(this)(node);
+    } }));
 
-    // 只有deadlineDate
-    if (null === publishDate && deadlineDate) {
-      if (null == limitMinutes || limitMinutes <= 0) {
-        limitMinutes = 0;
-      }
 
-      var atLeastDate = new Date(now.getTime() + limitMinutes * 60 * 1000);
-      if (atLeastDate > deadlineDate) {
-        return { value: false, msg: '现在到截止时间不足限时的时间范围' };
-      }
-      return { value: true, msg: '' };
+}
+function VantComponent() {var vantOptions = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var options = {};
+  mapKeys(vantOptions, options, {
+    data: 'data',
+    props: 'properties',
+    mixins: 'behaviors',
+    methods: 'methods',
+    beforeCreate: 'created',
+    created: 'attached',
+    mounted: 'ready',
+    relations: 'relations',
+    destroyed: 'detached',
+    classes: 'externalClasses' });var
+
+  relation = vantOptions.relation;
+  if (relation) {
+    makeRelation(options, vantOptions, relation);
+  }
+  // add default externalClasses
+  options.externalClasses = options.externalClasses || [];
+  options.externalClasses.push('custom-class');
+  // add default behaviors
+  options.behaviors = options.behaviors || [];
+  options.behaviors.push(_basic.basic);
+  // map field to form-field behavior
+  if (vantOptions.field) {
+    options.behaviors.push('wx://form-field');
+  }
+  // add default options
+  options.options = {
+    multipleSlots: true,
+    addGlobalClass: true };
+
+  Component(options);
+}
+
+/***/ }),
+
+/***/ 33:
+/*!************************************************************************************************************!*\
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/mixins/basic.js ***!
+  \************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });exports.basic = void 0;var basic = Behavior({
+  methods: {
+    $emit: function $emit() {
+      this.triggerEvent.apply(this, arguments);
+    },
+    set: function set(data, callback) {
+      this.setData(data, callback);
+      return new Promise(function (resolve) {return wx.nextTick(resolve);});
+    },
+    getRect: function getRect(selector, all) {var _this = this;
+      return new Promise(function (resolve) {
+        wx.createSelectorQuery().
+        in(_this)[all ? 'selectAll' : 'select'](selector).
+        boundingClientRect(function (rect) {
+          if (all && Array.isArray(rect) && rect.length) {
+            resolve(rect);
+          }
+          if (!all && rect) {
+            resolve(rect);
+          }
+        }).
+        exec();
+      });
+    } } });exports.basic = basic;
+
+/***/ }),
+
+/***/ 34:
+/*!*************************************************************************************************************!*\
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/dialog/dialog.js ***!
+  \*************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var queue = [];
+function getContext() {
+  var pages = getCurrentPages();
+  return pages[pages.length - 1];
+}
+var Dialog = function Dialog(options) {
+  options = Object.assign(Object.assign({}, Dialog.currentOptions), options);
+  return new Promise(function (resolve, reject) {
+    var context = options.context || getContext();
+    var dialog = context.selectComponent(options.selector);
+    delete options.context;
+    delete options.selector;
+    if (dialog) {
+      dialog.setData(Object.assign({ onCancel: reject, onConfirm: resolve }, options));
+      queue.push(dialog);
+    } else
+    {
+      console.warn('未找到 van-dialog 节点，请确认 selector 及 context 是否正确');
     }
+  });
+};
+Dialog.defaultOptions = {
+  show: true,
+  title: '',
+  width: null,
+  message: '',
+  zIndex: 100,
+  overlay: true,
+  selector: '#van-dialog',
+  className: '',
+  asyncClose: false,
+  transition: 'scale',
+  customStyle: '',
+  messageAlign: '',
+  overlayStyle: '',
+  confirmButtonText: '确认',
+  cancelButtonText: '取消',
+  showConfirmButton: true,
+  showCancelButton: false,
+  closeOnClickOverlay: false,
+  confirmButtonOpenType: '' };
 
-    // 两者都有
-    if (publishDate < now) {
-      return { value: false, msg: '开始时间早于现在' };
-    }
-
-    if (null != limitMinutes && limitMinutes > 0) {
-      var _atLeastDate = new Date(publishDate.getTime() + limitMinutes * 60 * 1000);
-      if (_atLeastDate > deadlineDate) {
-        return { value: false, msg: '开始时间到截止时间不足限时的时间范围' };
-      }
-    }
-
-    return { value: true, msg: '' };
-  },
-
-  /**
-      * 创建contest
-      * @param {Object} contest
-      */
-  createContest: function createContest(contest) {
-    return new Promise(function (resolve, reject) {
-      uni.request({
-        url: _api_reference.default.CONTEST,
-        method: "POST",
-        header: _http_commons.default.getAuthenticationHeader(),
-        data: contest,
-        success: function success(resp) {
-          if (_http_commons.default.successCheck(resp)) {
-            resolve(resp.data.data);
-          }
-        },
-        fail: function fail(err) {
-          _http_commons.default.commonFailHanlder(err);
-          reject(err);
-        } });
-
-    });
-  },
-
-  /**
-      * 通过courseId获取试卷
-      * 
-      * @param {Number} courseId
-      * @param {Number} offset
-      * @param {Number} count
-      */
-  getContestByCourseId: function getContestByCourseId(courseId, offset, count) {
-    return new Promise(function (resolve, reject) {
-      uni.request({
-        url: _api_reference.default.GET_CONTESTS_BY_COURSEID + '?courseId=' + courseId + '&offset=' + offset + '&count=' + count,
-        header: _http_commons.default.getAuthenticationHeader(),
-        success: function success(resp) {
-          if (_http_commons.default.successCheck(resp)) {
-            resolve(resp.data.data);
-          }
-        },
-        fail: function fail(err) {
-          _http_commons.default.commonFailHanlder(err);
-          reject(err);
-        } });
-
-    });
-  },
-
-  /**
-      * @param {String} contestId
-      */
-  getContestById: function getContestById(contestId) {
-    return new Promise(function (resolve, reject) {
-      uni.request({
-        url: _api_reference.default.CONTEST + '?contestId=' + contestId,
-        header: _http_commons.default.getAuthenticationHeader(),
-        success: function success(resp) {
-          if (_http_commons.default.successCheck(resp)) {
-            resolve(resp.data.data);
-          }
-        },
-        fail: function fail(err) {
-          _http_commons.default.commonFailHanlder(err);
-          reject(err);
-        } });
-
-    });
-  },
-
-  /**
-      * 通过contestId获取contest详细内容
-      * 
-      * @param {Number} contestId
-      */
-  getContestDetail: function getContestDetail(contestId) {
-    return new Promise(function (resolve, reject) {
-      uni.request({
-        url: _api_reference.default.GET_CONTEST_DETAIL + '?contestId=' + contestId,
-        header: _http_commons.default.getAuthenticationHeader(),
-        success: function success(resp) {
-          if (_http_commons.default.successCheck(resp)) {
-            resolve(resp.data.data);
-          }
-        },
-        fail: function fail(err) {
-          _http_commons.default.commonFailHanlder(err);
-          reject(err);
-        } });
-
-    });
-  },
-
-  /**
-      * 通过contestId获取answer
-      * 
-      * @param {Number} contestId
-      */
-  getAnswer: function getAnswer(contestId) {
-    return new Promise(function (resolve, reject) {
-      uni.request({
-        url: _api_reference.default.ANSWER + '?contestId=' + contestId,
-        header: _http_commons.default.getAuthenticationHeader(),
-        success: function success(resp) {
-          if (_http_commons.default.successCheck(resp)) {
-            resolve(resp.data.data);
-          }
-        },
-        fail: function fail(err) {
-          _http_commons.default.commonFailHanlder(err);
-          reject(err);
-        } });
-
-    });
-  },
-
-  /**
-      * @param {Object} answer
-      */
-  updateAnswer: function updateAnswer(answer) {
-    return new Promise(function (resolve, reject) {
-      uni.request({
-        url: _api_reference.default.ANSWER,
-        method: "PUT",
-        data: answer,
-        header: _http_commons.default.getAuthenticationHeader(),
-        success: function success(resp) {
-          if (_http_commons.default.successCheck(resp)) {
-            resolve(resp.data.data);
-          }
-        },
-        fail: function fail(err) {
-          _http_commons.default.commonFailHanlder(err);
-          reject(err);
-        } });
-
-    });
-  },
-
-  /** 
-      * 计算出测试剩余时间(毫秒)
-      * 
-      * @param {String} answerStartDate
-      * @param {String} publishDate
-      * @param {String} deadline
-      * @param {Number} limitMinutes
-      */
-  getLeftDate: function getLeftDate(answerStartDate, publishDate, deadline, limitMinutes) {
-    var now = new Date();
-    console.log("获取剩余时间", answerStartDate, publishDate, deadline, limitMinutes);
-
-    if (limitMinutes === 0) {
-      // 不限时
-      return new Date(deadline) - now;
-    } else {
-      // 限时
-      if (deadline) {
-        // 如果有截止时间，就比较用户开始时间+限时 和 截止时间哪个大
-
-        // 用户开始答题时刻 + 限时的剩余时间
-        var leftTimeToBeginTime = new Date(answerStartDate).getTime() + limitMinutes * 60 * 1000 - now;
-        console.log("leftTimeToBeginTime", leftTimeToBeginTime);
-
-        // 截止时间（起始时间+限时或结束时间）的剩余时间
-        var leftTimeBeforeDeadline = new Date(deadline) - now;
-        console.log("leftTimeBeforeDeadline", leftTimeBeforeDeadline);
-        // 返回小的
-        return leftTimeToBeginTime < leftTimeBeforeDeadline ? leftTimeToBeginTime : leftTimeBeforeDeadline;
-      } else {
-        // 如果没有截止时间，那么剩余时间就是发布时间+限时-现在
-        return new Date(publishDate).getTime() + limitMinutes * 60 * 1000 - now;
-      }
-    }
-  },
-
-  /**
-      * 根据contestId获取所有学生的试卷
-      * @param {String} contestId
-      */
-  getAnswerList: function getAnswerList(contestId) {
-    return new Promise(function (resolve, reject) {
-      uni.request({
-        url: _api_reference.default.ANSWER_LIST + '?contestId=' + contestId,
-        header: _http_commons.default.getAuthenticationHeader(),
-        success: function success(resp) {
-          if (_http_commons.default.successCheck(resp)) {
-            resolve(resp.data.data);
-          }
-        },
-        fail: function fail(err) {
-          _http_commons.default.commonFailHanlder(err);
-          reject(err);
-        } });
-
-    });
-  },
-
-  /**
-      * 根据用户id和测试id获得该用户的试卷
-      * 
-      * @param {Number} userId
-      * @param {String} contestId
-      */
-  getReviseAnswer: function getReviseAnswer(userId, contestId) {
-    return new Promise(function (resolve, reject) {
-      uni.request({
-        url: _api_reference.default.REVISE_ANSWER + '?contestId=' + contestId + '&userId=' + userId,
-        header: _http_commons.default.getAuthenticationHeader(),
-        success: function success(resp) {
-          if (_http_commons.default.successCheck(resp)) {
-            resolve(resp.data.data);
-          }
-        },
-        fail: function fail(err) {
-          _http_commons.default.commonFailHanlder(err);
-          reject(err);
-        } });
-
-    });
-  },
-
-  updateRevise: function updateRevise(answerId, subjectiveScores) {
-    return new Promise(function (resolve, reject) {
-      uni.request({
-        url: _api_reference.default.REVISE_ANSWER + '?answerId=' + answerId + '&subjectiveScores=' + subjectiveScores,
-        method: "PUT",
-        header: _http_commons.default.getAuthenticationHeader(),
-        success: function success(resp) {
-          if (_http_commons.default.successCheck(resp)) {
-            resolve(resp.data.data);
-          }
-        },
-        fail: function fail(err) {
-          _http_commons.default.commonFailHanlder(err);
-          reject(err);
-        } });
-
-    });
-  } };exports.default = _default;
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
+Dialog.alert = Dialog;
+Dialog.confirm = function (options) {return Dialog(Object.assign({ showCancelButton: true }, options));};
+Dialog.close = function () {
+  queue.forEach(function (dialog) {
+    dialog.close();
+  });
+  queue = [];
+};
+Dialog.stopLoading = function () {
+  queue.forEach(function (dialog) {
+    dialog.stopLoading();
+  });
+};
+Dialog.setDefaultOptions = function (options) {
+  Object.assign(Dialog.currentOptions, options);
+};
+Dialog.resetDefaultOptions = function () {
+  Dialog.currentOptions = Object.assign({}, Dialog.defaultOptions);
+};
+Dialog.resetDefaultOptions();var _default =
+Dialog;exports.default = _default;
 
 /***/ }),
 
@@ -23299,7 +23058,247 @@ cityData;exports.default = _default;
 
 /***/ }),
 
-/***/ 39:
+/***/ 35:
+/*!*****************************************************************************************!*\
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/static/js/course.js ***!
+  \*****************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _api_reference = _interopRequireDefault(__webpack_require__(/*! ./api_reference.js */ 15));
+var _http_commons = _interopRequireDefault(__webpack_require__(/*! ./http_commons.js */ 18));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var _default =
+
+{
+
+  getCourse: function getCourse(courseId) {
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: _api_reference.default.GET_COURSE + '?courseId=' + courseId,
+        header: _http_commons.default.getAuthenticationHeader(),
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+        } });
+
+    });
+  },
+
+  /**
+      * 获取我的课程列表
+      * 
+      * @param {Number} type  0:我教的课  1:我参与的课
+      * @return {Object} 课程列表
+      */
+  listCourse: function listCourse(type) {var offset = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;var count = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 10;
+    var url = type === 0 ? _api_reference.default.GET_TEACHED_COURSE : _api_reference.default.GET_JOINED_COURSE;
+
+    return new Promise(function (resolve, reject) {
+      console.log("请求");
+      uni.request({
+        url: url + '?offset=' + offset + '&count=' + count,
+        header: _http_commons.default.getAuthenticationHeader(),
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+        } });
+
+    });
+  },
+
+  /**
+      * @param {String} courseName
+      * @param {String} classInfo
+      */
+  createCourse: function createCourse(courseName, classInfo) {
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: _api_reference.default.CREATE_COURSE,
+        method: "POST",
+        header: _http_commons.default.getAuthenticationHeader(),
+        data: {
+          courseName: courseName,
+          classInfo: classInfo },
+
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+          reject(err);
+        } });
+
+    });
+  },
+
+  joinCourse: function joinCourse(courseId) {
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: _api_reference.default.JOIN_COURSE + '?courseId=' + courseId,
+        method: "POST",
+        header: _http_commons.default.getAuthenticationHeader(),
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+          reject(err);
+        } });
+
+    });
+  },
+
+  deleteCourse: function deleteCourse(courseId) {
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: _api_reference.default.DELETE_COURSE + '?courseId=' + courseId,
+        method: "DELETE",
+        header: _http_commons.default.getAuthenticationHeader(),
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+          reject(err);
+        } });
+
+    });
+  },
+
+  exitCourse: function exitCourse(courseId) {
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: _api_reference.default.EXIT_COURSE + '?courseId=' + courseId,
+        method: "DELETE",
+        header: _http_commons.default.getAuthenticationHeader(),
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+          reject(err);
+        } });
+
+    });
+  },
+
+  /**
+      * 更新course 信息，服务端会校验，只允许更新courseName和classInfo
+      * 
+      * @param {Object} course 
+      */
+  updateCourse: function updateCourse(course) {
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: _api_reference.default.UPDATE_COURSE,
+        method: "PUT",
+        header: _http_commons.default.getAuthenticationHeader(),
+        data: {
+          id: course.id,
+          courseName: course.courseName,
+          classInfo: course.classInfo },
+
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+          reject(err);
+        } });
+
+    });
+  },
+
+  getCourseMembers: function getCourseMembers(courseId) {
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: _api_reference.default.GET_MEMBERS + '?courseId=' + courseId,
+        header: _http_commons.default.getAuthenticationHeader(),
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+          reject(err);
+        } });
+
+    });
+  },
+
+  kickoutUser: function kickoutUser(kickedUserId, courseId) {
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: _api_reference.default.KICK_OUT_MEMBER + '?courseId=' + courseId + '&kickedUserId=' + kickedUserId,
+        method: "DELETE",
+        header: _http_commons.default.getAuthenticationHeader(),
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+          reject(err);
+        } });
+
+    });
+  },
+
+  assignTeacher: function assignTeacher(assignedUserId, courseId) {
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: _api_reference.default.ASSIGN_TEACHER + '?targetUserId=' + assignedUserId + '&courseId=' + courseId,
+        method: "PUT",
+        header: _http_commons.default.getAuthenticationHeader(),
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+          reject(err);
+        } });
+
+    });
+  } };exports.default = _default;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
+
+/***/ }),
+
+/***/ 4:
+/*!********************************************************************************!*\
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/pages.json ***!
+  \********************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/***/ }),
+
+/***/ 44:
 /*!***************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/static/js/chat.js ***!
   \***************************************************************************************/
@@ -23387,18 +23386,6 @@ var _http_commons = _interopRequireDefault(__webpack_require__(/*! ./http_common
     });
   } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
-
-/***/ }),
-
-/***/ 4:
-/*!********************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/pages.json ***!
-  \********************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
 
 /***/ }),
 
@@ -24308,23 +24295,35 @@ module.exports = {"_from":"@dcloudio/uni-stat@next","_id":"@dcloudio/uni-stat@2.
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _default = { "pages": { "pages/revise/revise": { "usingComponents": { "create-revise": "/components/CreateRevise", "van-index-bar": "/wxcomponents/vant/dist/index-bar/index", "van-index-anchor": "/wxcomponents/vant/dist/index-anchor/index", "van-notify": "/wxcomponents/vant/dist/notify/index" }, "usingAutoImportComponents": {} }, "pages/message/message": { "usingComponents": { "s-tabs": "/components/s-tabs/index", "s-tab": "/components/s-tab/index", "van-image": "/wxcomponents/vant/dist/image/index", "uni-load-more": "/components/uni-load-more/uni-load-more" }, "usingAutoImportComponents": { "uni-load-more": "/components/uni-load-more/uni-load-more" } }, "pages/login/login": { "usingComponents": { "update-user-info": "/components/UpdateUserInfo", "van-popup": "/wxcomponents/vant/dist/popup/index" }, "usingAutoImportComponents": {} }, "pages/me/me": { "usingComponents": { "update-user-info": "/components/UpdateUserInfo", "van-button": "/wxcomponents/vant/dist/button/index", "van-notify": "/wxcomponents/vant/dist/notify/index", "van-image": "/wxcomponents/vant/dist/image/index" }, "usingAutoImportComponents": {} }, "pages/favorite/favorite": { "usingComponents": {}, "usingAutoImportComponents": {} }, "pages/conurse_ware/course_ware": { "usingComponents": {}, "usingAutoImportComponents": {} }, "pages/contest/contest": { "usingComponents": { "uni-countdown": "/components/uni-countdown/uni-countdown", "create-answer": "/components/CreateAnswer", "w-picker": "/components/w-picker/w-picker", "van-button": "/wxcomponents/vant/dist/button/index", "van-icon": "/wxcomponents/vant/dist/icon/index", "van-dialog": "/wxcomponents/vant/dist/dialog/index", "van-divider": "/wxcomponents/vant/dist/divider/index", "van-notify": "/wxcomponents/vant/dist/notify/index" }, "usingAutoImportComponents": { "uni-countdown": "/components/uni-countdown/uni-countdown" } }, "pages/helpme/helpme": { "usingComponents": {}, "usingAutoImportComponents": {} }, "pages/course/course": { "usingComponents": { "single-submit-popup": "/components/SingleSubmitPopup", "uni-load-more": "/components/uni-load-more/uni-load-more", "s-tabs": "/components/s-tabs/index", "s-tab": "/components/s-tab/index", "van-grid": "/wxcomponents/vant/dist/grid/index", "van-grid-item": "/wxcomponents/vant/dist/grid-item/index", "van-notify": "/wxcomponents/vant/dist/notify/index", "van-icon": "/wxcomponents/vant/dist/icon/index", "van-button": "/wxcomponents/vant/dist/button/index", "van-steps": "/wxcomponents/vant/dist/steps/index" }, "usingAutoImportComponents": { "uni-load-more": "/components/uni-load-more/uni-load-more" } }, "pages/course_settings/course_settings": { "usingComponents": { "van-notify": "/wxcomponents/vant/dist/notify/index", "van-button": "/wxcomponents/vant/dist/button/index" }, "usingAutoImportComponents": {} }, "pages/topics/topics": { "usingComponents": { "ms-dropdown-menu": "/components/ms-dropdown/dropdown-menu", "ms-dropdown-item": "/components/ms-dropdown/dropdown-item", "s-tabs": "/components/s-tabs/index", "s-tab": "/components/s-tab/index", "van-notify": "/wxcomponents/vant/dist/notify/index", "uni-load-more": "/components/uni-load-more/uni-load-more", "van-icon": "/wxcomponents/vant/dist/icon/index", "van-image": "/wxcomponents/vant/dist/image/index" }, "usingAutoImportComponents": { "uni-load-more": "/components/uni-load-more/uni-load-more" } }, "pages/create_topic/create_topic": { "usingComponents": { "van-notify": "/wxcomponents/vant/dist/notify/index", "van-button": "/wxcomponents/vant/dist/button/index" }, "usingAutoImportComponents": {} }, "pages/topic/topic": { "usingComponents": { "s-tabs": "/components/s-tabs/index", "s-tab": "/components/s-tab/index", "single-submit-popup": "/components/SingleSubmitPopup", "van-notify": "/wxcomponents/vant/dist/notify/index", "uni-load-more": "/components/uni-load-more/uni-load-more", "van-icon": "/wxcomponents/vant/dist/icon/index", "van-image": "/wxcomponents/vant/dist/image/index" }, "usingAutoImportComponents": { "uni-load-more": "/components/uni-load-more/uni-load-more" } }, "pages/sub_comments/sub_comments": { "usingComponents": { "single-submit-popup": "/components/SingleSubmitPopup", "van-notify": "/wxcomponents/vant/dist/notify/index", "uni-load-more": "/components/uni-load-more/uni-load-more", "van-icon": "/wxcomponents/vant/dist/icon/index", "van-image": "/wxcomponents/vant/dist/image/index" }, "usingAutoImportComponents": { "uni-load-more": "/components/uni-load-more/uni-load-more" } }, "pages/member_list/member_list": { "usingComponents": { "van-index-bar": "/wxcomponents/vant/dist/index-bar/index", "van-index-anchor": "/wxcomponents/vant/dist/index-anchor/index", "van-cell": "/wxcomponents/vant/dist/cell/index", "van-notify": "/wxcomponents/vant/dist/notify/index", "van-cell-group": "/wxcomponents/vant/dist/cell-group/index", "van-swipe-cell": "/wxcomponents/vant/dist/swipe-cell/index" }, "usingAutoImportComponents": {} }, "pages/chat/chat": { "usingComponents": { "van-notify": "/wxcomponents/vant/dist/notify/index", "uni-load-more": "/components/uni-load-more/uni-load-more", "van-icon": "/wxcomponents/vant/dist/icon/index", "van-image": "/wxcomponents/vant/dist/image/index" }, "usingAutoImportComponents": { "uni-load-more": "/components/uni-load-more/uni-load-more" } }, "pages/create_contest/create_contest": { "usingComponents": { "create-question": "/components/CreateQuestion", "w-picker": "/components/w-picker/w-picker", "van-button": "/wxcomponents/vant/dist/button/index", "van-icon": "/wxcomponents/vant/dist/icon/index", "van-dialog": "/wxcomponents/vant/dist/dialog/index", "van-divider": "/wxcomponents/vant/dist/divider/index", "van-notify": "/wxcomponents/vant/dist/notify/index" }, "usingAutoImportComponents": { "w-picker": "/components/w-picker/w-picker" } }, "pages/index/index": { "navigationBarTitleText": "讨论区", "usingComponents": { "create-course-modal": "/components/CreateCourse", "join-course-modal": "/components/JoinCourse", "van-grid": "/wxcomponents/vant/dist/grid/index", "van-grid-item": "/wxcomponents/vant/dist/grid-item/index", "van-tab": "/wxcomponents/vant/dist/tab/index", "van-tabs": "/wxcomponents/vant/dist/tabs/index", "van-notify": "/wxcomponents/vant/dist/notify/index", "van-icon": "/wxcomponents/vant/dist/icon/index", "van-button": "/wxcomponents/vant/dist/button/index", "van-swipe-cell": "/wxcomponents/vant/dist/swipe-cell/index", "van-dialog": "/wxcomponents/vant/dist/dialog/index" }, "usingAutoImportComponents": {} } }, "globalStyle": { "navigationBarTextStyle": "black", "navigationBarTitleText": "小课堂", "navigationBarBackgroundColor": "#F8F8F8", "backgroundColor": "#F2F2F2" } };exports.default = _default;
+Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _default = { "pages": { "pages/index/index": { "navigationBarTitleText": "讨论区", "usingComponents": { "create-course-modal": "/components/CreateCourse", "join-course-modal": "/components/JoinCourse", "van-grid": "/wxcomponents/vant/dist/grid/index", "van-grid-item": "/wxcomponents/vant/dist/grid-item/index", "van-tab": "/wxcomponents/vant/dist/tab/index", "van-tabs": "/wxcomponents/vant/dist/tabs/index", "van-notify": "/wxcomponents/vant/dist/notify/index", "van-icon": "/wxcomponents/vant/dist/icon/index", "van-button": "/wxcomponents/vant/dist/button/index", "van-swipe-cell": "/wxcomponents/vant/dist/swipe-cell/index", "van-dialog": "/wxcomponents/vant/dist/dialog/index" }, "usingAutoImportComponents": {} }, "pages/message/message": { "usingComponents": { "s-tabs": "/components/s-tabs/index", "s-tab": "/components/s-tab/index", "van-image": "/wxcomponents/vant/dist/image/index", "uni-load-more": "/components/uni-load-more/uni-load-more" }, "usingAutoImportComponents": { "uni-load-more": "/components/uni-load-more/uni-load-more" } }, "pages/login/login": { "usingComponents": { "update-user-info": "/components/UpdateUserInfo", "van-popup": "/wxcomponents/vant/dist/popup/index" }, "usingAutoImportComponents": {} }, "pages/me/me": { "usingComponents": { "update-user-info": "/components/UpdateUserInfo", "van-button": "/wxcomponents/vant/dist/button/index", "van-notify": "/wxcomponents/vant/dist/notify/index", "van-image": "/wxcomponents/vant/dist/image/index" }, "usingAutoImportComponents": {} }, "pages/favorite/favorite": { "usingComponents": {}, "usingAutoImportComponents": {} }, "pages/conurse_ware/course_ware": { "usingComponents": {}, "usingAutoImportComponents": {} }, "pages/contest/contest": { "usingComponents": { "uni-countdown": "/components/uni-countdown/uni-countdown", "create-answer": "/components/CreateAnswer", "w-picker": "/components/w-picker/w-picker", "van-button": "/wxcomponents/vant/dist/button/index", "van-icon": "/wxcomponents/vant/dist/icon/index", "van-dialog": "/wxcomponents/vant/dist/dialog/index", "van-divider": "/wxcomponents/vant/dist/divider/index", "van-notify": "/wxcomponents/vant/dist/notify/index" }, "usingAutoImportComponents": { "uni-countdown": "/components/uni-countdown/uni-countdown" } }, "pages/helpme/helpme": { "usingComponents": {}, "usingAutoImportComponents": {} }, "pages/course/course": { "usingComponents": { "single-submit-popup": "/components/SingleSubmitPopup", "uni-load-more": "/components/uni-load-more/uni-load-more", "s-tabs": "/components/s-tabs/index", "s-tab": "/components/s-tab/index", "van-grid": "/wxcomponents/vant/dist/grid/index", "van-grid-item": "/wxcomponents/vant/dist/grid-item/index", "van-notify": "/wxcomponents/vant/dist/notify/index", "van-icon": "/wxcomponents/vant/dist/icon/index", "van-button": "/wxcomponents/vant/dist/button/index", "van-steps": "/wxcomponents/vant/dist/steps/index" }, "usingAutoImportComponents": { "uni-load-more": "/components/uni-load-more/uni-load-more" } }, "pages/course_settings/course_settings": { "usingComponents": { "van-notify": "/wxcomponents/vant/dist/notify/index", "van-button": "/wxcomponents/vant/dist/button/index" }, "usingAutoImportComponents": {} }, "pages/topics/topics": { "usingComponents": { "ms-dropdown-menu": "/components/ms-dropdown/dropdown-menu", "ms-dropdown-item": "/components/ms-dropdown/dropdown-item", "s-tabs": "/components/s-tabs/index", "s-tab": "/components/s-tab/index", "van-notify": "/wxcomponents/vant/dist/notify/index", "uni-load-more": "/components/uni-load-more/uni-load-more", "van-icon": "/wxcomponents/vant/dist/icon/index", "van-image": "/wxcomponents/vant/dist/image/index" }, "usingAutoImportComponents": { "uni-load-more": "/components/uni-load-more/uni-load-more" } }, "pages/create_topic/create_topic": { "usingComponents": { "van-notify": "/wxcomponents/vant/dist/notify/index", "van-button": "/wxcomponents/vant/dist/button/index" }, "usingAutoImportComponents": {} }, "pages/topic/topic": { "usingComponents": { "s-tabs": "/components/s-tabs/index", "s-tab": "/components/s-tab/index", "single-submit-popup": "/components/SingleSubmitPopup", "van-notify": "/wxcomponents/vant/dist/notify/index", "uni-load-more": "/components/uni-load-more/uni-load-more", "van-icon": "/wxcomponents/vant/dist/icon/index", "van-image": "/wxcomponents/vant/dist/image/index" }, "usingAutoImportComponents": { "uni-load-more": "/components/uni-load-more/uni-load-more" } }, "pages/sub_comments/sub_comments": { "usingComponents": { "single-submit-popup": "/components/SingleSubmitPopup", "van-notify": "/wxcomponents/vant/dist/notify/index", "uni-load-more": "/components/uni-load-more/uni-load-more", "van-icon": "/wxcomponents/vant/dist/icon/index", "van-image": "/wxcomponents/vant/dist/image/index" }, "usingAutoImportComponents": { "uni-load-more": "/components/uni-load-more/uni-load-more" } }, "pages/member_list/member_list": { "usingComponents": { "van-index-bar": "/wxcomponents/vant/dist/index-bar/index", "van-index-anchor": "/wxcomponents/vant/dist/index-anchor/index", "van-cell": "/wxcomponents/vant/dist/cell/index", "van-notify": "/wxcomponents/vant/dist/notify/index", "van-cell-group": "/wxcomponents/vant/dist/cell-group/index", "van-swipe-cell": "/wxcomponents/vant/dist/swipe-cell/index" }, "usingAutoImportComponents": {} }, "pages/chat/chat": { "usingComponents": { "van-notify": "/wxcomponents/vant/dist/notify/index", "uni-load-more": "/components/uni-load-more/uni-load-more", "van-icon": "/wxcomponents/vant/dist/icon/index", "van-image": "/wxcomponents/vant/dist/image/index" }, "usingAutoImportComponents": { "uni-load-more": "/components/uni-load-more/uni-load-more" } }, "pages/create_contest/create_contest": { "usingComponents": { "create-question": "/components/CreateQuestion", "w-picker": "/components/w-picker/w-picker", "van-button": "/wxcomponents/vant/dist/button/index", "van-icon": "/wxcomponents/vant/dist/icon/index", "van-dialog": "/wxcomponents/vant/dist/dialog/index", "van-divider": "/wxcomponents/vant/dist/divider/index", "van-notify": "/wxcomponents/vant/dist/notify/index" }, "usingAutoImportComponents": { "w-picker": "/components/w-picker/w-picker" } }, "pages/revise/revise": { "usingComponents": { "create-revise": "/components/CreateRevise", "van-index-bar": "/wxcomponents/vant/dist/index-bar/index", "van-index-anchor": "/wxcomponents/vant/dist/index-anchor/index", "van-notify": "/wxcomponents/vant/dist/notify/index" }, "usingAutoImportComponents": {} }, "pages/contest_list/contest_list": {} }, "globalStyle": { "navigationBarTextStyle": "black", "navigationBarTitleText": "小课堂", "navigationBarBackgroundColor": "#F8F8F8", "backgroundColor": "#F2F2F2" } };exports.default = _default;
 
 /***/ }),
 
-/***/ 74:
+/***/ 79:
 /*!**********************************************************!*\
   !*** ./node_modules/@babel/runtime/regenerator/index.js ***!
   \**********************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! regenerator-runtime */ 75);
+module.exports = __webpack_require__(/*! regenerator-runtime */ 80);
 
 
 /***/ }),
 
-/***/ 75:
+/***/ 8:
+/*!************************************************************************************************!*\
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/pages.json?{"type":"stat"} ***!
+  \************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _default = { "appid": "" };exports.default = _default;
+
+/***/ }),
+
+/***/ 80:
 /*!************************************************************!*\
   !*** ./node_modules/regenerator-runtime/runtime-module.js ***!
   \************************************************************/
@@ -24355,7 +24354,7 @@ var oldRuntime = hadRuntime && g.regeneratorRuntime;
 // Force reevalutation of runtime.js.
 g.regeneratorRuntime = undefined;
 
-module.exports = __webpack_require__(/*! ./runtime */ 76);
+module.exports = __webpack_require__(/*! ./runtime */ 81);
 
 if (hadRuntime) {
   // Restore the original runtime.
@@ -24372,7 +24371,7 @@ if (hadRuntime) {
 
 /***/ }),
 
-/***/ 76:
+/***/ 81:
 /*!*****************************************************!*\
   !*** ./node_modules/regenerator-runtime/runtime.js ***!
   \*****************************************************/
@@ -25104,96 +25103,10 @@ if (hadRuntime) {
 
 /***/ }),
 
-/***/ 77:
-/*!*************************************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/dialog/dialog.js ***!
-  \*************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var queue = [];
-function getContext() {
-  var pages = getCurrentPages();
-  return pages[pages.length - 1];
-}
-var Dialog = function Dialog(options) {
-  options = Object.assign(Object.assign({}, Dialog.currentOptions), options);
-  return new Promise(function (resolve, reject) {
-    var context = options.context || getContext();
-    var dialog = context.selectComponent(options.selector);
-    delete options.context;
-    delete options.selector;
-    if (dialog) {
-      dialog.setData(Object.assign({ onCancel: reject, onConfirm: resolve }, options));
-      queue.push(dialog);
-    } else
-    {
-      console.warn('未找到 van-dialog 节点，请确认 selector 及 context 是否正确');
-    }
-  });
-};
-Dialog.defaultOptions = {
-  show: true,
-  title: '',
-  width: null,
-  message: '',
-  zIndex: 100,
-  overlay: true,
-  selector: '#van-dialog',
-  className: '',
-  asyncClose: false,
-  transition: 'scale',
-  customStyle: '',
-  messageAlign: '',
-  overlayStyle: '',
-  confirmButtonText: '确认',
-  cancelButtonText: '取消',
-  showConfirmButton: true,
-  showCancelButton: false,
-  closeOnClickOverlay: false,
-  confirmButtonOpenType: '' };
-
-Dialog.alert = Dialog;
-Dialog.confirm = function (options) {return Dialog(Object.assign({ showCancelButton: true }, options));};
-Dialog.close = function () {
-  queue.forEach(function (dialog) {
-    dialog.close();
-  });
-  queue = [];
-};
-Dialog.stopLoading = function () {
-  queue.forEach(function (dialog) {
-    dialog.stopLoading();
-  });
-};
-Dialog.setDefaultOptions = function (options) {
-  Object.assign(Dialog.currentOptions, options);
-};
-Dialog.resetDefaultOptions = function () {
-  Dialog.currentOptions = Object.assign({}, Dialog.defaultOptions);
-};
-Dialog.resetDefaultOptions();var _default =
-Dialog;exports.default = _default;
-
-/***/ }),
-
-/***/ 8:
-/*!************************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/pages.json?{"type":"stat"} ***!
-  \************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _default = { "appid": "" };exports.default = _default;
-
-/***/ }),
-
-/***/ 92:
-/*!*****************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/static/js/course.js ***!
-  \*****************************************************************************************/
+/***/ 82:
+/*!******************************************************************************************!*\
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/static/js/contest.js ***!
+  \******************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -25203,63 +25116,78 @@ var _http_commons = _interopRequireDefault(__webpack_require__(/*! ./http_common
 
 {
 
-  getCourse: function getCourse(courseId) {
-    return new Promise(function (resolve, reject) {
-      uni.request({
-        url: _api_reference.default.GET_COURSE + '?courseId=' + courseId,
-        header: _http_commons.default.getAuthenticationHeader(),
-        success: function success(resp) {
-          if (_http_commons.default.successCheck(resp)) {
-            resolve(resp.data.data);
-          }
-        },
-        fail: function fail(err) {
-          _http_commons.default.commonFailHanlder(err);
-        } });
+  /**
+   * 检查测试(只包括作业和考试)的各个时间的逻辑是否合理。
+   * 
+   * 1、边界检查
+   * 2、搭配类型检查
+   * 3、时间范围检查
+   * 
+   * @param {Date} publishDate
+   * @param {Date} deadlineDate
+   * @param {Number} limitMinutes
+   * @return {Object} {"value": bool, "msg": 错误信息}
+   */
+  isDateRelationValid: function isDateRelationValid(publishDate, deadlineDate, limitMinutes) {
+    console.log("params", publishDate, deadlineDate, limitMinutes);
+    var now = new Date();
 
-    });
+    // 两者必有一
+    if (null === publishDate && null === deadlineDate) {
+      return { value: false, msg: '开始和截止时间必有一个' };
+    }
+
+    // 只有publishDate
+    if (null === deadlineDate && publishDate) {
+      if (publishDate < now) {
+        return { value: false, msg: '开始时间早于现在' };
+      }
+
+      if (null == limitMinutes || limitMinutes <= 0) {
+        return { value: false, msg: '只有开始时间, 未设置限时' };
+      }
+      return { value: true, msg: '' };
+    }
+
+    // 只有deadlineDate
+    if (null === publishDate && deadlineDate) {
+      if (null == limitMinutes || limitMinutes <= 0) {
+        limitMinutes = 0;
+      }
+
+      var atLeastDate = new Date(now.getTime() + limitMinutes * 60 * 1000);
+      if (atLeastDate > deadlineDate) {
+        return { value: false, msg: '现在到截止时间不足限时的时间范围' };
+      }
+      return { value: true, msg: '' };
+    }
+
+    // 两者都有
+    if (publishDate < now) {
+      return { value: false, msg: '开始时间早于现在' };
+    }
+
+    if (null != limitMinutes && limitMinutes > 0) {
+      var _atLeastDate = new Date(publishDate.getTime() + limitMinutes * 60 * 1000);
+      if (_atLeastDate > deadlineDate) {
+        return { value: false, msg: '开始时间到截止时间不足限时的时间范围' };
+      }
+    }
+
+    return { value: true, msg: '' };
   },
 
   /**
-      * 获取我的课程列表
-      * 
-      * @param {Number} type  0:我教的课  1:我参与的课
-      * @return {Object} 课程列表
+      * 创建contest
+      * @param {Object} contest
       */
-  listCourse: function listCourse(type) {var offset = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;var count = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 10;
-    var url = type === 0 ? _api_reference.default.GET_TEACHED_COURSE : _api_reference.default.GET_JOINED_COURSE;
-
-    return new Promise(function (resolve, reject) {
-      console.log("请求");
-      uni.request({
-        url: url + '?offset=' + offset + '&count=' + count,
-        header: _http_commons.default.getAuthenticationHeader(),
-        success: function success(resp) {
-          if (_http_commons.default.successCheck(resp)) {
-            resolve(resp.data.data);
-          }
-        },
-        fail: function fail(err) {
-          _http_commons.default.commonFailHanlder(err);
-        } });
-
-    });
-  },
-
-  /**
-      * @param {String} courseName
-      * @param {String} classInfo
-      */
-  createCourse: function createCourse(courseName, classInfo) {
+  createContest: function createContest(contest) {
     return new Promise(function (resolve, reject) {
       uni.request({
-        url: _api_reference.default.CREATE_COURSE,
+        url: _api_reference.default.CONTEST,
         method: "POST",
         header: _http_commons.default.getAuthenticationHeader(),
-        data: {
-          courseName: courseName,
-          classInfo: classInfo },
-
+        data: contest,
         success: function success(resp) {
           if (_http_commons.default.successCheck(resp)) {
             resolve(resp.data.data);
@@ -25273,49 +25201,17 @@ var _http_commons = _interopRequireDefault(__webpack_require__(/*! ./http_common
     });
   },
 
-  joinCourse: function joinCourse(courseId) {
+  /**
+      * 通过courseId获取试卷
+      * 
+      * @param {Number} courseId
+      * @param {Number} offset
+      * @param {Number} count
+      */
+  getContestByCourseId: function getContestByCourseId(courseId, offset, count) {
     return new Promise(function (resolve, reject) {
       uni.request({
-        url: _api_reference.default.JOIN_COURSE + '?courseId=' + courseId,
-        method: "POST",
-        header: _http_commons.default.getAuthenticationHeader(),
-        success: function success(resp) {
-          if (_http_commons.default.successCheck(resp)) {
-            resolve(resp.data.data);
-          }
-        },
-        fail: function fail(err) {
-          _http_commons.default.commonFailHanlder(err);
-          reject(err);
-        } });
-
-    });
-  },
-
-  deleteCourse: function deleteCourse(courseId) {
-    return new Promise(function (resolve, reject) {
-      uni.request({
-        url: _api_reference.default.DELETE_COURSE + '?courseId=' + courseId,
-        method: "DELETE",
-        header: _http_commons.default.getAuthenticationHeader(),
-        success: function success(resp) {
-          if (_http_commons.default.successCheck(resp)) {
-            resolve(resp.data.data);
-          }
-        },
-        fail: function fail(err) {
-          _http_commons.default.commonFailHanlder(err);
-          reject(err);
-        } });
-
-    });
-  },
-
-  exitCourse: function exitCourse(courseId) {
-    return new Promise(function (resolve, reject) {
-      uni.request({
-        url: _api_reference.default.EXIT_COURSE + '?courseId=' + courseId,
-        method: "DELETE",
+        url: _api_reference.default.GET_CONTESTS_BY_COURSEID + '?courseId=' + courseId + '&offset=' + offset + '&count=' + count,
         header: _http_commons.default.getAuthenticationHeader(),
         success: function success(resp) {
           if (_http_commons.default.successCheck(resp)) {
@@ -25331,21 +25227,200 @@ var _http_commons = _interopRequireDefault(__webpack_require__(/*! ./http_common
   },
 
   /**
-      * 更新course 信息，服务端会校验，只允许更新courseName和classInfo
-      * 
-      * @param {Object} course 
+      * @param {String} contestId
       */
-  updateCourse: function updateCourse(course) {
+  getContestById: function getContestById(contestId) {
     return new Promise(function (resolve, reject) {
       uni.request({
-        url: _api_reference.default.UPDATE_COURSE,
+        url: _api_reference.default.CONTEST + '?contestId=' + contestId,
+        header: _http_commons.default.getAuthenticationHeader(),
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+          reject(err);
+        } });
+
+    });
+  },
+
+  /**
+      * 通过contestId获取contest详细内容
+      * 
+      * @param {Number} contestId
+      */
+  getContestDetail: function getContestDetail(contestId) {
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: _api_reference.default.GET_CONTEST_DETAIL + '?contestId=' + contestId,
+        header: _http_commons.default.getAuthenticationHeader(),
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+          reject(err);
+        } });
+
+    });
+  },
+
+  /**
+      * 通过contestId获取answer
+      * 
+      * @param {Number} contestId
+      */
+  getAnswer: function getAnswer(contestId) {
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: _api_reference.default.ANSWER + '?contestId=' + contestId,
+        header: _http_commons.default.getAuthenticationHeader(),
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+          reject(err);
+        } });
+
+    });
+  },
+
+  /**
+      * @param {Object} answer
+      */
+  updateAnswer: function updateAnswer(answer) {
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: _api_reference.default.ANSWER,
+        method: "PUT",
+        data: answer,
+        header: _http_commons.default.getAuthenticationHeader(),
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+          reject(err);
+        } });
+
+    });
+  },
+
+  /** 
+      * 计算出测试剩余时间(毫秒)
+      * 
+      * @param {String} answerStartDate
+      * @param {String} publishDate
+      * @param {String} deadline
+      * @param {Number} limitMinutes
+      */
+  getLeftDate: function getLeftDate(answerStartDate, publishDate, deadline, limitMinutes) {
+    var now = new Date();
+    console.log("获取剩余时间", answerStartDate, publishDate, deadline, limitMinutes);
+
+    if (limitMinutes === 0) {
+      // 不限时
+      return new Date(deadline) - now;
+    } else {
+      // 限时
+      if (deadline) {
+        // 如果有截止时间，就比较用户开始时间+限时 和 截止时间哪个大
+
+        // 用户开始答题时刻 + 限时的剩余时间
+        var leftTimeToBeginTime = new Date(answerStartDate).getTime() + limitMinutes * 60 * 1000 - now;
+        console.log("leftTimeToBeginTime", leftTimeToBeginTime);
+
+        // 截止时间（起始时间+限时或结束时间）的剩余时间
+        var leftTimeBeforeDeadline = new Date(deadline) - now;
+        console.log("leftTimeBeforeDeadline", leftTimeBeforeDeadline);
+        // 返回小的
+        return leftTimeToBeginTime < leftTimeBeforeDeadline ? leftTimeToBeginTime : leftTimeBeforeDeadline;
+      } else {
+        // 如果没有截止时间，那么剩余时间就是发布时间+限时-现在
+        return new Date(publishDate).getTime() + limitMinutes * 60 * 1000 - now;
+      }
+    }
+  },
+
+  /**
+      * 计算出测试剩余时间(毫秒)，用于老师，就不考虑学生何时开始考试的时间
+      * 
+      * @param {String} publishDate
+      * @param {String} deadline
+      * @param {Number} limitMinutes
+      */
+  getLeftDateForTeacher: function getLeftDateForTeacher(publishDate, deadline, limitMinutes) {
+    var now = new Date();
+
+    if (deadline) {
+      return new Date(deadline).getTime() - now;
+    } else {
+      return new Date(publishDate).getTime() + limitMinutes * 60 * 1000 - now;
+    }
+  },
+
+  /**
+      * 根据contestId获取所有学生的试卷
+      * @param {String} contestId
+      */
+  getAnswerList: function getAnswerList(contestId) {
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: _api_reference.default.ANSWER_LIST + '?contestId=' + contestId,
+        header: _http_commons.default.getAuthenticationHeader(),
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+          reject(err);
+        } });
+
+    });
+  },
+
+  /**
+      * 根据用户id和测试id获得该用户的试卷
+      * 
+      * @param {Number} userId
+      * @param {String} contestId
+      */
+  getReviseAnswer: function getReviseAnswer(userId, contestId) {
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: _api_reference.default.REVISE_ANSWER + '?contestId=' + contestId + '&userId=' + userId,
+        header: _http_commons.default.getAuthenticationHeader(),
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+          reject(err);
+        } });
+
+    });
+  },
+
+  updateRevise: function updateRevise(answerId, subjectiveScores) {
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: _api_reference.default.REVISE_ANSWER + '?answerId=' + answerId + '&subjectiveScores=' + subjectiveScores,
         method: "PUT",
         header: _http_commons.default.getAuthenticationHeader(),
-        data: {
-          id: course.id,
-          courseName: course.courseName,
-          classInfo: course.classInfo },
-
         success: function success(resp) {
           if (_http_commons.default.successCheck(resp)) {
             resolve(resp.data.data);
@@ -25359,10 +25434,10 @@ var _http_commons = _interopRequireDefault(__webpack_require__(/*! ./http_common
     });
   },
 
-  getCourseMembers: function getCourseMembers(courseId) {
+  getContestAsCreator: function getContestAsCreator(offset, count) {
     return new Promise(function (resolve, reject) {
       uni.request({
-        url: _api_reference.default.GET_MEMBERS + '?courseId=' + courseId,
+        url: _api_reference.default.GET_CONTEST_AS_CREATOR + '?offset=' + offset + '&count=' + count,
         header: _http_commons.default.getAuthenticationHeader(),
         success: function success(resp) {
           if (_http_commons.default.successCheck(resp)) {
@@ -25377,30 +25452,10 @@ var _http_commons = _interopRequireDefault(__webpack_require__(/*! ./http_common
     });
   },
 
-  kickoutUser: function kickoutUser(kickedUserId, courseId) {
+  getContestAsParticipator: function getContestAsParticipator(offset, count) {
     return new Promise(function (resolve, reject) {
       uni.request({
-        url: _api_reference.default.KICK_OUT_MEMBER + '?courseId=' + courseId + '&kickedUserId=' + kickedUserId,
-        method: "DELETE",
-        header: _http_commons.default.getAuthenticationHeader(),
-        success: function success(resp) {
-          if (_http_commons.default.successCheck(resp)) {
-            resolve(resp.data.data);
-          }
-        },
-        fail: function fail(err) {
-          _http_commons.default.commonFailHanlder(err);
-          reject(err);
-        } });
-
-    });
-  },
-
-  assignTeacher: function assignTeacher(assignedUserId, courseId) {
-    return new Promise(function (resolve, reject) {
-      uni.request({
-        url: _api_reference.default.ASSIGN_TEACHER + '?targetUserId=' + assignedUserId + '&courseId=' + courseId,
-        method: "PUT",
+        url: _api_reference.default.GET_CONTEST_AS_PARTICIPATOR + '?offset=' + offset + '&count=' + count,
         header: _http_commons.default.getAuthenticationHeader(),
         success: function success(resp) {
           if (_http_commons.default.successCheck(resp)) {
@@ -25418,7 +25473,7 @@ var _http_commons = _interopRequireDefault(__webpack_require__(/*! ./http_common
 
 /***/ }),
 
-/***/ 93:
+/***/ 97:
 /*!*******************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/static/js/bulletin.js ***!
   \*******************************************************************************************/

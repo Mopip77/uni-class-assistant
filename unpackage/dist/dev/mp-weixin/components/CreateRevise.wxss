@@ -25,6 +25,10 @@
 /* 透明度 */
 /* 文章场景相关 */
 .on-cover {
+  z-index: 9988;
+  position: fixed;
+}
+.on-cover {
   z-index: 8889;
   position: absolute;
   width: 100%;
@@ -120,5 +124,8 @@
 }
 .question-list .error {
     background-color: #f44336;
+}
+.question-list .revised {
+    background-color: #FDD835;
 }
 

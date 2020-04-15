@@ -10,16 +10,14 @@
 	-->
 	<view>
 		<view v-if="showAnswerModal" class="on-cover">
-			<CreateAnswer :index="ACIndex" :questionType="ACQuestionType" :score="ACScore" :question="ACQuestion" :imageUrls="ACImageUrls"
-			 :look="ACLook" :revised="ACRevised" :isTeacher="ACIsTeacher" :options="ACOptions" :correctOptions="ACCorrectOptions"
-			 :optionAnswers="ACOptionAnswer" :content="ACConent" :answerImageUrls="ACAnswerImageUrls" @closeModal="closeModal"
-			 @successCallback="updateAnswers"></CreateAnswer>
+			<CreateAnswer :index="ACIndex" :questionType="ACQuestionType" :leftSeconds="leftSecond" :look="ACLook" :revised="revised" :isTeacher="isTeacher" :question="ACQuestion" :answer="ACAnswer" @closeModal="closeModal"
+			  @successCallback="updateAnswers"></CreateAnswer>
 		</view>
 
 		<van-notify class="on-top" id="van-notify" />
 		<van-dialog id="van-dialog" />
 
-		<view v-if="!isTeacher && leftSecond >= 0" class="count-down-box">
+		<view v-if="leftSecond >= 0" class="count-down-box">
 			<uni-countdown class="on-everything" color="black" backgroundColor="#f2f2f2" :day="0" :hour="0" :minute="0" :second="leftSecond"
 			 @timeup="autoSubmitAnswer"></uni-countdown>
 		</view>
@@ -29,13 +27,13 @@
 
 
 		<view class="title">
-			总分: {{ fullScore }}
+			<text v-if="!revised">总分: {{ fullScore }} 分</text>
+			<text v-else>得分: {{ gotScore }} / {{ fullScore }} 分</text>
 
 			<view class="my-button-group">
 				<van-button custom-class="my-button" plain square type="primary" @tap="onCancel">取消</van-button>
-				<van-button v-if="!isTeacher" :disabled="leftSecond < 0" custom-class="my-button" square type="primary" @tap="submitAnswer">提交</van-button>
-				<van-button v-else :disabled="leftSecond > 0" custom-class="my-button" square type="primary" @tap="goToRevise">批改</van-button>
-			
+				<van-button v-if="!isTeacher && leftSecond >= 0" :disabled="leftSecond < 0" custom-class="my-button" square type="primary" @tap="submitAnswer">提交</van-button>
+				<van-button v-else-if="isTeacher" :disabled="leftSecond > 0" custom-class="my-button" square type="primary" @tap="goToRevise">批改</van-button>
 			</view>
 		</view>
 
@@ -47,7 +45,9 @@
 			</view>
 
 			<view class="question-list objective-question-list">
-				<view @tap="answerQuestion(idx, 'objective')" :class="objectiveQuestions[idx].answered ? 'answered' : ''" class="question-item objective-question-item"
+				<view @tap="gotoQuestion(idx, 'objective')" 
+				:class="[objectiveQuestions[idx].answered ? 'answered' : '', revised && objectiveAnswers[idx].score > 0 ? 'correct' : 'error']" 
+				class="question-item objective-question-item"
 				 v-for="(question, idx) in objectiveQuestions" :key="idx">
 					<view>{{ idx + 1 }}</view>
 				</view>
@@ -62,7 +62,7 @@
 			</view>
 
 			<view class="question-list subjective-question-list">
-				<view @tap="answerQuestion(idx, 'subjective')" :class="subjectiveQuestions[idx].answered ? 'answered' : ''" class="question-item subjective-question-item"
+				<view @tap="gotoQuestion(idx, 'subjective')" :class="subjectiveQuestions[idx].answered ? 'answered' : ''" class="question-item subjective-question-item"
 				 v-for="(question, idx) in subjectiveQuestions" :key="idx">
 					<view>{{ idx + 1 }}</view>
 				</view>
@@ -108,18 +108,11 @@
 				// 问题本身
 				ACIndex: 0,
 				ACQuestionType: 'objective',
-				ACScore: 2,
-				ACQuestion: '',
-				ACImageUrls: [],
-				ACOptions: [], // ['A', 'B', 'C'...]
-				ACCorrectOptions: [],
+				ACQuestion: {},
 				// 回答本身
-				ACRevised: false,
 				ACLook: false, // 如果用户是教师，那么只能查看不能完成题目
 				ACIsTeacher: false,
-				ACOptionAnswer: [], // 选择题答案索引 [0, 1...]
-				ACConent: '', // 主观题答案
-				ACAnswerImageUrls: [], // 主观题图片附件
+				ACAnswer: {},
 
 				// 测试的内容
 				contestId: '',
@@ -128,6 +121,7 @@
 				limitMinutes: 0,
 				leftSecond: -1,
 				fullScore: 0,
+				revised: false,
 				publishDate: null,
 				deadline: null,
 				objectiveQuestions: [],
@@ -152,9 +146,8 @@
 			},
 			// 倒计时结束自动提交
 			autoSubmitAnswer() {
-				Notify({
-					type: 'success',
-					message: '自动提交...'
+				uni.showToast({
+					title: '自动提交中...'
 				})
 				
 				this.submitAnswerInternal()
@@ -241,26 +234,15 @@
 
 			// function
 			// 新增一个answer，初始化所有参数，调用component
-			answerQuestion(index, type) {
+			gotoQuestion(index, type) {
 				let questions = type === 'objective' ? this.objectiveQuestions : this.subjectiveQuestions;
 				let answers = type === 'objective' ? this.objectiveAnswers : this.subjectiveAnswers;
 
 				this.ACIndex = index;
 				this.ACQuestionType = type;
-				this.ACScore = questions[index].score;
-				this.ACQuestion = questions[index].question;
-				this.ACImageUrls = type === 'objective' ? (questions[index].imageUrl ? [questions[index].imageUrl] : []) :
-					questions[index].imageUrls;
-				this.ACOptions = type === 'objective' ? questions[index].choices : [];
-				this.ACCorrectOptions = type === 'objective' ? questions[index].answerIndices : [];
-				this.ACIsTeacher = this.isTeacher
-				this.ACLook = this.isTeacher || this.leftSecond < 0
-
-				this.ACOptionAnswer = type === 'objective' ? answers[index].options : [];
-				// this.ACOptionAnswer = [0];
-				this.ACConent = type === 'objective' ? '' : answers[index].content;
-				this.ACAnswerImageUrls = type === 'objective' ? [] : answers[index].imageUrls;
-				// this.ACAnswerImageUrls = ["https://i.loli.net/2020/04/13/ekmZ7idzfcutQEq.png", "https://i.loli.net/2020/04/13/PujOmHkA5dhg6oL.png"]
+				this.ACLook = this.isTeacher || this.leftSecond < 0;
+				this.ACQuestion = questions[index];
+				this.ACAnswer = answers[index];
 
 				this.showAnswerModal = true;
 			},
@@ -288,8 +270,8 @@
 
 					// getAllAnswers
 					if (that.isTeacher) {
+						that.leftSecond = Math.floor(ContestUtils.getLeftDateForTeacher(that.publishDate, that.deadline, that.limitMinutes) / 1000)
 						// 如果没有就新建
-						that.ACRevised = false
 						that.objectiveAnswers = that.objectiveQuestions.map(e => {
 							return {
 								options: []
@@ -305,7 +287,7 @@
 					} else {
 						// 如果是学生就要向服务器获取answer
 						let answerData = await ContestUtils.getAnswer(that.contestId)
-						that.ACRevised = answerData.revised
+						that.revised = answerData.revised
 						that.answerId = answerData.id
 						that.gotScore = answerData.score
 
@@ -375,7 +357,9 @@
 	}
 
 	.expired {
-		color: red;
+		color: white;
+		background-color: red;
+		border-radius: 0 0 10rpx 10rpx;
 		font-weight: 500;
 		display: flex;
 		justify-content: center;
@@ -470,8 +454,17 @@
 
 		// 特化
 		.objective-question-item.answered {
-			color: white;
 			background-color: #00838f;
+		}
+		
+		.objective-question-item.correct {
+			color: white;
+			background-color: #4CAF50;
+		}
+		
+		.objective-question-item.error {
+			color: white;
+			background-color: #f44336;
 		}
 
 		.subjective-question-item {

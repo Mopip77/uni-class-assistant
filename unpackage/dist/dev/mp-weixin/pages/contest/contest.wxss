@@ -40,7 +40,9 @@
   z-index: 1000000;
 }
 .expired {
-  color: red;
+  color: white;
+  background-color: red;
+  border-radius: 0 0 10rpx 10rpx;
   font-weight: 500;
   display: -webkit-box;
   display: -webkit-flex;
@@ -148,8 +150,15 @@
               align-items: center;
 }
 .question-list .objective-question-item.answered {
-    color: white;
     background-color: #00838f;
+}
+.question-list .objective-question-item.correct {
+    color: white;
+    background-color: #4CAF50;
+}
+.question-list .objective-question-item.error {
+    color: white;
+    background-color: #f44336;
 }
 .question-list .subjective-question-item {
     border-radius: 0;

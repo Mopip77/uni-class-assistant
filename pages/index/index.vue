@@ -40,7 +40,7 @@
 						<text>课件库</text>
 					</van-grid-item>
 				</navigator>
-				<navigator url="../contest/contest">
+				<navigator url="../contest_list/contest_list">
 					<van-grid-item use-slot>
 						<image src="../../static/img/icon/paper.png" />
 						<text>试卷库</text>
@@ -120,23 +120,24 @@
 </template>
 
 <script>
-	import Grid from '../../wxcomponents/vant/dist/grid/index.js'
-	import GridItem from '../../wxcomponents/vant/dist/grid-item/index.js'
-	import Tab from '../../wxcomponents/vant/dist/tab/index.js'
-	import Tabs from '../../wxcomponents/vant/dist/tabs/index.js'
-	import VanNotify from '../../wxcomponents/vant/dist/notify/index.js'
-	import Notify from '../../wxcomponents/vant/dist/notify/notify.js'
-	import Icon from '../../wxcomponents/vant/dist/icon/index.js'
-	import Button from '../../wxcomponents/vant/dist/button/index.js'
-	import Card from '../../wxcomponents/vant/dist/card/index.js'
-	import SwipeCell from '../../wxcomponents/vant/dist/swipe-cell/index.js'
-	import VanDialog from '../../wxcomponents/vant/dist/dialog/index.js'
-	import Dialog from '../../wxcomponents/vant/dist/dialog/dialog.js'
+	import Grid from '@/wxcomponents/vant/dist/grid/index.js'
+	import GridItem from '@/wxcomponents/vant/dist/grid-item/index.js'
+	import Tab from '@/wxcomponents/vant/dist/tab/index.js'
+	import Tabs from '@/wxcomponents/vant/dist/tabs/index.js'
+	import VanNotify from '@/wxcomponents/vant/dist/notify/index.js'
+	import Notify from '@/wxcomponents/vant/dist/notify/notify.js'
+	import Icon from '@/wxcomponents/vant/dist/icon/index.js'
+	import Button from '@/wxcomponents/vant/dist/button/index.js'
+	import Card from '@/wxcomponents/vant/dist/card/index.js'
+	import SwipeCell from '@/wxcomponents/vant/dist/swipe-cell/index.js'
+	import VanDialog from '@/wxcomponents/vant/dist/dialog/index.js'
+	import Dialog from '@/wxcomponents/vant/dist/dialog/dialog.js'
+	import Divider from '@/wxcomponents/vant/dist/divider/index.js'
 
-	import CourseUtils from '../../static/js/course.js'
+	import CourseUtils from '@/static/js/course.js'
 
-	import CreateCourseModal from '../../components/CreateCourse.vue'
-	import JoinCourseModal from '../../components/JoinCourse.vue'
+	import CreateCourseModal from '@/components/CreateCourse.vue'
+	import JoinCourseModal from '@/components/JoinCourse.vue'
 
 	export default {
 		components: {
@@ -152,6 +153,7 @@
 			'van-button': Button,
 			'van-swipe-cell': SwipeCell,
 			'van-dialog': VanDialog,
+			"van-divider": Divider,
 
 		},
 		data() {

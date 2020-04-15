@@ -36,6 +36,23 @@
           align-items: center;
   padding: 4rpx 10rpx;
 }
+.header .left {
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+            align-items: center;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+}
+.header .left .favorite-icon {
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: flex;
+      -webkit-box-align: center;
+      -webkit-align-items: center;
+              align-items: center;
+      margin-left: 18rpx;
+}
 .image-list {
   display: -webkit-box;
   display: -webkit-flex;
@@ -71,6 +88,10 @@
 .question-box .question {
     margin-bottom: 40rpx;
     padding: 0 4rpx;
+}
+.answer-box .answer {
+  margin: 28rpx 0;
+  padding: 0 4rpx;
 }
 .answer-box textarea {
   font-size: 30rpx;

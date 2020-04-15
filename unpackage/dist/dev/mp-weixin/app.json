@@ -17,7 +17,8 @@
     "pages/member_list/member_list",
     "pages/chat/chat",
     "pages/create_contest/create_contest",
-    "pages/revise/revise"
+    "pages/revise/revise",
+    "pages/contest_list/contest_list"
   ],
   "subPackages": [],
   "window": {

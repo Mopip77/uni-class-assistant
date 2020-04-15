@@ -89,17 +89,18 @@
 				.then(data => {
 					this.unSubmit = data.unSubmit
 					this.unRevised = data.unRevised
-					this.revised = data.revised
+					this.revised = data.revised.sort((x, y) => y.score - x.score)
 				})
 		},
-		onShow() {
+		updated() {
+			console.log("onshow，看看", this.refreshOnShow);
 			if (this.refreshOnShow) {
 				let promise = ContestUtils.getAnswerList(this.contestId)
 				promise
 					.then(data => {
 						this.unSubmit = data.unSubmit
 						this.unRevised = data.unRevised
-						this.revised = data.revised
+						this.revised = data.revised.sort((x, y) => y.score - x.score)
 					})
 					
 				this.refreshOnShow = false;

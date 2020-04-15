@@ -240,6 +240,23 @@ export default {
 	},
 	
 	/**
+	 * 计算出测试剩余时间(毫秒)，用于老师，就不考虑学生何时开始考试的时间
+	 * 
+	 * @param {String} publishDate
+	 * @param {String} deadline
+	 * @param {Number} limitMinutes
+	 */
+	getLeftDateForTeacher(publishDate, deadline, limitMinutes) {
+		let now = new Date()
+		
+		if (deadline) {
+			return new Date(deadline).getTime() - now
+		} else {
+			return new Date(publishDate).getTime() + limitMinutes * 60 * 1000 - now
+		}
+	},
+	
+	/**
 	 * 根据contestId获取所有学生的试卷
 	 * @param {String} contestId
 	 */
@@ -302,5 +319,41 @@ export default {
 				}
 			})
 		})
-	}
+	},
+	
+	getContestAsCreator(offset, count) {
+		return new Promise((resolve, reject) => {
+			uni.request({
+				url: ApiReference.GET_CONTEST_AS_CREATOR + '?offset=' + offset + '&count=' + count,
+				header: HttpCommons.getAuthenticationHeader(),
+				success: (resp) => {
+					if (HttpCommons.successCheck(resp)) {
+						resolve(resp.data.data)
+					}
+				},
+				fail: (err) => {
+					HttpCommons.commonFailHanlder(err)
+					reject(err)
+				}
+			})
+		})
+	},
+	
+	getContestAsParticipator(offset, count) {
+		return new Promise((resolve, reject) => {
+			uni.request({
+				url: ApiReference.GET_CONTEST_AS_PARTICIPATOR + '?offset=' + offset + '&count=' + count,
+				header: HttpCommons.getAuthenticationHeader(),
+				success: (resp) => {
+					if (HttpCommons.successCheck(resp)) {
+						resolve(resp.data.data)
+					}
+				},
+				fail: (err) => {
+					HttpCommons.commonFailHanlder(err)
+					reject(err)
+				}
+			})
+		})
+	},
 }

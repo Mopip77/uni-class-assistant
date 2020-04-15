@@ -3,6 +3,7 @@
   "usingComponents": {
     "robby-image-upload": "/components/robby-image-upload/robby-image-upload",
     "van-button": "/wxcomponents/vant/dist/button/index",
-    "van-notify": "/wxcomponents/vant/dist/notify/index"
+    "van-notify": "/wxcomponents/vant/dist/notify/index",
+    "van-icon": "/wxcomponents/vant/dist/icon/index"
   }
 }

@@ -8,7 +8,7 @@
 		4、学生 - 查看 - 试卷截止 - 老师未批改     客观题能看到自己的答案和正确答案，主观题能看到题目和自己的答案，并且提示老师未批改
 		5、学生 - 查看 - 试卷截止 - 老师已批改     客观题能看到自己的答案和正确答案，主观题能看到题目和自己的答案和分数
 		
-		其中老师和学生根据传入isTeacher来判断，查看和编辑状态根据传入look来判断，试卷是否截止根据传入question是否有正确答案来判断，老师是否批改根据传入revised值来判断
+		其中老师和学生根据传入isTeacher来判断，查看和编辑状态根据传入look来判断，试卷是否截止根据传入leftSeconds来判断，老师是否批改根据传入revised值来判断
 	
 	
 		由于只有一个可编辑的地方就是学生写题目的时候，此时提交则会emit successCallback(index, questionType, {answer}) 
@@ -21,24 +21,33 @@
 		
 		<view class="question-box">
 			<view class="header">
-				<text>题目</text>
-				<text>{{Dscore}}分</text>
+				<view class="left">
+					<text>题目</text>
+					<view class="favorite-icon">
+						<!-- 先把位置固定了，还需要知道使用fav的api判断是否是已经收藏了 -->
+						<van-icon v-if="favorited" name="star-o" />
+						<van-icon v-else color="#e74c3c" name="star" />
+					</view>
+				</view>
+				<text v-if="!isTeacher && look && leftSeconds <= 0"> {{answer.score}} / {{question.score}}分</text>
+				<text v-else>{{question.score}}分</text>
 			</view>
+			
 			<view class="question">
-				{{Dquestion}}
+				{{question.question}}
 			</view>
+			
 			<view class="image-list">
 				<view class="image-item" v-for="(url, idx) in DimageUrls" :key="idx">
 					<image @tap="previewImage(idx, 'question')" :src="url"></image>
 				</view>
-
 			</view>
 
-			<view v-if="DquestionType === 'objective'" class="option-list-box">
+			<view v-if="questionType === 'objective'" class="option-list-box">
 
-				<view v-if="Dlook" class="option-list">
+				<view v-if="look" class="option-list">
 					<view class="option" v-for="(option, idx) in Doptions" :key="idx">
-						<checkbox v-if="!isTeacher" disabled :value="idx" :checked="option.checked" @click="optionChecked(option, idx)" />
+						<checkbox v-if="!isTeacher" disabled :value="idx" :checked="option.checked" />
 						<text :style="option.correct ? 'color:green;' : ''">{{option.value}}</text>
 					</view>
 				</view>
@@ -53,32 +62,49 @@
 			</view>
 		</view>
 
-		<view v-if="!Dlook && DquestionType === 'subjective'" class="answer-box">
+		<view v-if="!isTeacher && questionType === 'subjective'" class="answer-box">
 			<view class="header">回答区域</view>
-			<textarea v-model="Dcontent" auto-height maxlength="-1" placeholder="请输入回答内容..." />
-
-			<view v-if="DanswerImageUrls.length === 0" class="image-box">
-				<view class="header">上传图片附件</view>
-				<robby-image-upload v-model="imageList" :limit="3"></robby-image-upload>
-			</view>
-			
-			<view v-else class="image-box">
-				<view class="header">
-					<text>上传图片附件</text>
-					<van-button @tap="rePickImage" custom-class="button" type="danger">重选</van-button>
+			<view v-if="!look">
+				<textarea v-model="Dcontent" auto-height maxlength="-1" placeholder="请输入回答内容..." />
+				
+				<view v-if="DanswerImageUrls.length === 0" class="image-box">
+					<view class="header">上传图片附件</view>
+					<robby-image-upload v-model="imageList" :limit="3"></robby-image-upload>
 				</view>
 				
-				<view class="image-list">
-					<view class="image-item" v-for="(url, idx) in DanswerImageUrls" :key="idx">
-						<image @tap="previewImage(idx, 'answer')" :src="url"></image>
+				<view v-else class="image-box">
+					<view class="header">
+						<text>上传图片附件</text>
+						<van-button @tap="rePickImage" custom-class="button" type="danger">重选</van-button>
+					</view>
+					
+					<view class="image-list">
+						<view class="image-item" v-for="(url, idx) in DanswerImageUrls" :key="idx">
+							<image @tap="previewImage(idx, 'answer')" :src="url"></image>
+						</view>
 					</view>
 				</view>
 			</view>
+			
+			<view v-else>
+				<view class="answer">
+					{{answer.content}}
+				</view>
+				
+				<view class="image-box">
+					<view class="image-list">
+						<view class="image-item" v-for="(url, idx) in DanswerImageUrls" :key="idx">
+							<image @tap="previewImage(idx, 'answer')" :src="url"></image>
+						</view>
+					</view>
+				</view>
+			</view>
+			
 		</view>
 		
 		<view class="my-button-group">
 			<van-button custom-class="my-button" plain square type="primary" @tap="onCancel">返回</van-button>
-			<van-button :disabled="Dlook" custom-class="my-button" square type="primary" @tap="submitAnswer">提交</van-button>
+			<van-button :disabled="look" custom-class="my-button" square type="primary" @tap="submitAnswer">提交</van-button>
 		</view>
 	</view>
 </template>
@@ -88,6 +114,7 @@
 	import vanButton from '@/wxcomponents/vant/dist/button/index.js'
 	import VanNotify from "@/wxcomponents/vant/dist/notify/index.js";
 	import Notify from "@/wxcomponents/vant/dist/notify/notify.js";
+	import Icon from '@/wxcomponents/vant/dist/icon/index.js'
 	
 	import HttpCommons from '@/static/js/http_commons.js'
 	import ApiReference from '@/static/js/api_reference.js'
@@ -97,6 +124,7 @@
 			vanButton,
 			robbyImageUpload,
 			"van-notify": VanNotify,
+			"van-icon": Icon,
 		},
 		props: {
 			index: {
@@ -107,16 +135,8 @@
 				type: String,
 				required: true
 			},
-			score: {
+			leftSeconds: {
 				type: Number,
-				required: true
-			},
-			question: {
-				type: String,
-				required: true
-			},
-			imageUrls: {
-				type: Array,
 				required: true
 			},
 			look: {  // 是否只是查看题目
@@ -129,41 +149,52 @@
 			isTeacher: { // 是否是老师
 				type: Boolean
 			},
-			options: {
-				type: Array,
+			question: {  
+				// 问题 根据类型不同有 
+				// 客观题:{score: Number, question: String, imageUrl: String, choices:[], answerIndices: []}
+				// 主观题:{score: Number, question: String, imageUrls: []}
+				type: Object,
+				required: true
 			},
-			correctOptions: { // 正确答案 <!-- 如果传入正确答案说明要么是老师，要么是学生并且答题已经结束了 -->
-				type: Array,
-			},
-			optionAnswers: {
-				type: Array,
-			},
-			content: {
-				type: String,
-			},
-			answerImageUrls: {
-				type: Array,
-			},
+			answer: {
+				// 问题 根据类型不同有 
+				// 客观题答案:{score: Number, options:[]}
+				// 主观题答案:{score: Number, content: String, imageUrls: []}
+				type: Object,
+				required: true
+			}
 		},
 		data() {
 			return {
-				Dindex: this.index,
-				DquestionType: this.questionType,
-				Dscore: this.score,
-				Dquestion: this.question,
-				DimageUrls: [],
-				Dlook: this.look,
-				Drevised: this.revised,
-				DisTeacher: this.isTeacher,
-				Doptions: [],
-				DcorrectOptions: [],
-				DoptionAnswers: [],
-				Dcontent: this.content,
-				DanswerImageUrls: [],
-				
-				
 				imageList: [],
+				DanswerImageUrls: this.answer.imageUrls ? [...this.answer.imageUrls] : [],
+				Dcontent: this.answer.content,
+				
+				favorited: false
 			};
+		},
+		computed: {
+			Doptions() {
+				if (this.questionType === 'objective') {
+					let that = this
+					return this.question.choices.map((e, idx) => {
+						return {
+							checked: that.answer.options.indexOf(idx) >= 0,
+							correct: that.question.answerIndices ? that.question.answerIndices.indexOf(idx) >= 0 : false,
+							value: e
+						}
+					})
+				} else {
+					return []
+				}
+			},
+			DimageUrls() {
+				if (this.questionType === 'objective') {
+					return this.question.imageUrl ? [this.question.imageUrl] : []
+				} else {
+					return [...this.question.imageUrls]
+				}
+			}
 		},
 		methods: {
 			previewImage(idx, type) {
@@ -188,7 +219,7 @@
 			},
 			async submitAnswer() {
 				let result = {}
-				if (this.DquestionType === 'objective') {
+				if (this.questionType === 'objective') {
 					let answers = []
 					this.Doptions.forEach((e, idx) => {
 						if (e.checked) {
@@ -226,7 +257,7 @@
 					result.answerImageUrls = this.DanswerImageUrls
 				}
 				
-				this.$emit('successCallback', this.Dindex, this.DquestionType, result)
+				this.$emit('successCallback', this.index, this.questionType, result)
 				this.$emit('closeModal')
 			},
 			optionChecked(option) {
@@ -234,30 +265,12 @@
 			} 
 		},
 		created() {
-			console.log("onload。。。");
-			this.DimageUrls = [...this.imageUrls]
-			console.log("提前看看options", this.options);
-			this.Doptions = this.options.map((e, idx)=> {
-				return {
-					correct: this.correctOptions.indexOf(idx) >= 0,
-					checked: this.optionAnswers.indexOf(idx) >= 0,
-					value: e
-				}
-			})
-			this.DcorrectOptions = [...this.correctOptions]
-			this.DoptionAnswers = [...this.optionAnswers]
-			this.DanswerImageUrls = [...this.answerImageUrls]
-			
-			console.log("Dindex", this.Dindex);
-			console.log("DquestionType", this.DquestionType);
-			console.log("Dscore", this.Dscore);
-			console.log("Dquestion", this.Dquestion);
-			console.log("DimageUrls", this.DimageUrls);
-			console.log("Dlook", this.Dlook);
+			console.log("Dindex", this.index);
+			console.log("questionType", this.questionType);
+			console.log("question", this.question);
+			console.log("look", this.look);
 			console.log("Doptions", this.Doptions);
-			console.log("DoptionAnswers", this.DoptionAnswers);
-			console.log("Dcontent", this.Dcontent);
-			console.log("DanswerImageUrls", this.DanswerImageUrls);
+			console.log("answer", this.answer);
 		}
 	}
 </script>
@@ -272,6 +285,17 @@
 		display: flex;
 		align-items: center;
 		padding: 4rpx 10rpx;
+		
+		.left {
+			align-items: center;
+			display: flex;
+			
+			.favorite-icon {
+				display: flex;
+				align-items: center;
+				margin-left: 18rpx;
+			}
+		}
 	}
 	
 	.image-list {
@@ -311,6 +335,10 @@
 	}
 	
 	.answer-box {
+		.answer {
+			margin: 28rpx 0;
+			padding: 0 4rpx;
+		}
 		
 		textarea {
 			@include common-textarea;
