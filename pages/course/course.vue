@@ -4,11 +4,15 @@
 			<van-notify class="on-top" id="van-notify" />
 		</view>
 
-		<view v-if="showNewBulletinModal" class="on-top">
+		<view v-if="showModal" class="on-top">
 			<!-- 只用于新建公告 -->
-			<SingleSubmitPopup type="textarea" title="发布公告" fieldName="公告内容" placeHolder="请输入公告内容..." :contentNullable="false"
-			 :contentIsNumber="false" @closeModal="closeNewBulletinModal" @successCallBack="newBulletinSubmitCallBack" />
+			<SingleSubmitPopup type="textarea" :title="modalTitle" :fieldName="modalFieldName" :placeHolder="modalPlaceHolder"
+			 :submitText="modalSubmitText" :contentNullable="false" :contentIsNumber="false" @closeModal="closeModal"
+			 @successCallBack="submitCallBack" />
 		</view>
+
+		<!-- 用于上传文件 -->
+		<l-file ref="lFile" @up-success="upSuccess"></l-file>
 
 		<view class="course-info">
 			<view class="header">
@@ -73,10 +77,28 @@
 						<uni-load-more :status="onloadingStatuses[0]" @clickLoadMore="loadMore" :contentText="onloadingTexts[0]"></uni-load-more>
 					</view>
 				</STab>
-				<STab title="课件">课件</STab>
+				<STab title="课件">
+					<view class="list course-ware-list">
+						<view class="item course-ware-item" v-for="(courseWare, idx) in datas[1]" :key="idx" @tap="goToCourseWare(idx)">
+							<view class="header">
+								<view class="display-name">{{courseWare.displayName}}</view>
+								<view class="time-box">
+									{{courseWare.createGmt}}
+								</view>
+							</view>
+							<view class="footer">
+								<view class="user-box">
+									<image :src="courseWare.creator.avatarUrl"></image>
+									<text>{{courseWare.creator.nickname}}</text>
+								</view>
+							</view>
+						</view>
+						<uni-load-more :status="onloadingStatuses[1]" @clickLoadMore="loadMore" :contentText="onloadingTexts[1]"></uni-load-more>
+					</view>
+				</STab>
 				<STab title="试卷">
 					<view class="list contest-list">
-						<view class="contest-item" v-for="(contest, idx) in datas[2]" :key="idx" @tap="goToContest(idx)">
+						<view class="item contest-item" v-for="(contest, idx) in datas[2]" :key="idx" @tap="goToContest(idx)">
 							<view class="header">
 								<view v-if="contest.status === '未开始'" class="status" style="color: #607D8B;">未开始</view>
 								<view v-if="contest.status === '已结束'" class="status" style="font-style: italic;">已结束</view>
@@ -114,12 +136,16 @@
 	import Button from "@/wxcomponents/vant/dist/button/index.js";
 	import Steps from "@/wxcomponents/vant/dist/steps/index.js";
 
+	import CourseWareUtils from '@/static/js/course_ware.js'
 	import CourseUtils from "@/static/js/course.js";
 	import BulletinUtils from "@/static/js/bulletin.js";
 	import Utils from "@/static/js/utils.js";
 	import LSReference from '@/static/js/local_storage_reference.js';
 	import ContestUtils from '@/static/js/contest.js'
+	import HttpCommons from '@/static/js/http_commons.js'
+	import ApiReference from '@/static/js/api_reference.js'
 
+	import lFile from '@/components/l-file/l-file.vue';
 	import SingleSubmitPopup from "@/components/SingleSubmitPopup.vue";
 	import UniLoadMore from "@/components/uni-load-more/uni-load-more.vue";
 	import STabs from "@/components/s-tabs/index.vue";
@@ -127,6 +153,7 @@
 
 	export default {
 		components: {
+			lFile,
 			SingleSubmitPopup,
 			UniLoadMore,
 			STabs,
@@ -142,6 +169,12 @@
 			return {
 				// 从其他页面回退回来，是否需要刷新本页，在其他页面回退之前通过page更改，刷新完再置回false
 				refreshOnShow: false,
+
+				// modalParams
+				modalTitle: '',
+				modalFieldName: '',
+				modalPlaceHolder: '',
+				modalSubmitText: '',
 
 				// 该页面加载内容
 				userId: 0,
@@ -192,7 +225,7 @@
 					title: "发布通知"
 				}],
 				newResourceIdx: 0,
-				showNewBulletinModal: false,
+				showModal: false,
 			};
 		},
 		methods: {
@@ -218,8 +251,8 @@
 					console.log("获得公告", data);
 				} else if (idx === 1) {
 					// 加载课件
-					console.log("获得课件");
-					return;
+					data = await this.getCourseWare()
+					console.log("获得课件", data);
 				} else if (idx === 2) {
 					// 加载试卷
 					data = await this.getContestsByCourseId()
@@ -230,16 +263,14 @@
 					return;
 				}
 
-				console.log("获取后插入前", this.offsets[idx], this.datas[idx]);
 				this.datas[idx].push(...data)
 
 				// 更新offset 和 onLoading 类型（是否有更多加载）
 				this.offsets[idx] += this.counts[idx];
 				this.onloadingStatuses[idx] = this.offsets[idx] === this.datas[idx].length ? "more" : "noMore";
-				console.log("晚晚晨晨 offset:", this.offsets[idx], " datas:", this.datas[idx], " status:", this.onloadingStatuses[idx]);
 			},
-			closeNewBulletinModal() {
-				this.showNewBulletinModal = false;
+			closeModal() {
+				this.showModal = false;
 			},
 			// 点击新建课程资源按钮
 			createNewResourceBtn() {
@@ -247,6 +278,7 @@
 					itemList: this.newResourceMap.map(e => e["title"]),
 					success: res => {
 						let idx = res.tapIndex;
+						this.newResourceIdx = idx;
 						if (idx >= this.newResourceMap.length) {
 							return;
 						}
@@ -254,42 +286,89 @@
 						// 使用统一modal创建简单内容
 						// 公告
 						if (idx === 3) {
-							this.showNewBulletinModal = true;
+							this.modalTitle = '发布公告';
+							this.modalFieldName = '公告内容';
+							this.modalPlaceHolder = '请输入公告内容...';
+							this.modalSubmitText = '提交';
+							this.showModal = true;
 						} else if (idx === 2) {
 							// 试卷
 							uni.navigateTo({
 								url: '../create_contest/create_contest?courseId=' + this.course.id
 							})
+						} else if (idx === 1) {
+							// PPT课件
+							this.modalTitle = '发布课件';
+							this.modalFieldName = '课件名';
+							this.modalPlaceHolder = '请输入课件名...';
+							this.modalSubmitText = '上传文件';
+							this.showModal = true;
 						}
 
 					}
 				});
 			},
 
-			// popup提交的callback函数，提交完，如果当前tab正好是所提交的类型，则重置offset并刷新
-			newBulletinSubmitCallBack(content) {
-				let promise = BulletinUtils.createBulletin(this.course.id, content);
-				promise.then(data => {
-					if (this.resourceSelectIndex === 0) {
-						// 并且正好当前选择了公告tab
-						this.offsets[0] = 0
-						this.datas[0].splice(0)
-						this.loadMore();
+			// 上传课件后的callback
+			upSuccess(resp) {
+				if (HttpCommons.successCheck(resp)) {
+					Notify({
+						type: 'success',
+						message: '课件上传成功',
+					});
+
+					// 如果正好在课件tab，则刷新
+					let idx = this.resourceSelectIndex
+					if (idx === 1) {
+						this.offsets[idx] = 0
+						this.datas[idx].splice(0)
+						this.loadMore()
 					}
-				});
+				}
+			},
+
+			// popup提交的callback函数，提交完，如果当前tab正好是所提交的类型，则重置offset并刷新
+			submitCallBack(content) {
+				let idx = this.newResourceIdx;
+				let that = this;
+
+				if (idx === 3) {
+					// 公告
+					let promise = BulletinUtils.createBulletin(that.course.id, content);
+					promise.then(data => {
+						if (that.resourceSelectIndex === 0) {
+							// 并且正好当前选择了公告tab
+							that.offsets[0] = 0
+							that.datas[0].splice(0)
+							that.loadMore();
+						}
+					});
+				} else if (idx === 1) {
+					// ppt
+					that.$refs.lFile.upload({
+						// #ifdef APP-PLUS
+						currentWebview: that.$mp.page.$getAppWebview(),
+						// #endif
+						url: ApiReference.UPLOAD_COURSE_WARE, //测试地址，记得更换
+						name: 'file',
+						header: HttpCommons.getAuthenticationHeader(),
+						formData: JSON.stringify({
+							displayName: content,
+							courseId: that.course.id
+						})
+					});
+				}
 			},
 
 			// 获取资源栏内容
 			changeResourceTab() {
 				// 如果本tab没有任何内容(初次调用或本来就没有内容)，加载
 				let idx = this.resourceSelectIndex
-				console.log("change Tab: ", idx);
 				if (this.offsets[idx] === 0) {
-					console.log("看看现在如何", this.offsets[0], this.datas[0]);
 					this.loadMore()
 				}
 			},
-			
+
 			// 进入contest界面
 			goToContest(idx) {
 				let contest = this.datas[2][idx]
@@ -303,9 +382,18 @@
 						return;
 					}
 				}
-				
+
 				uni.navigateTo({
 					url: '../contest/contest?contestId=' + contest.id
+				})
+			},
+			
+			// 进入courseWare界面
+			goToCourseWare(idx) {
+				let courseWare = this.datas[1][idx]
+				
+				uni.navigateTo({
+					url: '../conurse_ware/course_ware?courseWareId=' + courseWare.id
 				})
 			},
 
@@ -322,10 +410,7 @@
 					);
 					promise.then(data => {
 						data.forEach(e => {
-							let dateObj = Utils.dateConverter(e.createGmt);
-							if (null !== dateObj) {
-								e.createGmt = dateObj.defaultDate;
-							}
+							Utils.dateConverterBatch(e, false, 'createGmt')
 						});
 
 						// 重置字段为van-steps所需的字段
@@ -341,11 +426,10 @@
 				})
 			},
 
-			// 通过课程号获取课程
+			// 通过课程号获取试卷
 			getContestsByCourseId() {
 				let that = this
 				let idx = this.resourceSelectIndex
-				console.log("获取课程中... idx:", idx, " offsets:", this.offsets[idx]);
 				return new Promise((resolve, reject) => {
 					let promise = ContestUtils.getContestByCourseId(
 						that.course.id,
@@ -354,20 +438,32 @@
 					);
 					promise.then(data => {
 						data.forEach(e => {
-							let dateObj = Utils.dateConverter(e.publishDate, false);
-							if (null !== dateObj) {
-								e.publishDate = dateObj.defaultDatetime;
-							}
-
-							dateObj = Utils.dateConverter(e.deadline, false);
-							if (null !== dateObj) {
-								e.deadline = dateObj.defaultDatetime;
-							}
+							Utils.dateConverterBatch(e, false, 'publishDate', 'deadline')
 						});
 						resolve(data);
 					});
 				})
-			}
+			},
+
+			// 获取课件
+			getCourseWare() {
+				let that = this
+				let idx = this.resourceSelectIndex
+				return new Promise((resolve, reject) => {
+					let promise = CourseWareUtils.getCourseWareByCourseId(
+						that.course.id,
+						that.offsets[idx],
+						that.counts[idx]
+					);
+					promise.then(data => {
+						data.forEach(e => {
+							Utils.dateConverterBatch(e, false, 'createGmt')
+						});
+
+						resolve(data);
+					});
+				})
+			},
 		},
 		onLoad(option) {
 			// 传入id
@@ -393,7 +489,7 @@
 		onShow() {
 			if (this.refreshOnShow) {
 				let courseId = this.course.id;
-				
+
 				let that = this
 				if (!courseId) {
 					Notify({
@@ -510,11 +606,7 @@
 		.list {
 			.bulletin-body {
 				background-color: $global-background-color;
-
-				// .van-step__circle-container {
-				// 	margin-bottom: -15rpx;
-				// }
-
+			
 				.van-step {
 					border-radius: 20rpx;
 					margin-right: 10rpx;
@@ -522,14 +614,12 @@
 					padding: 0;
 				}
 			}
-
+			
 			.bulletin-desc {
 				font-size: 24rpx;
 			}
-		}
-
-		.contest-list {
-			.contest-item {
+			
+			.item {
 				@include common-card;
 				display: flex;
 				flex-direction: column;
@@ -540,12 +630,12 @@
 					display: flex;
 					justify-content: space-between;
 					padding: 10rpx 10rpx;
-					
+
 					.status {
 						font-size: 50rpx;
 						font-weight: 600;
 					}
-					
+
 					.time-box {
 						font-size: 24rpx;
 						color: #424242;
@@ -561,21 +651,32 @@
 					margin-top: auto;
 					margin-bottom: 6rpx;
 					padding: 0 10rpx;
-					
+
 					.user-box {
 						display: flex;
 						align-items: center;
-						
+
 						image {
 							width: 60rpx;
 							height: 60rpx;
 							border-radius: 50%;
 						}
-						
+
 						text {
 							margin-left: 10rpx;
 						}
 					}
+				}
+			}
+		}
+	
+		.course-ware-list {
+			.course-ware-item {
+				height: 160rpx;
+				
+				.display-name {
+					font-size: 34rpx;
+					font-weight: 600;
 				}
 			}
 		}

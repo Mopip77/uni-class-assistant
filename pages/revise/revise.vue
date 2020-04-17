@@ -5,36 +5,36 @@
 			<CreateRevise :contestId="contestId" :userId="revisingUserId" @closeModal="closeModal"></CreateRevise>
 		</view>
 
-			<view class="revise-list">
-				<view class="title">未批改</view>
-				<view class="revise-item un-revised" v-for="(revise, idx) in unRevised" :key="idx" @tap="revise(revise.user.id)">
-					<view class="user">
-						<image :src="revise.user.avatarUrl"></image>
-						<text>{{revise.user.nickname}}</text>
-					</view>
+		<view class="revise-list">
+			<view class="title">未批改</view>
+			<view class="revise-item un-revised" v-for="(revise, idx) in unRevised" :key="idx" @tap="revise(revise.user.id)">
+				<view class="user">
+					<image :src="revise.user.avatarUrl"></image>
+					<text>{{revise.user.nickname}}</text>
 				</view>
 			</view>
+		</view>
 
-			<view class="revise-list">
-				<view class="title">已批改</view>
-				<view class="revise-item un-revised" v-for="(revise, idx) in revised" :key="idx" @tap="revise(revise.user.id)">
-					<view class="user">
-						<image :src="revise.user.avatarUrl"></image>
-						<text>{{revise.user.nickname}}</text>
-					</view>
-					<view class="score">{{revise.score}} / {{fullScore}} 分</view>
+		<view class="revise-list">
+			<view class="title">已批改</view>
+			<view class="revise-item un-revised" v-for="(revise, idx) in revised" :key="idx" @tap="revise(revise.user.id)">
+				<view class="user">
+					<image :src="revise.user.avatarUrl"></image>
+					<text>{{revise.user.nickname}}</text>
 				</view>
+				<view class="score">{{revise.score}} / {{fullScore}} 分</view>
 			</view>
+		</view>
 
-			<view class="revise-list">
-				<view class="title">未提交</view>
-				<view class="revise-item un-revised" v-for="(revise, idx) in unSubmit" :key="idx">
-					<view class="user">
-						<image :src="revise.user.avatarUrl"></image>
-						<text>{{revise.user.nickname}}</text>
-					</view>
+		<view class="revise-list">
+			<view class="title">未提交</view>
+			<view class="revise-item un-revised" v-for="(revise, idx) in unSubmit" :key="idx">
+				<view class="user">
+					<image :src="revise.user.avatarUrl"></image>
+					<text>{{revise.user.nickname}}</text>
 				</view>
 			</view>
+		</view>
 
 	</view>
 </template>
@@ -46,7 +46,7 @@
 	import Notify from "@/wxcomponents/vant/dist/notify/notify.js";
 
 	import ContestUtils from '@/static/js/contest.js'
-	
+
 	import CreateRevise from '@/components/CreateRevise.vue'
 
 	export default {
@@ -59,10 +59,10 @@
 		data() {
 			return {
 				refreshOnShow: false,
-				
+
 				showModal: false,
 				revisingUserId: 0,
-				
+
 				contestId: '',
 				fullScore: 0,
 				unSubmit: [],
@@ -102,7 +102,7 @@
 						this.unRevised = data.unRevised
 						this.revised = data.revised.sort((x, y) => y.score - x.score)
 					})
-					
+
 				this.refreshOnShow = false;
 			}
 		}
@@ -114,7 +114,7 @@
 		z-index: 9988;
 		position: fixed;
 	}
-	
+
 	.on-cover {
 		z-index: 8888;
 		position: absolute;
@@ -122,17 +122,17 @@
 		height: 100%;
 		background-color: $global-background-color;
 	}
-	
+
 	.revise-list {
 		margin-bottom: 20rpx;
-		
+
 		.title {
 			font-size: 40rpx;
 			background-color: #4FC3F7;
 			color: #fff;
 			padding: 4rpx 6rpx;
 		}
-		
+
 		.revise-item {
 			background-color: #fff;
 			padding: 20rpx 8rpx;
@@ -140,22 +140,21 @@
 			display: flex;
 			align-items: center;
 			justify-content: space-between;
-			
+
 			.user {
 				display: flex;
 				align-items: center;
-				
+
 				image {
 					width: 60rpx;
 					height: 60rpx;
 					border-radius: 50%;
 				}
-				
+
 				text {
 					margin-left: 16rpx;
 				}
 			}
 		}
 	}
-	
 </style>

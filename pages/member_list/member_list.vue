@@ -8,7 +8,12 @@
 				<view v-if="isCreator">
 					<van-swipe-cell v-for="(teacher, idx) in teachers" :key="idx" right-width="65">
 						<van-cell-group>
-							<van-cell @tap="chatWith(teacher.id)" :class="teacher.id === userId ? 'is-me' : ''" :title="teacher.nickname" />
+							<van-cell @tap="chatWith(teacher.id)" :class="teacher.id === userId ? 'is-me' : ''">
+								<view class="slot" slot="title">
+									<image :src="teacher.avatarUrl"></image>
+									<text>{{teacher.nickname}}</text>
+								</view>
+							</van-cell>
 						</van-cell-group>
 						<view class="swipe-cell-field-right" slot="right" @tap="kickout(teacher.id, teacher.nickname)">踢出</view>
 					</van-swipe-cell>
@@ -16,8 +21,12 @@
 
 				<view v-else>
 					<van-cell-group>
-						<van-cell @tap="chatWith(teacher.id)" v-for="(teacher, idx) in teachers" :key="idx" :class="teacher.id === userId ? 'is-me' : ''"
-						 :title="teacher.nickname" />
+						<van-cell @tap="chatWith(teacher.id)" v-for="(teacher, idx) in teachers" :key="idx" :class="teacher.id === userId ? 'is-me' : ''">
+							<view class="slot" slot="title">
+								<image :src="teacher.avatarUrl"></image>
+								<text>{{teacher.nickname}}</text>
+							</view>
+						</van-cell>
 					</van-cell-group>
 				</view>
 
@@ -29,7 +38,12 @@
 					<van-swipe-cell v-for="(student, idx) in students" :key="idx" right-width="65" left-width="65">
 						<view class="swipe-cell-field-left" slot="left" @tap="assignTeacher(student.id, student.nickname)">任命</view>
 						<van-cell-group>
-							<van-cell @tap="chatWith(student.id)" :class="student.id === userId ? 'is-me' : ''" :title="student.nickname" />
+							<van-cell @tap="chatWith(student.id)" :class="student.id === userId ? 'is-me' : ''">
+								<view class="slot" slot="title">
+									<image :src="student.avatarUrl"></image>
+									<text>{{student.nickname}}</text>
+								</view>
+							</van-cell>
 						</van-cell-group>
 						<view class="swipe-cell-field-right" slot="right" @tap="kickout(student.id, student.nickname)">踢出</view>
 					</van-swipe-cell>
@@ -38,7 +52,12 @@
 				<view v-else-if="isTeacher">
 					<van-swipe-cell v-for="(student, idx) in students" :key="idx" right-width="65">
 						<van-cell-group>
-							<van-cell @tap="chatWith(student.id)" :class="student.id === userId ? 'is-me' : ''" :title="student.nickname" />
+							<van-cell @tap="chatWith(student.id)" :class="student.id === userId ? 'is-me' : ''">
+								<view class="slot" slot="title">
+									<image :src="student.avatarUrl"></image>
+									<text>{{student.nickname}}</text>
+								</view>
+							</van-cell>
 						</van-cell-group>
 						<view class="swipe-cell-field-right" slot="right" @tap="kickout(student.id, student.nickname)">踢出</view>
 					</van-swipe-cell>
@@ -46,8 +65,12 @@
 
 				<view v-else>
 					<van-cell-group>
-						<van-cell @tap="chatWith(student.id)" v-for="(student, idx) in students" :key="idx" :class="student.id === userId ? 'is-me' : ''"
-						 :title="student.nickname" />
+						<van-cell @tap="chatWith(student.id)" v-for="(student, idx) in students" :key="idx" :class="student.id === userId ? 'is-me' : ''">
+							<view class="slot" slot="title">
+								<image :src="student.avatarUrl"></image>
+								<text>{{student.nickname}}</text>
+							</view>
+						</van-cell>
 					</van-cell-group>
 				</view>
 
@@ -218,7 +241,7 @@
 	.swipe-cell-field-right {
 		color: white;
 		background-color: #f44336;
-		padding: 22rpx 38rpx;
+		padding: 30rpx 38rpx;
 		font-size: 28rpx;
 	}
 
@@ -232,6 +255,21 @@
 	.is-me {
 		.van-cell__title {
 			color: #EF6C00;
+		}
+	}
+	
+	.slot {
+		display: flex;
+		align-items: center;
+		
+		image {
+			width: 60rpx;
+			height: 60rpx;
+			border-radius: 50%;
+		}
+		
+		text {
+			margin-left: 16rpx;
 		}
 	}
 </style>

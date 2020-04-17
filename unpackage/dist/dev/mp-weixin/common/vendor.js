@@ -1555,7 +1555,70 @@ uni$1;exports.default = _default;
 
 /***/ }),
 
-/***/ 114:
+/***/ 100:
+/*!*******************************************************************************************!*\
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/static/js/bulletin.js ***!
+  \*******************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _api_reference = _interopRequireDefault(__webpack_require__(/*! ./api_reference.js */ 15));
+var _http_commons = _interopRequireDefault(__webpack_require__(/*! ./http_commons.js */ 18));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var _default =
+
+{
+
+  /**
+   * @param {Number} courseId
+   * @param {Object} bulletinContent
+   */
+  createBulletin: function createBulletin(courseId, bulletinContent) {
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: _api_reference.default.CREATE_BULLETIN + '?courseId=' + courseId,
+        method: "POST",
+        header: _http_commons.default.getAuthenticationHeader(),
+        data: {
+          content: bulletinContent },
+
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+          reject(err);
+        } });
+
+    });
+  },
+
+  /**
+      * 
+      */
+  listBulletin: function listBulletin(courseId) {var offset = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;var count = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 10;
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: _api_reference.default.GET_BULLETIN + '?courseId=' + courseId + '&offset=' + offset + '&count=' + count,
+        header: _http_commons.default.getAuthenticationHeader(),
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+          reject(err);
+        } });
+
+    });
+  } };exports.default = _default;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
+
+/***/ }),
+
+/***/ 117:
 /*!****************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/static/js/topic.js ***!
   \****************************************************************************************/
@@ -3092,9 +3155,17 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
   GET_CONTEST_AS_CREATOR: API_SERVER + 'contest/creator',
   GET_CONTEST_AS_PARTICIPATOR: API_SERVER + 'contest/participator',
 
+  // course_ware
+  COURSE_WARE: API_SERVER + 'course-ware',
+  USER_COURSE_WARE: API_SERVER + 'course-ware/user',
+  GET_COURSE_WARE_BY_COURSEID: API_SERVER + 'course-ware/course',
+  READ_COURSE_WARE: API_SERVER + 'course-ware/read',
+  COURSE_WARE_COMMENT: API_SERVER + 'course-ware/comment',
+
   // upload
   UPLOAD_AVATAR: API_SERVER + 'upload/avatar',
   UPLOAD_QUESTION: API_SERVER + 'upload/question',
+  UPLOAD_COURSE_WARE: API_SERVER + 'upload/course-ware',
 
   TEST_URL: API_SERVER + 'test' };exports.default = _default;
 
@@ -3226,7 +3297,123 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
 /***/ }),
 
-/***/ 173:
+/***/ 18:
+/*!***********************************************************************************************!*\
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/static/js/http_commons.js ***!
+  \***********************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _login = _interopRequireDefault(__webpack_require__(/*! ./login.js */ 12));
+var _local_storage_reference = _interopRequireDefault(__webpack_require__(/*! ./local_storage_reference.js */ 16));
+var _index = _interopRequireDefault(__webpack_require__(/*! ../../store/index.js */ 13));
+
+var _notify = _interopRequireDefault(__webpack_require__(/*! ../../wxcomponents/vant/dist/notify/notify.js */ 19));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var _default =
+
+{
+
+  /**
+   * 处理通用的正常结果(主要是为了处理auth内容), 返回true如果没问题, 否则返回false
+   * @param {Object} resp
+   * @return {Boolean}
+   */
+  successCheck: function successCheck(resp) {
+    console.log("successCheck resp", resp);
+    console.log("successCheck resp auth", resp.data.auth);
+    if (undefined !== resp.data.auth && null !== resp.data.auth) {
+      // 更新token
+      console.log("更新token in httpSuccessCheck");
+      uni.setStorageSync(_local_storage_reference.default.JWT_TOKEN, resp.data.auth['token']);
+      uni.setStorageSync(_local_storage_reference.default.EXPIRE_TIMESTAMP, resp.data.auth['expireTimestamp']);
+    }
+
+    if (typeof resp.data === 'string') {
+      resp.data = JSON.parse(resp.data);
+    }
+
+    if (resp.data.code === 3002) {
+      // 用户未登录
+      // LoginUtils.login()
+      _index.default.commit('LOGOUT');
+      _index.default.commit('NEED_LOGIN_ALERT', true);
+      uni.switchTab({
+        url: "/pages/me/me" });
+
+      return false;
+    } else if (resp.data.code != 0) {
+      console.error(resp.data.trace);
+      (0, _notify.default)({
+        type: 'danger',
+        message: resp.data.message });
+
+      return false;
+    }
+
+    return true;
+  },
+
+  /**
+      * 返回包含jwt token的http header
+      * 
+      * 同步方法会导致一个问题, 就是在onLauch我们会checkTokenVaild和获取首页信息,并且在这两个request建立前header就已经生成了相同的. 
+      * 如果当前token"即将"过期,那么checkToken会更新token,但是同步更新的值不会反映到获取首页信息的request header中,
+      * 我使用了timeInterval的方法,让 获取首页信息 一定在checkToken之后执行, 但是这只是针对这个方法而言. 如果该程序有多个入口,那么每个入口,都要设置执行的先后顺序.
+      * 不过,目前该程序只有首页一个入口.
+      * 
+      */
+  getAuthenticationHeader: function getAuthenticationHeader() {
+    var header = {
+      'Authorization': 'Bearer ' + uni.getStorageSync(_local_storage_reference.default.JWT_TOKEN) };
+
+    console.log("生成auth header", header);
+    return header;
+  },
+
+  /**
+      * 通用的错误处理
+      * 
+      * @param {Object} err 错误
+      */
+  commonFailHanlder: function commonFailHanlder(err) {
+    console.error(err);
+    (0, _notify.default)({
+      type: 'danger',
+      message: err });
+
+  },
+
+  /**
+      * 上传图片
+      */
+  uploadImage: function uploadImage(url, imgUrl) {var formData = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;var imgName = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 'image';
+    var that = this;
+    return new Promise(function (resolve, reject) {
+      uni.uploadFile({
+        url: url,
+        filePath: imgUrl,
+        name: imgName,
+        header: that.getAuthenticationHeader(),
+        formData: formData,
+        success: function success(resp) {
+          if (that.successCheck(resp)) {
+            resolve(resp.data.data);
+          } else {
+            reject(resp);
+          }
+        },
+        fail: function fail(err) {
+          that.commonFailHanlder(err);
+          reject(err);
+        } });
+
+    });
+  } };exports.default = _default;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
+
+/***/ }),
+
+/***/ 184:
 /*!**********************************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/grid/index.js ***!
   \**********************************************************************************************************/
@@ -3235,7 +3422,7 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
 "use strict";
 var _component = __webpack_require__(/*! ../common/component */ 32);
-var _utils = __webpack_require__(/*! ../common/utils */ 174);
+var _utils = __webpack_require__(/*! ../common/utils */ 185);
 (0, _component.VantComponent)({
   relation: {
     name: 'grid-item',
@@ -3292,7 +3479,7 @@ var _utils = __webpack_require__(/*! ../common/utils */ 174);
 
 /***/ }),
 
-/***/ 174:
+/***/ 185:
 /*!************************************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/common/utils.js ***!
   \************************************************************************************************************/
@@ -3335,7 +3522,7 @@ function addUnit(value) {
 
 /***/ }),
 
-/***/ 175:
+/***/ 186:
 /*!***************************************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/grid-item/index.js ***!
   \***************************************************************************************************************/
@@ -3345,7 +3532,7 @@ function addUnit(value) {
 "use strict";
 var _link = __webpack_require__(/*! ../mixins/link */ 31);
 var _component = __webpack_require__(/*! ../common/component */ 32);
-var _utils = __webpack_require__(/*! ../common/utils */ 174);
+var _utils = __webpack_require__(/*! ../common/utils */ 185);
 (0, _component.VantComponent)({
   relation: {
     name: 'grid',
@@ -3413,7 +3600,7 @@ var _utils = __webpack_require__(/*! ../common/utils */ 174);
 
 /***/ }),
 
-/***/ 176:
+/***/ 187:
 /*!*********************************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/tab/index.js ***!
   \*********************************************************************************************************/
@@ -3481,7 +3668,7 @@ var _component = __webpack_require__(/*! ../common/component */ 32);
 
 /***/ }),
 
-/***/ 177:
+/***/ 188:
 /*!**********************************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/tabs/index.js ***!
   \**********************************************************************************************************/
@@ -3490,8 +3677,8 @@ var _component = __webpack_require__(/*! ../common/component */ 32);
 
 "use strict";
 var _component = __webpack_require__(/*! ../common/component */ 32);
-var _touch = __webpack_require__(/*! ../mixins/touch */ 178);
-var _utils = __webpack_require__(/*! ../common/utils */ 174);function _slicedToArray(arr, i) {return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest();}function _nonIterableRest() {throw new TypeError("Invalid attempt to destructure non-iterable instance");}function _iterableToArrayLimit(arr, i) {if (!(Symbol.iterator in Object(arr) || Object.prototype.toString.call(arr) === "[object Arguments]")) {return;}var _arr = [];var _n = true;var _d = false;var _e = undefined;try {for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {_arr.push(_s.value);if (i && _arr.length === i) break;}} catch (err) {_d = true;_e = err;} finally {try {if (!_n && _i["return"] != null) _i["return"]();} finally {if (_d) throw _e;}}return _arr;}function _arrayWithHoles(arr) {if (Array.isArray(arr)) return arr;}
+var _touch = __webpack_require__(/*! ../mixins/touch */ 189);
+var _utils = __webpack_require__(/*! ../common/utils */ 185);function _slicedToArray(arr, i) {return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest();}function _nonIterableRest() {throw new TypeError("Invalid attempt to destructure non-iterable instance");}function _iterableToArrayLimit(arr, i) {if (!(Symbol.iterator in Object(arr) || Object.prototype.toString.call(arr) === "[object Arguments]")) {return;}var _arr = [];var _n = true;var _d = false;var _e = undefined;try {for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {_arr.push(_s.value);if (i && _arr.length === i) break;}} catch (err) {_d = true;_e = err;} finally {try {if (!_n && _i["return"] != null) _i["return"]();} finally {if (_d) throw _e;}}return _arr;}function _arrayWithHoles(arr) {if (Array.isArray(arr)) return arr;}
 (0, _component.VantComponent)({
   mixins: [_touch.touch],
   classes: ['nav-class', 'tab-class', 'tab-active-class', 'line-class'],
@@ -3764,7 +3951,7 @@ var _utils = __webpack_require__(/*! ../common/utils */ 174);function _slicedToA
 
 /***/ }),
 
-/***/ 178:
+/***/ 189:
 /*!************************************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/mixins/touch.js ***!
   \************************************************************************************************************/
@@ -3808,7 +3995,60 @@ var touch = Behavior({
 
 /***/ }),
 
-/***/ 179:
+/***/ 19:
+/*!*************************************************************************************************************!*\
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/notify/notify.js ***!
+  \*************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });exports.default = Notify;var _color = __webpack_require__(/*! ../common/color */ 20);
+var defaultOptions = {
+  selector: '#van-notify',
+  type: 'danger',
+  message: '',
+  background: '',
+  duration: 3000,
+  zIndex: 110,
+  color: _color.WHITE,
+  safeAreaInsetTop: false,
+  onClick: function onClick() {},
+  onOpened: function onOpened() {},
+  onClose: function onClose() {} };
+
+function parseOptions(message) {
+  return typeof message === 'string' ? { message: message } : message;
+}
+function getContext() {
+  var pages = getCurrentPages();
+  return pages[pages.length - 1];
+}
+function Notify(options) {
+  options = Object.assign(Object.assign({}, defaultOptions), parseOptions(options));
+  var context = options.context || getContext();
+  var notify = context.selectComponent(options.selector);
+  delete options.context;
+  delete options.selector;
+  if (notify) {
+    notify.setData(options);
+    notify.show();
+    return notify;
+  }
+  console.warn('未找到 van-notify 节点，请确认 selector 及 context 是否正确');
+}
+Notify.clear = function (options) {
+  options = Object.assign(Object.assign({}, defaultOptions), parseOptions(options));
+  var context = options.context || getContext();
+  var notify = context.selectComponent(options.selector);
+  if (notify) {
+    notify.hide();
+  }
+};
+
+/***/ }),
+
+/***/ 190:
 /*!************************************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/notify/index.js ***!
   \************************************************************************************************************/
@@ -3877,123 +4117,7 @@ var _color = __webpack_require__(/*! ../common/color */ 20);
 
 /***/ }),
 
-/***/ 18:
-/*!***********************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/static/js/http_commons.js ***!
-  \***********************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _login = _interopRequireDefault(__webpack_require__(/*! ./login.js */ 12));
-var _local_storage_reference = _interopRequireDefault(__webpack_require__(/*! ./local_storage_reference.js */ 16));
-var _index = _interopRequireDefault(__webpack_require__(/*! ../../store/index.js */ 13));
-
-var _notify = _interopRequireDefault(__webpack_require__(/*! ../../wxcomponents/vant/dist/notify/notify.js */ 19));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var _default =
-
-{
-
-  /**
-   * 处理通用的正常结果(主要是为了处理auth内容), 返回true如果没问题, 否则返回false
-   * @param {Object} resp
-   * @return {Boolean}
-   */
-  successCheck: function successCheck(resp) {
-    console.log("successCheck resp", resp);
-    console.log("successCheck resp auth", resp.data.auth);
-    if (undefined !== resp.data.auth && null !== resp.data.auth) {
-      // 更新token
-      console.log("更新token in httpSuccessCheck");
-      uni.setStorageSync(_local_storage_reference.default.JWT_TOKEN, resp.data.auth['token']);
-      uni.setStorageSync(_local_storage_reference.default.EXPIRE_TIMESTAMP, resp.data.auth['expireTimestamp']);
-    }
-
-    if (typeof resp.data === 'string') {
-      resp.data = JSON.parse(resp.data);
-    }
-
-    if (resp.data.code === 3002) {
-      // 用户未登录
-      // LoginUtils.login()
-      _index.default.commit('LOGOUT');
-      _index.default.commit('NEED_LOGIN_ALERT', true);
-      uni.switchTab({
-        url: "/pages/me/me" });
-
-      return false;
-    } else if (resp.data.code != 0) {
-      console.error(resp.data.trace);
-      (0, _notify.default)({
-        type: 'danger',
-        message: resp.data.message });
-
-      return false;
-    }
-
-    return true;
-  },
-
-  /**
-      * 返回包含jwt token的http header
-      * 
-      * 同步方法会导致一个问题, 就是在onLauch我们会checkTokenVaild和获取首页信息,并且在这两个request建立前header就已经生成了相同的. 
-      * 如果当前token"即将"过期,那么checkToken会更新token,但是同步更新的值不会反映到获取首页信息的request header中,
-      * 我使用了timeInterval的方法,让 获取首页信息 一定在checkToken之后执行, 但是这只是针对这个方法而言. 如果该程序有多个入口,那么每个入口,都要设置执行的先后顺序.
-      * 不过,目前该程序只有首页一个入口.
-      * 
-      */
-  getAuthenticationHeader: function getAuthenticationHeader() {
-    var header = {
-      'Authorization': 'Bearer ' + uni.getStorageSync(_local_storage_reference.default.JWT_TOKEN) };
-
-    console.log("生成auth header", header);
-    return header;
-  },
-
-  /**
-      * 通用的错误处理
-      * 
-      * @param {Object} err 错误
-      */
-  commonFailHanlder: function commonFailHanlder(err) {
-    console.error(err);
-    (0, _notify.default)({
-      type: 'danger',
-      message: err });
-
-  },
-
-  /**
-      * 上传图片
-      */
-  uploadImage: function uploadImage(url, imgUrl) {var formData = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;var imgName = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 'image';
-    var that = this;
-    return new Promise(function (resolve, reject) {
-      uni.uploadFile({
-        url: url,
-        filePath: imgUrl,
-        name: imgName,
-        header: that.getAuthenticationHeader(),
-        formData: formData,
-        success: function success(resp) {
-          if (that.successCheck(resp)) {
-            resolve(resp.data.data);
-          } else {
-            reject(resp);
-          }
-        },
-        fail: function fail(err) {
-          that.commonFailHanlder(err);
-          reject(err);
-        } });
-
-    });
-  } };exports.default = _default;
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
-
-/***/ }),
-
-/***/ 180:
+/***/ 191:
 /*!**********************************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/icon/index.js ***!
   \**********************************************************************************************************/
@@ -4029,7 +4153,7 @@ var _component = __webpack_require__(/*! ../common/component */ 32);
 
 /***/ }),
 
-/***/ 181:
+/***/ 192:
 /*!************************************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/button/index.js ***!
   \************************************************************************************************************/
@@ -4038,8 +4162,8 @@ var _component = __webpack_require__(/*! ../common/component */ 32);
 
 "use strict";
 var _component = __webpack_require__(/*! ../common/component */ 32);
-var _button = __webpack_require__(/*! ../mixins/button */ 182);
-var _openType = __webpack_require__(/*! ../mixins/open-type */ 183);
+var _button = __webpack_require__(/*! ../mixins/button */ 193);
+var _openType = __webpack_require__(/*! ../mixins/open-type */ 194);
 (0, _component.VantComponent)({
   mixins: [_button.button, _openType.openType],
   classes: ['hover-class', 'loading-class'],
@@ -4106,7 +4230,7 @@ var _openType = __webpack_require__(/*! ../mixins/open-type */ 183);
 
 /***/ }),
 
-/***/ 182:
+/***/ 193:
 /*!*************************************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/mixins/button.js ***!
   \*************************************************************************************************************/
@@ -4133,7 +4257,7 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.button = v
 
 /***/ }),
 
-/***/ 183:
+/***/ 194:
 /*!****************************************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/mixins/open-type.js ***!
   \****************************************************************************************************************/
@@ -4167,7 +4291,7 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.openType =
 
 /***/ }),
 
-/***/ 184:
+/***/ 195:
 /*!****************************************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/swipe-cell/index.js ***!
   \****************************************************************************************************************/
@@ -4176,8 +4300,8 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.openType =
 
 "use strict";
 var _component = __webpack_require__(/*! ../common/component */ 32);
-var _touch = __webpack_require__(/*! ../mixins/touch */ 178);
-var _utils = __webpack_require__(/*! ../common/utils */ 174);
+var _touch = __webpack_require__(/*! ../mixins/touch */ 189);
+var _utils = __webpack_require__(/*! ../common/utils */ 185);
 var THRESHOLD = 0.3;
 var ARRAY = [];
 (0, _component.VantComponent)({
@@ -4308,7 +4432,7 @@ var ARRAY = [];
 
 /***/ }),
 
-/***/ 185:
+/***/ 196:
 /*!************************************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/dialog/index.js ***!
   \************************************************************************************************************/
@@ -4317,8 +4441,8 @@ var ARRAY = [];
 
 "use strict";
 var _component = __webpack_require__(/*! ../common/component */ 32);
-var _button = __webpack_require__(/*! ../mixins/button */ 182);
-var _openType = __webpack_require__(/*! ../mixins/open-type */ 183);
+var _button = __webpack_require__(/*! ../mixins/button */ 193);
+var _openType = __webpack_require__(/*! ../mixins/open-type */ 194);
 var _color = __webpack_require__(/*! ../common/color */ 20);function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 (0, _component.VantComponent)({
   mixins: [_button.button, _openType.openType],
@@ -4427,56 +4551,44 @@ var _color = __webpack_require__(/*! ../common/color */ 20);function _defineProp
 
 /***/ }),
 
-/***/ 19:
+/***/ 197:
 /*!*************************************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/notify/notify.js ***!
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/divider/index.js ***!
   \*************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.default = Notify;var _color = __webpack_require__(/*! ../common/color */ 20);
-var defaultOptions = {
-  selector: '#van-notify',
-  type: 'danger',
-  message: '',
-  background: '',
-  duration: 3000,
-  zIndex: 110,
-  color: _color.WHITE,
-  safeAreaInsetTop: false,
-  onClick: function onClick() {},
-  onOpened: function onOpened() {},
-  onClose: function onClose() {} };
+var _component = __webpack_require__(/*! ../common/component */ 32);
+(0, _component.VantComponent)({
+  props: {
+    dashed: {
+      type: Boolean,
+      value: false },
 
-function parseOptions(message) {
-  return typeof message === 'string' ? { message: message } : message;
-}
-function getContext() {
-  var pages = getCurrentPages();
-  return pages[pages.length - 1];
-}
-function Notify(options) {
-  options = Object.assign(Object.assign({}, defaultOptions), parseOptions(options));
-  var context = options.context || getContext();
-  var notify = context.selectComponent(options.selector);
-  delete options.context;
-  delete options.selector;
-  if (notify) {
-    notify.setData(options);
-    notify.show();
-    return notify;
-  }
-  console.warn('未找到 van-notify 节点，请确认 selector 及 context 是否正确');
-}
-Notify.clear = function (options) {
-  options = Object.assign(Object.assign({}, defaultOptions), parseOptions(options));
-  var context = options.context || getContext();
-  var notify = context.selectComponent(options.selector);
-  if (notify) {
-    notify.hide();
-  }
-};
+    hairline: {
+      type: Boolean,
+      value: false },
+
+    contentPosition: {
+      type: String,
+      value: '' },
+
+    fontSize: {
+      type: Number,
+      value: '' },
+
+    borderColor: {
+      type: String,
+      value: '' },
+
+    textColor: {
+      type: String,
+      value: '' },
+
+    customStyle: {
+      type: String,
+      value: '' } } });
 
 /***/ }),
 
@@ -10528,203 +10640,6 @@ var GRAY_DARK = '#969799';exports.GRAY_DARK = GRAY_DARK;
 
 /***/ }),
 
-/***/ 221:
-/*!***********************************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/image/index.js ***!
-  \***********************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-var _utils = __webpack_require__(/*! ../common/utils */ 174);
-var _component = __webpack_require__(/*! ../common/component */ 32);
-var _button = __webpack_require__(/*! ../mixins/button */ 182);
-var _openType = __webpack_require__(/*! ../mixins/open-type */ 183);
-var FIT_MODE_MAP = {
-  none: 'center',
-  fill: 'scaleToFill',
-  cover: 'aspectFill',
-  contain: 'aspectFit' };
-
-(0, _component.VantComponent)({
-  mixins: [_button.button, _openType.openType],
-  classes: ['custom-class', 'loading-class', 'error-class', 'image-class'],
-  props: {
-    src: {
-      type: String,
-      observer: function observer() {
-        this.setData({
-          error: false,
-          loading: true });
-
-      } },
-
-    round: Boolean,
-    width: {
-      type: null,
-      observer: 'setStyle' },
-
-    height: {
-      type: null,
-      observer: 'setStyle' },
-
-    radius: null,
-    lazyLoad: Boolean,
-    useErrorSlot: Boolean,
-    useLoadingSlot: Boolean,
-    showMenuByLongpress: Boolean,
-    fit: {
-      type: String,
-      value: 'fill',
-      observer: 'setMode' },
-
-    showError: {
-      type: Boolean,
-      value: true },
-
-    showLoading: {
-      type: Boolean,
-      value: true } },
-
-
-  data: {
-    error: false,
-    loading: true,
-    viewStyle: '' },
-
-  mounted: function mounted() {
-    this.setMode();
-    this.setStyle();
-  },
-  methods: {
-    setMode: function setMode() {
-      this.setData({
-        mode: FIT_MODE_MAP[this.data.fit] });
-
-    },
-    setStyle: function setStyle() {var _this$data =
-      this.data,width = _this$data.width,height = _this$data.height,radius = _this$data.radius;
-      var style = '';
-      if ((0, _utils.isDef)(width)) {
-        style += "width: ".concat((0, _utils.addUnit)(width), ";");
-      }
-      if ((0, _utils.isDef)(height)) {
-        style += "height: ".concat((0, _utils.addUnit)(height), ";");
-      }
-      if ((0, _utils.isDef)(radius)) {
-        style += 'overflow: hidden;';
-        style += "border-radius: ".concat((0, _utils.addUnit)(radius), ";");
-      }
-      this.setData({ viewStyle: style });
-    },
-    onLoad: function onLoad(event) {
-      this.setData({
-        loading: false });
-
-      this.$emit('load', event.detail);
-    },
-    onError: function onError(event) {
-      this.setData({
-        loading: false,
-        error: true });
-
-      this.$emit('error', event.detail);
-    },
-    onClick: function onClick(event) {
-      this.$emit('click', event.detail);
-    } } });
-
-/***/ }),
-
-/***/ 229:
-/*!***********************************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/popup/index.js ***!
-  \***********************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-var _component = __webpack_require__(/*! ../common/component */ 32);
-var _transition = __webpack_require__(/*! ../mixins/transition */ 230);
-(0, _component.VantComponent)({
-  classes: [
-  'enter-class',
-  'enter-active-class',
-  'enter-to-class',
-  'leave-class',
-  'leave-active-class',
-  'leave-to-class'],
-
-  mixins: [(0, _transition.transition)(false)],
-  props: {
-    round: Boolean,
-    closeable: Boolean,
-    customStyle: String,
-    overlayStyle: String,
-    transition: {
-      type: String,
-      observer: 'observeClass' },
-
-    zIndex: {
-      type: Number,
-      value: 100 },
-
-    overlay: {
-      type: Boolean,
-      value: true },
-
-    closeIcon: {
-      type: String,
-      value: 'cross' },
-
-    closeIconPosition: {
-      type: String,
-      value: 'top-right' },
-
-    closeOnClickOverlay: {
-      type: Boolean,
-      value: true },
-
-    position: {
-      type: String,
-      value: 'center',
-      observer: 'observeClass' },
-
-    safeAreaInsetBottom: {
-      type: Boolean,
-      value: true },
-
-    safeAreaInsetTop: {
-      type: Boolean,
-      value: false } },
-
-
-  created: function created() {
-    this.observeClass();
-  },
-  methods: {
-    onClickCloseIcon: function onClickCloseIcon() {
-      this.$emit('close');
-    },
-    onClickOverlay: function onClickOverlay() {
-      this.$emit('click-overlay');
-      if (this.data.closeOnClickOverlay) {
-        this.$emit('close');
-      }
-    },
-    observeClass: function observeClass() {var _this$data =
-      this.data,transition = _this$data.transition,position = _this$data.position;
-      var updateData = {
-        name: transition || position };
-
-      if (transition === 'none') {
-        updateData.duration = 0;
-      }
-      this.setData(updateData);
-    } } });
-
-/***/ }),
-
 /***/ 23:
 /*!**********************************************************************************************************!*\
   !*** ./node_modules/@dcloudio/vue-cli-plugin-uni/packages/vue-loader/lib/runtime/componentNormalizer.js ***!
@@ -10854,7 +10769,204 @@ function normalizeComponent (
 
 /***/ }),
 
-/***/ 230:
+/***/ 233:
+/*!***********************************************************************************************************!*\
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/image/index.js ***!
+  \***********************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+var _utils = __webpack_require__(/*! ../common/utils */ 185);
+var _component = __webpack_require__(/*! ../common/component */ 32);
+var _button = __webpack_require__(/*! ../mixins/button */ 193);
+var _openType = __webpack_require__(/*! ../mixins/open-type */ 194);
+var FIT_MODE_MAP = {
+  none: 'center',
+  fill: 'scaleToFill',
+  cover: 'aspectFill',
+  contain: 'aspectFit' };
+
+(0, _component.VantComponent)({
+  mixins: [_button.button, _openType.openType],
+  classes: ['custom-class', 'loading-class', 'error-class', 'image-class'],
+  props: {
+    src: {
+      type: String,
+      observer: function observer() {
+        this.setData({
+          error: false,
+          loading: true });
+
+      } },
+
+    round: Boolean,
+    width: {
+      type: null,
+      observer: 'setStyle' },
+
+    height: {
+      type: null,
+      observer: 'setStyle' },
+
+    radius: null,
+    lazyLoad: Boolean,
+    useErrorSlot: Boolean,
+    useLoadingSlot: Boolean,
+    showMenuByLongpress: Boolean,
+    fit: {
+      type: String,
+      value: 'fill',
+      observer: 'setMode' },
+
+    showError: {
+      type: Boolean,
+      value: true },
+
+    showLoading: {
+      type: Boolean,
+      value: true } },
+
+
+  data: {
+    error: false,
+    loading: true,
+    viewStyle: '' },
+
+  mounted: function mounted() {
+    this.setMode();
+    this.setStyle();
+  },
+  methods: {
+    setMode: function setMode() {
+      this.setData({
+        mode: FIT_MODE_MAP[this.data.fit] });
+
+    },
+    setStyle: function setStyle() {var _this$data =
+      this.data,width = _this$data.width,height = _this$data.height,radius = _this$data.radius;
+      var style = '';
+      if ((0, _utils.isDef)(width)) {
+        style += "width: ".concat((0, _utils.addUnit)(width), ";");
+      }
+      if ((0, _utils.isDef)(height)) {
+        style += "height: ".concat((0, _utils.addUnit)(height), ";");
+      }
+      if ((0, _utils.isDef)(radius)) {
+        style += 'overflow: hidden;';
+        style += "border-radius: ".concat((0, _utils.addUnit)(radius), ";");
+      }
+      this.setData({ viewStyle: style });
+    },
+    onLoad: function onLoad(event) {
+      this.setData({
+        loading: false });
+
+      this.$emit('load', event.detail);
+    },
+    onError: function onError(event) {
+      this.setData({
+        loading: false,
+        error: true });
+
+      this.$emit('error', event.detail);
+    },
+    onClick: function onClick(event) {
+      this.$emit('click', event.detail);
+    } } });
+
+/***/ }),
+
+/***/ 241:
+/*!***********************************************************************************************************!*\
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/popup/index.js ***!
+  \***********************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+var _component = __webpack_require__(/*! ../common/component */ 32);
+var _transition = __webpack_require__(/*! ../mixins/transition */ 242);
+(0, _component.VantComponent)({
+  classes: [
+  'enter-class',
+  'enter-active-class',
+  'enter-to-class',
+  'leave-class',
+  'leave-active-class',
+  'leave-to-class'],
+
+  mixins: [(0, _transition.transition)(false)],
+  props: {
+    round: Boolean,
+    closeable: Boolean,
+    customStyle: String,
+    overlayStyle: String,
+    transition: {
+      type: String,
+      observer: 'observeClass' },
+
+    zIndex: {
+      type: Number,
+      value: 100 },
+
+    overlay: {
+      type: Boolean,
+      value: true },
+
+    closeIcon: {
+      type: String,
+      value: 'cross' },
+
+    closeIconPosition: {
+      type: String,
+      value: 'top-right' },
+
+    closeOnClickOverlay: {
+      type: Boolean,
+      value: true },
+
+    position: {
+      type: String,
+      value: 'center',
+      observer: 'observeClass' },
+
+    safeAreaInsetBottom: {
+      type: Boolean,
+      value: true },
+
+    safeAreaInsetTop: {
+      type: Boolean,
+      value: false } },
+
+
+  created: function created() {
+    this.observeClass();
+  },
+  methods: {
+    onClickCloseIcon: function onClickCloseIcon() {
+      this.$emit('close');
+    },
+    onClickOverlay: function onClickOverlay() {
+      this.$emit('click-overlay');
+      if (this.data.closeOnClickOverlay) {
+        this.$emit('close');
+      }
+    },
+    observeClass: function observeClass() {var _this$data =
+      this.data,transition = _this$data.transition,position = _this$data.position;
+      var updateData = {
+        name: transition || position };
+
+      if (transition === 'none') {
+        updateData.duration = 0;
+      }
+      this.setData(updateData);
+    } } });
+
+/***/ }),
+
+/***/ 242:
 /*!*****************************************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/mixins/transition.js ***!
   \*****************************************************************************************************************/
@@ -10862,7 +10974,7 @@ function normalizeComponent (
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.transition = void 0;var _utils = __webpack_require__(/*! ../common/utils */ 174);
+Object.defineProperty(exports, "__esModule", { value: true });exports.transition = void 0;var _utils = __webpack_require__(/*! ../common/utils */ 185);
 var getClassNames = function getClassNames(name) {return {
     enter: "van-".concat(name, "-enter van-").concat(name, "-enter-active enter-class enter-active-class"),
     'enter-to': "van-".concat(name, "-enter-to van-").concat(name, "-enter-active enter-to-class enter-active-class"),
@@ -10983,48 +11095,7 @@ var transition = function transition(showDefaultValue) {
 
 /***/ }),
 
-/***/ 238:
-/*!*************************************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/divider/index.js ***!
-  \*************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-var _component = __webpack_require__(/*! ../common/component */ 32);
-(0, _component.VantComponent)({
-  props: {
-    dashed: {
-      type: Boolean,
-      value: false },
-
-    hairline: {
-      type: Boolean,
-      value: false },
-
-    contentPosition: {
-      type: String,
-      value: '' },
-
-    fontSize: {
-      type: Number,
-      value: '' },
-
-    borderColor: {
-      type: String,
-      value: '' },
-
-    textColor: {
-      type: String,
-      value: '' },
-
-    customStyle: {
-      type: String,
-      value: '' } } });
-
-/***/ }),
-
-/***/ 253:
+/***/ 271:
 /*!***********************************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/steps/index.js ***!
   \***********************************************************************************************************/
@@ -11060,7 +11131,7 @@ var _color = __webpack_require__(/*! ../common/color */ 20);
 
 /***/ }),
 
-/***/ 275:
+/***/ 293:
 /*!***************************************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/index-bar/index.js ***!
   \***************************************************************************************************************/
@@ -11317,7 +11388,7 @@ var indexList = function indexList() {
 
 /***/ }),
 
-/***/ 276:
+/***/ 294:
 /*!******************************************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/index-anchor/index.js ***!
   \******************************************************************************************************************/
@@ -11343,7 +11414,7 @@ var _component = __webpack_require__(/*! ../common/component */ 32);
 
 /***/ }),
 
-/***/ 277:
+/***/ 295:
 /*!**********************************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/cell/index.js ***!
   \**********************************************************************************************************/
@@ -11389,7 +11460,7 @@ var _component = __webpack_require__(/*! ../common/component */ 32);
 
 /***/ }),
 
-/***/ 278:
+/***/ 296:
 /*!****************************************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/cell-group/index.js ***!
   \****************************************************************************************************************/
@@ -11404,37 +11475,6 @@ var _component = __webpack_require__(/*! ../common/component */ 32);
     border: {
       type: Boolean,
       value: true } } });
-
-/***/ }),
-
-/***/ 293:
-/*!*************************************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/overlay/index.js ***!
-  \*************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-var _component = __webpack_require__(/*! ../common/component */ 32);
-(0, _component.VantComponent)({
-  props: {
-    show: Boolean,
-    customStyle: String,
-    duration: {
-      type: null,
-      value: 300 },
-
-    zIndex: {
-      type: Number,
-      value: 1 } },
-
-
-  methods: {
-    onClick: function onClick() {
-      this.$emit('click');
-    },
-    // for prevent touchmove
-    noop: function noop() {} } });
 
 /***/ }),
 
@@ -11550,6 +11590,37 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.link = voi
         wx[this.data.linkType]({ url: url });
       }
     } } });exports.link = link;
+
+/***/ }),
+
+/***/ 311:
+/*!*************************************************************************************************************!*\
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/overlay/index.js ***!
+  \*************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+var _component = __webpack_require__(/*! ../common/component */ 32);
+(0, _component.VantComponent)({
+  props: {
+    show: Boolean,
+    customStyle: String,
+    duration: {
+      type: null,
+      value: 300 },
+
+    zIndex: {
+      type: Number,
+      value: 1 } },
+
+
+  methods: {
+    onClick: function onClick() {
+      this.$emit('click');
+    },
+    // for prevent touchmove
+    noop: function noop() {} } });
 
 /***/ }),
 
@@ -11765,7 +11836,235 @@ Dialog;exports.default = _default;
 
 /***/ }),
 
-/***/ 341:
+/***/ 35:
+/*!*****************************************************************************************!*\
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/static/js/course.js ***!
+  \*****************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _api_reference = _interopRequireDefault(__webpack_require__(/*! ./api_reference.js */ 15));
+var _http_commons = _interopRequireDefault(__webpack_require__(/*! ./http_commons.js */ 18));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var _default =
+
+{
+
+  getCourse: function getCourse(courseId) {
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: _api_reference.default.GET_COURSE + '?courseId=' + courseId,
+        header: _http_commons.default.getAuthenticationHeader(),
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+        } });
+
+    });
+  },
+
+  /**
+      * 获取我的课程列表
+      * 
+      * @param {Number} type  0:我教的课  1:我参与的课
+      * @return {Object} 课程列表
+      */
+  listCourse: function listCourse(type) {var offset = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;var count = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 10;
+    var url = type === 0 ? _api_reference.default.GET_TEACHED_COURSE : _api_reference.default.GET_JOINED_COURSE;
+
+    return new Promise(function (resolve, reject) {
+      console.log("请求");
+      uni.request({
+        url: url + '?offset=' + offset + '&count=' + count,
+        header: _http_commons.default.getAuthenticationHeader(),
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+        } });
+
+    });
+  },
+
+  /**
+      * @param {String} courseName
+      * @param {String} classInfo
+      */
+  createCourse: function createCourse(courseName, classInfo) {
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: _api_reference.default.CREATE_COURSE,
+        method: "POST",
+        header: _http_commons.default.getAuthenticationHeader(),
+        data: {
+          courseName: courseName,
+          classInfo: classInfo },
+
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+          reject(err);
+        } });
+
+    });
+  },
+
+  joinCourse: function joinCourse(courseId) {
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: _api_reference.default.JOIN_COURSE + '?courseId=' + courseId,
+        method: "POST",
+        header: _http_commons.default.getAuthenticationHeader(),
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+          reject(err);
+        } });
+
+    });
+  },
+
+  deleteCourse: function deleteCourse(courseId) {
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: _api_reference.default.DELETE_COURSE + '?courseId=' + courseId,
+        method: "DELETE",
+        header: _http_commons.default.getAuthenticationHeader(),
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+          reject(err);
+        } });
+
+    });
+  },
+
+  exitCourse: function exitCourse(courseId) {
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: _api_reference.default.EXIT_COURSE + '?courseId=' + courseId,
+        method: "DELETE",
+        header: _http_commons.default.getAuthenticationHeader(),
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+          reject(err);
+        } });
+
+    });
+  },
+
+  /**
+      * 更新course 信息，服务端会校验，只允许更新courseName和classInfo
+      * 
+      * @param {Object} course 
+      */
+  updateCourse: function updateCourse(course) {
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: _api_reference.default.UPDATE_COURSE,
+        method: "PUT",
+        header: _http_commons.default.getAuthenticationHeader(),
+        data: {
+          id: course.id,
+          courseName: course.courseName,
+          classInfo: course.classInfo },
+
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+          reject(err);
+        } });
+
+    });
+  },
+
+  getCourseMembers: function getCourseMembers(courseId) {
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: _api_reference.default.GET_MEMBERS + '?courseId=' + courseId,
+        header: _http_commons.default.getAuthenticationHeader(),
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+          reject(err);
+        } });
+
+    });
+  },
+
+  kickoutUser: function kickoutUser(kickedUserId, courseId) {
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: _api_reference.default.KICK_OUT_MEMBER + '?courseId=' + courseId + '&kickedUserId=' + kickedUserId,
+        method: "DELETE",
+        header: _http_commons.default.getAuthenticationHeader(),
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+          reject(err);
+        } });
+
+    });
+  },
+
+  assignTeacher: function assignTeacher(assignedUserId, courseId) {
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: _api_reference.default.ASSIGN_TEACHER + '?targetUserId=' + assignedUserId + '&courseId=' + courseId,
+        method: "PUT",
+        header: _http_commons.default.getAuthenticationHeader(),
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+          reject(err);
+        } });
+
+    });
+  } };exports.default = _default;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
+
+/***/ }),
+
+/***/ 359:
 /*!**************************************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/components/w-picker/areadata/areadata.js ***!
   \**************************************************************************************************************/
@@ -23058,234 +23357,6 @@ cityData;exports.default = _default;
 
 /***/ }),
 
-/***/ 35:
-/*!*****************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/static/js/course.js ***!
-  \*****************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _api_reference = _interopRequireDefault(__webpack_require__(/*! ./api_reference.js */ 15));
-var _http_commons = _interopRequireDefault(__webpack_require__(/*! ./http_commons.js */ 18));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var _default =
-
-{
-
-  getCourse: function getCourse(courseId) {
-    return new Promise(function (resolve, reject) {
-      uni.request({
-        url: _api_reference.default.GET_COURSE + '?courseId=' + courseId,
-        header: _http_commons.default.getAuthenticationHeader(),
-        success: function success(resp) {
-          if (_http_commons.default.successCheck(resp)) {
-            resolve(resp.data.data);
-          }
-        },
-        fail: function fail(err) {
-          _http_commons.default.commonFailHanlder(err);
-        } });
-
-    });
-  },
-
-  /**
-      * 获取我的课程列表
-      * 
-      * @param {Number} type  0:我教的课  1:我参与的课
-      * @return {Object} 课程列表
-      */
-  listCourse: function listCourse(type) {var offset = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;var count = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 10;
-    var url = type === 0 ? _api_reference.default.GET_TEACHED_COURSE : _api_reference.default.GET_JOINED_COURSE;
-
-    return new Promise(function (resolve, reject) {
-      console.log("请求");
-      uni.request({
-        url: url + '?offset=' + offset + '&count=' + count,
-        header: _http_commons.default.getAuthenticationHeader(),
-        success: function success(resp) {
-          if (_http_commons.default.successCheck(resp)) {
-            resolve(resp.data.data);
-          }
-        },
-        fail: function fail(err) {
-          _http_commons.default.commonFailHanlder(err);
-        } });
-
-    });
-  },
-
-  /**
-      * @param {String} courseName
-      * @param {String} classInfo
-      */
-  createCourse: function createCourse(courseName, classInfo) {
-    return new Promise(function (resolve, reject) {
-      uni.request({
-        url: _api_reference.default.CREATE_COURSE,
-        method: "POST",
-        header: _http_commons.default.getAuthenticationHeader(),
-        data: {
-          courseName: courseName,
-          classInfo: classInfo },
-
-        success: function success(resp) {
-          if (_http_commons.default.successCheck(resp)) {
-            resolve(resp.data.data);
-          }
-        },
-        fail: function fail(err) {
-          _http_commons.default.commonFailHanlder(err);
-          reject(err);
-        } });
-
-    });
-  },
-
-  joinCourse: function joinCourse(courseId) {
-    return new Promise(function (resolve, reject) {
-      uni.request({
-        url: _api_reference.default.JOIN_COURSE + '?courseId=' + courseId,
-        method: "POST",
-        header: _http_commons.default.getAuthenticationHeader(),
-        success: function success(resp) {
-          if (_http_commons.default.successCheck(resp)) {
-            resolve(resp.data.data);
-          }
-        },
-        fail: function fail(err) {
-          _http_commons.default.commonFailHanlder(err);
-          reject(err);
-        } });
-
-    });
-  },
-
-  deleteCourse: function deleteCourse(courseId) {
-    return new Promise(function (resolve, reject) {
-      uni.request({
-        url: _api_reference.default.DELETE_COURSE + '?courseId=' + courseId,
-        method: "DELETE",
-        header: _http_commons.default.getAuthenticationHeader(),
-        success: function success(resp) {
-          if (_http_commons.default.successCheck(resp)) {
-            resolve(resp.data.data);
-          }
-        },
-        fail: function fail(err) {
-          _http_commons.default.commonFailHanlder(err);
-          reject(err);
-        } });
-
-    });
-  },
-
-  exitCourse: function exitCourse(courseId) {
-    return new Promise(function (resolve, reject) {
-      uni.request({
-        url: _api_reference.default.EXIT_COURSE + '?courseId=' + courseId,
-        method: "DELETE",
-        header: _http_commons.default.getAuthenticationHeader(),
-        success: function success(resp) {
-          if (_http_commons.default.successCheck(resp)) {
-            resolve(resp.data.data);
-          }
-        },
-        fail: function fail(err) {
-          _http_commons.default.commonFailHanlder(err);
-          reject(err);
-        } });
-
-    });
-  },
-
-  /**
-      * 更新course 信息，服务端会校验，只允许更新courseName和classInfo
-      * 
-      * @param {Object} course 
-      */
-  updateCourse: function updateCourse(course) {
-    return new Promise(function (resolve, reject) {
-      uni.request({
-        url: _api_reference.default.UPDATE_COURSE,
-        method: "PUT",
-        header: _http_commons.default.getAuthenticationHeader(),
-        data: {
-          id: course.id,
-          courseName: course.courseName,
-          classInfo: course.classInfo },
-
-        success: function success(resp) {
-          if (_http_commons.default.successCheck(resp)) {
-            resolve(resp.data.data);
-          }
-        },
-        fail: function fail(err) {
-          _http_commons.default.commonFailHanlder(err);
-          reject(err);
-        } });
-
-    });
-  },
-
-  getCourseMembers: function getCourseMembers(courseId) {
-    return new Promise(function (resolve, reject) {
-      uni.request({
-        url: _api_reference.default.GET_MEMBERS + '?courseId=' + courseId,
-        header: _http_commons.default.getAuthenticationHeader(),
-        success: function success(resp) {
-          if (_http_commons.default.successCheck(resp)) {
-            resolve(resp.data.data);
-          }
-        },
-        fail: function fail(err) {
-          _http_commons.default.commonFailHanlder(err);
-          reject(err);
-        } });
-
-    });
-  },
-
-  kickoutUser: function kickoutUser(kickedUserId, courseId) {
-    return new Promise(function (resolve, reject) {
-      uni.request({
-        url: _api_reference.default.KICK_OUT_MEMBER + '?courseId=' + courseId + '&kickedUserId=' + kickedUserId,
-        method: "DELETE",
-        header: _http_commons.default.getAuthenticationHeader(),
-        success: function success(resp) {
-          if (_http_commons.default.successCheck(resp)) {
-            resolve(resp.data.data);
-          }
-        },
-        fail: function fail(err) {
-          _http_commons.default.commonFailHanlder(err);
-          reject(err);
-        } });
-
-    });
-  },
-
-  assignTeacher: function assignTeacher(assignedUserId, courseId) {
-    return new Promise(function (resolve, reject) {
-      uni.request({
-        url: _api_reference.default.ASSIGN_TEACHER + '?targetUserId=' + assignedUserId + '&courseId=' + courseId,
-        method: "PUT",
-        header: _http_commons.default.getAuthenticationHeader(),
-        success: function success(resp) {
-          if (_http_commons.default.successCheck(resp)) {
-            resolve(resp.data.data);
-          }
-        },
-        fail: function fail(err) {
-          _http_commons.default.commonFailHanlder(err);
-          reject(err);
-        } });
-
-    });
-  } };exports.default = _default;
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
-
-/***/ }),
-
 /***/ 4:
 /*!********************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/pages.json ***!
@@ -24295,19 +24366,134 @@ module.exports = {"_from":"@dcloudio/uni-stat@next","_id":"@dcloudio/uni-stat@2.
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _default = { "pages": { "pages/index/index": { "navigationBarTitleText": "讨论区", "usingComponents": { "create-course-modal": "/components/CreateCourse", "join-course-modal": "/components/JoinCourse", "van-grid": "/wxcomponents/vant/dist/grid/index", "van-grid-item": "/wxcomponents/vant/dist/grid-item/index", "van-tab": "/wxcomponents/vant/dist/tab/index", "van-tabs": "/wxcomponents/vant/dist/tabs/index", "van-notify": "/wxcomponents/vant/dist/notify/index", "van-icon": "/wxcomponents/vant/dist/icon/index", "van-button": "/wxcomponents/vant/dist/button/index", "van-swipe-cell": "/wxcomponents/vant/dist/swipe-cell/index", "van-dialog": "/wxcomponents/vant/dist/dialog/index" }, "usingAutoImportComponents": {} }, "pages/message/message": { "usingComponents": { "s-tabs": "/components/s-tabs/index", "s-tab": "/components/s-tab/index", "van-image": "/wxcomponents/vant/dist/image/index", "uni-load-more": "/components/uni-load-more/uni-load-more" }, "usingAutoImportComponents": { "uni-load-more": "/components/uni-load-more/uni-load-more" } }, "pages/login/login": { "usingComponents": { "update-user-info": "/components/UpdateUserInfo", "van-popup": "/wxcomponents/vant/dist/popup/index" }, "usingAutoImportComponents": {} }, "pages/me/me": { "usingComponents": { "update-user-info": "/components/UpdateUserInfo", "van-button": "/wxcomponents/vant/dist/button/index", "van-notify": "/wxcomponents/vant/dist/notify/index", "van-image": "/wxcomponents/vant/dist/image/index" }, "usingAutoImportComponents": {} }, "pages/favorite/favorite": { "usingComponents": {}, "usingAutoImportComponents": {} }, "pages/conurse_ware/course_ware": { "usingComponents": {}, "usingAutoImportComponents": {} }, "pages/contest/contest": { "usingComponents": { "uni-countdown": "/components/uni-countdown/uni-countdown", "create-answer": "/components/CreateAnswer", "w-picker": "/components/w-picker/w-picker", "van-button": "/wxcomponents/vant/dist/button/index", "van-icon": "/wxcomponents/vant/dist/icon/index", "van-dialog": "/wxcomponents/vant/dist/dialog/index", "van-divider": "/wxcomponents/vant/dist/divider/index", "van-notify": "/wxcomponents/vant/dist/notify/index" }, "usingAutoImportComponents": { "uni-countdown": "/components/uni-countdown/uni-countdown" } }, "pages/helpme/helpme": { "usingComponents": {}, "usingAutoImportComponents": {} }, "pages/course/course": { "usingComponents": { "single-submit-popup": "/components/SingleSubmitPopup", "uni-load-more": "/components/uni-load-more/uni-load-more", "s-tabs": "/components/s-tabs/index", "s-tab": "/components/s-tab/index", "van-grid": "/wxcomponents/vant/dist/grid/index", "van-grid-item": "/wxcomponents/vant/dist/grid-item/index", "van-notify": "/wxcomponents/vant/dist/notify/index", "van-icon": "/wxcomponents/vant/dist/icon/index", "van-button": "/wxcomponents/vant/dist/button/index", "van-steps": "/wxcomponents/vant/dist/steps/index" }, "usingAutoImportComponents": { "uni-load-more": "/components/uni-load-more/uni-load-more" } }, "pages/course_settings/course_settings": { "usingComponents": { "van-notify": "/wxcomponents/vant/dist/notify/index", "van-button": "/wxcomponents/vant/dist/button/index" }, "usingAutoImportComponents": {} }, "pages/topics/topics": { "usingComponents": { "ms-dropdown-menu": "/components/ms-dropdown/dropdown-menu", "ms-dropdown-item": "/components/ms-dropdown/dropdown-item", "s-tabs": "/components/s-tabs/index", "s-tab": "/components/s-tab/index", "van-notify": "/wxcomponents/vant/dist/notify/index", "uni-load-more": "/components/uni-load-more/uni-load-more", "van-icon": "/wxcomponents/vant/dist/icon/index", "van-image": "/wxcomponents/vant/dist/image/index" }, "usingAutoImportComponents": { "uni-load-more": "/components/uni-load-more/uni-load-more" } }, "pages/create_topic/create_topic": { "usingComponents": { "van-notify": "/wxcomponents/vant/dist/notify/index", "van-button": "/wxcomponents/vant/dist/button/index" }, "usingAutoImportComponents": {} }, "pages/topic/topic": { "usingComponents": { "s-tabs": "/components/s-tabs/index", "s-tab": "/components/s-tab/index", "single-submit-popup": "/components/SingleSubmitPopup", "van-notify": "/wxcomponents/vant/dist/notify/index", "uni-load-more": "/components/uni-load-more/uni-load-more", "van-icon": "/wxcomponents/vant/dist/icon/index", "van-image": "/wxcomponents/vant/dist/image/index" }, "usingAutoImportComponents": { "uni-load-more": "/components/uni-load-more/uni-load-more" } }, "pages/sub_comments/sub_comments": { "usingComponents": { "single-submit-popup": "/components/SingleSubmitPopup", "van-notify": "/wxcomponents/vant/dist/notify/index", "uni-load-more": "/components/uni-load-more/uni-load-more", "van-icon": "/wxcomponents/vant/dist/icon/index", "van-image": "/wxcomponents/vant/dist/image/index" }, "usingAutoImportComponents": { "uni-load-more": "/components/uni-load-more/uni-load-more" } }, "pages/member_list/member_list": { "usingComponents": { "van-index-bar": "/wxcomponents/vant/dist/index-bar/index", "van-index-anchor": "/wxcomponents/vant/dist/index-anchor/index", "van-cell": "/wxcomponents/vant/dist/cell/index", "van-notify": "/wxcomponents/vant/dist/notify/index", "van-cell-group": "/wxcomponents/vant/dist/cell-group/index", "van-swipe-cell": "/wxcomponents/vant/dist/swipe-cell/index" }, "usingAutoImportComponents": {} }, "pages/chat/chat": { "usingComponents": { "van-notify": "/wxcomponents/vant/dist/notify/index", "uni-load-more": "/components/uni-load-more/uni-load-more", "van-icon": "/wxcomponents/vant/dist/icon/index", "van-image": "/wxcomponents/vant/dist/image/index" }, "usingAutoImportComponents": { "uni-load-more": "/components/uni-load-more/uni-load-more" } }, "pages/create_contest/create_contest": { "usingComponents": { "create-question": "/components/CreateQuestion", "w-picker": "/components/w-picker/w-picker", "van-button": "/wxcomponents/vant/dist/button/index", "van-icon": "/wxcomponents/vant/dist/icon/index", "van-dialog": "/wxcomponents/vant/dist/dialog/index", "van-divider": "/wxcomponents/vant/dist/divider/index", "van-notify": "/wxcomponents/vant/dist/notify/index" }, "usingAutoImportComponents": { "w-picker": "/components/w-picker/w-picker" } }, "pages/revise/revise": { "usingComponents": { "create-revise": "/components/CreateRevise", "van-index-bar": "/wxcomponents/vant/dist/index-bar/index", "van-index-anchor": "/wxcomponents/vant/dist/index-anchor/index", "van-notify": "/wxcomponents/vant/dist/notify/index" }, "usingAutoImportComponents": {} }, "pages/contest_list/contest_list": {} }, "globalStyle": { "navigationBarTextStyle": "black", "navigationBarTitleText": "小课堂", "navigationBarBackgroundColor": "#F8F8F8", "backgroundColor": "#F2F2F2" } };exports.default = _default;
+Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _default = { "pages": { "pages/index/index": { "navigationBarTitleText": "讨论区" }, "pages/message/message": {}, "pages/login/login": {}, "pages/me/me": {}, "pages/favorite/favorite": {}, "pages/conurse_ware/course_ware": {}, "pages/contest/contest": {}, "pages/helpme/helpme": {}, "pages/course/course": {}, "pages/course_settings/course_settings": {}, "pages/topics/topics": {}, "pages/create_topic/create_topic": {}, "pages/topic/topic": {}, "pages/sub_comments/sub_comments": {}, "pages/member_list/member_list": {}, "pages/chat/chat": {}, "pages/create_contest/create_contest": {}, "pages/revise/revise": {}, "pages/contest_list/contest_list": {} }, "globalStyle": { "navigationBarTextStyle": "black", "navigationBarTitleText": "小课堂", "navigationBarBackgroundColor": "#F8F8F8", "backgroundColor": "#F2F2F2" } };exports.default = _default;
 
 /***/ }),
 
-/***/ 79:
-/*!**********************************************************!*\
-  !*** ./node_modules/@babel/runtime/regenerator/index.js ***!
-  \**********************************************************/
+/***/ 73:
+/*!**********************************************************************************************!*\
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/static/js/course_ware.js ***!
+  \**********************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! regenerator-runtime */ 80);
+"use strict";
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _api_reference = _interopRequireDefault(__webpack_require__(/*! @/static/js/api_reference.js */ 15));
+var _http_commons = _interopRequireDefault(__webpack_require__(/*! @/static/js/http_commons.js */ 18));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var _default =
 
+{
+
+  /**
+   * @param {String} courseWareId
+   */
+  getCourseWare: function getCourseWare(courseWareId) {
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: _api_reference.default.COURSE_WARE + '?courseWareId=' + courseWareId,
+        header: _http_commons.default.getAuthenticationHeader(),
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+          reject(err);
+        } });
+
+    });
+  },
+
+  /**
+      * 通过courseId获取课件
+      */
+  getCourseWareByCourseId: function getCourseWareByCourseId(courseId) {var offset = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;var count = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 10;
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: _api_reference.default.GET_COURSE_WARE_BY_COURSEID + '?courseId=' + courseId + '&offset=' + offset + '&count=' + count,
+        header: _http_commons.default.getAuthenticationHeader(),
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+          reject(err);
+        } });
+
+    });
+  },
+
+  /**
+      * 获取用户-课件信息
+      * 
+      * @param {String} courseWareId
+      */
+  getUserCourseWare: function getUserCourseWare(courseWareId) {
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: _api_reference.default.USER_COURSE_WARE + '?courseWareId=' + courseWareId,
+        header: _http_commons.default.getAuthenticationHeader(),
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+          reject(err);
+        } });
+
+    });
+  },
+
+  /**
+      * 
+      * @param {String} courseWareId
+      * @param {Number} pageIdx
+      * @param {Number} readSeconds
+      */
+  readPage: function readPage(courseWareId, pageIdx, readSeconds) {
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: _api_reference.default.READ_COURSE_WARE + '?courseWareId=' + courseWareId + '&pageIndex=' + pageIdx + '&readSeconds=' + readSeconds,
+        method: "POST",
+        header: _http_commons.default.getAuthenticationHeader(),
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+          reject(err);
+        } });
+
+    });
+  },
+
+  /**
+      */
+  updateComment: function updateComment(courseWareId, comment) {
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: _api_reference.default.COURSE_WARE_COMMENT + '?courseWareId=' + courseWareId + '&comment=' + comment,
+        method: "POST",
+        header: _http_commons.default.getAuthenticationHeader(),
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+          reject(err);
+        } });
+
+    });
+  } };exports.default = _default;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 
 /***/ }),
 
@@ -24323,7 +24509,19 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
 /***/ }),
 
-/***/ 80:
+/***/ 82:
+/*!**********************************************************!*\
+  !*** ./node_modules/@babel/runtime/regenerator/index.js ***!
+  \**********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(/*! regenerator-runtime */ 83);
+
+
+/***/ }),
+
+/***/ 83:
 /*!************************************************************!*\
   !*** ./node_modules/regenerator-runtime/runtime-module.js ***!
   \************************************************************/
@@ -24354,7 +24552,7 @@ var oldRuntime = hadRuntime && g.regeneratorRuntime;
 // Force reevalutation of runtime.js.
 g.regeneratorRuntime = undefined;
 
-module.exports = __webpack_require__(/*! ./runtime */ 81);
+module.exports = __webpack_require__(/*! ./runtime */ 84);
 
 if (hadRuntime) {
   // Restore the original runtime.
@@ -24371,7 +24569,7 @@ if (hadRuntime) {
 
 /***/ }),
 
-/***/ 81:
+/***/ 84:
 /*!*****************************************************!*\
   !*** ./node_modules/regenerator-runtime/runtime.js ***!
   \*****************************************************/
@@ -25103,7 +25301,7 @@ if (hadRuntime) {
 
 /***/ }),
 
-/***/ 82:
+/***/ 85:
 /*!******************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/static/js/contest.js ***!
   \******************************************************************************************/
@@ -25456,69 +25654,6 @@ var _http_commons = _interopRequireDefault(__webpack_require__(/*! ./http_common
     return new Promise(function (resolve, reject) {
       uni.request({
         url: _api_reference.default.GET_CONTEST_AS_PARTICIPATOR + '?offset=' + offset + '&count=' + count,
-        header: _http_commons.default.getAuthenticationHeader(),
-        success: function success(resp) {
-          if (_http_commons.default.successCheck(resp)) {
-            resolve(resp.data.data);
-          }
-        },
-        fail: function fail(err) {
-          _http_commons.default.commonFailHanlder(err);
-          reject(err);
-        } });
-
-    });
-  } };exports.default = _default;
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
-
-/***/ }),
-
-/***/ 97:
-/*!*******************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/static/js/bulletin.js ***!
-  \*******************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _api_reference = _interopRequireDefault(__webpack_require__(/*! ./api_reference.js */ 15));
-var _http_commons = _interopRequireDefault(__webpack_require__(/*! ./http_commons.js */ 18));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var _default =
-
-{
-
-  /**
-   * @param {Number} courseId
-   * @param {Object} bulletinContent
-   */
-  createBulletin: function createBulletin(courseId, bulletinContent) {
-    return new Promise(function (resolve, reject) {
-      uni.request({
-        url: _api_reference.default.CREATE_BULLETIN + '?courseId=' + courseId,
-        method: "POST",
-        header: _http_commons.default.getAuthenticationHeader(),
-        data: {
-          content: bulletinContent },
-
-        success: function success(resp) {
-          if (_http_commons.default.successCheck(resp)) {
-            resolve(resp.data.data);
-          }
-        },
-        fail: function fail(err) {
-          _http_commons.default.commonFailHanlder(err);
-          reject(err);
-        } });
-
-    });
-  },
-
-  /**
-      * 
-      */
-  listBulletin: function listBulletin(courseId) {var offset = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;var count = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 10;
-    return new Promise(function (resolve, reject) {
-      uni.request({
-        url: _api_reference.default.GET_BULLETIN + '?courseId=' + courseId + '&offset=' + offset + '&count=' + count,
         header: _http_commons.default.getAuthenticationHeader(),
         success: function success(resp) {
           if (_http_commons.default.successCheck(resp)) {

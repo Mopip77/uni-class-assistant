@@ -1,5 +1,6 @@
 {
   "usingComponents": {
+    "l-file": "/components/l-file/l-file",
     "uni-load-more": "/components/uni-load-more/uni-load-more",
     "single-submit-popup": "/components/SingleSubmitPopup",
     "s-tabs": "/components/s-tabs/index",

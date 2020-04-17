@@ -98,8 +98,8 @@
   background-color: #fafafa;
   width: 100%;
   padding: 10rpx;
+  min-height: 300rpx;
   background-color: #fff;
-  height: 600rpx;
 }
 .answer-box .image-box {
   margin-top: 40rpx;

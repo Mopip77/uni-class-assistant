@@ -136,6 +136,7 @@
 						this.comment = data
 
 						this.offset = 0
+						this.subComments.splice(0)
 						this.getSubComments()
 					})
 			},
@@ -206,6 +207,7 @@
 				promise
 					.then(() => {
 						this.offset = 0
+						this.subComments.splice(0)
 						this.getSubComments()
 					})
 			},

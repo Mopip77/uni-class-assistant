@@ -342,8 +342,8 @@
 		
 		textarea {
 			@include common-textarea;
+			min-height: 300rpx;
 			background-color: #fff;
-			height: 600rpx;
 		}
 		
 		.image-box {

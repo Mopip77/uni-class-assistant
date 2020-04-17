@@ -1,3 +1,9 @@
 {
-  "usingComponents": {}
+  "usingComponents": {
+    "l-file": "/components/l-file/l-file",
+    "read-course-ware-page": "/components/ReadCourseWarePage",
+    "van-notify": "/wxcomponents/vant/dist/notify/index",
+    "van-button": "/wxcomponents/vant/dist/button/index",
+    "van-icon": "/wxcomponents/vant/dist/icon/index"
+  }
 }

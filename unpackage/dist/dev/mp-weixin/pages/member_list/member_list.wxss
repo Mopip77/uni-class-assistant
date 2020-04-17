@@ -33,7 +33,7 @@ van-index-anchor .van-index-anchor--active {
 .swipe-cell-field-right {
   color: white;
   background-color: #f44336;
-  padding: 22rpx 38rpx;
+  padding: 30rpx 38rpx;
   font-size: 28rpx;
 }
 .swipe-cell-field-left {
@@ -44,5 +44,21 @@ van-index-anchor .van-index-anchor--active {
 }
 .is-me .van-cell__title {
   color: #EF6C00;
+}
+.slot {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+          align-items: center;
+}
+.slot image {
+    width: 60rpx;
+    height: 60rpx;
+    border-radius: 50%;
+}
+.slot text {
+    margin-left: 16rpx;
 }
 

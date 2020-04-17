@@ -186,6 +186,9 @@
 							}
 						});
 
+						if (this.offset === 0) {
+							this.topics.splice(0)
+						}
 						this.topics.push(...data);
 
 						// 更新offset 和 onLoading 类型（是否有更多加载）

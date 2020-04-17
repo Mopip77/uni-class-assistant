@@ -53,9 +53,17 @@ export default {
 	GET_CONTEST_AS_CREATOR: API_SERVER + 'contest/creator',
 	GET_CONTEST_AS_PARTICIPATOR: API_SERVER + 'contest/participator',
 	
+	// course_ware
+	COURSE_WARE: API_SERVER + 'course-ware',
+	USER_COURSE_WARE: API_SERVER + 'course-ware/user',
+	GET_COURSE_WARE_BY_COURSEID: API_SERVER + 'course-ware/course',
+	READ_COURSE_WARE: API_SERVER + 'course-ware/read',
+	COURSE_WARE_COMMENT: API_SERVER + 'course-ware/comment',
+	
 	// upload
 	UPLOAD_AVATAR: API_SERVER + 'upload/avatar',
 	UPLOAD_QUESTION: API_SERVER + 'upload/question',
+	UPLOAD_COURSE_WARE: API_SERVER + 'upload/course-ware',
 	
 	TEST_URL: API_SERVER + 'test'
 }

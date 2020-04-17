@@ -145,8 +145,8 @@
 							e.createGmt = dateObj.defaultDatetime;
 						}
 					});
-
-					this.messages.push(...data.messages.reverse())
+					
+					data.messages.forEach(e => this.messages.splice(0, 0, e))
 
 					this.oppositeUserInfo = data.oppositeUser
 					this.meUserInfo = data.me
@@ -173,6 +173,7 @@
 						this.messageInput = ''
 						this.offset = 0
 						this.scrollTop = 0
+						this.messages.splice(0)
 						this.getMessages()
 					})
 			}

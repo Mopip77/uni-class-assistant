@@ -129,7 +129,7 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var UpdateUserInfo = function UpdateUserInfo() {Promise.all(/*! require.ensure | components/UpdateUserInfo */[__webpack_require__.e("common/vendor"), __webpack_require__.e("components/UpdateUserInfo")]).then((function () {return resolve(__webpack_require__(/*! ../../components/UpdateUserInfo.vue */ 222));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var VanPopup = function VanPopup() {__webpack_require__.e(/*! require.ensure | wxcomponents/vant/dist/popup/index */ "common/vendor").then((function () {return resolve(__webpack_require__(/*! ../../wxcomponents/vant/dist/popup/index.js */ 229));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var _default =
+Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var UpdateUserInfo = function UpdateUserInfo() {Promise.all(/*! require.ensure | components/UpdateUserInfo */[__webpack_require__.e("common/vendor"), __webpack_require__.e("components/UpdateUserInfo")]).then((function () {return resolve(__webpack_require__(/*! ../../components/UpdateUserInfo.vue */ 234));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var VanPopup = function VanPopup() {__webpack_require__.e(/*! require.ensure | wxcomponents/vant/dist/popup/index */ "common/vendor").then((function () {return resolve(__webpack_require__(/*! ../../wxcomponents/vant/dist/popup/index.js */ 241));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var _default =
 
 
 
