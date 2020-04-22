@@ -23,10 +23,9 @@
 			<view class="header">
 				<view class="left">
 					<text>题目</text>
-					<view class="favorite-icon">
-						<!-- 先把位置固定了，还需要知道使用fav的api判断是否是已经收藏了 -->
-						<van-icon v-if="favorited" name="star-o" />
-						<van-icon v-else color="#e74c3c" name="star" />
+					<view v-if="look && leftSeconds <= 0" class="favorite-icon">
+						<van-icon v-if="!favorited" name="star-o" @tap="favorite" />
+						<van-icon v-else color="#e74c3c" name="star" @tap="unFavorite" />
 					</view>
 				</view>
 				<text v-if="!isTeacher && look && leftSeconds <= 0"> {{answer.score}} / {{question.score}}分</text>
@@ -116,6 +115,7 @@
 	import Notify from "@/wxcomponents/vant/dist/notify/notify.js";
 	import Icon from '@/wxcomponents/vant/dist/icon/index.js'
 	
+	import FavoriteUtils from '@/static/js/favorite.js'
 	import HttpCommons from '@/static/js/http_commons.js'
 	import ApiReference from '@/static/js/api_reference.js'
 	
@@ -262,7 +262,23 @@
 			},
 			optionChecked(option) {
 				option.checked = !option.checked
-			} 
+			},
+			
+			favorite() {
+				let type = this.questionType === 'objective' ? FavoriteUtils.OBJECTIVE_QUESTION_TYPE : FavoriteUtils.SUBJECTIVE_QUESTION_TYPE;
+				let p = FavoriteUtils.favorite(type, this.question.id)
+				p.then(data => {
+					this.favorited = true
+				})
+			},
+			
+			unFavorite() {
+				let type = this.questionType === 'objective' ? FavoriteUtils.OBJECTIVE_QUESTION_TYPE : FavoriteUtils.SUBJECTIVE_QUESTION_TYPE;
+				let p = FavoriteUtils.unFavorite(type, this.question.id)
+				p.then(data => {
+					this.favorited = false
+				})
+			}
 		},
 		created() {
 			console.log("Dindex", this.index);
@@ -271,6 +287,14 @@
 			console.log("look", this.look);
 			console.log("Doptions", this.Doptions);
 			console.log("answer", this.answer);
+			
+			if (this.look && this.leftSeconds <= 0) {
+				let type = this.questionType === 'objective' ? FavoriteUtils.OBJECTIVE_QUESTION_TYPE : FavoriteUtils.SUBJECTIVE_QUESTION_TYPE;
+				let p = FavoriteUtils.exist(type, this.question.id)
+				p.then(data => {
+					this.favorited = data
+				})
+			}
 		}
 	}
 </script>

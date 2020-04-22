@@ -1,0 +1,7 @@
+{
+  "usingComponents": {
+    "w-picker": "/components/w-picker/w-picker",
+    "van-notify": "/wxcomponents/vant/dist/notify/index",
+    "van-button": "/wxcomponents/vant/dist/button/index"
+  }
+}

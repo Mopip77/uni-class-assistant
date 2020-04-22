@@ -86,6 +86,8 @@
 .topic-box .topic-body .content {
       font-size: 26rpx;
       margin-top: 14rpx;
+      max-width: 98%;
+      word-break: break-all;
 }
 .comment-box {
   margin-top: 35rpx;
@@ -99,6 +101,8 @@
 .comment-box .comment-item .comment-body {
       padding: 12rpx 0 0 4rpx;
       font-size: 30rpx;
+      max-width: 98%;
+      word-break: break-all;
 }
 .comment-box .comment-item .sub-comment {
       font-size: 26rpx;

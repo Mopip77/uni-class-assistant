@@ -55,6 +55,7 @@
 .update-userinfo-box .name-field text {
       font-size: 28rpx;
       color: gray;
+      margin-left: 8rpx;
 }
 .update-userinfo-box .name-field input {
       font-size: 30rpx;
@@ -66,6 +67,7 @@
     margin-bottom: 54rpx;
 }
 .update-userinfo-box .school-field text {
+      margin-left: 8rpx;
       font-size: 28rpx;
       color: gray;
 }

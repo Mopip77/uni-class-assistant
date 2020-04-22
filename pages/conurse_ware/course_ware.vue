@@ -14,8 +14,8 @@
 				<view class="title">
 					<text>{{courseWare.displayName}}</text>
 					<view class="favorite-icon">
-						<van-icon v-if="!favorited" name="star-o" />
-						<van-icon v-else color="#e74c3c" name="star" />
+						<van-icon @tap="favorite" v-if="!favorited" name="star-o" />
+						<van-icon @tap="unFavorite" v-else color="#e74c3c" name="star" />
 					</view>
 				</view>
 				<van-button custom-class="button" square type="primary" @tap="downloadCourseWare">下载</van-button>
@@ -74,6 +74,7 @@
 	import ReadCourseWarePage from '@/components/ReadCourseWarePage.vue'
 
 	import CourseWareUtils from '@/static/js/course_ware.js'
+	import FavoriteUtils from '@/static/js/favorite.js'
 	import CommonUtils from '@/static/js/utils.js'
 
 	export default {
@@ -96,6 +97,7 @@
 				showModal: false,
 				viewingPageIdx: 0,
 				
+				favorited: false,
 				courseWare: {},
 				userCourseWare: {}
 			}
@@ -148,6 +150,20 @@
 						})
 					})
 				}
+			},
+			
+			favorite() {
+				let p = FavoriteUtils.favorite(FavoriteUtils.COURSE_WARE_TYPE, this.courseWare.id)
+				p.then(data => {
+					this.favorited = true
+				})
+			},
+			
+			unFavorite() {
+				let p = FavoriteUtils.unFavorite(FavoriteUtils.COURSE_WARE_TYPE, this.courseWare.id)
+				p.then(data => {
+					this.favorited = false
+				})
 			}
 		},
 
@@ -179,6 +195,11 @@
 					}
 					
 				});
+				
+				let p = FavoriteUtils.exist(FavoriteUtils.COURSE_WARE_TYPE, courseWareId)
+				p.then(data => {
+					this.favorited = data
+				})
 			}
 		}
 	}

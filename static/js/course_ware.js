@@ -112,5 +112,41 @@ export default {
 				}
 			})
 		})
-	}
+	},
+	
+	getCourseWaresAsCreator(offset, count) {
+		return new Promise((resolve, reject) => {
+			uni.request({
+				url: ApiReference.GET_COURSE_WARE_AS_CREATOR + '?offset=' + offset + '&count=' + count,
+				header: HttpCommons.getAuthenticationHeader(),
+				success: (resp) => {
+					if (HttpCommons.successCheck(resp)) {
+						resolve(resp.data.data)
+					}
+				},
+				fail: (err) => {
+					HttpCommons.commonFailHanlder(err)
+					reject(err)
+				}
+			})
+		})
+	},
+	
+	getCourseWaresAsReader(offset, count) {
+		return new Promise((resolve, reject) => {
+			uni.request({
+				url: ApiReference.GET_COURSE_WARE_AS_READER + '?offset=' + offset + '&count=' + count,
+				header: HttpCommons.getAuthenticationHeader(),
+				success: (resp) => {
+					if (HttpCommons.successCheck(resp)) {
+						resolve(resp.data.data)
+					}
+				},
+				fail: (err) => {
+					HttpCommons.commonFailHanlder(err)
+					reject(err)
+				}
+			})
+		})
+	},
 }

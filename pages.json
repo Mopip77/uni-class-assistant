@@ -84,6 +84,14 @@
             "path" : "pages/contest_list/contest_list",
             "style" : {}
         }
+        ,{
+            "path" : "pages/create_notification/create_notification",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/course_wares/course_wares",
+            "style" : {}
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",

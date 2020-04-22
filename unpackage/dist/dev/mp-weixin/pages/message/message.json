@@ -1,8 +1,10 @@
 {
   "usingComponents": {
     "uni-load-more": "/components/uni-load-more/uni-load-more",
+    "notification": "/components/Notification",
     "s-tabs": "/components/s-tabs/index",
     "s-tab": "/components/s-tab/index",
+    "van-tag": "/wxcomponents/vant/dist/tag/index",
     "van-image": "/wxcomponents/vant/dist/image/index"
   }
 }

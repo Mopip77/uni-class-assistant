@@ -34,7 +34,7 @@
 
 		<view class="func-select-box">
 			<van-grid column-num="3">
-				<navigator url="../conurse_ware/course_ware">
+				<navigator url="../course_wares/course_wares">
 					<van-grid-item use-slot>
 						<image src="../../static/img/icon/book.png" />
 						<text>课件库</text>

@@ -62,7 +62,8 @@
 			<view class="dock-row">
 				<view class="input-column" @tap="showModal(0)">我有一个大胆的想法...</view>
 				<view class="favorite-column">
-					<van-icon name="star-o" />
+					<van-icon @tap="favorite" v-if="!favorited" name="star-o" />
+					<van-icon @tap="unFavorite" v-else color="#e74c3c" name="star" />
 				</view>
 			</view>
 		</view>
@@ -80,6 +81,7 @@
 	import STab from "@/components/s-tab";
 	import SingleSubmitPopup from '@/components/SingleSubmitPopup.vue'
 
+	import FavoriteUtils from '@/static/js/favorite.js'
 	import TopicUtils from '@/static/js/topic.js'
 	import CommonUtils from '@/static/js/utils.js'
 
@@ -103,7 +105,8 @@
 				showNewCommentModal: false,
 				popupTitle: '',
 				newSubCommentIdx: 0, // 由于一级评论和子评论公用一个Popup，所以需要一个标志位，如果是评论子评论，那么把该位置为评论id，使用完恢复0
-
+				
+				favorited: false,
 				topic: {},
 
 				// comments 
@@ -284,6 +287,20 @@
 							this.offset === this.comments.length ? "more" : "noMore";
 						console.log("更新状态", this.offset, this.onloadingStatus);
 					})
+			},
+			
+			favorite() {
+				let p = FavoriteUtils.favorite(FavoriteUtils.TOPIC_TYPE, this.topic.id)
+				p.then(data => {
+					this.favorited = true
+				})
+			},
+			
+			unFavorite() {
+				let p = FavoriteUtils.unFavorite(FavoriteUtils.TOPIC_TYPE, this.topic.id)
+				p.then(data => {
+					this.favorited = false
+				})
 			}
 		},
 
@@ -292,6 +309,10 @@
 			let topicId = option.topicId
 			if (topicId) {
 				this.getTopic(topicId)
+				let p = FavoriteUtils.exist(FavoriteUtils.TOPIC_TYPE, topicId)
+				p.then(data => {
+					this.favorited = data
+				})
 			} else {
 				Notify({
 					type: "danger",
@@ -360,6 +381,8 @@
 			.content {
 				font-size: 26rpx;
 				margin-top: 14rpx;
+				max-width: 98%;
+				word-break: break-all;
 			}
 		}
 	}
@@ -376,6 +399,8 @@
 			.comment-body {
 				padding: 12rpx 0 0 4rpx;
 				font-size: 30rpx;
+				max-width: 98%;
+				word-break: break-all;
 			}
 
 			.sub-comment {

@@ -24,7 +24,10 @@
 
 								<view class="right">
 									<view class="like-count">
-										<van-icon name="like-o" /> <text>{{topic.likeCount}}</text></view>
+										<van-icon v-if="!topic.like" name="like-o" />
+										<van-icon v-else name="like" color="red" />
+										<text>{{topic.likeCount}}</text>
+									</view>
 									<view class="comment-count">
 										<van-icon name="comment-o" /> <text>{{topic.commentCount}}</text></view>
 								</view>
@@ -52,9 +55,13 @@
 
 								<view class="right">
 									<view class="like-count">
-										<van-icon name="like-o" /> <view class="count">{{topic.likeCount}}</view></view>
+										<van-icon name="like-o" />
+										<view class="count">{{topic.likeCount}}</view>
+									</view>
 									<view class="comment-count">
-										<van-icon name="comment-o" /> <view class="count">{{topic.commentCount}}</view></view>
+										<van-icon name="comment-o" />
+										<view class="count">{{topic.commentCount}}</view>
+									</view>
 								</view>
 							</view>
 						</view>
@@ -179,7 +186,7 @@
 							if (null !== dateObj) {
 								e.updateGmt = dateObj.defaultDatetime;
 							}
-							
+
 							dateObj = CommonUtils.dateConverter(e.createGmt);
 							if (null !== dateObj) {
 								e.createGmt = dateObj.defaultDatetime;
@@ -354,21 +361,22 @@
 							font-size: 24rpx;
 							margin-left: 6rpx;
 						}
-						
+
 						.count {
-							font-size: 24rpx;
+							font-size: 26rpx;
+							margin-left: 4rpx;
 						}
 
 						.right {
 							width: 180rpx;
 							display: flex;
 							justify-content: space-around;
-							
+
 							.like-count {
 								display: flex;
 								align-items: center;
 							}
-							
+
 							.comment-count {
 								display: flex;
 								align-items: center;

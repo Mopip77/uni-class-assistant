@@ -59,11 +59,26 @@ export default {
 	GET_COURSE_WARE_BY_COURSEID: API_SERVER + 'course-ware/course',
 	READ_COURSE_WARE: API_SERVER + 'course-ware/read',
 	COURSE_WARE_COMMENT: API_SERVER + 'course-ware/comment',
+	GET_COURSE_WARE_AS_CREATOR: API_SERVER + 'course-ware/creator',
+	GET_COURSE_WARE_AS_READER: API_SERVER + 'course-ware/reader',
+	
+	// notification
+	NOTIFICATION: API_SERVER + 'notification',
+	NOTIFICATION_LIST: API_SERVER + 'notification/list',
+	NOTIFICATION_CALLBACK_URL: API_SERVER + 'notification/callbackUrl',
 	
 	// upload
 	UPLOAD_AVATAR: API_SERVER + 'upload/avatar',
 	UPLOAD_QUESTION: API_SERVER + 'upload/question',
 	UPLOAD_COURSE_WARE: API_SERVER + 'upload/course-ware',
+	
+	// favorite
+	FAVORITE: API_SERVER + 'favorite',
+	FAVORITE_LIST: API_SERVER + 'favorite/list',
+	FAVORITE_EXIST: API_SERVER + 'favorite/exist',
+	FAVORITE_BY_TYPE: API_SERVER + 'favorite/type',
+	
+	
 	
 	TEST_URL: API_SERVER + 'test'
 }

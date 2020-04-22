@@ -18,7 +18,9 @@
     "pages/chat/chat",
     "pages/create_contest/create_contest",
     "pages/revise/revise",
-    "pages/contest_list/contest_list"
+    "pages/contest_list/contest_list",
+    "pages/create_notification/create_notification",
+    "pages/course_wares/course_wares"
   ],
   "subPackages": [],
   "window": {
@@ -49,6 +51,5 @@
       }
     ]
   },
-  "usingComponents": {},
-  "sitemapLocation": "sitemap73.json"
+  "usingComponents": {}
 }

@@ -186,7 +186,6 @@
 					[],
 					[]
 				],
-				steps: [],
 				offsets: [0, 0, 0, 0],
 				counts: [10, 10, 10, 10],
 				onloadingStatuses: ["more", "more", "more", "more"],
@@ -284,8 +283,14 @@
 						}
 
 						// 使用统一modal创建简单内容
-						// 公告
-						if (idx === 3) {
+						if (idx === 4) {
+							// 通知
+							uni.navigateTo({
+								url: '../create_notification/create_notification?courseId=' + this.course.id
+							})
+						}
+						else if (idx === 3) {
+							// 公告
 							this.modalTitle = '发布公告';
 							this.modalFieldName = '公告内容';
 							this.modalPlaceHolder = '请输入公告内容...';

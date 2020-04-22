@@ -309,6 +309,8 @@
 			.content {
 				font-size: 30rpx;
 				margin-top: 14rpx;
+				max-width: 98%;
+				word-break: break-all;
 			}
 		}
 	}
@@ -325,6 +327,8 @@
 			.sub-comment-body {
 				padding: 12rpx 0 0 4rpx;
 				font-size: 30rpx;
+				max-width: 98%;
+				word-break: break-all;
 
 				.parent-name {
 					color: #039BE5;

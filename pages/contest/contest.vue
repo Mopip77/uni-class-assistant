@@ -46,7 +46,7 @@
 
 			<view class="question-list objective-question-list">
 				<view @tap="gotoQuestion(idx, 'objective')" 
-				:class="[objectiveQuestions[idx].answered ? 'answered' : '', revised && objectiveAnswers[idx].score > 0 ? 'correct' : 'error']" 
+				:class="[objectiveQuestions[idx].answered ? 'answered' : '', revised ? (objectiveAnswers[idx].score > 0 ? 'correct' : 'error') : '']" 
 				class="question-item objective-question-item"
 				 v-for="(question, idx) in objectiveQuestions" :key="idx">
 					<view>{{ idx + 1 }}</view>
@@ -248,9 +248,12 @@
 			},
 		},
 		onLoad(option) {
-			// this.contestId = '5e932eafe06a54259f5c6d75'
-			// this.contestId = "5e9428f5d0e42c34fedf4bea"
 			this.contestId = option.contestId
+			
+			// 这两个用于页面直接跳转到问题页面，如果都存在那么就在加载完试卷后自动跳转
+			let qId = option.questionId
+			let type = option.questionType
+			
 			let that = this
 			let promise = ContestUtils.getContestDetail(this.contestId)
 			promise
@@ -287,17 +290,29 @@
 					} else {
 						// 如果是学生就要向服务器获取answer
 						let answerData = await ContestUtils.getAnswer(that.contestId)
-						that.revised = answerData.revised
-						that.answerId = answerData.id
-						that.gotScore = answerData.score
-
-						// 设置倒计时时间
-						dateObj = CommonUtils.dateConverter(answerData.startGmt, false)
-						that.leftSecond = Math.floor(ContestUtils.getLeftDate(dateObj.defaultDatetime, that.publishDate, that.deadline,
-							that.limitMinutes) / 1000)
+						if (answerData) {
+							that.revised = answerData.revised
+							that.answerId = answerData.id
+							that.gotScore = answerData.score
+							
+							// 设置倒计时时间
+							dateObj = CommonUtils.dateConverter(answerData.startGmt, false)
+							that.leftSecond = Math.floor(ContestUtils.getLeftDate(dateObj.defaultDatetime, that.publishDate, that.deadline,
+								that.limitMinutes) / 1000)
+						} else {
+							// 说明学生并没有提交过试卷
+							that.revised = true
+							that.subjectiveAnswers = that.subjectiveQuestions.map(e => {
+								return {
+									score: 0,
+									content: '',
+									imageUrls: []
+								}
+							})
+						}
 
 						// 如果回答没有说明是新创建的，先生成对应数量的答案
-						if (answerData.objectiveAnswers.length === 0) {
+						if (!answerData || answerData.objectiveAnswers.length === 0) {
 							that.objectiveAnswers = that.objectiveQuestions.map(e => {
 								return {
 									score: 0,
@@ -308,7 +323,7 @@
 							that.objectiveAnswers = answerData.objectiveAnswers
 						}
 
-						if (answerData.subjectiveAnswers.length === 0) {
+						if (!answerData || answerData.subjectiveAnswers.length === 0) {
 							that.subjectiveAnswers = that.subjectiveQuestions.map(e => {
 								return {
 									score: 0,
@@ -328,6 +343,31 @@
 						that.subjectiveQuestions.forEach((e, idx) => {
 							e.answered = that.subjectiveAnswers[idx].content || that.subjectiveAnswers[idx].imageUrls.length > 0
 						})
+					}
+				
+					// redirect
+					console.log("看看内容", qId, type);
+					if (qId && type) {
+						let questionList = []
+						if (type === 'objective') {
+							questionList = that.objectiveQuestions
+						} else {
+							questionList = that.subjectiveQuestions
+						}
+						
+						let result = questionList.map((question, idx) => {
+							if (question.id === qId) {
+								return idx
+							} else {
+								return -1
+							}
+						}).filter(i => i >= 0)
+						
+						console.log("看看result", result);
+						
+						if (result.length > 0) {
+							that.gotoQuestion(result[0], type)
+						}
 					}
 				})
 		},

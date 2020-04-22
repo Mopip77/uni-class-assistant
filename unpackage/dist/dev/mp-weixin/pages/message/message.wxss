@@ -24,7 +24,14 @@
 /* 垂直间距 */
 /* 透明度 */
 /* 文章场景相关 */
-.chat-list {
+.on-cover {
+  position: fixed;
+  z-index: 9988;
+  width: 100%;
+  height: 100%;
+  background-color: #f2f2f2;
+}
+.list {
   display: -webkit-box;
   display: -webkit-flex;
   display: flex;
@@ -35,11 +42,11 @@
   background-color: white;
   margin: 4rpx 0;
 }
-.chat-list .left image {
+.list .left image {
     width: 80rpx;
     height: 80rpx;
 }
-.chat-list .mid {
+.list .mid {
     display: -webkit-box;
     display: -webkit-flex;
     display: flex;
@@ -49,11 +56,11 @@
             flex-direction: column;
     margin-left: 20rpx;
 }
-.chat-list .mid .creator-name {
+.list .mid .creator-name {
       font-size: 28rpx;
       font-weight: 600;
 }
-.chat-list .mid .content {
+.list .mid .content {
       font-size: 22rpx;
       color: gray;
       overflow: hidden;
@@ -61,15 +68,61 @@
       text-overflow: ellipsis;
       white-space: nowrap;
 }
-.chat-list .right {
+.list .right {
     margin-left: auto;
 }
-.chat-list .right .update-time {
+.list .right .update-time {
       color: gray;
       margin-top: -40rpx;
       font-size: 24rpx;
       -webkit-box-align: end;
       -webkit-align-items: flex-end;
               align-items: flex-end;
+}
+.notification-list {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: start;
+  -webkit-align-items: flex-start;
+          align-items: flex-start;
+  padding: 20rpx 10rpx 6rpx 10rpx;
+}
+.notification-list .header {
+    font-size: 30rpx;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+            align-items: center;
+}
+.notification-list .header view {
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: flex;
+      -webkit-box-align: center;
+      -webkit-align-items: center;
+              align-items: center;
+      margin-left: 10rpx;
+      font-weight: 500;
+}
+.notification-list .content {
+    margin: 6rpx 10rpx;
+}
+.notification-list .date-box {
+    margin-top: 20rpx;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    font-size: 24rpx;
+    color: gray;
+}
+.readed {
+  color: gray;
 }
 

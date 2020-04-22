@@ -1,0 +1,7 @@
+{
+  "usingComponents": {
+    "uni-load-more": "/components/uni-load-more/uni-load-more",
+    "s-tabs": "/components/s-tabs/index",
+    "s-tab": "/components/s-tab/index"
+  }
+}

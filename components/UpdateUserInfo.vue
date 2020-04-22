@@ -200,6 +200,7 @@
 			text {
 				font-size: 28rpx;
 				color: gray;
+				margin-left: 8rpx;
 			}
 
 			input {
@@ -211,6 +212,7 @@
 			margin-bottom: 54rpx;
 
 			text {
+				margin-left: 8rpx;
 				font-size: 28rpx;
 				color: gray;
 			}
