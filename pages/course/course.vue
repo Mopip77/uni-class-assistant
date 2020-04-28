@@ -5,7 +5,6 @@
 		</view>
 
 		<view v-if="showModal" class="on-top">
-			<!-- 只用于新建公告 -->
 			<SingleSubmitPopup type="textarea" :title="modalTitle" :fieldName="modalFieldName" :placeHolder="modalPlaceHolder"
 			 :submitText="modalSubmitText" :contentNullable="false" :contentIsNumber="false" @closeModal="closeModal"
 			 @successCallBack="submitCallBack" />
@@ -20,6 +19,8 @@
 					{{ course.courseName }}
 					<view class="course-id"> 课程号: {{ course.id }} </view>
 				</view>
+				
+				<van-button v-if="course.isTeacher" custom-class="score-cal" square type="danger" @tap="scoreCalculate">分数结算</van-button>
 			</view>
 			<view class="footer">
 				<view class="info">
@@ -91,6 +92,7 @@
 									<image :src="courseWare.creator.avatarUrl"></image>
 									<text>{{courseWare.creator.nickname}}</text>
 								</view>
+								<van-tag v-if="!courseWare.published" plain type="primary">未发布</van-tag>
 							</view>
 						</view>
 						<uni-load-more :status="onloadingStatuses[1]" @clickLoadMore="loadMore" :contentText="onloadingTexts[1]"></uni-load-more>
@@ -100,14 +102,17 @@
 					<view class="list contest-list">
 						<view class="item contest-item" v-for="(contest, idx) in datas[2]" :key="idx" @tap="goToContest(idx)">
 							<view class="header">
-								<view v-if="contest.status === '未开始'" class="status" style="color: #607D8B;">未开始</view>
-								<view v-if="contest.status === '已结束'" class="status" style="font-style: italic;">已结束</view>
-								<view v-if="contest.status === '进行中'" class="status" style="color: red;">进行中</view>
-								<view v-if="contest.status === '可进行'" class="status" style="color: #e57373;">可进行</view>
-								<view class="time-box">
+								<view v-if="!contest.published" class="status" style="font-style: italic;color: #E65100;">未发布</view>
+								<view v-else-if="contest.status === '未开始'" class="status" style="color: #607D8B;">未开始</view>
+								<view v-else-if="contest.status === '已结束'" class="status" style="font-style: italic;">已结束</view>
+								<view v-else-if="contest.status === '进行中'" class="status" style="color: red;">进行中</view>
+								<view v-else-if="contest.status === '可进行'" class="status" style="color: #e57373;">可进行</view>
+								
+								<view v-if="contest.published" class="time-box">
 									<view v-if="contest.publishDate" class="publish-date">开始时间:{{contest.publishDate}}</view>
 									<view v-if="contest.deadline" class="publish-date">截止时间:{{contest.deadline}}</view>
 								</view>
+								<view v-else class="class-name">{{contest.className}}</view>
 							</view>
 							<view class="footer">
 								<view class="user-box">
@@ -121,7 +126,29 @@
 						<uni-load-more :status="onloadingStatuses[2]" @clickLoadMore="loadMore" :contentText="onloadingTexts[2]"></uni-load-more>
 					</view>
 				</STab>
-				<STab title="课堂">课堂</STab>
+				<STab title="课堂">
+					<view class="list class-list">
+						<view class="item class-item" v-for="(classObj, idx) in datas[3]" :key="idx" @tap="goToClass(idx)">
+							<view class="header">
+								<van-tag v-if="classObj.published === 0" plain type="primary">未发布</van-tag>
+								<van-tag v-else-if="classObj.finished === 0" plain type="success">进行中</van-tag>
+								<van-tag v-else plain type="danger">已结课</van-tag>
+								<view class="title">
+									{{classObj.className}}
+								</view>
+							</view>
+							<view class="footer">
+								<view class="user-box">
+									<image :src="classObj.creator.avatarUrl"></image>
+									<text>{{classObj.creator.nickname}}</text>
+								</view>
+
+								<view class="create-date">{{classObj.createGmt}}</view>
+							</view>
+						</view>
+						<uni-load-more :status="onloadingStatuses[3]" @clickLoadMore="loadMore" :contentText="onloadingTexts[3]"></uni-load-more>
+					</view>
+				</STab>
 			</STabs>
 		</view>
 	</view>
@@ -135,7 +162,9 @@
 	import Icon from "@/wxcomponents/vant/dist/icon/index.js";
 	import Button from "@/wxcomponents/vant/dist/button/index.js";
 	import Steps from "@/wxcomponents/vant/dist/steps/index.js";
+	import Tag from '@/wxcomponents/vant/dist/tag/index.js'
 
+	import ClassUtils from '@/static/js/class.js';
 	import CourseWareUtils from '@/static/js/course_ware.js'
 	import CourseUtils from "@/static/js/course.js";
 	import BulletinUtils from "@/static/js/bulletin.js";
@@ -158,6 +187,7 @@
 			UniLoadMore,
 			STabs,
 			STab,
+			"van-tag": Tag,
 			"van-grid": Grid,
 			"van-grid-item": GridItem,
 			"van-notify": VanNotify,
@@ -258,8 +288,8 @@
 					console.log("获得试卷", data);
 				} else if (idx === 3) {
 					// 加载课堂
-					console.log("获得课堂");
-					return;
+					data = await this.getClass()
+					console.log("获得课堂", data);
 				}
 
 				this.datas[idx].push(...data)
@@ -288,8 +318,7 @@
 							uni.navigateTo({
 								url: '../create_notification/create_notification?courseId=' + this.course.id
 							})
-						}
-						else if (idx === 3) {
+						} else if (idx === 3) {
 							// 公告
 							this.modalTitle = '发布公告';
 							this.modalFieldName = '公告内容';
@@ -308,6 +337,11 @@
 							this.modalPlaceHolder = '请输入课件名...';
 							this.modalSubmitText = '上传文件';
 							this.showModal = true;
+						} else if (idx === 0) {
+							// 课堂
+							uni.navigateTo({
+								url: '../create_class/create_class?courseId=' + this.course.id
+							})
 						}
 
 					}
@@ -354,7 +388,7 @@
 						// #ifdef APP-PLUS
 						currentWebview: that.$mp.page.$getAppWebview(),
 						// #endif
-						url: ApiReference.UPLOAD_COURSE_WARE, //测试地址，记得更换
+						url: ApiReference.UPLOAD_COURSE_WARE,
 						name: 'file',
 						header: HttpCommons.getAuthenticationHeader(),
 						formData: JSON.stringify({
@@ -386,6 +420,12 @@
 						})
 						return;
 					}
+				} else if (!contest.published) {
+					Notify({
+						type: 'danger',
+						message: '测试还未发布'
+					})
+					return;
 				}
 
 				uni.navigateTo({
@@ -393,10 +433,16 @@
 				})
 			},
 			
+			goToClass(idx) {
+				uni.navigateTo({
+					url: '../class/class?classId=' + this.datas[3][idx].id
+				})
+			},
+
 			// 进入courseWare界面
 			goToCourseWare(idx) {
 				let courseWare = this.datas[1][idx]
-				
+
 				uni.navigateTo({
 					url: '../conurse_ware/course_ware?courseWareId=' + courseWare.id
 				})
@@ -469,6 +515,22 @@
 					});
 				})
 			},
+
+			// 获取课堂
+			getClass() {
+				let that = this
+
+				return new Promise((resolve, reject) => {
+					let promise = ClassUtils.getClassByCourseId(that.course.id);
+					promise.then(data => {
+						data.forEach(e => {
+							Utils.dateConverterBatch(e, true, 'createGmt')
+						});
+
+						resolve(data);
+					});
+				})
+			},
 		},
 		onLoad(option) {
 			// 传入id
@@ -534,6 +596,8 @@
 			margin-bottom: 22rpx;
 			margin-top: 15rpx;
 			margin-left: 15rpx;
+			display: flex;
+			justify-content: space-between;
 
 			.title {
 				font-size: 60rpx;
@@ -546,6 +610,13 @@
 					margin-top: 41rpx;
 					font-weight: normal;
 				}
+			}
+			
+			.score-cal {
+				width: 180rpx;
+				height: 70rpx;
+				border-radius: 6rpx;
+				margin-right: 12rpx;
 			}
 		}
 
@@ -611,7 +682,7 @@
 		.list {
 			.bulletin-body {
 				background-color: $global-background-color;
-			
+
 				.van-step {
 					border-radius: 20rpx;
 					margin-right: 10rpx;
@@ -619,22 +690,23 @@
 					padding: 0;
 				}
 			}
-			
+
 			.bulletin-desc {
 				font-size: 24rpx;
 			}
-			
+
 			.item {
 				@include common-card;
 				display: flex;
 				flex-direction: column;
-				height: 200rpx;
+				height: 180rpx;
 				background-image: url(~@/static/img/course-card-background.png);
 
 				.header {
 					display: flex;
 					justify-content: space-between;
 					padding: 10rpx 10rpx;
+					align-items: center;
 
 					.status {
 						font-size: 50rpx;
@@ -646,6 +718,10 @@
 						color: #424242;
 						display: flex;
 						flex-direction: column;
+					}
+					
+					.class-name {
+						font-size: 32rpx;
 					}
 				}
 
@@ -670,18 +746,66 @@
 						text {
 							margin-left: 10rpx;
 						}
+						
+						.van-tag {
+							background-color: $global-background-color;
+						}
 					}
 				}
 			}
 		}
-	
+
 		.course-ware-list {
 			.course-ware-item {
 				height: 160rpx;
-				
+
 				.display-name {
 					font-size: 34rpx;
 					font-weight: 600;
+				}
+			}
+			
+			.footer {
+				.van-tag {
+					background-color: $global-background-color;
+				}
+			}
+		}
+		
+		.class-list {
+			.class-item {
+				height: 174rpx;
+				
+				.header {
+					display: flex;
+					justify-content: flex-start;
+					align-items: center;
+					font-size: 32rpx;
+					font-weight: 500;
+					padding: 20rpx 10rpx;
+					
+					.title {
+						margin-left: 10rpx;
+						overflow: hidden;
+						text-overflow: ellipsis;
+						white-space: nowrap;
+					}
+					
+					van-tag {
+						display: flex;
+						align-items: center;
+						
+						.van-tag {
+							background-color: $global-background-color;
+						}
+					}
+				}
+				
+				.footer {
+					.create-date {
+						font-size: 24rpx;
+						color: #37474F;
+					}
 				}
 			}
 		}

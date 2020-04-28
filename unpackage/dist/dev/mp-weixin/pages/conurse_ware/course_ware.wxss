@@ -63,6 +63,15 @@
       -webkit-align-items: center;
               align-items: center;
 }
+.info-header .line-1 .favorite-icon {
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: flex;
+      -webkit-box-align: center;
+      -webkit-align-items: center;
+              align-items: center;
+      margin-left: 10rpx;
+}
 .info-header .line-1 .button {
       width: 120rpx;
       height: 54rpx;

@@ -20,7 +20,7 @@
 					<van-icon name="good-job-o" /> <text>{{topic.likeCount}}</text>
 				</view>
 				<view v-else class="like-count" @tap="unlikeTopic">
-					<van-icon name="good-job" color="red" /> <text>{{topic.likeCount + 1}}</text>
+					<van-icon name="good-job" color="red" /> <text>{{topic.likeCount}}</text>
 				</view>
 			</view>
 			<view class="topic-body">
@@ -44,7 +44,7 @@
 						<van-icon name="good-job-o" /> <text>{{comment.likeCount}}</text>
 					</view>
 					<view v-else class="like-count" @tap="unlikeComment(idx)">
-						<van-icon name="good-job" color="red" /> <text>{{comment.likeCount + 1}}</text>
+						<van-icon name="good-job" color="red" /> <text>{{comment.likeCount}}</text>
 					</view>
 				</view>
 				<view class="comment-body">
@@ -184,6 +184,7 @@
 				promise
 					.then(() => {
 						this.topic.like = true
+						this.topic.likeCount += 1
 					})
 			},
 			unlikeTopic() {
@@ -195,6 +196,7 @@
 				promise
 					.then(() => {
 						this.topic.like = false
+						this.topic.likeCount -= 1
 					})
 			},
 			likeComment(commentIdx) {
@@ -206,6 +208,7 @@
 				promise
 					.then(() => {
 						this.comments[commentIdx].like = true
+						this.comments[commentIdx].likeCount += 1
 					})
 			},
 			unlikeComment(commentIdx) {
@@ -217,6 +220,7 @@
 				promise
 					.then(() => {
 						this.comments[commentIdx].like = false
+						this.comments[commentIdx].likeCount -= 1
 					})
 			},
 
@@ -305,7 +309,6 @@
 		},
 
 		onLoad(option) {
-			// let topicId = 4
 			let topicId = option.topicId
 			if (topicId) {
 				this.getTopic(topicId)

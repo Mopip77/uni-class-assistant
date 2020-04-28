@@ -5,6 +5,7 @@
     "single-submit-popup": "/components/SingleSubmitPopup",
     "s-tabs": "/components/s-tabs/index",
     "s-tab": "/components/s-tab/index",
+    "van-tag": "/wxcomponents/vant/dist/tag/index",
     "van-grid": "/wxcomponents/vant/dist/grid/index",
     "van-grid-item": "/wxcomponents/vant/dist/grid-item/index",
     "van-notify": "/wxcomponents/vant/dist/notify/index",

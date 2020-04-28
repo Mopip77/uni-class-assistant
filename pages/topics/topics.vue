@@ -38,15 +38,15 @@
 				</STab>
 				<STab title="最新">
 					<view class="topic-list">
-						<view class="topic-item" v-for="(topic, idx) in topics" :key="idx">
+						<view class="topic-item" @tap="openTopic(topic.id)" v-for="(topic, idx) in topics" :key="idx">
 							<view class="header">
-								<view class="title" @tap="openTopic(topic.id)">{{topic.title}}</view>
+								<view class="title">{{topic.title}}</view>
 								<view class="user-box">
 									<text>{{topic.creatorName}}</text>
 									<van-image round :src="topic.creatorAvatar"></van-image>
 								</view>
 							</view>
-							<view class="content" @tap="openTopic(topic.id)">{{topic.content}}</view>
+							<view class="content">{{topic.content}}</view>
 							<view class="footer">
 								<view class="left">
 									<text v-if="sortedIdx === 1" class="update-time">更新于: {{topic.updateGmt}}</text>
@@ -182,15 +182,7 @@
 					.then(data => {
 						console.log("获取到topics", data);
 						data.forEach(e => {
-							let dateObj = CommonUtils.dateConverter(e.updateGmt);
-							if (null !== dateObj) {
-								e.updateGmt = dateObj.defaultDatetime;
-							}
-
-							dateObj = CommonUtils.dateConverter(e.createGmt);
-							if (null !== dateObj) {
-								e.createGmt = dateObj.defaultDatetime;
-							}
+							CommonUtils.dateConverterBatch(e, false, 'updateGmt', 'createGmt')
 						});
 
 						if (this.offset === 0) {

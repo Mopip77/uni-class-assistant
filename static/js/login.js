@@ -37,11 +37,11 @@ export default {
 						console.log("needUserInfo", needUploadUserInfo);
 
 						if (needUploadUserInfo) {
-							// console.log("上传用户信息")
+							console.log("上传用户信息")
 							uni.getUserInfo({
 								provider,
 								success: function(infoRes) {
-									// console.log('user info：', infoRes)
+									console.log('user info：', infoRes)
 									G_store.commit("LOGIN")
 
 									// 上传userInfo到后台
@@ -66,7 +66,11 @@ export default {
 											}
 										}
 									})
+								},
+								fail: (err) => {
+									console.log("err:", err);
 								}
+								
 							});
 						}
 

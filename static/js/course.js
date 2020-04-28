@@ -213,5 +213,99 @@ export default {
 				}
 			})
 		});
+	},
+	
+	assignTeacher(assignedUserId, courseId) {
+		return new Promise((resolve, reject) => {
+			uni.request({
+				url: ApiReference.ASSIGN_TEACHER + '?targetUserId=' + assignedUserId + '&courseId=' + courseId,
+				method: "PUT",
+				header: HttpCommons.getAuthenticationHeader(),
+				success: (resp) => {
+					if (HttpCommons.successCheck(resp)) {
+						resolve(resp.data.data)
+					}
+				},
+				fail: (err) => {
+					HttpCommons.commonFailHanlder(err)
+					reject(err)
+				}
+			})
+		});
+	},
+	
+	getScoreRule(courseId) {
+		return new Promise((resolve, reject) => {
+			uni.request({
+				url: ApiReference.SCOER_RULE + '?courseId=' + courseId,
+				header: HttpCommons.getAuthenticationHeader(),
+				success: (resp) => {
+					if (HttpCommons.successCheck(resp)) {
+						resolve(resp.data.data)
+					}
+				},
+				fail: (err) => {
+					HttpCommons.commonFailHanlder(err)
+					reject(err)
+				}
+			})
+		});
+	},
+	
+	updateScoreRule(rule) {
+		return new Promise((resolve, reject) => {
+			uni.request({
+				url: ApiReference.SCOER_RULE,
+				method: "POST",
+				data: rule,
+				header: HttpCommons.getAuthenticationHeader(),
+				success: (resp) => {
+					if (HttpCommons.successCheck(resp)) {
+						resolve(resp.data.data)
+					}
+				},
+				fail: (err) => {
+					HttpCommons.commonFailHanlder(err)
+					reject(err)
+				}
+			})
+		});
+	},
+	
+	scoreCal(courseId) {
+		return new Promise((resolve, reject) => {
+			uni.request({
+				url: ApiReference.SCOER_CAL + '?courseId=' + courseId,
+				method: "POST",
+				header: HttpCommons.getAuthenticationHeader(),
+				success: (resp) => {
+					if (HttpCommons.successCheck(resp)) {
+						resolve(resp.data.data)
+					}
+				},
+				fail: (err) => {
+					HttpCommons.commonFailHanlder(err)
+					reject(err)
+				}
+			})
+		});
+	},
+	
+	getStudentScoreList(courseId) {
+		return new Promise((resolve, reject) => {
+			uni.request({
+				url: ApiReference.GET_STUDENT_SCORE + '?courseId=' + courseId,
+				header: HttpCommons.getAuthenticationHeader(),
+				success: (resp) => {
+					if (HttpCommons.successCheck(resp)) {
+						resolve(resp.data.data)
+					}
+				},
+				fail: (err) => {
+					HttpCommons.commonFailHanlder(err)
+					reject(err)
+				}
+			})
+		});
 	}
 }

@@ -106,7 +106,8 @@
 											{{course.classInfo}}
 										</view>
 										<view class="teacher">
-											{{course.creatorName}}老师
+											<image :src="course.creator.avatarUrl"></image>
+											{{course.creator.nickname}}老师
 										</view>
 									</view>
 								</view>
@@ -382,6 +383,15 @@
 
 					.teacher {
 						font-size: 30rpx;
+						display: flex;
+						align-content: center;
+						
+						image {
+							width: 44rpx;
+							height: 44rpx;
+							border-radius: 50%;
+							margin-right: 10rpx;
+						}
 					}
 
 					.user-count {

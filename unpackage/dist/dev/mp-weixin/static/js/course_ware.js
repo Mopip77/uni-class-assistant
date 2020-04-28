@@ -25,6 +25,28 @@ export default {
 	},
 	
 	/**
+	 * @param {String} courseWareId
+	 */
+	publishCourseWare: function(courseWareId) {
+		return new Promise((resolve, reject) => {
+			uni.request({
+				url: ApiReference.PUBLISH_COURSE_WARE + '?courseWareId=' + courseWareId,
+				method: "POST",
+				header: HttpCommons.getAuthenticationHeader(),
+				success: (resp) => {
+					if (HttpCommons.successCheck(resp)) {
+						resolve(resp.data.data)
+					}
+				},
+				fail: (err) => {
+					HttpCommons.commonFailHanlder(err)
+					reject(err)
+				}
+			})
+		})
+	},
+	
+	/**
 	 * 通过courseId获取课件
 	 */
 	getCourseWareByCourseId: function(courseId, offset = 0, count = 10) {
@@ -136,6 +158,25 @@ export default {
 		return new Promise((resolve, reject) => {
 			uni.request({
 				url: ApiReference.GET_COURSE_WARE_AS_READER + '?offset=' + offset + '&count=' + count,
+				header: HttpCommons.getAuthenticationHeader(),
+				success: (resp) => {
+					if (HttpCommons.successCheck(resp)) {
+						resolve(resp.data.data)
+					}
+				},
+				fail: (err) => {
+					HttpCommons.commonFailHanlder(err)
+					reject(err)
+				}
+			})
+		})
+	},
+	
+	deleteCourseWare: function(courseWareId) {
+		return new Promise((resolve, reject) => {
+			uni.request({
+				url: ApiReference.COURSE_WARE + '?courseWareId=' + courseWareId,
+				method: "DELETE",
 				header: HttpCommons.getAuthenticationHeader(),
 				success: (resp) => {
 					if (HttpCommons.successCheck(resp)) {

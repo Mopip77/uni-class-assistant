@@ -17,7 +17,10 @@
 		<van-notify class="on-top" id="van-notify" />
 		<van-dialog id="van-dialog" />
 
-		<view v-if="leftSecond >= 0" class="count-down-box">
+		<view v-if="!published" class="expired">
+			随堂测试还未发布
+		</view>
+		<view v-else-if="leftSecond >= 0" class="count-down-box">
 			<uni-countdown class="on-everything" color="black" backgroundColor="#f2f2f2" :day="0" :hour="0" :minute="0" :second="leftSecond"
 			 @timeup="autoSubmitAnswer"></uni-countdown>
 		</view>
@@ -120,6 +123,8 @@
 				isTeacher: false,
 				limitMinutes: 0,
 				leftSecond: -1,
+				contestType: 0,
+				published: false,
 				fullScore: 0,
 				revised: false,
 				publishDate: null,
@@ -146,11 +151,13 @@
 			},
 			// 倒计时结束自动提交
 			autoSubmitAnswer() {
-				uni.showToast({
-					title: '自动提交中...'
-				})
-				
-				this.submitAnswerInternal()
+				if (!this.isTeacher) {
+					uni.showToast({
+						title: '自动提交中...'
+					})
+					
+					this.submitAnswerInternal()
+				}
 			},
 			// 取消创建
 			onCancel() {
@@ -270,10 +277,18 @@
 					that.objectiveQuestions = data.objectiveQuestions
 					that.subjectiveQuestions = data.subjectiveQuestions
 					that.fullScore = data.fullScore
+					that.contestType = data.type
+					that.published = data.published
 
 					// getAllAnswers
 					if (that.isTeacher) {
-						that.leftSecond = Math.floor(ContestUtils.getLeftDateForTeacher(that.publishDate, that.deadline, that.limitMinutes) / 1000)
+						// 首先leftSecond对于老师来说只是用于判断测试是否过期，而且如果是未发布的quiz只有limitMinutes，并没有另外两个，所以直接设置leftSecond为正数即可
+						if (!that.publishDate && !that.deadline) {
+							that.leftSecond = 500000
+						} else {
+							that.leftSecond = Math.floor(ContestUtils.getLeftDateForTeacher(that.publishDate, that.deadline, that.limitMinutes) / 1000)
+						}
+						
 						// 如果没有就新建
 						that.objectiveAnswers = that.objectiveQuestions.map(e => {
 							return {

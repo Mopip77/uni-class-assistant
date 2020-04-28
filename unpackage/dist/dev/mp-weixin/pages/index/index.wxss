@@ -134,6 +134,17 @@
 }
 .course-select-root .course-list .course-item .footer .teacher {
           font-size: 30rpx;
+          display: -webkit-box;
+          display: -webkit-flex;
+          display: flex;
+          -webkit-align-content: center;
+                  align-content: center;
+}
+.course-select-root .course-list .course-item .footer .teacher image {
+            width: 44rpx;
+            height: 44rpx;
+            border-radius: 50%;
+            margin-right: 10rpx;
 }
 .course-select-root .course-list .course-item .footer .user-count {
           font-size: 30rpx;

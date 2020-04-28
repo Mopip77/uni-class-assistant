@@ -1,0 +1,6 @@
+{
+  "usingComponents": {
+    "van-button": "/wxcomponents/vant/dist/button/index",
+    "van-notify": "/wxcomponents/vant/dist/notify/index"
+  }
+}

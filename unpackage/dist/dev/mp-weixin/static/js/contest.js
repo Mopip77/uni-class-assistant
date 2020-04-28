@@ -89,6 +89,29 @@ export default {
 	},
 	
 	/**
+	 * 删除contest
+	 * @param {String} contestId
+	 */
+	deleteContest(contestId) {
+		return new Promise((resolve, reject) => {
+			uni.request({
+				url: ApiReference.CONTEST + '?contestId=' + contestId,
+				method: "DELETE",
+				header: HttpCommons.getAuthenticationHeader(),
+				success: (resp) => {
+					if (HttpCommons.successCheck(resp)) {
+						resolve(resp.data.data)
+					}
+				},
+				fail: (err) => {
+					HttpCommons.commonFailHanlder(err)
+					reject(err)
+				}
+			})
+		})
+	},
+	
+	/**
 	 * 通过courseId获取试卷
 	 * 
 	 * @param {Number} courseId
@@ -356,4 +379,23 @@ export default {
 			})
 		})
 	},
+	
+	publish: function(contestId) {
+		return new Promise((resolve, reject) => {
+			uni.request({
+				url: ApiReference.PUBLISH_CONTEST + '?contestId=' + contestId,
+				method: "POST",
+				header: HttpCommons.getAuthenticationHeader(),
+				success: (resp) => {
+					if (HttpCommons.successCheck(resp)) {
+						resolve(resp.data.data)
+					}
+				},
+				fail: (err) => {
+					HttpCommons.commonFailHanlder(err)
+					reject(err)
+				}
+			})
+		})
+	}
 }

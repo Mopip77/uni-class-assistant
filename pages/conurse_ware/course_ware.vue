@@ -234,6 +234,12 @@
 				align-items: center;
 			}
 			
+			.favorite-icon {
+				display: flex;
+				align-items: center;
+				margin-left: 10rpx;
+			}
+			
 			.button {
 				width: 120rpx;
 				height: 54rpx;

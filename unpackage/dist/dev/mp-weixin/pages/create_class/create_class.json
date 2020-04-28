@@ -1,0 +1,10 @@
+{
+  "usingComponents": {
+    "l-file": "/components/l-file/l-file",
+    "single-submit-popup": "/components/SingleSubmitPopup",
+    "create-quiz": "/components/CreateQuiz",
+    "van-swipe-cell": "/wxcomponents/vant/dist/swipe-cell/index",
+    "van-button": "/wxcomponents/vant/dist/button/index",
+    "van-notify": "/wxcomponents/vant/dist/notify/index"
+  }
+}

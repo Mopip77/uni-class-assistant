@@ -22,6 +22,9 @@ export default {
 	GET_MEMBERS: API_SERVER + 'course/members',
 	KICK_OUT_MEMBER: API_SERVER + 'course/kick',
 	ASSIGN_TEACHER: API_SERVER + 'course/assign-teacher',
+	SCOER_RULE: API_SERVER + 'course/score-rule',
+	SCOER_CAL: API_SERVER + 'course/score-cal',
+	GET_STUDENT_SCORE: API_SERVER + 'course/student-score',
 	
 	// bulltin
 	CREATE_BULLETIN: API_SERVER + 'bulletin/create',
@@ -52,6 +55,7 @@ export default {
 	REVISE_ANSWER: API_SERVER + 'contest/revise',
 	GET_CONTEST_AS_CREATOR: API_SERVER + 'contest/creator',
 	GET_CONTEST_AS_PARTICIPATOR: API_SERVER + 'contest/participator',
+	PUBLISH_CONTEST: API_SERVER + 'contest/publish',
 	
 	// course_ware
 	COURSE_WARE: API_SERVER + 'course-ware',
@@ -61,6 +65,7 @@ export default {
 	COURSE_WARE_COMMENT: API_SERVER + 'course-ware/comment',
 	GET_COURSE_WARE_AS_CREATOR: API_SERVER + 'course-ware/creator',
 	GET_COURSE_WARE_AS_READER: API_SERVER + 'course-ware/reader',
+	PUBLISH_COURSE_WARE: API_SERVER + 'course-ware/publish',
 	
 	// notification
 	NOTIFICATION: API_SERVER + 'notification',
@@ -77,6 +82,18 @@ export default {
 	FAVORITE_LIST: API_SERVER + 'favorite/list',
 	FAVORITE_EXIST: API_SERVER + 'favorite/exist',
 	FAVORITE_BY_TYPE: API_SERVER + 'favorite/type',
+	
+	// class
+	CLASS: API_SERVER + 'class',
+	GET_CLASS_BY_COURSE_ID: API_SERVER + 'class/course',
+	GET_CLASS_INFO_AS_TEACHER: API_SERVER + 'class/teacher',
+	GET_CLASS_INFO_AS_STUDENT: API_SERVER + 'class/student',
+	PUBLISH_CLASS: API_SERVER + 'class/publish',
+	FINISH_CLASS: API_SERVER + 'class/finish',
+	START_SIGN_IN: API_SERVER + 'class/start-sign-in',
+	SIGN_IN_COUNT: API_SERVER + 'class/sign-in-count',
+	SIGN_IN: API_SERVER + 'class/sign-in',
+	CLASS_NOTE: API_SERVER + 'class/note',
 	
 	
 	
