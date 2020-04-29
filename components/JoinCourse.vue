@@ -9,6 +9,13 @@
 					</van-cell-group>
 				</view>
 
+				<view class="class-password-field">
+					<text>暗号</text>
+					<van-cell-group>
+						<input type="text" v-model="password" placeholder="请输入暗号" />
+					</van-cell-group>
+				</view>
+
 				<view class="button-group">
 					<van-button type="info" @tap="cancel()" custom-style="height: 70rpx;width: 140rpx;">取消</van-button>
 					<van-button type="primary" @tap="submit()" custom-style="height: 70rpx;width: 140rpx;">提交</van-button>
@@ -37,6 +44,7 @@
 		data() {
 			return {
 				courseId: '',
+				password: '',
 			}
 		},
 		methods: {
@@ -58,8 +66,14 @@
 					Notify({ type: 'danger', message: "课程号不能为空且需要是数字" });
 					return;
 				}
+				
+				let password = this.password
+				if (null == courseId) {
+					Notify({ type: 'danger', message: "暗号不能为空" });
+					return;
+				}
  				
-				let promise = CourseUtils.joinCourse(courseId)
+				let promise = CourseUtils.joinCourse(courseId, password)
 				this.$emit('closeJoinCourseModal');
 				
 				promise
@@ -90,33 +104,25 @@
 		right: 0;
 		top: 0;
 		bottom: 0;
+		
+		text {
+			font-size: 28rpx;
+			color: gray;
+			margin-left: 10rpx;
+		}
+		
+		input {
+			@include common-input;
+		}
 
 		.class-number-field {
 			margin: 60rpx 0;
-			
-			text {
-				font-size: 28rpx;
-				color: gray;
-			}
-			
-			input {
-				@include common-input;
-			}
 		}
 
-		.class-info-field {
+		.class-password-field {
 			margin-bottom: 54rpx;
-			
-			text {
-				font-size: 28rpx;
-				color: gray;
-			}
-			
-			input {
-				@include common-input;
-			}
 		}
-
+		
 		.button-group {
 			display: flex;
 			justify-content: space-around;

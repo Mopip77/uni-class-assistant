@@ -18,7 +18,7 @@
 					<van-icon name="good-job-o" /> <text>{{comment.likeCount}}</text>
 				</view>
 				<view v-else class="like-count" @tap="unlikeComment(comment.id)">
-					<van-icon name="good-job" color="red" /> <text>{{comment.likeCount + 1}}</text>
+					<van-icon name="good-job" color="red" /> <text>{{comment.likeCount}}</text>
 				</view>
 			</view>
 			<view class="top-comment-body">
@@ -35,11 +35,11 @@
 						<view class="creator-name">{{subComment.creator.nickname}}</view>
 						<view class="create-time">{{subComment.createGmt}}</view>
 					</view>
-					<view v-if="subComment.like" class="like-count" @tap="likeSubComment(idx)">
+					<view v-if="!subComment.like" class="like-count" @tap="likeSubComment(idx)">
 						<van-icon name="good-job-o" /> <text>{{subComment.likeCount}}</text>
 					</view>
 					<view v-else class="like-count" @tap="unlikeSubComment(idx)">
-						<van-icon name="good-job" color="red" /> <text>{{subComment.likeCount + 1}}</text>
+						<van-icon name="good-job" color="red" /> <text>{{subComment.likeCount}}</text>
 					</view>
 				</view>
 				<view class="sub-comment-body" @tap="showModal(subComment.id, subComment.creator.nickname)">
@@ -150,6 +150,7 @@
 				promise
 				.then(() => {
 					this.comment.like = true
+					this.comment.likeCount += 1
 				})
 			},
 			
@@ -162,6 +163,7 @@
 				promise
 				.then(() => {
 					this.comment.like = false
+					this.comment.likeCount -= 1
 				})
 			},
 			
@@ -174,6 +176,7 @@
 				promise
 				.then(() => {
 					this.subComments[commentIdx].like = true
+					this.subComments[commentIdx].likeCount += 1
 				})
 			},
 			
@@ -186,6 +189,7 @@
 				promise
 				.then(() => {
 					this.subComments[commentIdx].like = false
+					this.subComments[commentIdx].likeCount -= 1
 				})
 			},
 

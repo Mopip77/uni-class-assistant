@@ -73,10 +73,10 @@ export default {
 		});
 	},
 	
-	joinCourse: function(courseId) {
+	joinCourse: function(courseId, password) {
 		return new Promise((resolve, reject) => {
 			uni.request({
-				url: ApiReference.JOIN_COURSE + '?courseId=' + courseId,
+				url: ApiReference.JOIN_COURSE + '?courseId=' + courseId + '&password=' + password,
 				method: "POST",
 				header: HttpCommons.getAuthenticationHeader(),
 				success: (resp) => {

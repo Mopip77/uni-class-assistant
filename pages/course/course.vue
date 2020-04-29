@@ -60,17 +60,11 @@
 		<view class="resource-select-box">
 			<view class="label">
 				<view><text>课程资源</text></view>
-				<view v-if="course.creatorId === userId">
+				<view v-if="course.isTeacher">
 					<van-button custom-class="button" square type="primary" @tap="createNewResourceBtn">+</van-button>
 				</view>
 			</view>
-			<!-- <van-tabs
-        swipeable
-        animated
-		sticky
-        :active="resourceSelectIndex"
-        @change="changeResourceTab"
-      > -->
+			
 			<STabs effect="true" navPerView="4" v-model="resourceSelectIndex" @change="changeResourceTab">
 				<STab title="公告">
 					<view class="list bulletin-list">
@@ -461,7 +455,7 @@
 					);
 					promise.then(data => {
 						data.forEach(e => {
-							Utils.dateConverterBatch(e, false, 'createGmt')
+							Utils.dateConverterBatch(e, true, 'createGmt')
 						});
 
 						// 重置字段为van-steps所需的字段

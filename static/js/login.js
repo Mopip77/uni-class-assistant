@@ -42,7 +42,6 @@ export default {
 								provider,
 								success: function(infoRes) {
 									console.log('user info：', infoRes)
-									G_store.commit("LOGIN")
 
 									// 上传userInfo到后台
 									uni.request({
@@ -64,19 +63,25 @@ export default {
 												});
 												return;
 											}
+
+											// 这个必须后置，因为在me页面如果登陆了就会去获取信息，如果放在前面信息可能还并未传上去
+											G_store.commit("LOGIN")
+											if (null !== resolve) {
+												resolve()
+											}
 										}
 									})
 								},
 								fail: (err) => {
 									console.log("err:", err);
 								}
-								
-							});
-						}
 
-						console.log("获取用户信息 in login method");
-						if (null !== resolve) {
-							resolve()
+							});
+						} else {
+							G_store.commit("LOGIN")
+							if (null !== resolve) {
+								resolve()
+							}
 						}
 					},
 					fail: (e) => {

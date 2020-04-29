@@ -1555,7 +1555,7 @@ uni$1;exports.default = _default;
 
 /***/ }),
 
-/***/ 100:
+/***/ 104:
 /*!****************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/static/js/class.js ***!
   \****************************************************************************************/
@@ -1786,7 +1786,7 @@ var _http_commons = _interopRequireDefault(__webpack_require__(/*! @/static/js/h
 
 /***/ }),
 
-/***/ 101:
+/***/ 105:
 /*!*******************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/static/js/bulletin.js ***!
   \*******************************************************************************************/
@@ -1849,7 +1849,246 @@ var _http_commons = _interopRequireDefault(__webpack_require__(/*! ./http_common
 
 /***/ }),
 
-/***/ 118:
+/***/ 12:
+/*!****************************************************************************************!*\
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/static/js/login.js ***!
+  \****************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _index = _interopRequireDefault(__webpack_require__(/*! ../../store/index.js */ 13));
+var _api_reference = _interopRequireDefault(__webpack_require__(/*! ./api_reference.js */ 15));
+var _local_storage_reference = _interopRequireDefault(__webpack_require__(/*! ./local_storage_reference.js */ 16));
+var _utils = _interopRequireDefault(__webpack_require__(/*! ./utils.js */ 17));
+var _http_commons = _interopRequireDefault(__webpack_require__(/*! ./http_commons.js */ 18));
+
+var _notify = _interopRequireDefault(__webpack_require__(/*! ../../wxcomponents/vant/dist/notify/notify.js */ 19));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var _default =
+
+{
+  login: function login() {var resolve = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;var provider = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'weixin';
+    // console.log("登录中...");
+    var that = this;
+
+    uni.login({
+      provider: provider,
+      success: function success(loginRes) {
+        console.log(loginRes);
+        uni.request({
+          url: _api_reference.default.LOGIN_URL + '?code=' + loginRes.code,
+          method: 'POST',
+          success: function success(infoRes) {
+            if (infoRes.data.code !== 0) {
+              console.log('登录失败,请重试', infoRes);
+              uni.showToast({
+                title: '登录失败,请重试' });
+
+              return;
+            }
+
+            console.log("server log:", infoRes);
+
+            uni.setStorageSync(_local_storage_reference.default.ID, infoRes.data.data['id']);
+            uni.setStorageSync(_local_storage_reference.default.JWT_TOKEN, infoRes.data.data['jwt_token']);
+            uni.setStorageSync(_local_storage_reference.default.EXPIRE_TIMESTAMP, Number(infoRes.data.data['expiration_at']));
+            var needUploadUserInfo = infoRes.data.data['need_user_info'] === "false" ? false : true; // js string bool 问题
+
+            console.log("needUserInfo", needUploadUserInfo);
+
+            if (needUploadUserInfo) {
+              console.log("上传用户信息");
+              uni.getUserInfo({
+                provider: provider,
+                success: function success(infoRes) {
+                  console.log('user info：', infoRes);
+
+                  // 上传userInfo到后台
+                  uni.request({
+                    url: _api_reference.default.UPLOAD_USER_INFO,
+                    method: "POST",
+                    header: _http_commons.default.getAuthenticationHeader(),
+                    data: {
+                      "openId": loginRes.code,
+                      "encryptedData": infoRes.encryptedData,
+                      "iv": infoRes.iv },
+
+                    success: function success(resp) {
+                      console.log("上传userInfo返回值", resp);
+                      _http_commons.default.successCheck(resp);
+                      if (resp.data.code != 0) {
+                        (0, _notify.default)({
+                          type: 'danger',
+                          message: '用户信息已上传过' });
+
+                        return;
+                      }
+
+                      // 这个必须后置，因为在me页面如果登陆了就会去获取信息，如果放在前面信息可能还并未传上去
+                      _index.default.commit("LOGIN");
+                      if (null !== resolve) {
+                        resolve();
+                      }
+                    } });
+
+                },
+                fail: function fail(err) {
+                  console.log("err:", err);
+                } });
+
+
+            } else {
+              _index.default.commit("LOGIN");
+              if (null !== resolve) {
+                resolve();
+              }
+            }
+          },
+          fail: function fail(e) {
+            console.error(e);
+            (0, _notify.default)({
+              type: 'danger',
+              message: "登录失败,请重试" });
+
+          } });
+
+
+      },
+      fail: function fail(e) {
+        uni.showToast({
+          title: '登录失败,请重启小程序' });
+
+      } });
+
+
+  },
+
+  logout: function logout() {
+    uni.logout();
+    _index.default.commit("LOGOUT");
+  },
+
+  /**
+      * 从服务器获取用户信息, 如果没有学校相关的信息, 弹出modal让用户补充
+      */
+  getUserInfo: function getUserInfo() {
+    uni.request({
+      url: _api_reference.default.GET_USERINFO_URL,
+      header: _http_commons.default.getAuthenticationHeader(),
+      success: function success(resp) {
+        console.log("获取用户信息", resp);
+        _http_commons.default.successCheck(resp);
+        _index.default.commit("LOGIN");
+        _index.default.commit("SET_USERINFO", resp.data.data);
+      },
+      fail: function fail(e) {
+        console.error("获取用户信息失败", e);
+        uni.showToast({
+          title: '获取用户信息失败' });
+
+      } });
+
+  },
+
+  /**
+      * 传入用户信息, 用户信息需要在传入前校验. 返回是否更新成功
+      * 
+      * @param {Object} userInfo
+      */
+  updateUserInfo: function updateUserInfo(userInfo) {
+    uni.request({
+      url: _api_reference.default.UPDATE_USERINFO_URL,
+      method: "PUT",
+      header: _http_commons.default.getAuthenticationHeader(),
+      data: userInfo,
+      success: function success(resp) {
+        if (!_http_commons.default.successCheck(resp)) {
+          return;
+        }
+
+        _index.default.commit("SET_USERINFO", resp.data.data);
+        (0, _notify.default)({
+          type: 'success',
+          message: "更新资料成功" });
+
+      },
+      fail: function fail(e) {
+        _http_commons.default.commonFailHanlder(e);
+      } });
+
+  },
+
+  /**
+      * 检查登录状态,如果本地token有并且未过期,则直接返回,否则登录
+      */
+  checkLoginStateAndLogin: function checkLoginStateAndLogin(resolve) {
+    var token = uni.getStorageSync(_local_storage_reference.default.JWT_TOKEN);
+    var expireTs = uni.getStorageSync(_local_storage_reference.default.EXPIRE_TIMESTAMP);
+
+    if (null !== token && _utils.default.isTimestampValid(expireTs)) {
+      uni.request({
+        url: _api_reference.default,
+        header: _http_commons.default.getAuthenticationHeader(),
+        success: function success(resp) {
+          if (resp.data.code === 0) {
+            console.log("check login success");
+            _index.default.commit("LOGIN");
+          } else {
+            login();
+          }
+
+          if (null !== resolve) {
+            resolve();
+          }
+        } });
+
+    }
+  },
+
+  /**
+      * 只检查token是否过期
+      * 
+      * @return {Promise} 返回promise(resp)或者执行reject的空promise
+      */
+  checkTokenVaild: function checkTokenVaild() {
+    console.log("检查token valid");
+    var token = uni.getStorageSync(_local_storage_reference.default.JWT_TOKEN);
+    var expireTs = uni.getStorageSync(_local_storage_reference.default.EXPIRE_TIMESTAMP);
+
+    if (null !== token && _utils.default.isTimestampValid(expireTs)) {
+      console.log("请求token校验");
+      return new Promise(function (resolve, reject) {
+        uni.request({
+          url: _api_reference.default.CHECK_TOKEN_URL,
+          header: _http_commons.default.getAuthenticationHeader(),
+          success: function success(resp) {
+            console.log("检查token valid的resp", resp);
+            if (resp.data.code === 0) {
+              console.log("check login success");
+              if (null !== resp.data.auth) {
+                console.log("更新token in checkTokenVaild");
+                uni.setStorageSync(_local_storage_reference.default.JWT_TOKEN, resp.data.auth['token']);
+                uni.setStorageSync(_local_storage_reference.default.EXPIRE_TIMESTAMP, resp.data.auth['expireTimestamp']);
+              }
+              _index.default.commit("LOGIN");
+            }
+            resolve(resp);
+          },
+          fail: function fail(err) {
+            reject(err);
+          } });
+
+      });
+    }
+    console.log("本地token失效");
+    return new Promise(function (resolve, reject) {
+      reject();
+    });
+  } };exports.default = _default;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
+
+/***/ }),
+
+/***/ 122:
 /*!****************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/static/js/topic.js ***!
   \****************************************************************************************/
@@ -2081,240 +2320,6 @@ var _http_commons = _interopRequireDefault(__webpack_require__(/*! ./http_common
           reject(err);
         } });
 
-    });
-  } };exports.default = _default;
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
-
-/***/ }),
-
-/***/ 12:
-/*!****************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/static/js/login.js ***!
-  \****************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _index = _interopRequireDefault(__webpack_require__(/*! ../../store/index.js */ 13));
-var _api_reference = _interopRequireDefault(__webpack_require__(/*! ./api_reference.js */ 15));
-var _local_storage_reference = _interopRequireDefault(__webpack_require__(/*! ./local_storage_reference.js */ 16));
-var _utils = _interopRequireDefault(__webpack_require__(/*! ./utils.js */ 17));
-var _http_commons = _interopRequireDefault(__webpack_require__(/*! ./http_commons.js */ 18));
-
-var _notify = _interopRequireDefault(__webpack_require__(/*! ../../wxcomponents/vant/dist/notify/notify.js */ 19));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var _default =
-
-{
-  login: function login() {var resolve = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;var provider = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'weixin';
-    // console.log("登录中...");
-    var that = this;
-
-    uni.login({
-      provider: provider,
-      success: function success(loginRes) {
-        console.log(loginRes);
-        uni.request({
-          url: _api_reference.default.LOGIN_URL + '?code=' + loginRes.code,
-          method: 'POST',
-          success: function success(infoRes) {
-            if (infoRes.data.code !== 0) {
-              console.log('登录失败,请重试', infoRes);
-              uni.showToast({
-                title: '登录失败,请重试' });
-
-              return;
-            }
-
-            console.log("server log:", infoRes);
-
-            uni.setStorageSync(_local_storage_reference.default.ID, infoRes.data.data['id']);
-            uni.setStorageSync(_local_storage_reference.default.JWT_TOKEN, infoRes.data.data['jwt_token']);
-            uni.setStorageSync(_local_storage_reference.default.EXPIRE_TIMESTAMP, Number(infoRes.data.data['expiration_at']));
-            var needUploadUserInfo = infoRes.data.data['need_user_info'] === "false" ? false : true; // js string bool 问题
-
-            console.log("needUserInfo", needUploadUserInfo);
-
-            if (needUploadUserInfo) {
-              console.log("上传用户信息");
-              uni.getUserInfo({
-                provider: provider,
-                success: function success(infoRes) {
-                  console.log('user info：', infoRes);
-                  _index.default.commit("LOGIN");
-
-                  // 上传userInfo到后台
-                  uni.request({
-                    url: _api_reference.default.UPLOAD_USER_INFO,
-                    method: "POST",
-                    header: _http_commons.default.getAuthenticationHeader(),
-                    data: {
-                      "openId": loginRes.code,
-                      "encryptedData": infoRes.encryptedData,
-                      "iv": infoRes.iv },
-
-                    success: function success(resp) {
-                      console.log("上传userInfo返回值", resp);
-                      _http_commons.default.successCheck(resp);
-                      if (resp.data.code != 0) {
-                        (0, _notify.default)({
-                          type: 'danger',
-                          message: '用户信息已上传过' });
-
-                        return;
-                      }
-                    } });
-
-                },
-                fail: function fail(err) {
-                  console.log("err:", err);
-                } });
-
-
-            }
-
-            console.log("获取用户信息 in login method");
-            if (null !== resolve) {
-              resolve();
-            }
-          },
-          fail: function fail(e) {
-            console.error(e);
-            (0, _notify.default)({
-              type: 'danger',
-              message: "登录失败,请重试" });
-
-          } });
-
-
-      },
-      fail: function fail(e) {
-        uni.showToast({
-          title: '登录失败,请重启小程序' });
-
-      } });
-
-
-  },
-
-  logout: function logout() {
-    uni.logout();
-    _index.default.commit("LOGOUT");
-  },
-
-  /**
-      * 从服务器获取用户信息, 如果没有学校相关的信息, 弹出modal让用户补充
-      */
-  getUserInfo: function getUserInfo() {
-    uni.request({
-      url: _api_reference.default.GET_USERINFO_URL,
-      header: _http_commons.default.getAuthenticationHeader(),
-      success: function success(resp) {
-        console.log("获取用户信息", resp);
-        _http_commons.default.successCheck(resp);
-        _index.default.commit("LOGIN");
-        _index.default.commit("SET_USERINFO", resp.data.data);
-      },
-      fail: function fail(e) {
-        console.error("获取用户信息失败", e);
-        uni.showToast({
-          title: '获取用户信息失败' });
-
-      } });
-
-  },
-
-  /**
-      * 传入用户信息, 用户信息需要在传入前校验. 返回是否更新成功
-      * 
-      * @param {Object} userInfo
-      */
-  updateUserInfo: function updateUserInfo(userInfo) {
-    uni.request({
-      url: _api_reference.default.UPDATE_USERINFO_URL,
-      method: "PUT",
-      header: _http_commons.default.getAuthenticationHeader(),
-      data: userInfo,
-      success: function success(resp) {
-        if (!_http_commons.default.successCheck(resp)) {
-          return;
-        }
-
-        _index.default.commit("SET_USERINFO", resp.data.data);
-        (0, _notify.default)({
-          type: 'success',
-          message: "更新资料成功" });
-
-      },
-      fail: function fail(e) {
-        _http_commons.default.commonFailHanlder(e);
-      } });
-
-  },
-
-  /**
-      * 检查登录状态,如果本地token有并且未过期,则直接返回,否则登录
-      */
-  checkLoginStateAndLogin: function checkLoginStateAndLogin(resolve) {
-    var token = uni.getStorageSync(_local_storage_reference.default.JWT_TOKEN);
-    var expireTs = uni.getStorageSync(_local_storage_reference.default.EXPIRE_TIMESTAMP);
-
-    if (null !== token && _utils.default.isTimestampValid(expireTs)) {
-      uni.request({
-        url: _api_reference.default,
-        header: _http_commons.default.getAuthenticationHeader(),
-        success: function success(resp) {
-          if (resp.data.code === 0) {
-            console.log("check login success");
-            _index.default.commit("LOGIN");
-          } else {
-            login();
-          }
-
-          if (null !== resolve) {
-            resolve();
-          }
-        } });
-
-    }
-  },
-
-  /**
-      * 只检查token是否过期
-      * 
-      * @return {Promise} 返回promise(resp)或者执行reject的空promise
-      */
-  checkTokenVaild: function checkTokenVaild() {
-    console.log("检查token valid");
-    var token = uni.getStorageSync(_local_storage_reference.default.JWT_TOKEN);
-    var expireTs = uni.getStorageSync(_local_storage_reference.default.EXPIRE_TIMESTAMP);
-
-    if (null !== token && _utils.default.isTimestampValid(expireTs)) {
-      console.log("请求token校验");
-      return new Promise(function (resolve, reject) {
-        uni.request({
-          url: _api_reference.default.CHECK_TOKEN_URL,
-          header: _http_commons.default.getAuthenticationHeader(),
-          success: function success(resp) {
-            console.log("检查token valid的resp", resp);
-            if (resp.data.code === 0) {
-              console.log("check login success");
-              if (null !== resp.data.auth) {
-                console.log("更新token in checkTokenVaild");
-                uni.setStorageSync(_local_storage_reference.default.JWT_TOKEN, resp.data.auth['token']);
-                uni.setStorageSync(_local_storage_reference.default.EXPIRE_TIMESTAMP, resp.data.auth['expireTimestamp']);
-              }
-              _index.default.commit("LOGIN");
-            }
-            resolve(resp);
-          },
-          fail: function fail(err) {
-            reject(err);
-          } });
-
-      });
-    }
-    console.log("本地token失效");
-    return new Promise(function (resolve, reject) {
-      reject();
     });
   } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
@@ -9781,293 +9786,68 @@ var GRAY_DARK = '#969799';exports.GRAY_DARK = GRAY_DARK;
 
 /***/ }),
 
-/***/ 223:
+/***/ 229:
 /*!**********************************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/card/index.js ***!
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/grid/index.js ***!
   \**********************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-var _link = __webpack_require__(/*! ../mixins/link */ 224);
-var _component = __webpack_require__(/*! ../common/component */ 225);
+var _component = __webpack_require__(/*! ../common/component */ 32);
+var _utils = __webpack_require__(/*! ../common/utils */ 230);
 (0, _component.VantComponent)({
-  classes: [
-  'num-class',
-  'desc-class',
-  'thumb-class',
-  'title-class',
-  'price-class',
-  'origin-price-class'],
+  relation: {
+    name: 'grid-item',
+    type: 'descendant',
+    current: 'grid' },
 
-  mixins: [_link.link],
   props: {
-    tag: String,
-    num: String,
-    desc: String,
-    thumb: String,
-    title: String,
-    price: {
-      type: String,
-      observer: 'updatePrice' },
-
-    centered: Boolean,
-    lazyLoad: Boolean,
-    thumbLink: String,
-    originPrice: String,
-    thumbMode: {
-      type: String,
-      value: 'aspectFit' },
-
-    currency: {
-      type: String,
-      value: '¥' } },
-
-
-  methods: {
-    updatePrice: function updatePrice() {var
-      price = this.data.price;
-      var priceArr = price.toString().split('.');
-      this.setData({
-        integerStr: priceArr[0],
-        decimalStr: priceArr[1] ? ".".concat(priceArr[1]) : '' });
-
-    },
-    onClickThumb: function onClickThumb() {
-      this.jumpLink('thumbLink');
-    } } });
-
-/***/ }),
-
-/***/ 224:
-/*!***********************************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/mixins/link.js ***!
-  \***********************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.link = void 0;var link = Behavior({
-  properties: {
-    url: String,
-    linkType: {
-      type: String,
-      value: 'navigateTo' } },
-
-
-  methods: {
-    jumpLink: function jumpLink() {var urlKey = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'url';
-      var url = this.data[urlKey];
-      if (url) {
-        wx[this.data.linkType]({ url: url });
-      }
-    } } });exports.link = link;
-
-/***/ }),
-
-/***/ 225:
-/*!****************************************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/common/component.js ***!
-  \****************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.VantComponent = VantComponent;var _basic = __webpack_require__(/*! ../mixins/basic */ 226);function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
-var relationFunctions = {
-  ancestor: {
-    linked: function linked(parent) {
-      this.parent = parent;
-    },
-    unlinked: function unlinked() {
-      this.parent = null;
-    } },
-
-  descendant: {
-    linked: function linked(child) {
-      this.children = this.children || [];
-      this.children.push(child);
-    },
-    unlinked: function unlinked(child) {
-      this.children = (this.children || []).filter(function (it) {return it !== child;});
-    } } };
-
-
-function mapKeys(source, target, map) {
-  Object.keys(map).forEach(function (key) {
-    if (source[key]) {
-      target[map[key]] = source[key];
-    }
-  });
-}
-function makeRelation(options, vantOptions, relation) {var
-  type = relation.type,name = relation.name,_linked = relation.linked,_unlinked = relation.unlinked,_linkChanged = relation.linkChanged;var
-  beforeCreate = vantOptions.beforeCreate,destroyed = vantOptions.destroyed;
-  if (type === 'descendant') {
-    options.created = function () {
-      beforeCreate && beforeCreate.bind(this)();
-      this.children = this.children || [];
-    };
-    options.detached = function () {
-      this.children = [];
-      destroyed && destroyed.bind(this)();
-    };
-  }
-  options.relations = Object.assign(options.relations || {}, _defineProperty({}, "../".concat(
-  name, "/index"), {
-    type: type,
-    linked: function linked(node) {
-      relationFunctions[type].linked.bind(this)(node);
-      _linked && _linked.bind(this)(node);
-    },
-    linkChanged: function linkChanged(node) {
-      _linkChanged && _linkChanged.bind(this)(node);
-    },
-    unlinked: function unlinked(node) {
-      relationFunctions[type].unlinked.bind(this)(node);
-      _unlinked && _unlinked.bind(this)(node);
-    } }));
-
-
-}
-function VantComponent() {var vantOptions = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  var options = {};
-  mapKeys(vantOptions, options, {
-    data: 'data',
-    props: 'properties',
-    mixins: 'behaviors',
-    methods: 'methods',
-    beforeCreate: 'created',
-    created: 'attached',
-    mounted: 'ready',
-    relations: 'relations',
-    destroyed: 'detached',
-    classes: 'externalClasses' });var
-
-  relation = vantOptions.relation;
-  if (relation) {
-    makeRelation(options, vantOptions, relation);
-  }
-  // add default externalClasses
-  options.externalClasses = options.externalClasses || [];
-  options.externalClasses.push('custom-class');
-  // add default behaviors
-  options.behaviors = options.behaviors || [];
-  options.behaviors.push(_basic.basic);
-  // map field to form-field behavior
-  if (vantOptions.field) {
-    options.behaviors.push('wx://form-field');
-  }
-  // add default options
-  options.options = {
-    multipleSlots: true,
-    addGlobalClass: true };
-
-  Component(options);
-}
-
-/***/ }),
-
-/***/ 226:
-/*!************************************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/mixins/basic.js ***!
-  \************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.basic = void 0;var basic = Behavior({
-  methods: {
-    $emit: function $emit() {
-      this.triggerEvent.apply(this, arguments);
-    },
-    set: function set(data, callback) {
-      this.setData(data, callback);
-      return new Promise(function (resolve) {return wx.nextTick(resolve);});
-    },
-    getRect: function getRect(selector, all) {var _this = this;
-      return new Promise(function (resolve) {
-        wx.createSelectorQuery().
-        in(_this)[all ? 'selectAll' : 'select'](selector).
-        boundingClientRect(function (rect) {
-          if (all && Array.isArray(rect) && rect.length) {
-            resolve(rect);
-          }
-          if (!all && rect) {
-            resolve(rect);
-          }
-        }).
-        exec();
-      });
-    } } });exports.basic = basic;
-
-/***/ }),
-
-/***/ 229:
-/*!************************************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/notify/index.js ***!
-  \************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-var _component = __webpack_require__(/*! ../common/component */ 225);
-var _color = __webpack_require__(/*! ../common/color */ 20);
-(0, _component.VantComponent)({
-  props: {
-    message: String,
-    background: String,
-    type: {
-      type: String,
-      value: 'danger' },
-
-    color: {
-      type: String,
-      value: _color.WHITE },
-
-    duration: {
-      type: Number,
-      value: 3000 },
-
-    zIndex: {
-      type: Number,
-      value: 110 },
-
-    safeAreaInsetTop: {
+    square: {
       type: Boolean,
-      value: false } },
+      observer: 'updateChildren' },
+
+    gutter: {
+      type: [Number, String],
+      value: 0,
+      observer: 'updateChildren' },
+
+    clickable: {
+      type: Boolean,
+      observer: 'updateChildren' },
+
+    columnNum: {
+      type: Number,
+      value: 4,
+      observer: 'updateChildren' },
+
+    center: {
+      type: Boolean,
+      value: true,
+      observer: 'updateChildren' },
+
+    border: {
+      type: Boolean,
+      value: true,
+      observer: 'updateChildren' } },
 
 
   data: {
-    show: false },
+    viewStyle: '' },
 
-  created: function created() {var _wx$getSystemInfoSync =
-    wx.getSystemInfoSync(),statusBarHeight = _wx$getSystemInfoSync.statusBarHeight;
-    this.setData({ statusBarHeight: statusBarHeight });
+  created: function created() {var
+    gutter = this.data.gutter;
+    if (gutter) {
+      this.setData({
+        viewStyle: "padding-left: ".concat((0, _utils.addUnit)(gutter)) });
+
+    }
   },
   methods: {
-    show: function show() {var _this = this;var _this$data =
-      this.data,duration = _this$data.duration,onOpened = _this$data.onOpened;
-      clearTimeout(this.timer);
-      this.setData({ show: true });
-      wx.nextTick(onOpened);
-      if (duration > 0 && duration !== Infinity) {
-        this.timer = setTimeout(function () {
-          _this.hide();
-        }, duration);
-      }
-    },
-    hide: function hide() {var
-      onClose = this.data.onClose;
-      clearTimeout(this.timer);
-      this.setData({ show: false });
-      wx.nextTick(onClose);
-    },
-    onTap: function onTap(event) {var
-      onClick = this.data.onClick;
-      if (onClick) {
-        onClick(event.detail);
-      }
+    updateChildren: function updateChildren() {
+      this.children.forEach(function (child) {
+        child.updateStyle();
+      });
     } } });
 
 /***/ }),
@@ -10203,252 +9983,6 @@ function normalizeComponent (
 
 /***/ 230:
 /*!************************************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/button/index.js ***!
-  \************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-var _component = __webpack_require__(/*! ../common/component */ 225);
-var _button = __webpack_require__(/*! ../mixins/button */ 231);
-var _openType = __webpack_require__(/*! ../mixins/open-type */ 232);
-(0, _component.VantComponent)({
-  mixins: [_button.button, _openType.openType],
-  classes: ['hover-class', 'loading-class'],
-  data: {
-    baseStyle: '' },
-
-  props: {
-    icon: String,
-    plain: Boolean,
-    block: Boolean,
-    round: Boolean,
-    square: Boolean,
-    loading: Boolean,
-    hairline: Boolean,
-    disabled: Boolean,
-    loadingText: String,
-    customStyle: String,
-    loadingType: {
-      type: String,
-      value: 'circular' },
-
-    type: {
-      type: String,
-      value: 'default' },
-
-    size: {
-      type: String,
-      value: 'normal' },
-
-    loadingSize: {
-      type: String,
-      value: '20px' },
-
-    color: {
-      type: String,
-      observer: function observer(color) {
-        var style = '';
-        if (color) {
-          style += "color: ".concat(this.data.plain ? color : 'white', ";");
-          if (!this.data.plain) {
-            // Use background instead of backgroundColor to make linear-gradient work
-            style += "background: ".concat(color, ";");
-          }
-          // hide border when color is linear-gradient
-          if (color.indexOf('gradient') !== -1) {
-            style += 'border: 0;';
-          } else
-          {
-            style += "border-color: ".concat(color, ";");
-          }
-        }
-        if (style !== this.data.baseStyle) {
-          this.setData({ baseStyle: style });
-        }
-      } } },
-
-
-  methods: {
-    onClick: function onClick() {
-      if (!this.data.disabled && !this.data.loading) {
-        this.$emit('click');
-      }
-    } } });
-
-/***/ }),
-
-/***/ 231:
-/*!*************************************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/mixins/button.js ***!
-  \*************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.button = void 0;var button = Behavior({
-  externalClasses: ['hover-class'],
-  properties: {
-    id: String,
-    lang: {
-      type: String,
-      value: 'en' },
-
-    businessId: Number,
-    sessionFrom: String,
-    sendMessageTitle: String,
-    sendMessagePath: String,
-    sendMessageImg: String,
-    showMessageCard: Boolean,
-    appParameter: String,
-    ariaLabel: String } });exports.button = button;
-
-/***/ }),
-
-/***/ 232:
-/*!****************************************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/mixins/open-type.js ***!
-  \****************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.openType = void 0;var openType = Behavior({
-  properties: {
-    openType: String },
-
-  methods: {
-    bindGetUserInfo: function bindGetUserInfo(event) {
-      this.$emit('getuserinfo', event.detail);
-    },
-    bindContact: function bindContact(event) {
-      this.$emit('contact', event.detail);
-    },
-    bindGetPhoneNumber: function bindGetPhoneNumber(event) {
-      this.$emit('getphonenumber', event.detail);
-    },
-    bindError: function bindError(event) {
-      this.$emit('error', event.detail);
-    },
-    bindLaunchApp: function bindLaunchApp(event) {
-      this.$emit('launchapp', event.detail);
-    },
-    bindOpenSetting: function bindOpenSetting(event) {
-      this.$emit('opensetting', event.detail);
-    } } });exports.openType = openType;
-
-/***/ }),
-
-/***/ 254:
-/*!***********************************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/image/index.js ***!
-  \***********************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-var _utils = __webpack_require__(/*! ../common/utils */ 255);
-var _component = __webpack_require__(/*! ../common/component */ 225);
-var _button = __webpack_require__(/*! ../mixins/button */ 231);
-var _openType = __webpack_require__(/*! ../mixins/open-type */ 232);
-var FIT_MODE_MAP = {
-  none: 'center',
-  fill: 'scaleToFill',
-  cover: 'aspectFill',
-  contain: 'aspectFit' };
-
-(0, _component.VantComponent)({
-  mixins: [_button.button, _openType.openType],
-  classes: ['custom-class', 'loading-class', 'error-class', 'image-class'],
-  props: {
-    src: {
-      type: String,
-      observer: function observer() {
-        this.setData({
-          error: false,
-          loading: true });
-
-      } },
-
-    round: Boolean,
-    width: {
-      type: null,
-      observer: 'setStyle' },
-
-    height: {
-      type: null,
-      observer: 'setStyle' },
-
-    radius: null,
-    lazyLoad: Boolean,
-    useErrorSlot: Boolean,
-    useLoadingSlot: Boolean,
-    showMenuByLongpress: Boolean,
-    fit: {
-      type: String,
-      value: 'fill',
-      observer: 'setMode' },
-
-    showError: {
-      type: Boolean,
-      value: true },
-
-    showLoading: {
-      type: Boolean,
-      value: true } },
-
-
-  data: {
-    error: false,
-    loading: true,
-    viewStyle: '' },
-
-  mounted: function mounted() {
-    this.setMode();
-    this.setStyle();
-  },
-  methods: {
-    setMode: function setMode() {
-      this.setData({
-        mode: FIT_MODE_MAP[this.data.fit] });
-
-    },
-    setStyle: function setStyle() {var _this$data =
-      this.data,width = _this$data.width,height = _this$data.height,radius = _this$data.radius;
-      var style = '';
-      if ((0, _utils.isDef)(width)) {
-        style += "width: ".concat((0, _utils.addUnit)(width), ";");
-      }
-      if ((0, _utils.isDef)(height)) {
-        style += "height: ".concat((0, _utils.addUnit)(height), ";");
-      }
-      if ((0, _utils.isDef)(radius)) {
-        style += 'overflow: hidden;';
-        style += "border-radius: ".concat((0, _utils.addUnit)(radius), ";");
-      }
-      this.setData({ viewStyle: style });
-    },
-    onLoad: function onLoad(event) {
-      this.setData({
-        loading: false });
-
-      this.$emit('load', event.detail);
-    },
-    onError: function onError(event) {
-      this.setData({
-        loading: false,
-        error: true });
-
-      this.$emit('error', event.detail);
-    },
-    onClick: function onClick(event) {
-      this.$emit('click', event.detail);
-    } } });
-
-/***/ }),
-
-/***/ 255:
-/*!************************************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/common/utils.js ***!
   \************************************************************************************************************/
 /*! no static exports found */
@@ -10490,870 +10024,7 @@ function addUnit(value) {
 
 /***/ }),
 
-/***/ 256:
-/*!*********************************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/tag/index.js ***!
-  \*********************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-var _component = __webpack_require__(/*! ../common/component */ 225);
-(0, _component.VantComponent)({
-  props: {
-    size: String,
-    mark: Boolean,
-    color: String,
-    plain: Boolean,
-    round: Boolean,
-    textColor: String,
-    type: {
-      type: String,
-      value: 'default' },
-
-    closeable: Boolean },
-
-  methods: {
-    onClose: function onClose() {
-      this.$emit('close');
-    } } });
-
-/***/ }),
-
-/***/ 269:
-/*!**********************************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/icon/index.js ***!
-  \**********************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-var _component = __webpack_require__(/*! ../common/component */ 225);
-(0, _component.VantComponent)({
-  props: {
-    dot: Boolean,
-    info: null,
-    size: null,
-    color: String,
-    customStyle: String,
-    classPrefix: {
-      type: String,
-      value: 'van-icon' },
-
-    name: {
-      type: String,
-      observer: function observer(val) {
-        this.setData({
-          isImageName: val.indexOf('/') !== -1 });
-
-      } } },
-
-
-  methods: {
-    onClick: function onClick() {
-      this.$emit('click');
-    } } });
-
-/***/ }),
-
-/***/ 272:
-/*!***********************************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/popup/index.js ***!
-  \***********************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-var _component = __webpack_require__(/*! ../common/component */ 225);
-var _transition = __webpack_require__(/*! ../mixins/transition */ 273);
-(0, _component.VantComponent)({
-  classes: [
-  'enter-class',
-  'enter-active-class',
-  'enter-to-class',
-  'leave-class',
-  'leave-active-class',
-  'leave-to-class'],
-
-  mixins: [(0, _transition.transition)(false)],
-  props: {
-    round: Boolean,
-    closeable: Boolean,
-    customStyle: String,
-    overlayStyle: String,
-    transition: {
-      type: String,
-      observer: 'observeClass' },
-
-    zIndex: {
-      type: Number,
-      value: 100 },
-
-    overlay: {
-      type: Boolean,
-      value: true },
-
-    closeIcon: {
-      type: String,
-      value: 'cross' },
-
-    closeIconPosition: {
-      type: String,
-      value: 'top-right' },
-
-    closeOnClickOverlay: {
-      type: Boolean,
-      value: true },
-
-    position: {
-      type: String,
-      value: 'center',
-      observer: 'observeClass' },
-
-    safeAreaInsetBottom: {
-      type: Boolean,
-      value: true },
-
-    safeAreaInsetTop: {
-      type: Boolean,
-      value: false } },
-
-
-  created: function created() {
-    this.observeClass();
-  },
-  methods: {
-    onClickCloseIcon: function onClickCloseIcon() {
-      this.$emit('close');
-    },
-    onClickOverlay: function onClickOverlay() {
-      this.$emit('click-overlay');
-      if (this.data.closeOnClickOverlay) {
-        this.$emit('close');
-      }
-    },
-    observeClass: function observeClass() {var _this$data =
-      this.data,transition = _this$data.transition,position = _this$data.position;
-      var updateData = {
-        name: transition || position };
-
-      if (transition === 'none') {
-        updateData.duration = 0;
-      }
-      this.setData(updateData);
-    } } });
-
-/***/ }),
-
-/***/ 273:
-/*!*****************************************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/mixins/transition.js ***!
-  \*****************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.transition = void 0;var _utils = __webpack_require__(/*! ../common/utils */ 255);
-var getClassNames = function getClassNames(name) {return {
-    enter: "van-".concat(name, "-enter van-").concat(name, "-enter-active enter-class enter-active-class"),
-    'enter-to': "van-".concat(name, "-enter-to van-").concat(name, "-enter-active enter-to-class enter-active-class"),
-    leave: "van-".concat(name, "-leave van-").concat(name, "-leave-active leave-class leave-active-class"),
-    'leave-to': "van-".concat(name, "-leave-to van-").concat(name, "-leave-active leave-to-class leave-active-class") };};
-
-var nextTick = function nextTick() {return new Promise(function (resolve) {return setTimeout(resolve, 1000 / 30);});};
-var transition = function transition(showDefaultValue) {
-  return Behavior({
-    properties: {
-      customStyle: String,
-      // @ts-ignore
-      show: {
-        type: Boolean,
-        value: showDefaultValue,
-        observer: 'observeShow' },
-
-      // @ts-ignore
-      duration: {
-        type: null,
-        value: 300,
-        observer: 'observeDuration' },
-
-      name: {
-        type: String,
-        value: 'fade' } },
-
-
-    data: {
-      type: '',
-      inited: false,
-      display: false },
-
-    methods: {
-      observeShow: function observeShow(value, old) {
-        if (value === old) {
-          return;
-        }
-        value ? this.enter() : this.leave();
-      },
-      enter: function enter() {var _this = this;var _this$data =
-        this.data,duration = _this$data.duration,name = _this$data.name;
-        var classNames = getClassNames(name);
-        var currentDuration = (0, _utils.isObj)(duration) ? duration.enter : duration;
-        this.status = 'enter';
-        this.$emit('before-enter');
-        Promise.resolve().
-        then(nextTick).
-        then(function () {
-          _this.checkStatus('enter');
-          _this.$emit('enter');
-          _this.setData({
-            inited: true,
-            display: true,
-            classes: classNames.enter,
-            currentDuration: currentDuration });
-
-        }).
-        then(nextTick).
-        then(function () {
-          _this.checkStatus('enter');
-          _this.transitionEnded = false;
-          _this.setData({
-            classes: classNames['enter-to'] });
-
-        }).
-        catch(function () {});
-      },
-      leave: function leave() {var _this2 = this;
-        if (!this.data.display) {
-          return;
-        }var _this$data2 =
-        this.data,duration = _this$data2.duration,name = _this$data2.name;
-        var classNames = getClassNames(name);
-        var currentDuration = (0, _utils.isObj)(duration) ? duration.leave : duration;
-        this.status = 'leave';
-        this.$emit('before-leave');
-        Promise.resolve().
-        then(nextTick).
-        then(function () {
-          _this2.checkStatus('leave');
-          _this2.$emit('leave');
-          _this2.setData({
-            classes: classNames.leave,
-            currentDuration: currentDuration });
-
-        }).
-        then(nextTick).
-        then(function () {
-          _this2.checkStatus('leave');
-          _this2.transitionEnded = false;
-          setTimeout(function () {return _this2.onTransitionEnd();}, currentDuration);
-          _this2.setData({
-            classes: classNames['leave-to'] });
-
-        }).
-        catch(function () {});
-      },
-      checkStatus: function checkStatus(status) {
-        if (status !== this.status) {
-          throw new Error("incongruent status: ".concat(status));
-        }
-      },
-      onTransitionEnd: function onTransitionEnd() {
-        if (this.transitionEnded) {
-          return;
-        }
-        this.transitionEnded = true;
-        this.$emit("after-".concat(this.status));var _this$data3 =
-        this.data,show = _this$data3.show,display = _this$data3.display;
-        if (!show && display) {
-          this.setData({ display: false });
-        }
-      } } });
-
-
-};exports.transition = transition;
-
-/***/ }),
-
-/***/ 295:
-/*!************************************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/dialog/index.js ***!
-  \************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-var _component = __webpack_require__(/*! ../common/component */ 225);
-var _button = __webpack_require__(/*! ../mixins/button */ 231);
-var _openType = __webpack_require__(/*! ../mixins/open-type */ 232);
-var _color = __webpack_require__(/*! ../common/color */ 20);function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
-(0, _component.VantComponent)({
-  mixins: [_button.button, _openType.openType],
-  props: {
-    show: {
-      type: Boolean,
-      observer: function observer(show) {
-        !show && this.stopLoading();
-      } },
-
-    title: String,
-    message: String,
-    useSlot: Boolean,
-    className: String,
-    customStyle: String,
-    asyncClose: Boolean,
-    messageAlign: String,
-    overlayStyle: String,
-    useTitleSlot: Boolean,
-    showCancelButton: Boolean,
-    closeOnClickOverlay: Boolean,
-    confirmButtonOpenType: String,
-    width: null,
-    zIndex: {
-      type: Number,
-      value: 2000 },
-
-    confirmButtonText: {
-      type: String,
-      value: '确认' },
-
-    cancelButtonText: {
-      type: String,
-      value: '取消' },
-
-    confirmButtonColor: {
-      type: String,
-      value: _color.BLUE },
-
-    cancelButtonColor: {
-      type: String,
-      value: _color.GRAY },
-
-    showConfirmButton: {
-      type: Boolean,
-      value: true },
-
-    overlay: {
-      type: Boolean,
-      value: true },
-
-    transition: {
-      type: String,
-      value: 'scale' } },
-
-
-  data: {
-    loading: {
-      confirm: false,
-      cancel: false } },
-
-
-  methods: {
-    onConfirm: function onConfirm() {
-      this.handleAction('confirm');
-    },
-    onCancel: function onCancel() {
-      this.handleAction('cancel');
-    },
-    onClickOverlay: function onClickOverlay() {
-      this.onClose('overlay');
-    },
-    handleAction: function handleAction(action) {
-      if (this.data.asyncClose) {
-        this.setData(_defineProperty({}, "loading.".concat(
-        action), true));
-
-      }
-      this.onClose(action);
-    },
-    close: function close() {
-      this.setData({
-        show: false });
-
-    },
-    stopLoading: function stopLoading() {
-      this.setData({
-        loading: {
-          confirm: false,
-          cancel: false } });
-
-
-    },
-    onClose: function onClose(action) {
-      if (!this.data.asyncClose) {
-        this.close();
-      }
-      this.$emit('close', action);
-      // 把 dialog 实例传递出去，可以通过 stopLoading() 在外部关闭按钮的 loading
-      this.$emit(action, { dialog: this });
-      var callback = this.data[action === 'confirm' ? 'onConfirm' : 'onCancel'];
-      if (callback) {
-        callback(this);
-      }
-    } } });
-
-/***/ }),
-
-/***/ 296:
-/*!*************************************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/divider/index.js ***!
-  \*************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-var _component = __webpack_require__(/*! ../common/component */ 225);
-(0, _component.VantComponent)({
-  props: {
-    dashed: {
-      type: Boolean,
-      value: false },
-
-    hairline: {
-      type: Boolean,
-      value: false },
-
-    contentPosition: {
-      type: String,
-      value: '' },
-
-    fontSize: {
-      type: Number,
-      value: '' },
-
-    borderColor: {
-      type: String,
-      value: '' },
-
-    textColor: {
-      type: String,
-      value: '' },
-
-    customStyle: {
-      type: String,
-      value: '' } } });
-
-/***/ }),
-
-/***/ 3:
-/*!***********************************!*\
-  !*** (webpack)/buildin/global.js ***!
-  \***********************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-var g;
-
-// This works in non-strict mode
-g = (function() {
-	return this;
-})();
-
-try {
-	// This works if eval is allowed (see CSP)
-	g = g || new Function("return this")();
-} catch (e) {
-	// This works if the window reference is available
-	if (typeof window === "object") g = window;
-}
-
-// g can still be undefined, but nothing to do about it...
-// We return undefined, instead of nothing here, so it's
-// easier to handle this case. if(!global) { ...}
-
-module.exports = g;
-
-
-/***/ }),
-
-/***/ 30:
-/*!*****************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/static/js/course.js ***!
-  \*****************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _api_reference = _interopRequireDefault(__webpack_require__(/*! ./api_reference.js */ 15));
-var _http_commons = _interopRequireDefault(__webpack_require__(/*! ./http_commons.js */ 18));var _getCourse$listCourse;function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}var _default = (_getCourse$listCourse = {
-
-
-
-  getCourse: function getCourse(courseId) {
-    return new Promise(function (resolve, reject) {
-      uni.request({
-        url: _api_reference.default.GET_COURSE + '?courseId=' + courseId,
-        header: _http_commons.default.getAuthenticationHeader(),
-        success: function success(resp) {
-          if (_http_commons.default.successCheck(resp)) {
-            resolve(resp.data.data);
-          }
-        },
-        fail: function fail(err) {
-          _http_commons.default.commonFailHanlder(err);
-        } });
-
-    });
-  },
-
-  /**
-      * 获取我的课程列表
-      * 
-      * @param {Number} type  0:我教的课  1:我参与的课
-      * @return {Object} 课程列表
-      */
-  listCourse: function listCourse(type) {var offset = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;var count = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 10;
-    var url = type === 0 ? _api_reference.default.GET_TEACHED_COURSE : _api_reference.default.GET_JOINED_COURSE;
-
-    return new Promise(function (resolve, reject) {
-      console.log("请求");
-      uni.request({
-        url: url + '?offset=' + offset + '&count=' + count,
-        header: _http_commons.default.getAuthenticationHeader(),
-        success: function success(resp) {
-          if (_http_commons.default.successCheck(resp)) {
-            resolve(resp.data.data);
-          }
-        },
-        fail: function fail(err) {
-          _http_commons.default.commonFailHanlder(err);
-        } });
-
-    });
-  },
-
-  /**
-      * @param {String} courseName
-      * @param {String} classInfo
-      */
-  createCourse: function createCourse(courseName, classInfo) {
-    return new Promise(function (resolve, reject) {
-      uni.request({
-        url: _api_reference.default.CREATE_COURSE,
-        method: "POST",
-        header: _http_commons.default.getAuthenticationHeader(),
-        data: {
-          courseName: courseName,
-          classInfo: classInfo },
-
-        success: function success(resp) {
-          if (_http_commons.default.successCheck(resp)) {
-            resolve(resp.data.data);
-          }
-        },
-        fail: function fail(err) {
-          _http_commons.default.commonFailHanlder(err);
-          reject(err);
-        } });
-
-    });
-  },
-
-  joinCourse: function joinCourse(courseId) {
-    return new Promise(function (resolve, reject) {
-      uni.request({
-        url: _api_reference.default.JOIN_COURSE + '?courseId=' + courseId,
-        method: "POST",
-        header: _http_commons.default.getAuthenticationHeader(),
-        success: function success(resp) {
-          if (_http_commons.default.successCheck(resp)) {
-            resolve(resp.data.data);
-          }
-        },
-        fail: function fail(err) {
-          _http_commons.default.commonFailHanlder(err);
-          reject(err);
-        } });
-
-    });
-  },
-
-  deleteCourse: function deleteCourse(courseId) {
-    return new Promise(function (resolve, reject) {
-      uni.request({
-        url: _api_reference.default.DELETE_COURSE + '?courseId=' + courseId,
-        method: "DELETE",
-        header: _http_commons.default.getAuthenticationHeader(),
-        success: function success(resp) {
-          if (_http_commons.default.successCheck(resp)) {
-            resolve(resp.data.data);
-          }
-        },
-        fail: function fail(err) {
-          _http_commons.default.commonFailHanlder(err);
-          reject(err);
-        } });
-
-    });
-  },
-
-  exitCourse: function exitCourse(courseId) {
-    return new Promise(function (resolve, reject) {
-      uni.request({
-        url: _api_reference.default.EXIT_COURSE + '?courseId=' + courseId,
-        method: "DELETE",
-        header: _http_commons.default.getAuthenticationHeader(),
-        success: function success(resp) {
-          if (_http_commons.default.successCheck(resp)) {
-            resolve(resp.data.data);
-          }
-        },
-        fail: function fail(err) {
-          _http_commons.default.commonFailHanlder(err);
-          reject(err);
-        } });
-
-    });
-  },
-
-  /**
-      * 更新course 信息，服务端会校验，只允许更新courseName和classInfo
-      * 
-      * @param {Object} course 
-      */
-  updateCourse: function updateCourse(course) {
-    return new Promise(function (resolve, reject) {
-      uni.request({
-        url: _api_reference.default.UPDATE_COURSE,
-        method: "PUT",
-        header: _http_commons.default.getAuthenticationHeader(),
-        data: {
-          id: course.id,
-          courseName: course.courseName,
-          classInfo: course.classInfo },
-
-        success: function success(resp) {
-          if (_http_commons.default.successCheck(resp)) {
-            resolve(resp.data.data);
-          }
-        },
-        fail: function fail(err) {
-          _http_commons.default.commonFailHanlder(err);
-          reject(err);
-        } });
-
-    });
-  },
-
-  getCourseMembers: function getCourseMembers(courseId) {
-    return new Promise(function (resolve, reject) {
-      uni.request({
-        url: _api_reference.default.GET_MEMBERS + '?courseId=' + courseId,
-        header: _http_commons.default.getAuthenticationHeader(),
-        success: function success(resp) {
-          if (_http_commons.default.successCheck(resp)) {
-            resolve(resp.data.data);
-          }
-        },
-        fail: function fail(err) {
-          _http_commons.default.commonFailHanlder(err);
-          reject(err);
-        } });
-
-    });
-  },
-
-  kickoutUser: function kickoutUser(kickedUserId, courseId) {
-    return new Promise(function (resolve, reject) {
-      uni.request({
-        url: _api_reference.default.KICK_OUT_MEMBER + '?courseId=' + courseId + '&kickedUserId=' + kickedUserId,
-        method: "DELETE",
-        header: _http_commons.default.getAuthenticationHeader(),
-        success: function success(resp) {
-          if (_http_commons.default.successCheck(resp)) {
-            resolve(resp.data.data);
-          }
-        },
-        fail: function fail(err) {
-          _http_commons.default.commonFailHanlder(err);
-          reject(err);
-        } });
-
-    });
-  },
-
-  assignTeacher: function assignTeacher(assignedUserId, courseId) {
-    return new Promise(function (resolve, reject) {
-      uni.request({
-        url: _api_reference.default.ASSIGN_TEACHER + '?targetUserId=' + assignedUserId + '&courseId=' + courseId,
-        method: "PUT",
-        header: _http_commons.default.getAuthenticationHeader(),
-        success: function success(resp) {
-          if (_http_commons.default.successCheck(resp)) {
-            resolve(resp.data.data);
-          }
-        },
-        fail: function fail(err) {
-          _http_commons.default.commonFailHanlder(err);
-          reject(err);
-        } });
-
-    });
-  } }, _defineProperty(_getCourse$listCourse, "assignTeacher", function assignTeacher(
-
-assignedUserId, courseId) {
-  return new Promise(function (resolve, reject) {
-    uni.request({
-      url: _api_reference.default.ASSIGN_TEACHER + '?targetUserId=' + assignedUserId + '&courseId=' + courseId,
-      method: "PUT",
-      header: _http_commons.default.getAuthenticationHeader(),
-      success: function success(resp) {
-        if (_http_commons.default.successCheck(resp)) {
-          resolve(resp.data.data);
-        }
-      },
-      fail: function fail(err) {
-        _http_commons.default.commonFailHanlder(err);
-        reject(err);
-      } });
-
-  });
-}), _defineProperty(_getCourse$listCourse, "getScoreRule", function getScoreRule(
-
-courseId) {
-  return new Promise(function (resolve, reject) {
-    uni.request({
-      url: _api_reference.default.SCOER_RULE + '?courseId=' + courseId,
-      header: _http_commons.default.getAuthenticationHeader(),
-      success: function success(resp) {
-        if (_http_commons.default.successCheck(resp)) {
-          resolve(resp.data.data);
-        }
-      },
-      fail: function fail(err) {
-        _http_commons.default.commonFailHanlder(err);
-        reject(err);
-      } });
-
-  });
-}), _defineProperty(_getCourse$listCourse, "updateScoreRule", function updateScoreRule(
-
-rule) {
-  return new Promise(function (resolve, reject) {
-    uni.request({
-      url: _api_reference.default.SCOER_RULE,
-      method: "POST",
-      data: rule,
-      header: _http_commons.default.getAuthenticationHeader(),
-      success: function success(resp) {
-        if (_http_commons.default.successCheck(resp)) {
-          resolve(resp.data.data);
-        }
-      },
-      fail: function fail(err) {
-        _http_commons.default.commonFailHanlder(err);
-        reject(err);
-      } });
-
-  });
-}), _defineProperty(_getCourse$listCourse, "scoreCal", function scoreCal(
-
-courseId) {
-  return new Promise(function (resolve, reject) {
-    uni.request({
-      url: _api_reference.default.SCOER_CAL + '?courseId=' + courseId,
-      method: "POST",
-      header: _http_commons.default.getAuthenticationHeader(),
-      success: function success(resp) {
-        if (_http_commons.default.successCheck(resp)) {
-          resolve(resp.data.data);
-        }
-      },
-      fail: function fail(err) {
-        _http_commons.default.commonFailHanlder(err);
-        reject(err);
-      } });
-
-  });
-}), _defineProperty(_getCourse$listCourse, "getStudentScoreList", function getStudentScoreList(
-
-courseId) {
-  return new Promise(function (resolve, reject) {
-    uni.request({
-      url: _api_reference.default.GET_STUDENT_SCORE + '?courseId=' + courseId,
-      header: _http_commons.default.getAuthenticationHeader(),
-      success: function success(resp) {
-        if (_http_commons.default.successCheck(resp)) {
-          resolve(resp.data.data);
-        }
-      },
-      fail: function fail(err) {
-        _http_commons.default.commonFailHanlder(err);
-        reject(err);
-      } });
-
-  });
-}), _getCourse$listCourse);exports.default = _default;
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
-
-/***/ }),
-
-/***/ 311:
-/*!**********************************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/grid/index.js ***!
-  \**********************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-var _component = __webpack_require__(/*! ../common/component */ 225);
-var _utils = __webpack_require__(/*! ../common/utils */ 255);
-(0, _component.VantComponent)({
-  relation: {
-    name: 'grid-item',
-    type: 'descendant',
-    current: 'grid' },
-
-  props: {
-    square: {
-      type: Boolean,
-      observer: 'updateChildren' },
-
-    gutter: {
-      type: [Number, String],
-      value: 0,
-      observer: 'updateChildren' },
-
-    clickable: {
-      type: Boolean,
-      observer: 'updateChildren' },
-
-    columnNum: {
-      type: Number,
-      value: 4,
-      observer: 'updateChildren' },
-
-    center: {
-      type: Boolean,
-      value: true,
-      observer: 'updateChildren' },
-
-    border: {
-      type: Boolean,
-      value: true,
-      observer: 'updateChildren' } },
-
-
-  data: {
-    viewStyle: '' },
-
-  created: function created() {var
-    gutter = this.data.gutter;
-    if (gutter) {
-      this.setData({
-        viewStyle: "padding-left: ".concat((0, _utils.addUnit)(gutter)) });
-
-    }
-  },
-  methods: {
-    updateChildren: function updateChildren() {
-      this.children.forEach(function (child) {
-        child.updateStyle();
-      });
-    } } });
-
-/***/ }),
-
-/***/ 312:
+/***/ 231:
 /*!***************************************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/grid-item/index.js ***!
   \***************************************************************************************************************/
@@ -11361,9 +10032,9 @@ var _utils = __webpack_require__(/*! ../common/utils */ 255);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-var _link = __webpack_require__(/*! ../mixins/link */ 224);
-var _component = __webpack_require__(/*! ../common/component */ 225);
-var _utils = __webpack_require__(/*! ../common/utils */ 255);
+var _link = __webpack_require__(/*! ../mixins/link */ 31);
+var _component = __webpack_require__(/*! ../common/component */ 32);
+var _utils = __webpack_require__(/*! ../common/utils */ 230);
 (0, _component.VantComponent)({
   relation: {
     name: 'grid',
@@ -11431,575 +10102,7 @@ var _utils = __webpack_require__(/*! ../common/utils */ 255);
 
 /***/ }),
 
-/***/ 313:
-/*!***********************************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/steps/index.js ***!
-  \***********************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-var _component = __webpack_require__(/*! ../common/component */ 225);
-var _color = __webpack_require__(/*! ../common/color */ 20);
-(0, _component.VantComponent)({
-  classes: ['desc-class'],
-  props: {
-    icon: String,
-    steps: Array,
-    active: Number,
-    direction: {
-      type: String,
-      value: 'horizontal' },
-
-    activeColor: {
-      type: String,
-      value: _color.GREEN },
-
-    inactiveColor: {
-      type: String,
-      value: _color.GRAY_DARK },
-
-    activeIcon: {
-      type: String,
-      value: 'checked' },
-
-    inactiveIcon: String } });
-
-/***/ }),
-
-/***/ 335:
-/*!***************************************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/index-bar/index.js ***!
-  \***************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-var _component = __webpack_require__(/*! ../common/component */ 225);
-var _color = __webpack_require__(/*! ../common/color */ 20);
-var indexList = function indexList() {
-  var indexList = [];
-  var charCodeOfA = 'A'.charCodeAt(0);
-  for (var i = 0; i < 26; i++) {
-    indexList.push(String.fromCharCode(charCodeOfA + i));
-  }
-  return indexList;
-};
-(0, _component.VantComponent)({
-  relation: {
-    name: 'index-anchor',
-    type: 'descendant',
-    current: 'index-bar',
-    linked: function linked() {
-      this.updateData();
-    },
-    linkChanged: function linkChanged() {
-      this.updateData();
-    },
-    unlinked: function unlinked() {
-      this.updateData();
-    } },
-
-  props: {
-    sticky: {
-      type: Boolean,
-      value: true },
-
-    zIndex: {
-      type: Number,
-      value: 1 },
-
-    highlightColor: {
-      type: String,
-      value: _color.GREEN },
-
-    scrollTop: {
-      type: Number,
-      value: 0,
-      observer: 'onScroll' },
-
-    stickyOffsetTop: {
-      type: Number,
-      value: 0 },
-
-    indexList: {
-      type: Array,
-      value: indexList() } },
-
-
-  data: {
-    activeAnchorIndex: null,
-    showSidebar: false },
-
-  methods: {
-    updateData: function updateData() {var _this = this;
-      this.timer && clearTimeout(this.timer);
-      this.timer = setTimeout(function () {
-        _this.children = _this.getRelationNodes('../index-anchor/index');
-        _this.setData({
-          showSidebar: !!_this.children.length });
-
-        _this.setRect().then(function () {
-          _this.onScroll();
-        });
-      }, 0);
-    },
-    setRect: function setRect() {
-      return Promise.all([
-      this.setAnchorsRect(),
-      this.setListRect(),
-      this.setSiderbarRect()]);
-
-    },
-    setAnchorsRect: function setAnchorsRect() {var _this2 = this;
-      return Promise.all(this.children.map(function (anchor) {return anchor.
-        getRect('.van-index-anchor-wrapper').
-        then(function (rect) {
-          Object.assign(anchor, {
-            height: rect.height,
-            top: rect.top + _this2.data.scrollTop });
-
-        });}));
-    },
-    setListRect: function setListRect() {var _this3 = this;
-      return this.getRect('.van-index-bar').then(function (rect) {
-        Object.assign(_this3, {
-          height: rect.height,
-          top: rect.top + _this3.data.scrollTop });
-
-      });
-    },
-    setSiderbarRect: function setSiderbarRect() {var _this4 = this;
-      return this.getRect('.van-index-bar__sidebar').then(function (res) {
-        _this4.sidebar = {
-          height: res.height,
-          top: res.top };
-
-      });
-    },
-    setDiffData: function setDiffData(_ref) {var target = _ref.target,data = _ref.data;
-      var diffData = {};
-      Object.keys(data).forEach(function (key) {
-        if (target.data[key] !== data[key]) {
-          diffData[key] = data[key];
-        }
-      });
-      if (Object.keys(diffData).length) {
-        target.setData(diffData);
-      }
-    },
-    getAnchorRect: function getAnchorRect(anchor) {
-      return anchor.
-      getRect('.van-index-anchor-wrapper').
-      then(function (rect) {return {
-          height: rect.height,
-          top: rect.top };});
-
-    },
-    getActiveAnchorIndex: function getActiveAnchorIndex() {var
-      children = this.children;var _this$data =
-      this.data,sticky = _this$data.sticky,scrollTop = _this$data.scrollTop,stickyOffsetTop = _this$data.stickyOffsetTop;
-      for (var i = this.children.length - 1; i >= 0; i--) {
-        var preAnchorHeight = i > 0 ? children[i - 1].height : 0;
-        var reachTop = sticky ? preAnchorHeight + stickyOffsetTop : 0;
-        if (reachTop + scrollTop >= children[i].top) {
-          return i;
-        }
-      }
-      return -1;
-    },
-    onScroll: function onScroll() {var _this5 = this;var _this$children =
-      this.children,children = _this$children === void 0 ? [] : _this$children;
-      if (!children.length) {
-        return;
-      }var _this$data2 =
-      this.data,sticky = _this$data2.sticky,stickyOffsetTop = _this$data2.stickyOffsetTop,zIndex = _this$data2.zIndex,highlightColor = _this$data2.highlightColor,scrollTop = _this$data2.scrollTop;
-      var active = this.getActiveAnchorIndex();
-      this.setDiffData({
-        target: this,
-        data: {
-          activeAnchorIndex: active } });
-
-
-      if (sticky) {
-        var isActiveAnchorSticky = false;
-        if (active !== -1) {
-          isActiveAnchorSticky =
-          children[active].top <= stickyOffsetTop + scrollTop;
-        }
-        children.forEach(function (item, index) {
-          if (index === active) {
-            var wrapperStyle = '';
-            var anchorStyle = "\n              color: ".concat(
-            highlightColor, ";\n            ");
-
-            if (isActiveAnchorSticky) {
-              wrapperStyle = "\n                height: ".concat(
-              children[index].height, "px;\n              ");
-
-              anchorStyle = "\n                position: fixed;\n                top: ".concat(
-
-              stickyOffsetTop, "px;\n                z-index: ").concat(
-              zIndex, ";\n                color: ").concat(
-              highlightColor, ";\n              ");
-
-            }
-            _this5.setDiffData({
-              target: item,
-              data: {
-                active: true,
-                anchorStyle: anchorStyle,
-                wrapperStyle: wrapperStyle } });
-
-
-          } else
-          if (index === active - 1) {
-            var currentAnchor = children[index];
-            var currentOffsetTop = currentAnchor.top;
-            var targetOffsetTop = index === children.length - 1 ?
-            _this5.top :
-            children[index + 1].top;
-            var parentOffsetHeight = targetOffsetTop - currentOffsetTop;
-            var translateY = parentOffsetHeight - currentAnchor.height;
-            var _anchorStyle = "\n              position: relative;\n              transform: translate3d(0, ".concat(
-
-            translateY, "px, 0);\n              z-index: ").concat(
-            zIndex, ";\n              color: ").concat(
-            highlightColor, ";\n            ");
-
-            _this5.setDiffData({
-              target: item,
-              data: {
-                active: true,
-                anchorStyle: _anchorStyle } });
-
-
-          } else
-          {
-            _this5.setDiffData({
-              target: item,
-              data: {
-                active: false,
-                anchorStyle: '',
-                wrapperStyle: '' } });
-
-
-          }
-        });
-      }
-    },
-    onClick: function onClick(event) {
-      this.scrollToAnchor(event.target.dataset.index);
-    },
-    onTouchMove: function onTouchMove(event) {
-      var sidebarLength = this.children.length;
-      var touch = event.touches[0];
-      var itemHeight = this.sidebar.height / sidebarLength;
-      var index = Math.floor((touch.clientY - this.sidebar.top) / itemHeight);
-      if (index < 0) {
-        index = 0;
-      } else
-      if (index > sidebarLength - 1) {
-        index = sidebarLength - 1;
-      }
-      this.scrollToAnchor(index);
-    },
-    onTouchStop: function onTouchStop() {
-      this.scrollToAnchorIndex = null;
-    },
-    scrollToAnchor: function scrollToAnchor(index) {var _this6 = this;
-      if (typeof index !== 'number' || this.scrollToAnchorIndex === index) {
-        return;
-      }
-      this.scrollToAnchorIndex = index;
-      var anchor = this.children.find(function (item) {return item.data.index === _this6.data.indexList[index];});
-      if (anchor) {
-        this.$emit('select', anchor.data.index);
-        wx.pageScrollTo({
-          duration: 0,
-          scrollTop: anchor.top });
-
-      }
-    } } });
-
-/***/ }),
-
-/***/ 336:
-/*!******************************************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/index-anchor/index.js ***!
-  \******************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-var _component = __webpack_require__(/*! ../common/component */ 225);
-(0, _component.VantComponent)({
-  relation: {
-    name: 'index-bar',
-    type: 'ancestor',
-    current: 'index-anchor' },
-
-  props: {
-    useSlot: Boolean,
-    index: null },
-
-  data: {
-    active: false,
-    wrapperStyle: '',
-    anchorStyle: '' } });
-
-/***/ }),
-
-/***/ 337:
-/*!**********************************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/cell/index.js ***!
-  \**********************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-var _link = __webpack_require__(/*! ../mixins/link */ 224);
-var _component = __webpack_require__(/*! ../common/component */ 225);
-(0, _component.VantComponent)({
-  classes: [
-  'title-class',
-  'label-class',
-  'value-class',
-  'right-icon-class',
-  'hover-class'],
-
-  mixins: [_link.link],
-  props: {
-    title: null,
-    value: null,
-    icon: String,
-    size: String,
-    label: String,
-    center: Boolean,
-    isLink: Boolean,
-    required: Boolean,
-    clickable: Boolean,
-    titleWidth: String,
-    customStyle: String,
-    arrowDirection: String,
-    useLabelSlot: Boolean,
-    border: {
-      type: Boolean,
-      value: true } },
-
-
-  methods: {
-    onClick: function onClick(event) {
-      this.$emit('click', event.detail);
-      this.jumpLink();
-    } } });
-
-/***/ }),
-
-/***/ 338:
-/*!****************************************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/cell-group/index.js ***!
-  \****************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-var _component = __webpack_require__(/*! ../common/component */ 225);
-(0, _component.VantComponent)({
-  props: {
-    title: String,
-    border: {
-      type: Boolean,
-      value: true } } });
-
-/***/ }),
-
-/***/ 339:
-/*!****************************************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/swipe-cell/index.js ***!
-  \****************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-var _component = __webpack_require__(/*! ../common/component */ 225);
-var _touch = __webpack_require__(/*! ../mixins/touch */ 340);
-var _utils = __webpack_require__(/*! ../common/utils */ 255);
-var THRESHOLD = 0.3;
-var ARRAY = [];
-(0, _component.VantComponent)({
-  props: {
-    disabled: Boolean,
-    leftWidth: {
-      type: Number,
-      value: 0,
-      observer: function observer() {var leftWidth = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
-        if (this.offset > 0) {
-          this.swipeMove(leftWidth);
-        }
-      } },
-
-    rightWidth: {
-      type: Number,
-      value: 0,
-      observer: function observer() {var rightWidth = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
-        if (this.offset < 0) {
-          this.swipeMove(-rightWidth);
-        }
-      } },
-
-    asyncClose: Boolean,
-    name: {
-      type: [Number, String],
-      value: '' } },
-
-
-  mixins: [_touch.touch],
-  data: {
-    catchMove: false },
-
-  created: function created() {
-    this.offset = 0;
-    ARRAY.push(this);
-  },
-  destroyed: function destroyed() {var _this = this;
-    ARRAY = ARRAY.filter(function (item) {return item !== _this;});
-  },
-  methods: {
-    open: function open(position) {var _this$data =
-      this.data,leftWidth = _this$data.leftWidth,rightWidth = _this$data.rightWidth;
-      var offset = position === 'left' ? leftWidth : -rightWidth;
-      this.swipeMove(offset);
-      this.$emit('open', {
-        position: position,
-        name: this.data.name });
-
-    },
-    close: function close() {
-      this.swipeMove(0);
-    },
-    swipeMove: function swipeMove() {var offset = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
-      this.offset = (0, _utils.range)(offset, -this.data.rightWidth, this.data.leftWidth);
-      var transform = "translate3d(".concat(this.offset, "px, 0, 0)");
-      var transition = this.dragging ?
-      'none' :
-      'transform .6s cubic-bezier(0.18, 0.89, 0.32, 1)';
-      this.setData({
-        wrapperStyle: "\n        -webkit-transform: ".concat(
-        transform, ";\n        -webkit-transition: ").concat(
-        transition, ";\n        transform: ").concat(
-        transform, ";\n        transition: ").concat(
-        transition, ";\n      ") });
-
-
-    },
-    swipeLeaveTransition: function swipeLeaveTransition() {var _this$data2 =
-      this.data,leftWidth = _this$data2.leftWidth,rightWidth = _this$data2.rightWidth;var
-      offset = this.offset;
-      if (rightWidth > 0 && -offset > rightWidth * THRESHOLD) {
-        this.open('right');
-      } else
-      if (leftWidth > 0 && offset > leftWidth * THRESHOLD) {
-        this.open('left');
-      } else
-      {
-        this.swipeMove(0);
-      }
-      this.setData({ catchMove: false });
-    },
-    startDrag: function startDrag(event) {
-      if (this.data.disabled) {
-        return;
-      }
-      this.startOffset = this.offset;
-      this.touchStart(event);
-    },
-    noop: function noop() {},
-    onDrag: function onDrag(event) {var _this2 = this;
-      if (this.data.disabled) {
-        return;
-      }
-      this.touchMove(event);
-      if (this.direction !== 'horizontal') {
-        return;
-      }
-      this.dragging = true;
-      ARRAY.filter(function (item) {return item !== _this2;}).forEach(function (item) {return item.close();});
-      this.setData({ catchMove: true });
-      this.swipeMove(this.startOffset + this.deltaX);
-    },
-    endDrag: function endDrag() {
-      if (this.data.disabled) {
-        return;
-      }
-      this.dragging = false;
-      this.swipeLeaveTransition();
-    },
-    onClick: function onClick(event) {var _event$currentTarget$ =
-      event.currentTarget.dataset.key,position = _event$currentTarget$ === void 0 ? 'outside' : _event$currentTarget$;
-      this.$emit('click', position);
-      if (!this.offset) {
-        return;
-      }
-      if (this.data.asyncClose) {
-        this.$emit('close', {
-          position: position,
-          instance: this,
-          name: this.data.name });
-
-      } else
-      {
-        this.swipeMove(0);
-      }
-    } } });
-
-/***/ }),
-
-/***/ 340:
-/*!************************************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/mixins/touch.js ***!
-  \************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.touch = void 0;var MIN_DISTANCE = 10;
-function getDirection(x, y) {
-  if (x > y && x > MIN_DISTANCE) {
-    return 'horizontal';
-  }
-  if (y > x && y > MIN_DISTANCE) {
-    return 'vertical';
-  }
-  return '';
-}
-var touch = Behavior({
-  methods: {
-    resetTouchStatus: function resetTouchStatus() {
-      this.direction = '';
-      this.deltaX = 0;
-      this.deltaY = 0;
-      this.offsetX = 0;
-      this.offsetY = 0;
-    },
-    touchStart: function touchStart(event) {
-      this.resetTouchStatus();
-      var touch = event.touches[0];
-      this.startX = touch.clientX;
-      this.startY = touch.clientY;
-    },
-    touchMove: function touchMove(event) {
-      var touch = event.touches[0];
-      this.deltaX = touch.clientX - this.startX;
-      this.deltaY = touch.clientY - this.startY;
-      this.offsetX = Math.abs(this.deltaX);
-      this.offsetY = Math.abs(this.deltaY);
-      this.direction = this.direction || getDirection(this.offsetX, this.offsetY);
-    } } });exports.touch = touch;
-
-/***/ }),
-
-/***/ 362:
+/***/ 232:
 /*!*********************************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/tab/index.js ***!
   \*********************************************************************************************************/
@@ -12007,7 +10110,7 @@ var touch = Behavior({
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-var _component = __webpack_require__(/*! ../common/component */ 225);
+var _component = __webpack_require__(/*! ../common/component */ 32);
 (0, _component.VantComponent)({
   relation: {
     name: 'tabs',
@@ -12067,7 +10170,7 @@ var _component = __webpack_require__(/*! ../common/component */ 225);
 
 /***/ }),
 
-/***/ 363:
+/***/ 233:
 /*!**********************************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/tabs/index.js ***!
   \**********************************************************************************************************/
@@ -12075,9 +10178,9 @@ var _component = __webpack_require__(/*! ../common/component */ 225);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-var _component = __webpack_require__(/*! ../common/component */ 225);
-var _touch = __webpack_require__(/*! ../mixins/touch */ 340);
-var _utils = __webpack_require__(/*! ../common/utils */ 255);function _slicedToArray(arr, i) {return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest();}function _nonIterableRest() {throw new TypeError("Invalid attempt to destructure non-iterable instance");}function _iterableToArrayLimit(arr, i) {if (!(Symbol.iterator in Object(arr) || Object.prototype.toString.call(arr) === "[object Arguments]")) {return;}var _arr = [];var _n = true;var _d = false;var _e = undefined;try {for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {_arr.push(_s.value);if (i && _arr.length === i) break;}} catch (err) {_d = true;_e = err;} finally {try {if (!_n && _i["return"] != null) _i["return"]();} finally {if (_d) throw _e;}}return _arr;}function _arrayWithHoles(arr) {if (Array.isArray(arr)) return arr;}
+var _component = __webpack_require__(/*! ../common/component */ 32);
+var _touch = __webpack_require__(/*! ../mixins/touch */ 234);
+var _utils = __webpack_require__(/*! ../common/utils */ 230);function _slicedToArray(arr, i) {return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest();}function _nonIterableRest() {throw new TypeError("Invalid attempt to destructure non-iterable instance");}function _iterableToArrayLimit(arr, i) {if (!(Symbol.iterator in Object(arr) || Object.prototype.toString.call(arr) === "[object Arguments]")) {return;}var _arr = [];var _n = true;var _d = false;var _e = undefined;try {for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {_arr.push(_s.value);if (i && _arr.length === i) break;}} catch (err) {_d = true;_e = err;} finally {try {if (!_n && _i["return"] != null) _i["return"]();} finally {if (_d) throw _e;}}return _arr;}function _arrayWithHoles(arr) {if (Array.isArray(arr)) return arr;}
 (0, _component.VantComponent)({
   mixins: [_touch.touch],
   classes: ['nav-class', 'tab-class', 'tab-active-class', 'line-class'],
@@ -12350,6 +10453,1982 @@ var _utils = __webpack_require__(/*! ../common/utils */ 255);function _slicedToA
 
 /***/ }),
 
+/***/ 234:
+/*!************************************************************************************************************!*\
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/mixins/touch.js ***!
+  \************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });exports.touch = void 0;var MIN_DISTANCE = 10;
+function getDirection(x, y) {
+  if (x > y && x > MIN_DISTANCE) {
+    return 'horizontal';
+  }
+  if (y > x && y > MIN_DISTANCE) {
+    return 'vertical';
+  }
+  return '';
+}
+var touch = Behavior({
+  methods: {
+    resetTouchStatus: function resetTouchStatus() {
+      this.direction = '';
+      this.deltaX = 0;
+      this.deltaY = 0;
+      this.offsetX = 0;
+      this.offsetY = 0;
+    },
+    touchStart: function touchStart(event) {
+      this.resetTouchStatus();
+      var touch = event.touches[0];
+      this.startX = touch.clientX;
+      this.startY = touch.clientY;
+    },
+    touchMove: function touchMove(event) {
+      var touch = event.touches[0];
+      this.deltaX = touch.clientX - this.startX;
+      this.deltaY = touch.clientY - this.startY;
+      this.offsetX = Math.abs(this.deltaX);
+      this.offsetY = Math.abs(this.deltaY);
+      this.direction = this.direction || getDirection(this.offsetX, this.offsetY);
+    } } });exports.touch = touch;
+
+/***/ }),
+
+/***/ 235:
+/*!************************************************************************************************************!*\
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/notify/index.js ***!
+  \************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+var _component = __webpack_require__(/*! ../common/component */ 32);
+var _color = __webpack_require__(/*! ../common/color */ 20);
+(0, _component.VantComponent)({
+  props: {
+    message: String,
+    background: String,
+    type: {
+      type: String,
+      value: 'danger' },
+
+    color: {
+      type: String,
+      value: _color.WHITE },
+
+    duration: {
+      type: Number,
+      value: 3000 },
+
+    zIndex: {
+      type: Number,
+      value: 110 },
+
+    safeAreaInsetTop: {
+      type: Boolean,
+      value: false } },
+
+
+  data: {
+    show: false },
+
+  created: function created() {var _wx$getSystemInfoSync =
+    wx.getSystemInfoSync(),statusBarHeight = _wx$getSystemInfoSync.statusBarHeight;
+    this.setData({ statusBarHeight: statusBarHeight });
+  },
+  methods: {
+    show: function show() {var _this = this;var _this$data =
+      this.data,duration = _this$data.duration,onOpened = _this$data.onOpened;
+      clearTimeout(this.timer);
+      this.setData({ show: true });
+      wx.nextTick(onOpened);
+      if (duration > 0 && duration !== Infinity) {
+        this.timer = setTimeout(function () {
+          _this.hide();
+        }, duration);
+      }
+    },
+    hide: function hide() {var
+      onClose = this.data.onClose;
+      clearTimeout(this.timer);
+      this.setData({ show: false });
+      wx.nextTick(onClose);
+    },
+    onTap: function onTap(event) {var
+      onClick = this.data.onClick;
+      if (onClick) {
+        onClick(event.detail);
+      }
+    } } });
+
+/***/ }),
+
+/***/ 236:
+/*!**********************************************************************************************************!*\
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/icon/index.js ***!
+  \**********************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+var _component = __webpack_require__(/*! ../common/component */ 32);
+(0, _component.VantComponent)({
+  props: {
+    dot: Boolean,
+    info: null,
+    size: null,
+    color: String,
+    customStyle: String,
+    classPrefix: {
+      type: String,
+      value: 'van-icon' },
+
+    name: {
+      type: String,
+      observer: function observer(val) {
+        this.setData({
+          isImageName: val.indexOf('/') !== -1 });
+
+      } } },
+
+
+  methods: {
+    onClick: function onClick() {
+      this.$emit('click');
+    } } });
+
+/***/ }),
+
+/***/ 237:
+/*!************************************************************************************************************!*\
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/button/index.js ***!
+  \************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+var _component = __webpack_require__(/*! ../common/component */ 32);
+var _button = __webpack_require__(/*! ../mixins/button */ 238);
+var _openType = __webpack_require__(/*! ../mixins/open-type */ 239);
+(0, _component.VantComponent)({
+  mixins: [_button.button, _openType.openType],
+  classes: ['hover-class', 'loading-class'],
+  data: {
+    baseStyle: '' },
+
+  props: {
+    icon: String,
+    plain: Boolean,
+    block: Boolean,
+    round: Boolean,
+    square: Boolean,
+    loading: Boolean,
+    hairline: Boolean,
+    disabled: Boolean,
+    loadingText: String,
+    customStyle: String,
+    loadingType: {
+      type: String,
+      value: 'circular' },
+
+    type: {
+      type: String,
+      value: 'default' },
+
+    size: {
+      type: String,
+      value: 'normal' },
+
+    loadingSize: {
+      type: String,
+      value: '20px' },
+
+    color: {
+      type: String,
+      observer: function observer(color) {
+        var style = '';
+        if (color) {
+          style += "color: ".concat(this.data.plain ? color : 'white', ";");
+          if (!this.data.plain) {
+            // Use background instead of backgroundColor to make linear-gradient work
+            style += "background: ".concat(color, ";");
+          }
+          // hide border when color is linear-gradient
+          if (color.indexOf('gradient') !== -1) {
+            style += 'border: 0;';
+          } else
+          {
+            style += "border-color: ".concat(color, ";");
+          }
+        }
+        if (style !== this.data.baseStyle) {
+          this.setData({ baseStyle: style });
+        }
+      } } },
+
+
+  methods: {
+    onClick: function onClick() {
+      if (!this.data.disabled && !this.data.loading) {
+        this.$emit('click');
+      }
+    } } });
+
+/***/ }),
+
+/***/ 238:
+/*!*************************************************************************************************************!*\
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/mixins/button.js ***!
+  \*************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });exports.button = void 0;var button = Behavior({
+  externalClasses: ['hover-class'],
+  properties: {
+    id: String,
+    lang: {
+      type: String,
+      value: 'en' },
+
+    businessId: Number,
+    sessionFrom: String,
+    sendMessageTitle: String,
+    sendMessagePath: String,
+    sendMessageImg: String,
+    showMessageCard: Boolean,
+    appParameter: String,
+    ariaLabel: String } });exports.button = button;
+
+/***/ }),
+
+/***/ 239:
+/*!****************************************************************************************************************!*\
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/mixins/open-type.js ***!
+  \****************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });exports.openType = void 0;var openType = Behavior({
+  properties: {
+    openType: String },
+
+  methods: {
+    bindGetUserInfo: function bindGetUserInfo(event) {
+      this.$emit('getuserinfo', event.detail);
+    },
+    bindContact: function bindContact(event) {
+      this.$emit('contact', event.detail);
+    },
+    bindGetPhoneNumber: function bindGetPhoneNumber(event) {
+      this.$emit('getphonenumber', event.detail);
+    },
+    bindError: function bindError(event) {
+      this.$emit('error', event.detail);
+    },
+    bindLaunchApp: function bindLaunchApp(event) {
+      this.$emit('launchapp', event.detail);
+    },
+    bindOpenSetting: function bindOpenSetting(event) {
+      this.$emit('opensetting', event.detail);
+    } } });exports.openType = openType;
+
+/***/ }),
+
+/***/ 240:
+/*!****************************************************************************************************************!*\
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/swipe-cell/index.js ***!
+  \****************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+var _component = __webpack_require__(/*! ../common/component */ 32);
+var _touch = __webpack_require__(/*! ../mixins/touch */ 234);
+var _utils = __webpack_require__(/*! ../common/utils */ 230);
+var THRESHOLD = 0.3;
+var ARRAY = [];
+(0, _component.VantComponent)({
+  props: {
+    disabled: Boolean,
+    leftWidth: {
+      type: Number,
+      value: 0,
+      observer: function observer() {var leftWidth = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
+        if (this.offset > 0) {
+          this.swipeMove(leftWidth);
+        }
+      } },
+
+    rightWidth: {
+      type: Number,
+      value: 0,
+      observer: function observer() {var rightWidth = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
+        if (this.offset < 0) {
+          this.swipeMove(-rightWidth);
+        }
+      } },
+
+    asyncClose: Boolean,
+    name: {
+      type: [Number, String],
+      value: '' } },
+
+
+  mixins: [_touch.touch],
+  data: {
+    catchMove: false },
+
+  created: function created() {
+    this.offset = 0;
+    ARRAY.push(this);
+  },
+  destroyed: function destroyed() {var _this = this;
+    ARRAY = ARRAY.filter(function (item) {return item !== _this;});
+  },
+  methods: {
+    open: function open(position) {var _this$data =
+      this.data,leftWidth = _this$data.leftWidth,rightWidth = _this$data.rightWidth;
+      var offset = position === 'left' ? leftWidth : -rightWidth;
+      this.swipeMove(offset);
+      this.$emit('open', {
+        position: position,
+        name: this.data.name });
+
+    },
+    close: function close() {
+      this.swipeMove(0);
+    },
+    swipeMove: function swipeMove() {var offset = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
+      this.offset = (0, _utils.range)(offset, -this.data.rightWidth, this.data.leftWidth);
+      var transform = "translate3d(".concat(this.offset, "px, 0, 0)");
+      var transition = this.dragging ?
+      'none' :
+      'transform .6s cubic-bezier(0.18, 0.89, 0.32, 1)';
+      this.setData({
+        wrapperStyle: "\n        -webkit-transform: ".concat(
+        transform, ";\n        -webkit-transition: ").concat(
+        transition, ";\n        transform: ").concat(
+        transform, ";\n        transition: ").concat(
+        transition, ";\n      ") });
+
+
+    },
+    swipeLeaveTransition: function swipeLeaveTransition() {var _this$data2 =
+      this.data,leftWidth = _this$data2.leftWidth,rightWidth = _this$data2.rightWidth;var
+      offset = this.offset;
+      if (rightWidth > 0 && -offset > rightWidth * THRESHOLD) {
+        this.open('right');
+      } else
+      if (leftWidth > 0 && offset > leftWidth * THRESHOLD) {
+        this.open('left');
+      } else
+      {
+        this.swipeMove(0);
+      }
+      this.setData({ catchMove: false });
+    },
+    startDrag: function startDrag(event) {
+      if (this.data.disabled) {
+        return;
+      }
+      this.startOffset = this.offset;
+      this.touchStart(event);
+    },
+    noop: function noop() {},
+    onDrag: function onDrag(event) {var _this2 = this;
+      if (this.data.disabled) {
+        return;
+      }
+      this.touchMove(event);
+      if (this.direction !== 'horizontal') {
+        return;
+      }
+      this.dragging = true;
+      ARRAY.filter(function (item) {return item !== _this2;}).forEach(function (item) {return item.close();});
+      this.setData({ catchMove: true });
+      this.swipeMove(this.startOffset + this.deltaX);
+    },
+    endDrag: function endDrag() {
+      if (this.data.disabled) {
+        return;
+      }
+      this.dragging = false;
+      this.swipeLeaveTransition();
+    },
+    onClick: function onClick(event) {var _event$currentTarget$ =
+      event.currentTarget.dataset.key,position = _event$currentTarget$ === void 0 ? 'outside' : _event$currentTarget$;
+      this.$emit('click', position);
+      if (!this.offset) {
+        return;
+      }
+      if (this.data.asyncClose) {
+        this.$emit('close', {
+          position: position,
+          instance: this,
+          name: this.data.name });
+
+      } else
+      {
+        this.swipeMove(0);
+      }
+    } } });
+
+/***/ }),
+
+/***/ 241:
+/*!************************************************************************************************************!*\
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/dialog/index.js ***!
+  \************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+var _component = __webpack_require__(/*! ../common/component */ 32);
+var _button = __webpack_require__(/*! ../mixins/button */ 238);
+var _openType = __webpack_require__(/*! ../mixins/open-type */ 239);
+var _color = __webpack_require__(/*! ../common/color */ 20);function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
+(0, _component.VantComponent)({
+  mixins: [_button.button, _openType.openType],
+  props: {
+    show: {
+      type: Boolean,
+      observer: function observer(show) {
+        !show && this.stopLoading();
+      } },
+
+    title: String,
+    message: String,
+    useSlot: Boolean,
+    className: String,
+    customStyle: String,
+    asyncClose: Boolean,
+    messageAlign: String,
+    overlayStyle: String,
+    useTitleSlot: Boolean,
+    showCancelButton: Boolean,
+    closeOnClickOverlay: Boolean,
+    confirmButtonOpenType: String,
+    width: null,
+    zIndex: {
+      type: Number,
+      value: 2000 },
+
+    confirmButtonText: {
+      type: String,
+      value: '确认' },
+
+    cancelButtonText: {
+      type: String,
+      value: '取消' },
+
+    confirmButtonColor: {
+      type: String,
+      value: _color.BLUE },
+
+    cancelButtonColor: {
+      type: String,
+      value: _color.GRAY },
+
+    showConfirmButton: {
+      type: Boolean,
+      value: true },
+
+    overlay: {
+      type: Boolean,
+      value: true },
+
+    transition: {
+      type: String,
+      value: 'scale' } },
+
+
+  data: {
+    loading: {
+      confirm: false,
+      cancel: false } },
+
+
+  methods: {
+    onConfirm: function onConfirm() {
+      this.handleAction('confirm');
+    },
+    onCancel: function onCancel() {
+      this.handleAction('cancel');
+    },
+    onClickOverlay: function onClickOverlay() {
+      this.onClose('overlay');
+    },
+    handleAction: function handleAction(action) {
+      if (this.data.asyncClose) {
+        this.setData(_defineProperty({}, "loading.".concat(
+        action), true));
+
+      }
+      this.onClose(action);
+    },
+    close: function close() {
+      this.setData({
+        show: false });
+
+    },
+    stopLoading: function stopLoading() {
+      this.setData({
+        loading: {
+          confirm: false,
+          cancel: false } });
+
+
+    },
+    onClose: function onClose(action) {
+      if (!this.data.asyncClose) {
+        this.close();
+      }
+      this.$emit('close', action);
+      // 把 dialog 实例传递出去，可以通过 stopLoading() 在外部关闭按钮的 loading
+      this.$emit(action, { dialog: this });
+      var callback = this.data[action === 'confirm' ? 'onConfirm' : 'onCancel'];
+      if (callback) {
+        callback(this);
+      }
+    } } });
+
+/***/ }),
+
+/***/ 242:
+/*!*************************************************************************************************************!*\
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/divider/index.js ***!
+  \*************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+var _component = __webpack_require__(/*! ../common/component */ 32);
+(0, _component.VantComponent)({
+  props: {
+    dashed: {
+      type: Boolean,
+      value: false },
+
+    hairline: {
+      type: Boolean,
+      value: false },
+
+    contentPosition: {
+      type: String,
+      value: '' },
+
+    fontSize: {
+      type: Number,
+      value: '' },
+
+    borderColor: {
+      type: String,
+      value: '' },
+
+    textColor: {
+      type: String,
+      value: '' },
+
+    customStyle: {
+      type: String,
+      value: '' } } });
+
+/***/ }),
+
+/***/ 278:
+/*!***********************************************************************************************************!*\
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/image/index.js ***!
+  \***********************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+var _utils = __webpack_require__(/*! ../common/utils */ 230);
+var _component = __webpack_require__(/*! ../common/component */ 32);
+var _button = __webpack_require__(/*! ../mixins/button */ 238);
+var _openType = __webpack_require__(/*! ../mixins/open-type */ 239);
+var FIT_MODE_MAP = {
+  none: 'center',
+  fill: 'scaleToFill',
+  cover: 'aspectFill',
+  contain: 'aspectFit' };
+
+(0, _component.VantComponent)({
+  mixins: [_button.button, _openType.openType],
+  classes: ['custom-class', 'loading-class', 'error-class', 'image-class'],
+  props: {
+    src: {
+      type: String,
+      observer: function observer() {
+        this.setData({
+          error: false,
+          loading: true });
+
+      } },
+
+    round: Boolean,
+    width: {
+      type: null,
+      observer: 'setStyle' },
+
+    height: {
+      type: null,
+      observer: 'setStyle' },
+
+    radius: null,
+    lazyLoad: Boolean,
+    useErrorSlot: Boolean,
+    useLoadingSlot: Boolean,
+    showMenuByLongpress: Boolean,
+    fit: {
+      type: String,
+      value: 'fill',
+      observer: 'setMode' },
+
+    showError: {
+      type: Boolean,
+      value: true },
+
+    showLoading: {
+      type: Boolean,
+      value: true } },
+
+
+  data: {
+    error: false,
+    loading: true,
+    viewStyle: '' },
+
+  mounted: function mounted() {
+    this.setMode();
+    this.setStyle();
+  },
+  methods: {
+    setMode: function setMode() {
+      this.setData({
+        mode: FIT_MODE_MAP[this.data.fit] });
+
+    },
+    setStyle: function setStyle() {var _this$data =
+      this.data,width = _this$data.width,height = _this$data.height,radius = _this$data.radius;
+      var style = '';
+      if ((0, _utils.isDef)(width)) {
+        style += "width: ".concat((0, _utils.addUnit)(width), ";");
+      }
+      if ((0, _utils.isDef)(height)) {
+        style += "height: ".concat((0, _utils.addUnit)(height), ";");
+      }
+      if ((0, _utils.isDef)(radius)) {
+        style += 'overflow: hidden;';
+        style += "border-radius: ".concat((0, _utils.addUnit)(radius), ";");
+      }
+      this.setData({ viewStyle: style });
+    },
+    onLoad: function onLoad(event) {
+      this.setData({
+        loading: false });
+
+      this.$emit('load', event.detail);
+    },
+    onError: function onError(event) {
+      this.setData({
+        loading: false,
+        error: true });
+
+      this.$emit('error', event.detail);
+    },
+    onClick: function onClick(event) {
+      this.$emit('click', event.detail);
+    } } });
+
+/***/ }),
+
+/***/ 279:
+/*!*********************************************************************************************************!*\
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/tag/index.js ***!
+  \*********************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+var _component = __webpack_require__(/*! ../common/component */ 32);
+(0, _component.VantComponent)({
+  props: {
+    size: String,
+    mark: Boolean,
+    color: String,
+    plain: Boolean,
+    round: Boolean,
+    textColor: String,
+    type: {
+      type: String,
+      value: 'default' },
+
+    closeable: Boolean },
+
+  methods: {
+    onClose: function onClose() {
+      this.$emit('close');
+    } } });
+
+/***/ }),
+
+/***/ 294:
+/*!***********************************************************************************************************!*\
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/popup/index.js ***!
+  \***********************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+var _component = __webpack_require__(/*! ../common/component */ 32);
+var _transition = __webpack_require__(/*! ../mixins/transition */ 295);
+(0, _component.VantComponent)({
+  classes: [
+  'enter-class',
+  'enter-active-class',
+  'enter-to-class',
+  'leave-class',
+  'leave-active-class',
+  'leave-to-class'],
+
+  mixins: [(0, _transition.transition)(false)],
+  props: {
+    round: Boolean,
+    closeable: Boolean,
+    customStyle: String,
+    overlayStyle: String,
+    transition: {
+      type: String,
+      observer: 'observeClass' },
+
+    zIndex: {
+      type: Number,
+      value: 100 },
+
+    overlay: {
+      type: Boolean,
+      value: true },
+
+    closeIcon: {
+      type: String,
+      value: 'cross' },
+
+    closeIconPosition: {
+      type: String,
+      value: 'top-right' },
+
+    closeOnClickOverlay: {
+      type: Boolean,
+      value: true },
+
+    position: {
+      type: String,
+      value: 'center',
+      observer: 'observeClass' },
+
+    safeAreaInsetBottom: {
+      type: Boolean,
+      value: true },
+
+    safeAreaInsetTop: {
+      type: Boolean,
+      value: false } },
+
+
+  created: function created() {
+    this.observeClass();
+  },
+  methods: {
+    onClickCloseIcon: function onClickCloseIcon() {
+      this.$emit('close');
+    },
+    onClickOverlay: function onClickOverlay() {
+      this.$emit('click-overlay');
+      if (this.data.closeOnClickOverlay) {
+        this.$emit('close');
+      }
+    },
+    observeClass: function observeClass() {var _this$data =
+      this.data,transition = _this$data.transition,position = _this$data.position;
+      var updateData = {
+        name: transition || position };
+
+      if (transition === 'none') {
+        updateData.duration = 0;
+      }
+      this.setData(updateData);
+    } } });
+
+/***/ }),
+
+/***/ 295:
+/*!*****************************************************************************************************************!*\
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/mixins/transition.js ***!
+  \*****************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });exports.transition = void 0;var _utils = __webpack_require__(/*! ../common/utils */ 230);
+var getClassNames = function getClassNames(name) {return {
+    enter: "van-".concat(name, "-enter van-").concat(name, "-enter-active enter-class enter-active-class"),
+    'enter-to': "van-".concat(name, "-enter-to van-").concat(name, "-enter-active enter-to-class enter-active-class"),
+    leave: "van-".concat(name, "-leave van-").concat(name, "-leave-active leave-class leave-active-class"),
+    'leave-to': "van-".concat(name, "-leave-to van-").concat(name, "-leave-active leave-to-class leave-active-class") };};
+
+var nextTick = function nextTick() {return new Promise(function (resolve) {return setTimeout(resolve, 1000 / 30);});};
+var transition = function transition(showDefaultValue) {
+  return Behavior({
+    properties: {
+      customStyle: String,
+      // @ts-ignore
+      show: {
+        type: Boolean,
+        value: showDefaultValue,
+        observer: 'observeShow' },
+
+      // @ts-ignore
+      duration: {
+        type: null,
+        value: 300,
+        observer: 'observeDuration' },
+
+      name: {
+        type: String,
+        value: 'fade' } },
+
+
+    data: {
+      type: '',
+      inited: false,
+      display: false },
+
+    methods: {
+      observeShow: function observeShow(value, old) {
+        if (value === old) {
+          return;
+        }
+        value ? this.enter() : this.leave();
+      },
+      enter: function enter() {var _this = this;var _this$data =
+        this.data,duration = _this$data.duration,name = _this$data.name;
+        var classNames = getClassNames(name);
+        var currentDuration = (0, _utils.isObj)(duration) ? duration.enter : duration;
+        this.status = 'enter';
+        this.$emit('before-enter');
+        Promise.resolve().
+        then(nextTick).
+        then(function () {
+          _this.checkStatus('enter');
+          _this.$emit('enter');
+          _this.setData({
+            inited: true,
+            display: true,
+            classes: classNames.enter,
+            currentDuration: currentDuration });
+
+        }).
+        then(nextTick).
+        then(function () {
+          _this.checkStatus('enter');
+          _this.transitionEnded = false;
+          _this.setData({
+            classes: classNames['enter-to'] });
+
+        }).
+        catch(function () {});
+      },
+      leave: function leave() {var _this2 = this;
+        if (!this.data.display) {
+          return;
+        }var _this$data2 =
+        this.data,duration = _this$data2.duration,name = _this$data2.name;
+        var classNames = getClassNames(name);
+        var currentDuration = (0, _utils.isObj)(duration) ? duration.leave : duration;
+        this.status = 'leave';
+        this.$emit('before-leave');
+        Promise.resolve().
+        then(nextTick).
+        then(function () {
+          _this2.checkStatus('leave');
+          _this2.$emit('leave');
+          _this2.setData({
+            classes: classNames.leave,
+            currentDuration: currentDuration });
+
+        }).
+        then(nextTick).
+        then(function () {
+          _this2.checkStatus('leave');
+          _this2.transitionEnded = false;
+          setTimeout(function () {return _this2.onTransitionEnd();}, currentDuration);
+          _this2.setData({
+            classes: classNames['leave-to'] });
+
+        }).
+        catch(function () {});
+      },
+      checkStatus: function checkStatus(status) {
+        if (status !== this.status) {
+          throw new Error("incongruent status: ".concat(status));
+        }
+      },
+      onTransitionEnd: function onTransitionEnd() {
+        if (this.transitionEnded) {
+          return;
+        }
+        this.transitionEnded = true;
+        this.$emit("after-".concat(this.status));var _this$data3 =
+        this.data,show = _this$data3.show,display = _this$data3.display;
+        if (!show && display) {
+          this.setData({ display: false });
+        }
+      } } });
+
+
+};exports.transition = transition;
+
+/***/ }),
+
+/***/ 3:
+/*!***********************************!*\
+  !*** (webpack)/buildin/global.js ***!
+  \***********************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+var g;
+
+// This works in non-strict mode
+g = (function() {
+	return this;
+})();
+
+try {
+	// This works if eval is allowed (see CSP)
+	g = g || new Function("return this")();
+} catch (e) {
+	// This works if the window reference is available
+	if (typeof window === "object") g = window;
+}
+
+// g can still be undefined, but nothing to do about it...
+// We return undefined, instead of nothing here, so it's
+// easier to handle this case. if(!global) { ...}
+
+module.exports = g;
+
+
+/***/ }),
+
+/***/ 30:
+/*!**********************************************************************************************************!*\
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/card/index.js ***!
+  \**********************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+var _link = __webpack_require__(/*! ../mixins/link */ 31);
+var _component = __webpack_require__(/*! ../common/component */ 32);
+(0, _component.VantComponent)({
+  classes: [
+  'num-class',
+  'desc-class',
+  'thumb-class',
+  'title-class',
+  'price-class',
+  'origin-price-class'],
+
+  mixins: [_link.link],
+  props: {
+    tag: String,
+    num: String,
+    desc: String,
+    thumb: String,
+    title: String,
+    price: {
+      type: String,
+      observer: 'updatePrice' },
+
+    centered: Boolean,
+    lazyLoad: Boolean,
+    thumbLink: String,
+    originPrice: String,
+    thumbMode: {
+      type: String,
+      value: 'aspectFit' },
+
+    currency: {
+      type: String,
+      value: '¥' } },
+
+
+  methods: {
+    updatePrice: function updatePrice() {var
+      price = this.data.price;
+      var priceArr = price.toString().split('.');
+      this.setData({
+        integerStr: priceArr[0],
+        decimalStr: priceArr[1] ? ".".concat(priceArr[1]) : '' });
+
+    },
+    onClickThumb: function onClickThumb() {
+      this.jumpLink('thumbLink');
+    } } });
+
+/***/ }),
+
+/***/ 31:
+/*!***********************************************************************************************************!*\
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/mixins/link.js ***!
+  \***********************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });exports.link = void 0;var link = Behavior({
+  properties: {
+    url: String,
+    linkType: {
+      type: String,
+      value: 'navigateTo' } },
+
+
+  methods: {
+    jumpLink: function jumpLink() {var urlKey = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'url';
+      var url = this.data[urlKey];
+      if (url) {
+        wx[this.data.linkType]({ url: url });
+      }
+    } } });exports.link = link;
+
+/***/ }),
+
+/***/ 32:
+/*!****************************************************************************************************************!*\
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/common/component.js ***!
+  \****************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });exports.VantComponent = VantComponent;var _basic = __webpack_require__(/*! ../mixins/basic */ 33);function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
+var relationFunctions = {
+  ancestor: {
+    linked: function linked(parent) {
+      this.parent = parent;
+    },
+    unlinked: function unlinked() {
+      this.parent = null;
+    } },
+
+  descendant: {
+    linked: function linked(child) {
+      this.children = this.children || [];
+      this.children.push(child);
+    },
+    unlinked: function unlinked(child) {
+      this.children = (this.children || []).filter(function (it) {return it !== child;});
+    } } };
+
+
+function mapKeys(source, target, map) {
+  Object.keys(map).forEach(function (key) {
+    if (source[key]) {
+      target[map[key]] = source[key];
+    }
+  });
+}
+function makeRelation(options, vantOptions, relation) {var
+  type = relation.type,name = relation.name,_linked = relation.linked,_unlinked = relation.unlinked,_linkChanged = relation.linkChanged;var
+  beforeCreate = vantOptions.beforeCreate,destroyed = vantOptions.destroyed;
+  if (type === 'descendant') {
+    options.created = function () {
+      beforeCreate && beforeCreate.bind(this)();
+      this.children = this.children || [];
+    };
+    options.detached = function () {
+      this.children = [];
+      destroyed && destroyed.bind(this)();
+    };
+  }
+  options.relations = Object.assign(options.relations || {}, _defineProperty({}, "../".concat(
+  name, "/index"), {
+    type: type,
+    linked: function linked(node) {
+      relationFunctions[type].linked.bind(this)(node);
+      _linked && _linked.bind(this)(node);
+    },
+    linkChanged: function linkChanged(node) {
+      _linkChanged && _linkChanged.bind(this)(node);
+    },
+    unlinked: function unlinked(node) {
+      relationFunctions[type].unlinked.bind(this)(node);
+      _unlinked && _unlinked.bind(this)(node);
+    } }));
+
+
+}
+function VantComponent() {var vantOptions = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var options = {};
+  mapKeys(vantOptions, options, {
+    data: 'data',
+    props: 'properties',
+    mixins: 'behaviors',
+    methods: 'methods',
+    beforeCreate: 'created',
+    created: 'attached',
+    mounted: 'ready',
+    relations: 'relations',
+    destroyed: 'detached',
+    classes: 'externalClasses' });var
+
+  relation = vantOptions.relation;
+  if (relation) {
+    makeRelation(options, vantOptions, relation);
+  }
+  // add default externalClasses
+  options.externalClasses = options.externalClasses || [];
+  options.externalClasses.push('custom-class');
+  // add default behaviors
+  options.behaviors = options.behaviors || [];
+  options.behaviors.push(_basic.basic);
+  // map field to form-field behavior
+  if (vantOptions.field) {
+    options.behaviors.push('wx://form-field');
+  }
+  // add default options
+  options.options = {
+    multipleSlots: true,
+    addGlobalClass: true };
+
+  Component(options);
+}
+
+/***/ }),
+
+/***/ 33:
+/*!************************************************************************************************************!*\
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/mixins/basic.js ***!
+  \************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });exports.basic = void 0;var basic = Behavior({
+  methods: {
+    $emit: function $emit() {
+      this.triggerEvent.apply(this, arguments);
+    },
+    set: function set(data, callback) {
+      this.setData(data, callback);
+      return new Promise(function (resolve) {return wx.nextTick(resolve);});
+    },
+    getRect: function getRect(selector, all) {var _this = this;
+      return new Promise(function (resolve) {
+        wx.createSelectorQuery().
+        in(_this)[all ? 'selectAll' : 'select'](selector).
+        boundingClientRect(function (rect) {
+          if (all && Array.isArray(rect) && rect.length) {
+            resolve(rect);
+          }
+          if (!all && rect) {
+            resolve(rect);
+          }
+        }).
+        exec();
+      });
+    } } });exports.basic = basic;
+
+/***/ }),
+
+/***/ 331:
+/*!***********************************************************************************************************!*\
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/steps/index.js ***!
+  \***********************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+var _component = __webpack_require__(/*! ../common/component */ 32);
+var _color = __webpack_require__(/*! ../common/color */ 20);
+(0, _component.VantComponent)({
+  classes: ['desc-class'],
+  props: {
+    icon: String,
+    steps: Array,
+    active: Number,
+    direction: {
+      type: String,
+      value: 'horizontal' },
+
+    activeColor: {
+      type: String,
+      value: _color.GREEN },
+
+    inactiveColor: {
+      type: String,
+      value: _color.GRAY_DARK },
+
+    activeIcon: {
+      type: String,
+      value: 'checked' },
+
+    inactiveIcon: String } });
+
+/***/ }),
+
+/***/ 34:
+/*!*************************************************************************************************************!*\
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/dialog/dialog.js ***!
+  \*************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var queue = [];
+function getContext() {
+  var pages = getCurrentPages();
+  return pages[pages.length - 1];
+}
+var Dialog = function Dialog(options) {
+  options = Object.assign(Object.assign({}, Dialog.currentOptions), options);
+  return new Promise(function (resolve, reject) {
+    var context = options.context || getContext();
+    var dialog = context.selectComponent(options.selector);
+    delete options.context;
+    delete options.selector;
+    if (dialog) {
+      dialog.setData(Object.assign({ onCancel: reject, onConfirm: resolve }, options));
+      queue.push(dialog);
+    } else
+    {
+      console.warn('未找到 van-dialog 节点，请确认 selector 及 context 是否正确');
+    }
+  });
+};
+Dialog.defaultOptions = {
+  show: true,
+  title: '',
+  width: null,
+  message: '',
+  zIndex: 100,
+  overlay: true,
+  selector: '#van-dialog',
+  className: '',
+  asyncClose: false,
+  transition: 'scale',
+  customStyle: '',
+  messageAlign: '',
+  overlayStyle: '',
+  confirmButtonText: '确认',
+  cancelButtonText: '取消',
+  showConfirmButton: true,
+  showCancelButton: false,
+  closeOnClickOverlay: false,
+  confirmButtonOpenType: '' };
+
+Dialog.alert = Dialog;
+Dialog.confirm = function (options) {return Dialog(Object.assign({ showCancelButton: true }, options));};
+Dialog.close = function () {
+  queue.forEach(function (dialog) {
+    dialog.close();
+  });
+  queue = [];
+};
+Dialog.stopLoading = function () {
+  queue.forEach(function (dialog) {
+    dialog.stopLoading();
+  });
+};
+Dialog.setDefaultOptions = function (options) {
+  Object.assign(Dialog.currentOptions, options);
+};
+Dialog.resetDefaultOptions = function () {
+  Dialog.currentOptions = Object.assign({}, Dialog.defaultOptions);
+};
+Dialog.resetDefaultOptions();var _default =
+Dialog;exports.default = _default;
+
+/***/ }),
+
+/***/ 35:
+/*!*****************************************************************************************!*\
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/static/js/course.js ***!
+  \*****************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _api_reference = _interopRequireDefault(__webpack_require__(/*! ./api_reference.js */ 15));
+var _http_commons = _interopRequireDefault(__webpack_require__(/*! ./http_commons.js */ 18));var _getCourse$listCourse;function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}var _default = (_getCourse$listCourse = {
+
+
+
+  getCourse: function getCourse(courseId) {
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: _api_reference.default.GET_COURSE + '?courseId=' + courseId,
+        header: _http_commons.default.getAuthenticationHeader(),
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+        } });
+
+    });
+  },
+
+  /**
+      * 获取我的课程列表
+      * 
+      * @param {Number} type  0:我教的课  1:我参与的课
+      * @return {Object} 课程列表
+      */
+  listCourse: function listCourse(type) {var offset = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;var count = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 10;
+    var url = type === 0 ? _api_reference.default.GET_TEACHED_COURSE : _api_reference.default.GET_JOINED_COURSE;
+
+    return new Promise(function (resolve, reject) {
+      console.log("请求");
+      uni.request({
+        url: url + '?offset=' + offset + '&count=' + count,
+        header: _http_commons.default.getAuthenticationHeader(),
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+        } });
+
+    });
+  },
+
+  /**
+      * @param {String} courseName
+      * @param {String} classInfo
+      */
+  createCourse: function createCourse(courseName, classInfo) {
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: _api_reference.default.CREATE_COURSE,
+        method: "POST",
+        header: _http_commons.default.getAuthenticationHeader(),
+        data: {
+          courseName: courseName,
+          classInfo: classInfo },
+
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+          reject(err);
+        } });
+
+    });
+  },
+
+  joinCourse: function joinCourse(courseId, password) {
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: _api_reference.default.JOIN_COURSE + '?courseId=' + courseId + '&password=' + password,
+        method: "POST",
+        header: _http_commons.default.getAuthenticationHeader(),
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+          reject(err);
+        } });
+
+    });
+  },
+
+  deleteCourse: function deleteCourse(courseId) {
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: _api_reference.default.DELETE_COURSE + '?courseId=' + courseId,
+        method: "DELETE",
+        header: _http_commons.default.getAuthenticationHeader(),
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+          reject(err);
+        } });
+
+    });
+  },
+
+  exitCourse: function exitCourse(courseId) {
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: _api_reference.default.EXIT_COURSE + '?courseId=' + courseId,
+        method: "DELETE",
+        header: _http_commons.default.getAuthenticationHeader(),
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+          reject(err);
+        } });
+
+    });
+  },
+
+  /**
+      * 更新course 信息，服务端会校验，只允许更新courseName和classInfo
+      * 
+      * @param {Object} course 
+      */
+  updateCourse: function updateCourse(course) {
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: _api_reference.default.UPDATE_COURSE,
+        method: "PUT",
+        header: _http_commons.default.getAuthenticationHeader(),
+        data: {
+          id: course.id,
+          courseName: course.courseName,
+          classInfo: course.classInfo },
+
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+          reject(err);
+        } });
+
+    });
+  },
+
+  getCourseMembers: function getCourseMembers(courseId) {
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: _api_reference.default.GET_MEMBERS + '?courseId=' + courseId,
+        header: _http_commons.default.getAuthenticationHeader(),
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+          reject(err);
+        } });
+
+    });
+  },
+
+  kickoutUser: function kickoutUser(kickedUserId, courseId) {
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: _api_reference.default.KICK_OUT_MEMBER + '?courseId=' + courseId + '&kickedUserId=' + kickedUserId,
+        method: "DELETE",
+        header: _http_commons.default.getAuthenticationHeader(),
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+          reject(err);
+        } });
+
+    });
+  },
+
+  assignTeacher: function assignTeacher(assignedUserId, courseId) {
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: _api_reference.default.ASSIGN_TEACHER + '?targetUserId=' + assignedUserId + '&courseId=' + courseId,
+        method: "PUT",
+        header: _http_commons.default.getAuthenticationHeader(),
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+          reject(err);
+        } });
+
+    });
+  } }, _defineProperty(_getCourse$listCourse, "assignTeacher", function assignTeacher(
+
+assignedUserId, courseId) {
+  return new Promise(function (resolve, reject) {
+    uni.request({
+      url: _api_reference.default.ASSIGN_TEACHER + '?targetUserId=' + assignedUserId + '&courseId=' + courseId,
+      method: "PUT",
+      header: _http_commons.default.getAuthenticationHeader(),
+      success: function success(resp) {
+        if (_http_commons.default.successCheck(resp)) {
+          resolve(resp.data.data);
+        }
+      },
+      fail: function fail(err) {
+        _http_commons.default.commonFailHanlder(err);
+        reject(err);
+      } });
+
+  });
+}), _defineProperty(_getCourse$listCourse, "getScoreRule", function getScoreRule(
+
+courseId) {
+  return new Promise(function (resolve, reject) {
+    uni.request({
+      url: _api_reference.default.SCOER_RULE + '?courseId=' + courseId,
+      header: _http_commons.default.getAuthenticationHeader(),
+      success: function success(resp) {
+        if (_http_commons.default.successCheck(resp)) {
+          resolve(resp.data.data);
+        }
+      },
+      fail: function fail(err) {
+        _http_commons.default.commonFailHanlder(err);
+        reject(err);
+      } });
+
+  });
+}), _defineProperty(_getCourse$listCourse, "updateScoreRule", function updateScoreRule(
+
+rule) {
+  return new Promise(function (resolve, reject) {
+    uni.request({
+      url: _api_reference.default.SCOER_RULE,
+      method: "POST",
+      data: rule,
+      header: _http_commons.default.getAuthenticationHeader(),
+      success: function success(resp) {
+        if (_http_commons.default.successCheck(resp)) {
+          resolve(resp.data.data);
+        }
+      },
+      fail: function fail(err) {
+        _http_commons.default.commonFailHanlder(err);
+        reject(err);
+      } });
+
+  });
+}), _defineProperty(_getCourse$listCourse, "scoreCal", function scoreCal(
+
+courseId) {
+  return new Promise(function (resolve, reject) {
+    uni.request({
+      url: _api_reference.default.SCOER_CAL + '?courseId=' + courseId,
+      method: "POST",
+      header: _http_commons.default.getAuthenticationHeader(),
+      success: function success(resp) {
+        if (_http_commons.default.successCheck(resp)) {
+          resolve(resp.data.data);
+        }
+      },
+      fail: function fail(err) {
+        _http_commons.default.commonFailHanlder(err);
+        reject(err);
+      } });
+
+  });
+}), _defineProperty(_getCourse$listCourse, "getStudentScoreList", function getStudentScoreList(
+
+courseId) {
+  return new Promise(function (resolve, reject) {
+    uni.request({
+      url: _api_reference.default.GET_STUDENT_SCORE + '?courseId=' + courseId,
+      header: _http_commons.default.getAuthenticationHeader(),
+      success: function success(resp) {
+        if (_http_commons.default.successCheck(resp)) {
+          resolve(resp.data.data);
+        }
+      },
+      fail: function fail(err) {
+        _http_commons.default.commonFailHanlder(err);
+        reject(err);
+      } });
+
+  });
+}), _getCourse$listCourse);exports.default = _default;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
+
+/***/ }),
+
+/***/ 353:
+/*!***************************************************************************************************************!*\
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/index-bar/index.js ***!
+  \***************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+var _component = __webpack_require__(/*! ../common/component */ 32);
+var _color = __webpack_require__(/*! ../common/color */ 20);
+var indexList = function indexList() {
+  var indexList = [];
+  var charCodeOfA = 'A'.charCodeAt(0);
+  for (var i = 0; i < 26; i++) {
+    indexList.push(String.fromCharCode(charCodeOfA + i));
+  }
+  return indexList;
+};
+(0, _component.VantComponent)({
+  relation: {
+    name: 'index-anchor',
+    type: 'descendant',
+    current: 'index-bar',
+    linked: function linked() {
+      this.updateData();
+    },
+    linkChanged: function linkChanged() {
+      this.updateData();
+    },
+    unlinked: function unlinked() {
+      this.updateData();
+    } },
+
+  props: {
+    sticky: {
+      type: Boolean,
+      value: true },
+
+    zIndex: {
+      type: Number,
+      value: 1 },
+
+    highlightColor: {
+      type: String,
+      value: _color.GREEN },
+
+    scrollTop: {
+      type: Number,
+      value: 0,
+      observer: 'onScroll' },
+
+    stickyOffsetTop: {
+      type: Number,
+      value: 0 },
+
+    indexList: {
+      type: Array,
+      value: indexList() } },
+
+
+  data: {
+    activeAnchorIndex: null,
+    showSidebar: false },
+
+  methods: {
+    updateData: function updateData() {var _this = this;
+      this.timer && clearTimeout(this.timer);
+      this.timer = setTimeout(function () {
+        _this.children = _this.getRelationNodes('../index-anchor/index');
+        _this.setData({
+          showSidebar: !!_this.children.length });
+
+        _this.setRect().then(function () {
+          _this.onScroll();
+        });
+      }, 0);
+    },
+    setRect: function setRect() {
+      return Promise.all([
+      this.setAnchorsRect(),
+      this.setListRect(),
+      this.setSiderbarRect()]);
+
+    },
+    setAnchorsRect: function setAnchorsRect() {var _this2 = this;
+      return Promise.all(this.children.map(function (anchor) {return anchor.
+        getRect('.van-index-anchor-wrapper').
+        then(function (rect) {
+          Object.assign(anchor, {
+            height: rect.height,
+            top: rect.top + _this2.data.scrollTop });
+
+        });}));
+    },
+    setListRect: function setListRect() {var _this3 = this;
+      return this.getRect('.van-index-bar').then(function (rect) {
+        Object.assign(_this3, {
+          height: rect.height,
+          top: rect.top + _this3.data.scrollTop });
+
+      });
+    },
+    setSiderbarRect: function setSiderbarRect() {var _this4 = this;
+      return this.getRect('.van-index-bar__sidebar').then(function (res) {
+        _this4.sidebar = {
+          height: res.height,
+          top: res.top };
+
+      });
+    },
+    setDiffData: function setDiffData(_ref) {var target = _ref.target,data = _ref.data;
+      var diffData = {};
+      Object.keys(data).forEach(function (key) {
+        if (target.data[key] !== data[key]) {
+          diffData[key] = data[key];
+        }
+      });
+      if (Object.keys(diffData).length) {
+        target.setData(diffData);
+      }
+    },
+    getAnchorRect: function getAnchorRect(anchor) {
+      return anchor.
+      getRect('.van-index-anchor-wrapper').
+      then(function (rect) {return {
+          height: rect.height,
+          top: rect.top };});
+
+    },
+    getActiveAnchorIndex: function getActiveAnchorIndex() {var
+      children = this.children;var _this$data =
+      this.data,sticky = _this$data.sticky,scrollTop = _this$data.scrollTop,stickyOffsetTop = _this$data.stickyOffsetTop;
+      for (var i = this.children.length - 1; i >= 0; i--) {
+        var preAnchorHeight = i > 0 ? children[i - 1].height : 0;
+        var reachTop = sticky ? preAnchorHeight + stickyOffsetTop : 0;
+        if (reachTop + scrollTop >= children[i].top) {
+          return i;
+        }
+      }
+      return -1;
+    },
+    onScroll: function onScroll() {var _this5 = this;var _this$children =
+      this.children,children = _this$children === void 0 ? [] : _this$children;
+      if (!children.length) {
+        return;
+      }var _this$data2 =
+      this.data,sticky = _this$data2.sticky,stickyOffsetTop = _this$data2.stickyOffsetTop,zIndex = _this$data2.zIndex,highlightColor = _this$data2.highlightColor,scrollTop = _this$data2.scrollTop;
+      var active = this.getActiveAnchorIndex();
+      this.setDiffData({
+        target: this,
+        data: {
+          activeAnchorIndex: active } });
+
+
+      if (sticky) {
+        var isActiveAnchorSticky = false;
+        if (active !== -1) {
+          isActiveAnchorSticky =
+          children[active].top <= stickyOffsetTop + scrollTop;
+        }
+        children.forEach(function (item, index) {
+          if (index === active) {
+            var wrapperStyle = '';
+            var anchorStyle = "\n              color: ".concat(
+            highlightColor, ";\n            ");
+
+            if (isActiveAnchorSticky) {
+              wrapperStyle = "\n                height: ".concat(
+              children[index].height, "px;\n              ");
+
+              anchorStyle = "\n                position: fixed;\n                top: ".concat(
+
+              stickyOffsetTop, "px;\n                z-index: ").concat(
+              zIndex, ";\n                color: ").concat(
+              highlightColor, ";\n              ");
+
+            }
+            _this5.setDiffData({
+              target: item,
+              data: {
+                active: true,
+                anchorStyle: anchorStyle,
+                wrapperStyle: wrapperStyle } });
+
+
+          } else
+          if (index === active - 1) {
+            var currentAnchor = children[index];
+            var currentOffsetTop = currentAnchor.top;
+            var targetOffsetTop = index === children.length - 1 ?
+            _this5.top :
+            children[index + 1].top;
+            var parentOffsetHeight = targetOffsetTop - currentOffsetTop;
+            var translateY = parentOffsetHeight - currentAnchor.height;
+            var _anchorStyle = "\n              position: relative;\n              transform: translate3d(0, ".concat(
+
+            translateY, "px, 0);\n              z-index: ").concat(
+            zIndex, ";\n              color: ").concat(
+            highlightColor, ";\n            ");
+
+            _this5.setDiffData({
+              target: item,
+              data: {
+                active: true,
+                anchorStyle: _anchorStyle } });
+
+
+          } else
+          {
+            _this5.setDiffData({
+              target: item,
+              data: {
+                active: false,
+                anchorStyle: '',
+                wrapperStyle: '' } });
+
+
+          }
+        });
+      }
+    },
+    onClick: function onClick(event) {
+      this.scrollToAnchor(event.target.dataset.index);
+    },
+    onTouchMove: function onTouchMove(event) {
+      var sidebarLength = this.children.length;
+      var touch = event.touches[0];
+      var itemHeight = this.sidebar.height / sidebarLength;
+      var index = Math.floor((touch.clientY - this.sidebar.top) / itemHeight);
+      if (index < 0) {
+        index = 0;
+      } else
+      if (index > sidebarLength - 1) {
+        index = sidebarLength - 1;
+      }
+      this.scrollToAnchor(index);
+    },
+    onTouchStop: function onTouchStop() {
+      this.scrollToAnchorIndex = null;
+    },
+    scrollToAnchor: function scrollToAnchor(index) {var _this6 = this;
+      if (typeof index !== 'number' || this.scrollToAnchorIndex === index) {
+        return;
+      }
+      this.scrollToAnchorIndex = index;
+      var anchor = this.children.find(function (item) {return item.data.index === _this6.data.indexList[index];});
+      if (anchor) {
+        this.$emit('select', anchor.data.index);
+        wx.pageScrollTo({
+          duration: 0,
+          scrollTop: anchor.top });
+
+      }
+    } } });
+
+/***/ }),
+
+/***/ 354:
+/*!******************************************************************************************************************!*\
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/index-anchor/index.js ***!
+  \******************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+var _component = __webpack_require__(/*! ../common/component */ 32);
+(0, _component.VantComponent)({
+  relation: {
+    name: 'index-bar',
+    type: 'ancestor',
+    current: 'index-anchor' },
+
+  props: {
+    useSlot: Boolean,
+    index: null },
+
+  data: {
+    active: false,
+    wrapperStyle: '',
+    anchorStyle: '' } });
+
+/***/ }),
+
+/***/ 355:
+/*!**********************************************************************************************************!*\
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/cell/index.js ***!
+  \**********************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+var _link = __webpack_require__(/*! ../mixins/link */ 31);
+var _component = __webpack_require__(/*! ../common/component */ 32);
+(0, _component.VantComponent)({
+  classes: [
+  'title-class',
+  'label-class',
+  'value-class',
+  'right-icon-class',
+  'hover-class'],
+
+  mixins: [_link.link],
+  props: {
+    title: null,
+    value: null,
+    icon: String,
+    size: String,
+    label: String,
+    center: Boolean,
+    isLink: Boolean,
+    required: Boolean,
+    clickable: Boolean,
+    titleWidth: String,
+    customStyle: String,
+    arrowDirection: String,
+    useLabelSlot: Boolean,
+    border: {
+      type: Boolean,
+      value: true } },
+
+
+  methods: {
+    onClick: function onClick(event) {
+      this.$emit('click', event.detail);
+      this.jumpLink();
+    } } });
+
+/***/ }),
+
+/***/ 356:
+/*!****************************************************************************************************************!*\
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/cell-group/index.js ***!
+  \****************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+var _component = __webpack_require__(/*! ../common/component */ 32);
+(0, _component.VantComponent)({
+  props: {
+    title: String,
+    border: {
+      type: Boolean,
+      value: true } } });
+
+/***/ }),
+
 /***/ 378:
 /*!*************************************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/overlay/index.js ***!
@@ -12358,7 +12437,7 @@ var _utils = __webpack_require__(/*! ../common/utils */ 255);function _slicedToA
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-var _component = __webpack_require__(/*! ../common/component */ 225);
+var _component = __webpack_require__(/*! ../common/component */ 32);
 (0, _component.VantComponent)({
   props: {
     show: Boolean,
@@ -12381,18 +12460,6 @@ var _component = __webpack_require__(/*! ../common/component */ 225);
 
 /***/ }),
 
-/***/ 39:
-/*!**********************************************************!*\
-  !*** ./node_modules/@babel/runtime/regenerator/index.js ***!
-  \**********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__(/*! regenerator-runtime */ 40);
-
-
-/***/ }),
-
 /***/ 4:
 /*!********************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/pages.json ***!
@@ -12402,877 +12469,6 @@ module.exports = __webpack_require__(/*! regenerator-runtime */ 40);
 
 "use strict";
 
-
-/***/ }),
-
-/***/ 40:
-/*!************************************************************!*\
-  !*** ./node_modules/regenerator-runtime/runtime-module.js ***!
-  \************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-/**
- * Copyright (c) 2014-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
-
-// This method of obtaining a reference to the global object needs to be
-// kept identical to the way it is obtained in runtime.js
-var g = (function() {
-  return this || (typeof self === "object" && self);
-})() || Function("return this")();
-
-// Use `getOwnPropertyNames` because not all browsers support calling
-// `hasOwnProperty` on the global `self` object in a worker. See #183.
-var hadRuntime = g.regeneratorRuntime &&
-  Object.getOwnPropertyNames(g).indexOf("regeneratorRuntime") >= 0;
-
-// Save the old regeneratorRuntime in case it needs to be restored later.
-var oldRuntime = hadRuntime && g.regeneratorRuntime;
-
-// Force reevalutation of runtime.js.
-g.regeneratorRuntime = undefined;
-
-module.exports = __webpack_require__(/*! ./runtime */ 41);
-
-if (hadRuntime) {
-  // Restore the original runtime.
-  g.regeneratorRuntime = oldRuntime;
-} else {
-  // Remove the global property added by runtime.js.
-  try {
-    delete g.regeneratorRuntime;
-  } catch(e) {
-    g.regeneratorRuntime = undefined;
-  }
-}
-
-
-/***/ }),
-
-/***/ 41:
-/*!*****************************************************!*\
-  !*** ./node_modules/regenerator-runtime/runtime.js ***!
-  \*****************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-/**
- * Copyright (c) 2014-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
-
-!(function(global) {
-  "use strict";
-
-  var Op = Object.prototype;
-  var hasOwn = Op.hasOwnProperty;
-  var undefined; // More compressible than void 0.
-  var $Symbol = typeof Symbol === "function" ? Symbol : {};
-  var iteratorSymbol = $Symbol.iterator || "@@iterator";
-  var asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator";
-  var toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag";
-
-  var inModule = typeof module === "object";
-  var runtime = global.regeneratorRuntime;
-  if (runtime) {
-    if (inModule) {
-      // If regeneratorRuntime is defined globally and we're in a module,
-      // make the exports object identical to regeneratorRuntime.
-      module.exports = runtime;
-    }
-    // Don't bother evaluating the rest of this file if the runtime was
-    // already defined globally.
-    return;
-  }
-
-  // Define the runtime globally (as expected by generated code) as either
-  // module.exports (if we're in a module) or a new, empty object.
-  runtime = global.regeneratorRuntime = inModule ? module.exports : {};
-
-  function wrap(innerFn, outerFn, self, tryLocsList) {
-    // If outerFn provided and outerFn.prototype is a Generator, then outerFn.prototype instanceof Generator.
-    var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator;
-    var generator = Object.create(protoGenerator.prototype);
-    var context = new Context(tryLocsList || []);
-
-    // The ._invoke method unifies the implementations of the .next,
-    // .throw, and .return methods.
-    generator._invoke = makeInvokeMethod(innerFn, self, context);
-
-    return generator;
-  }
-  runtime.wrap = wrap;
-
-  // Try/catch helper to minimize deoptimizations. Returns a completion
-  // record like context.tryEntries[i].completion. This interface could
-  // have been (and was previously) designed to take a closure to be
-  // invoked without arguments, but in all the cases we care about we
-  // already have an existing method we want to call, so there's no need
-  // to create a new function object. We can even get away with assuming
-  // the method takes exactly one argument, since that happens to be true
-  // in every case, so we don't have to touch the arguments object. The
-  // only additional allocation required is the completion record, which
-  // has a stable shape and so hopefully should be cheap to allocate.
-  function tryCatch(fn, obj, arg) {
-    try {
-      return { type: "normal", arg: fn.call(obj, arg) };
-    } catch (err) {
-      return { type: "throw", arg: err };
-    }
-  }
-
-  var GenStateSuspendedStart = "suspendedStart";
-  var GenStateSuspendedYield = "suspendedYield";
-  var GenStateExecuting = "executing";
-  var GenStateCompleted = "completed";
-
-  // Returning this object from the innerFn has the same effect as
-  // breaking out of the dispatch switch statement.
-  var ContinueSentinel = {};
-
-  // Dummy constructor functions that we use as the .constructor and
-  // .constructor.prototype properties for functions that return Generator
-  // objects. For full spec compliance, you may wish to configure your
-  // minifier not to mangle the names of these two functions.
-  function Generator() {}
-  function GeneratorFunction() {}
-  function GeneratorFunctionPrototype() {}
-
-  // This is a polyfill for %IteratorPrototype% for environments that
-  // don't natively support it.
-  var IteratorPrototype = {};
-  IteratorPrototype[iteratorSymbol] = function () {
-    return this;
-  };
-
-  var getProto = Object.getPrototypeOf;
-  var NativeIteratorPrototype = getProto && getProto(getProto(values([])));
-  if (NativeIteratorPrototype &&
-      NativeIteratorPrototype !== Op &&
-      hasOwn.call(NativeIteratorPrototype, iteratorSymbol)) {
-    // This environment has a native %IteratorPrototype%; use it instead
-    // of the polyfill.
-    IteratorPrototype = NativeIteratorPrototype;
-  }
-
-  var Gp = GeneratorFunctionPrototype.prototype =
-    Generator.prototype = Object.create(IteratorPrototype);
-  GeneratorFunction.prototype = Gp.constructor = GeneratorFunctionPrototype;
-  GeneratorFunctionPrototype.constructor = GeneratorFunction;
-  GeneratorFunctionPrototype[toStringTagSymbol] =
-    GeneratorFunction.displayName = "GeneratorFunction";
-
-  // Helper for defining the .next, .throw, and .return methods of the
-  // Iterator interface in terms of a single ._invoke method.
-  function defineIteratorMethods(prototype) {
-    ["next", "throw", "return"].forEach(function(method) {
-      prototype[method] = function(arg) {
-        return this._invoke(method, arg);
-      };
-    });
-  }
-
-  runtime.isGeneratorFunction = function(genFun) {
-    var ctor = typeof genFun === "function" && genFun.constructor;
-    return ctor
-      ? ctor === GeneratorFunction ||
-        // For the native GeneratorFunction constructor, the best we can
-        // do is to check its .name property.
-        (ctor.displayName || ctor.name) === "GeneratorFunction"
-      : false;
-  };
-
-  runtime.mark = function(genFun) {
-    if (Object.setPrototypeOf) {
-      Object.setPrototypeOf(genFun, GeneratorFunctionPrototype);
-    } else {
-      genFun.__proto__ = GeneratorFunctionPrototype;
-      if (!(toStringTagSymbol in genFun)) {
-        genFun[toStringTagSymbol] = "GeneratorFunction";
-      }
-    }
-    genFun.prototype = Object.create(Gp);
-    return genFun;
-  };
-
-  // Within the body of any async function, `await x` is transformed to
-  // `yield regeneratorRuntime.awrap(x)`, so that the runtime can test
-  // `hasOwn.call(value, "__await")` to determine if the yielded value is
-  // meant to be awaited.
-  runtime.awrap = function(arg) {
-    return { __await: arg };
-  };
-
-  function AsyncIterator(generator) {
-    function invoke(method, arg, resolve, reject) {
-      var record = tryCatch(generator[method], generator, arg);
-      if (record.type === "throw") {
-        reject(record.arg);
-      } else {
-        var result = record.arg;
-        var value = result.value;
-        if (value &&
-            typeof value === "object" &&
-            hasOwn.call(value, "__await")) {
-          return Promise.resolve(value.__await).then(function(value) {
-            invoke("next", value, resolve, reject);
-          }, function(err) {
-            invoke("throw", err, resolve, reject);
-          });
-        }
-
-        return Promise.resolve(value).then(function(unwrapped) {
-          // When a yielded Promise is resolved, its final value becomes
-          // the .value of the Promise<{value,done}> result for the
-          // current iteration.
-          result.value = unwrapped;
-          resolve(result);
-        }, function(error) {
-          // If a rejected Promise was yielded, throw the rejection back
-          // into the async generator function so it can be handled there.
-          return invoke("throw", error, resolve, reject);
-        });
-      }
-    }
-
-    var previousPromise;
-
-    function enqueue(method, arg) {
-      function callInvokeWithMethodAndArg() {
-        return new Promise(function(resolve, reject) {
-          invoke(method, arg, resolve, reject);
-        });
-      }
-
-      return previousPromise =
-        // If enqueue has been called before, then we want to wait until
-        // all previous Promises have been resolved before calling invoke,
-        // so that results are always delivered in the correct order. If
-        // enqueue has not been called before, then it is important to
-        // call invoke immediately, without waiting on a callback to fire,
-        // so that the async generator function has the opportunity to do
-        // any necessary setup in a predictable way. This predictability
-        // is why the Promise constructor synchronously invokes its
-        // executor callback, and why async functions synchronously
-        // execute code before the first await. Since we implement simple
-        // async functions in terms of async generators, it is especially
-        // important to get this right, even though it requires care.
-        previousPromise ? previousPromise.then(
-          callInvokeWithMethodAndArg,
-          // Avoid propagating failures to Promises returned by later
-          // invocations of the iterator.
-          callInvokeWithMethodAndArg
-        ) : callInvokeWithMethodAndArg();
-    }
-
-    // Define the unified helper method that is used to implement .next,
-    // .throw, and .return (see defineIteratorMethods).
-    this._invoke = enqueue;
-  }
-
-  defineIteratorMethods(AsyncIterator.prototype);
-  AsyncIterator.prototype[asyncIteratorSymbol] = function () {
-    return this;
-  };
-  runtime.AsyncIterator = AsyncIterator;
-
-  // Note that simple async functions are implemented on top of
-  // AsyncIterator objects; they just return a Promise for the value of
-  // the final result produced by the iterator.
-  runtime.async = function(innerFn, outerFn, self, tryLocsList) {
-    var iter = new AsyncIterator(
-      wrap(innerFn, outerFn, self, tryLocsList)
-    );
-
-    return runtime.isGeneratorFunction(outerFn)
-      ? iter // If outerFn is a generator, return the full iterator.
-      : iter.next().then(function(result) {
-          return result.done ? result.value : iter.next();
-        });
-  };
-
-  function makeInvokeMethod(innerFn, self, context) {
-    var state = GenStateSuspendedStart;
-
-    return function invoke(method, arg) {
-      if (state === GenStateExecuting) {
-        throw new Error("Generator is already running");
-      }
-
-      if (state === GenStateCompleted) {
-        if (method === "throw") {
-          throw arg;
-        }
-
-        // Be forgiving, per 25.3.3.3.3 of the spec:
-        // https://people.mozilla.org/~jorendorff/es6-draft.html#sec-generatorresume
-        return doneResult();
-      }
-
-      context.method = method;
-      context.arg = arg;
-
-      while (true) {
-        var delegate = context.delegate;
-        if (delegate) {
-          var delegateResult = maybeInvokeDelegate(delegate, context);
-          if (delegateResult) {
-            if (delegateResult === ContinueSentinel) continue;
-            return delegateResult;
-          }
-        }
-
-        if (context.method === "next") {
-          // Setting context._sent for legacy support of Babel's
-          // function.sent implementation.
-          context.sent = context._sent = context.arg;
-
-        } else if (context.method === "throw") {
-          if (state === GenStateSuspendedStart) {
-            state = GenStateCompleted;
-            throw context.arg;
-          }
-
-          context.dispatchException(context.arg);
-
-        } else if (context.method === "return") {
-          context.abrupt("return", context.arg);
-        }
-
-        state = GenStateExecuting;
-
-        var record = tryCatch(innerFn, self, context);
-        if (record.type === "normal") {
-          // If an exception is thrown from innerFn, we leave state ===
-          // GenStateExecuting and loop back for another invocation.
-          state = context.done
-            ? GenStateCompleted
-            : GenStateSuspendedYield;
-
-          if (record.arg === ContinueSentinel) {
-            continue;
-          }
-
-          return {
-            value: record.arg,
-            done: context.done
-          };
-
-        } else if (record.type === "throw") {
-          state = GenStateCompleted;
-          // Dispatch the exception by looping back around to the
-          // context.dispatchException(context.arg) call above.
-          context.method = "throw";
-          context.arg = record.arg;
-        }
-      }
-    };
-  }
-
-  // Call delegate.iterator[context.method](context.arg) and handle the
-  // result, either by returning a { value, done } result from the
-  // delegate iterator, or by modifying context.method and context.arg,
-  // setting context.delegate to null, and returning the ContinueSentinel.
-  function maybeInvokeDelegate(delegate, context) {
-    var method = delegate.iterator[context.method];
-    if (method === undefined) {
-      // A .throw or .return when the delegate iterator has no .throw
-      // method always terminates the yield* loop.
-      context.delegate = null;
-
-      if (context.method === "throw") {
-        if (delegate.iterator.return) {
-          // If the delegate iterator has a return method, give it a
-          // chance to clean up.
-          context.method = "return";
-          context.arg = undefined;
-          maybeInvokeDelegate(delegate, context);
-
-          if (context.method === "throw") {
-            // If maybeInvokeDelegate(context) changed context.method from
-            // "return" to "throw", let that override the TypeError below.
-            return ContinueSentinel;
-          }
-        }
-
-        context.method = "throw";
-        context.arg = new TypeError(
-          "The iterator does not provide a 'throw' method");
-      }
-
-      return ContinueSentinel;
-    }
-
-    var record = tryCatch(method, delegate.iterator, context.arg);
-
-    if (record.type === "throw") {
-      context.method = "throw";
-      context.arg = record.arg;
-      context.delegate = null;
-      return ContinueSentinel;
-    }
-
-    var info = record.arg;
-
-    if (! info) {
-      context.method = "throw";
-      context.arg = new TypeError("iterator result is not an object");
-      context.delegate = null;
-      return ContinueSentinel;
-    }
-
-    if (info.done) {
-      // Assign the result of the finished delegate to the temporary
-      // variable specified by delegate.resultName (see delegateYield).
-      context[delegate.resultName] = info.value;
-
-      // Resume execution at the desired location (see delegateYield).
-      context.next = delegate.nextLoc;
-
-      // If context.method was "throw" but the delegate handled the
-      // exception, let the outer generator proceed normally. If
-      // context.method was "next", forget context.arg since it has been
-      // "consumed" by the delegate iterator. If context.method was
-      // "return", allow the original .return call to continue in the
-      // outer generator.
-      if (context.method !== "return") {
-        context.method = "next";
-        context.arg = undefined;
-      }
-
-    } else {
-      // Re-yield the result returned by the delegate method.
-      return info;
-    }
-
-    // The delegate iterator is finished, so forget it and continue with
-    // the outer generator.
-    context.delegate = null;
-    return ContinueSentinel;
-  }
-
-  // Define Generator.prototype.{next,throw,return} in terms of the
-  // unified ._invoke helper method.
-  defineIteratorMethods(Gp);
-
-  Gp[toStringTagSymbol] = "Generator";
-
-  // A Generator should always return itself as the iterator object when the
-  // @@iterator function is called on it. Some browsers' implementations of the
-  // iterator prototype chain incorrectly implement this, causing the Generator
-  // object to not be returned from this call. This ensures that doesn't happen.
-  // See https://github.com/facebook/regenerator/issues/274 for more details.
-  Gp[iteratorSymbol] = function() {
-    return this;
-  };
-
-  Gp.toString = function() {
-    return "[object Generator]";
-  };
-
-  function pushTryEntry(locs) {
-    var entry = { tryLoc: locs[0] };
-
-    if (1 in locs) {
-      entry.catchLoc = locs[1];
-    }
-
-    if (2 in locs) {
-      entry.finallyLoc = locs[2];
-      entry.afterLoc = locs[3];
-    }
-
-    this.tryEntries.push(entry);
-  }
-
-  function resetTryEntry(entry) {
-    var record = entry.completion || {};
-    record.type = "normal";
-    delete record.arg;
-    entry.completion = record;
-  }
-
-  function Context(tryLocsList) {
-    // The root entry object (effectively a try statement without a catch
-    // or a finally block) gives us a place to store values thrown from
-    // locations where there is no enclosing try statement.
-    this.tryEntries = [{ tryLoc: "root" }];
-    tryLocsList.forEach(pushTryEntry, this);
-    this.reset(true);
-  }
-
-  runtime.keys = function(object) {
-    var keys = [];
-    for (var key in object) {
-      keys.push(key);
-    }
-    keys.reverse();
-
-    // Rather than returning an object with a next method, we keep
-    // things simple and return the next function itself.
-    return function next() {
-      while (keys.length) {
-        var key = keys.pop();
-        if (key in object) {
-          next.value = key;
-          next.done = false;
-          return next;
-        }
-      }
-
-      // To avoid creating an additional object, we just hang the .value
-      // and .done properties off the next function object itself. This
-      // also ensures that the minifier will not anonymize the function.
-      next.done = true;
-      return next;
-    };
-  };
-
-  function values(iterable) {
-    if (iterable) {
-      var iteratorMethod = iterable[iteratorSymbol];
-      if (iteratorMethod) {
-        return iteratorMethod.call(iterable);
-      }
-
-      if (typeof iterable.next === "function") {
-        return iterable;
-      }
-
-      if (!isNaN(iterable.length)) {
-        var i = -1, next = function next() {
-          while (++i < iterable.length) {
-            if (hasOwn.call(iterable, i)) {
-              next.value = iterable[i];
-              next.done = false;
-              return next;
-            }
-          }
-
-          next.value = undefined;
-          next.done = true;
-
-          return next;
-        };
-
-        return next.next = next;
-      }
-    }
-
-    // Return an iterator with no values.
-    return { next: doneResult };
-  }
-  runtime.values = values;
-
-  function doneResult() {
-    return { value: undefined, done: true };
-  }
-
-  Context.prototype = {
-    constructor: Context,
-
-    reset: function(skipTempReset) {
-      this.prev = 0;
-      this.next = 0;
-      // Resetting context._sent for legacy support of Babel's
-      // function.sent implementation.
-      this.sent = this._sent = undefined;
-      this.done = false;
-      this.delegate = null;
-
-      this.method = "next";
-      this.arg = undefined;
-
-      this.tryEntries.forEach(resetTryEntry);
-
-      if (!skipTempReset) {
-        for (var name in this) {
-          // Not sure about the optimal order of these conditions:
-          if (name.charAt(0) === "t" &&
-              hasOwn.call(this, name) &&
-              !isNaN(+name.slice(1))) {
-            this[name] = undefined;
-          }
-        }
-      }
-    },
-
-    stop: function() {
-      this.done = true;
-
-      var rootEntry = this.tryEntries[0];
-      var rootRecord = rootEntry.completion;
-      if (rootRecord.type === "throw") {
-        throw rootRecord.arg;
-      }
-
-      return this.rval;
-    },
-
-    dispatchException: function(exception) {
-      if (this.done) {
-        throw exception;
-      }
-
-      var context = this;
-      function handle(loc, caught) {
-        record.type = "throw";
-        record.arg = exception;
-        context.next = loc;
-
-        if (caught) {
-          // If the dispatched exception was caught by a catch block,
-          // then let that catch block handle the exception normally.
-          context.method = "next";
-          context.arg = undefined;
-        }
-
-        return !! caught;
-      }
-
-      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
-        var entry = this.tryEntries[i];
-        var record = entry.completion;
-
-        if (entry.tryLoc === "root") {
-          // Exception thrown outside of any try block that could handle
-          // it, so set the completion value of the entire function to
-          // throw the exception.
-          return handle("end");
-        }
-
-        if (entry.tryLoc <= this.prev) {
-          var hasCatch = hasOwn.call(entry, "catchLoc");
-          var hasFinally = hasOwn.call(entry, "finallyLoc");
-
-          if (hasCatch && hasFinally) {
-            if (this.prev < entry.catchLoc) {
-              return handle(entry.catchLoc, true);
-            } else if (this.prev < entry.finallyLoc) {
-              return handle(entry.finallyLoc);
-            }
-
-          } else if (hasCatch) {
-            if (this.prev < entry.catchLoc) {
-              return handle(entry.catchLoc, true);
-            }
-
-          } else if (hasFinally) {
-            if (this.prev < entry.finallyLoc) {
-              return handle(entry.finallyLoc);
-            }
-
-          } else {
-            throw new Error("try statement without catch or finally");
-          }
-        }
-      }
-    },
-
-    abrupt: function(type, arg) {
-      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
-        var entry = this.tryEntries[i];
-        if (entry.tryLoc <= this.prev &&
-            hasOwn.call(entry, "finallyLoc") &&
-            this.prev < entry.finallyLoc) {
-          var finallyEntry = entry;
-          break;
-        }
-      }
-
-      if (finallyEntry &&
-          (type === "break" ||
-           type === "continue") &&
-          finallyEntry.tryLoc <= arg &&
-          arg <= finallyEntry.finallyLoc) {
-        // Ignore the finally entry if control is not jumping to a
-        // location outside the try/catch block.
-        finallyEntry = null;
-      }
-
-      var record = finallyEntry ? finallyEntry.completion : {};
-      record.type = type;
-      record.arg = arg;
-
-      if (finallyEntry) {
-        this.method = "next";
-        this.next = finallyEntry.finallyLoc;
-        return ContinueSentinel;
-      }
-
-      return this.complete(record);
-    },
-
-    complete: function(record, afterLoc) {
-      if (record.type === "throw") {
-        throw record.arg;
-      }
-
-      if (record.type === "break" ||
-          record.type === "continue") {
-        this.next = record.arg;
-      } else if (record.type === "return") {
-        this.rval = this.arg = record.arg;
-        this.method = "return";
-        this.next = "end";
-      } else if (record.type === "normal" && afterLoc) {
-        this.next = afterLoc;
-      }
-
-      return ContinueSentinel;
-    },
-
-    finish: function(finallyLoc) {
-      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
-        var entry = this.tryEntries[i];
-        if (entry.finallyLoc === finallyLoc) {
-          this.complete(entry.completion, entry.afterLoc);
-          resetTryEntry(entry);
-          return ContinueSentinel;
-        }
-      }
-    },
-
-    "catch": function(tryLoc) {
-      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
-        var entry = this.tryEntries[i];
-        if (entry.tryLoc === tryLoc) {
-          var record = entry.completion;
-          if (record.type === "throw") {
-            var thrown = record.arg;
-            resetTryEntry(entry);
-          }
-          return thrown;
-        }
-      }
-
-      // The context.catch method must only be called with a location
-      // argument that corresponds to a known catch block.
-      throw new Error("illegal catch attempt");
-    },
-
-    delegateYield: function(iterable, resultName, nextLoc) {
-      this.delegate = {
-        iterator: values(iterable),
-        resultName: resultName,
-        nextLoc: nextLoc
-      };
-
-      if (this.method === "next") {
-        // Deliberately forget the last sent value so that we don't
-        // accidentally pass it on to the delegate.
-        this.arg = undefined;
-      }
-
-      return ContinueSentinel;
-    }
-  };
-})(
-  // In sloppy mode, unbound `this` refers to the global object, fallback to
-  // Function constructor if we're in global strict mode. That is sadly a form
-  // of indirect eval which violates Content Security Policy.
-  (function() {
-    return this || (typeof self === "object" && self);
-  })() || Function("return this")()
-);
-
-
-/***/ }),
-
-/***/ 42:
-/*!***************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/static/js/chat.js ***!
-  \***************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _api_reference = _interopRequireDefault(__webpack_require__(/*! ./api_reference.js */ 15));
-var _http_commons = _interopRequireDefault(__webpack_require__(/*! ./http_commons.js */ 18));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var _default =
-
-{
-
-  /**
-   * @param {Number} uId
-   * @param {Number} offset
-   * @param {Number} count
-   */
-  getMessages: function getMessages(uId, offset, count) {
-    return new Promise(function (resolve, reject) {
-      uni.request({
-        url: _api_reference.default.CHAT + '?uId=' + uId + '&offset=' + offset + '&count=' + count,
-        header: _http_commons.default.getAuthenticationHeader(),
-        success: function success(resp) {
-          if (_http_commons.default.successCheck(resp)) {
-            resolve(resp.data.data);
-          }
-        },
-        fail: function fail(err) {
-          _http_commons.default.commonFailHanlder(err);
-          reject(err);
-        } });
-
-    });
-  },
-
-
-  /**
-      * @param {Number} receiverId
-      * @param {String} content
-      */
-  sendMessage: function sendMessage(receiverId, content) {
-    return new Promise(function (resolve, reject) {
-      uni.request({
-        url: _api_reference.default.CHAT,
-        method: "POST",
-        header: _http_commons.default.getAuthenticationHeader(),
-        data: {
-          receiverId: receiverId,
-          content: content },
-
-        success: function success(resp) {
-          if (_http_commons.default.successCheck(resp)) {
-            resolve(resp.data.data);
-          }
-        },
-        fail: function fail(err) {
-          _http_commons.default.commonFailHanlder(err);
-          reject(err);
-        } });
-
-    });
-  },
-
-  /**
-      * 获得最近的聊天pair
-      * 
-      * @param {Number} offset
-      * @param {Number} count
-      */
-  getLatestChats: function getLatestChats(offset, count) {
-    return new Promise(function (resolve, reject) {
-      uni.request({
-        url: _api_reference.default.LATEST_CHAT_PAIR + '?offset=' + offset + '&count=' + count,
-        header: _http_commons.default.getAuthenticationHeader(),
-        success: function success(resp) {
-          if (_http_commons.default.successCheck(resp)) {
-            resolve(resp.data.data);
-          }
-        },
-        fail: function fail(err) {
-          _http_commons.default.commonFailHanlder(err);
-          reject(err);
-        } });
-
-    });
-  } };exports.default = _default;
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 
 /***/ }),
 
@@ -24569,7 +23765,890 @@ cityData;exports.default = _default;
 
 /***/ }),
 
-/***/ 43:
+/***/ 44:
+/*!**********************************************************!*\
+  !*** ./node_modules/@babel/runtime/regenerator/index.js ***!
+  \**********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(/*! regenerator-runtime */ 45);
+
+
+/***/ }),
+
+/***/ 45:
+/*!************************************************************!*\
+  !*** ./node_modules/regenerator-runtime/runtime-module.js ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+/**
+ * Copyright (c) 2014-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+// This method of obtaining a reference to the global object needs to be
+// kept identical to the way it is obtained in runtime.js
+var g = (function() {
+  return this || (typeof self === "object" && self);
+})() || Function("return this")();
+
+// Use `getOwnPropertyNames` because not all browsers support calling
+// `hasOwnProperty` on the global `self` object in a worker. See #183.
+var hadRuntime = g.regeneratorRuntime &&
+  Object.getOwnPropertyNames(g).indexOf("regeneratorRuntime") >= 0;
+
+// Save the old regeneratorRuntime in case it needs to be restored later.
+var oldRuntime = hadRuntime && g.regeneratorRuntime;
+
+// Force reevalutation of runtime.js.
+g.regeneratorRuntime = undefined;
+
+module.exports = __webpack_require__(/*! ./runtime */ 46);
+
+if (hadRuntime) {
+  // Restore the original runtime.
+  g.regeneratorRuntime = oldRuntime;
+} else {
+  // Remove the global property added by runtime.js.
+  try {
+    delete g.regeneratorRuntime;
+  } catch(e) {
+    g.regeneratorRuntime = undefined;
+  }
+}
+
+
+/***/ }),
+
+/***/ 46:
+/*!*****************************************************!*\
+  !*** ./node_modules/regenerator-runtime/runtime.js ***!
+  \*****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+/**
+ * Copyright (c) 2014-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+!(function(global) {
+  "use strict";
+
+  var Op = Object.prototype;
+  var hasOwn = Op.hasOwnProperty;
+  var undefined; // More compressible than void 0.
+  var $Symbol = typeof Symbol === "function" ? Symbol : {};
+  var iteratorSymbol = $Symbol.iterator || "@@iterator";
+  var asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator";
+  var toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag";
+
+  var inModule = typeof module === "object";
+  var runtime = global.regeneratorRuntime;
+  if (runtime) {
+    if (inModule) {
+      // If regeneratorRuntime is defined globally and we're in a module,
+      // make the exports object identical to regeneratorRuntime.
+      module.exports = runtime;
+    }
+    // Don't bother evaluating the rest of this file if the runtime was
+    // already defined globally.
+    return;
+  }
+
+  // Define the runtime globally (as expected by generated code) as either
+  // module.exports (if we're in a module) or a new, empty object.
+  runtime = global.regeneratorRuntime = inModule ? module.exports : {};
+
+  function wrap(innerFn, outerFn, self, tryLocsList) {
+    // If outerFn provided and outerFn.prototype is a Generator, then outerFn.prototype instanceof Generator.
+    var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator;
+    var generator = Object.create(protoGenerator.prototype);
+    var context = new Context(tryLocsList || []);
+
+    // The ._invoke method unifies the implementations of the .next,
+    // .throw, and .return methods.
+    generator._invoke = makeInvokeMethod(innerFn, self, context);
+
+    return generator;
+  }
+  runtime.wrap = wrap;
+
+  // Try/catch helper to minimize deoptimizations. Returns a completion
+  // record like context.tryEntries[i].completion. This interface could
+  // have been (and was previously) designed to take a closure to be
+  // invoked without arguments, but in all the cases we care about we
+  // already have an existing method we want to call, so there's no need
+  // to create a new function object. We can even get away with assuming
+  // the method takes exactly one argument, since that happens to be true
+  // in every case, so we don't have to touch the arguments object. The
+  // only additional allocation required is the completion record, which
+  // has a stable shape and so hopefully should be cheap to allocate.
+  function tryCatch(fn, obj, arg) {
+    try {
+      return { type: "normal", arg: fn.call(obj, arg) };
+    } catch (err) {
+      return { type: "throw", arg: err };
+    }
+  }
+
+  var GenStateSuspendedStart = "suspendedStart";
+  var GenStateSuspendedYield = "suspendedYield";
+  var GenStateExecuting = "executing";
+  var GenStateCompleted = "completed";
+
+  // Returning this object from the innerFn has the same effect as
+  // breaking out of the dispatch switch statement.
+  var ContinueSentinel = {};
+
+  // Dummy constructor functions that we use as the .constructor and
+  // .constructor.prototype properties for functions that return Generator
+  // objects. For full spec compliance, you may wish to configure your
+  // minifier not to mangle the names of these two functions.
+  function Generator() {}
+  function GeneratorFunction() {}
+  function GeneratorFunctionPrototype() {}
+
+  // This is a polyfill for %IteratorPrototype% for environments that
+  // don't natively support it.
+  var IteratorPrototype = {};
+  IteratorPrototype[iteratorSymbol] = function () {
+    return this;
+  };
+
+  var getProto = Object.getPrototypeOf;
+  var NativeIteratorPrototype = getProto && getProto(getProto(values([])));
+  if (NativeIteratorPrototype &&
+      NativeIteratorPrototype !== Op &&
+      hasOwn.call(NativeIteratorPrototype, iteratorSymbol)) {
+    // This environment has a native %IteratorPrototype%; use it instead
+    // of the polyfill.
+    IteratorPrototype = NativeIteratorPrototype;
+  }
+
+  var Gp = GeneratorFunctionPrototype.prototype =
+    Generator.prototype = Object.create(IteratorPrototype);
+  GeneratorFunction.prototype = Gp.constructor = GeneratorFunctionPrototype;
+  GeneratorFunctionPrototype.constructor = GeneratorFunction;
+  GeneratorFunctionPrototype[toStringTagSymbol] =
+    GeneratorFunction.displayName = "GeneratorFunction";
+
+  // Helper for defining the .next, .throw, and .return methods of the
+  // Iterator interface in terms of a single ._invoke method.
+  function defineIteratorMethods(prototype) {
+    ["next", "throw", "return"].forEach(function(method) {
+      prototype[method] = function(arg) {
+        return this._invoke(method, arg);
+      };
+    });
+  }
+
+  runtime.isGeneratorFunction = function(genFun) {
+    var ctor = typeof genFun === "function" && genFun.constructor;
+    return ctor
+      ? ctor === GeneratorFunction ||
+        // For the native GeneratorFunction constructor, the best we can
+        // do is to check its .name property.
+        (ctor.displayName || ctor.name) === "GeneratorFunction"
+      : false;
+  };
+
+  runtime.mark = function(genFun) {
+    if (Object.setPrototypeOf) {
+      Object.setPrototypeOf(genFun, GeneratorFunctionPrototype);
+    } else {
+      genFun.__proto__ = GeneratorFunctionPrototype;
+      if (!(toStringTagSymbol in genFun)) {
+        genFun[toStringTagSymbol] = "GeneratorFunction";
+      }
+    }
+    genFun.prototype = Object.create(Gp);
+    return genFun;
+  };
+
+  // Within the body of any async function, `await x` is transformed to
+  // `yield regeneratorRuntime.awrap(x)`, so that the runtime can test
+  // `hasOwn.call(value, "__await")` to determine if the yielded value is
+  // meant to be awaited.
+  runtime.awrap = function(arg) {
+    return { __await: arg };
+  };
+
+  function AsyncIterator(generator) {
+    function invoke(method, arg, resolve, reject) {
+      var record = tryCatch(generator[method], generator, arg);
+      if (record.type === "throw") {
+        reject(record.arg);
+      } else {
+        var result = record.arg;
+        var value = result.value;
+        if (value &&
+            typeof value === "object" &&
+            hasOwn.call(value, "__await")) {
+          return Promise.resolve(value.__await).then(function(value) {
+            invoke("next", value, resolve, reject);
+          }, function(err) {
+            invoke("throw", err, resolve, reject);
+          });
+        }
+
+        return Promise.resolve(value).then(function(unwrapped) {
+          // When a yielded Promise is resolved, its final value becomes
+          // the .value of the Promise<{value,done}> result for the
+          // current iteration.
+          result.value = unwrapped;
+          resolve(result);
+        }, function(error) {
+          // If a rejected Promise was yielded, throw the rejection back
+          // into the async generator function so it can be handled there.
+          return invoke("throw", error, resolve, reject);
+        });
+      }
+    }
+
+    var previousPromise;
+
+    function enqueue(method, arg) {
+      function callInvokeWithMethodAndArg() {
+        return new Promise(function(resolve, reject) {
+          invoke(method, arg, resolve, reject);
+        });
+      }
+
+      return previousPromise =
+        // If enqueue has been called before, then we want to wait until
+        // all previous Promises have been resolved before calling invoke,
+        // so that results are always delivered in the correct order. If
+        // enqueue has not been called before, then it is important to
+        // call invoke immediately, without waiting on a callback to fire,
+        // so that the async generator function has the opportunity to do
+        // any necessary setup in a predictable way. This predictability
+        // is why the Promise constructor synchronously invokes its
+        // executor callback, and why async functions synchronously
+        // execute code before the first await. Since we implement simple
+        // async functions in terms of async generators, it is especially
+        // important to get this right, even though it requires care.
+        previousPromise ? previousPromise.then(
+          callInvokeWithMethodAndArg,
+          // Avoid propagating failures to Promises returned by later
+          // invocations of the iterator.
+          callInvokeWithMethodAndArg
+        ) : callInvokeWithMethodAndArg();
+    }
+
+    // Define the unified helper method that is used to implement .next,
+    // .throw, and .return (see defineIteratorMethods).
+    this._invoke = enqueue;
+  }
+
+  defineIteratorMethods(AsyncIterator.prototype);
+  AsyncIterator.prototype[asyncIteratorSymbol] = function () {
+    return this;
+  };
+  runtime.AsyncIterator = AsyncIterator;
+
+  // Note that simple async functions are implemented on top of
+  // AsyncIterator objects; they just return a Promise for the value of
+  // the final result produced by the iterator.
+  runtime.async = function(innerFn, outerFn, self, tryLocsList) {
+    var iter = new AsyncIterator(
+      wrap(innerFn, outerFn, self, tryLocsList)
+    );
+
+    return runtime.isGeneratorFunction(outerFn)
+      ? iter // If outerFn is a generator, return the full iterator.
+      : iter.next().then(function(result) {
+          return result.done ? result.value : iter.next();
+        });
+  };
+
+  function makeInvokeMethod(innerFn, self, context) {
+    var state = GenStateSuspendedStart;
+
+    return function invoke(method, arg) {
+      if (state === GenStateExecuting) {
+        throw new Error("Generator is already running");
+      }
+
+      if (state === GenStateCompleted) {
+        if (method === "throw") {
+          throw arg;
+        }
+
+        // Be forgiving, per 25.3.3.3.3 of the spec:
+        // https://people.mozilla.org/~jorendorff/es6-draft.html#sec-generatorresume
+        return doneResult();
+      }
+
+      context.method = method;
+      context.arg = arg;
+
+      while (true) {
+        var delegate = context.delegate;
+        if (delegate) {
+          var delegateResult = maybeInvokeDelegate(delegate, context);
+          if (delegateResult) {
+            if (delegateResult === ContinueSentinel) continue;
+            return delegateResult;
+          }
+        }
+
+        if (context.method === "next") {
+          // Setting context._sent for legacy support of Babel's
+          // function.sent implementation.
+          context.sent = context._sent = context.arg;
+
+        } else if (context.method === "throw") {
+          if (state === GenStateSuspendedStart) {
+            state = GenStateCompleted;
+            throw context.arg;
+          }
+
+          context.dispatchException(context.arg);
+
+        } else if (context.method === "return") {
+          context.abrupt("return", context.arg);
+        }
+
+        state = GenStateExecuting;
+
+        var record = tryCatch(innerFn, self, context);
+        if (record.type === "normal") {
+          // If an exception is thrown from innerFn, we leave state ===
+          // GenStateExecuting and loop back for another invocation.
+          state = context.done
+            ? GenStateCompleted
+            : GenStateSuspendedYield;
+
+          if (record.arg === ContinueSentinel) {
+            continue;
+          }
+
+          return {
+            value: record.arg,
+            done: context.done
+          };
+
+        } else if (record.type === "throw") {
+          state = GenStateCompleted;
+          // Dispatch the exception by looping back around to the
+          // context.dispatchException(context.arg) call above.
+          context.method = "throw";
+          context.arg = record.arg;
+        }
+      }
+    };
+  }
+
+  // Call delegate.iterator[context.method](context.arg) and handle the
+  // result, either by returning a { value, done } result from the
+  // delegate iterator, or by modifying context.method and context.arg,
+  // setting context.delegate to null, and returning the ContinueSentinel.
+  function maybeInvokeDelegate(delegate, context) {
+    var method = delegate.iterator[context.method];
+    if (method === undefined) {
+      // A .throw or .return when the delegate iterator has no .throw
+      // method always terminates the yield* loop.
+      context.delegate = null;
+
+      if (context.method === "throw") {
+        if (delegate.iterator.return) {
+          // If the delegate iterator has a return method, give it a
+          // chance to clean up.
+          context.method = "return";
+          context.arg = undefined;
+          maybeInvokeDelegate(delegate, context);
+
+          if (context.method === "throw") {
+            // If maybeInvokeDelegate(context) changed context.method from
+            // "return" to "throw", let that override the TypeError below.
+            return ContinueSentinel;
+          }
+        }
+
+        context.method = "throw";
+        context.arg = new TypeError(
+          "The iterator does not provide a 'throw' method");
+      }
+
+      return ContinueSentinel;
+    }
+
+    var record = tryCatch(method, delegate.iterator, context.arg);
+
+    if (record.type === "throw") {
+      context.method = "throw";
+      context.arg = record.arg;
+      context.delegate = null;
+      return ContinueSentinel;
+    }
+
+    var info = record.arg;
+
+    if (! info) {
+      context.method = "throw";
+      context.arg = new TypeError("iterator result is not an object");
+      context.delegate = null;
+      return ContinueSentinel;
+    }
+
+    if (info.done) {
+      // Assign the result of the finished delegate to the temporary
+      // variable specified by delegate.resultName (see delegateYield).
+      context[delegate.resultName] = info.value;
+
+      // Resume execution at the desired location (see delegateYield).
+      context.next = delegate.nextLoc;
+
+      // If context.method was "throw" but the delegate handled the
+      // exception, let the outer generator proceed normally. If
+      // context.method was "next", forget context.arg since it has been
+      // "consumed" by the delegate iterator. If context.method was
+      // "return", allow the original .return call to continue in the
+      // outer generator.
+      if (context.method !== "return") {
+        context.method = "next";
+        context.arg = undefined;
+      }
+
+    } else {
+      // Re-yield the result returned by the delegate method.
+      return info;
+    }
+
+    // The delegate iterator is finished, so forget it and continue with
+    // the outer generator.
+    context.delegate = null;
+    return ContinueSentinel;
+  }
+
+  // Define Generator.prototype.{next,throw,return} in terms of the
+  // unified ._invoke helper method.
+  defineIteratorMethods(Gp);
+
+  Gp[toStringTagSymbol] = "Generator";
+
+  // A Generator should always return itself as the iterator object when the
+  // @@iterator function is called on it. Some browsers' implementations of the
+  // iterator prototype chain incorrectly implement this, causing the Generator
+  // object to not be returned from this call. This ensures that doesn't happen.
+  // See https://github.com/facebook/regenerator/issues/274 for more details.
+  Gp[iteratorSymbol] = function() {
+    return this;
+  };
+
+  Gp.toString = function() {
+    return "[object Generator]";
+  };
+
+  function pushTryEntry(locs) {
+    var entry = { tryLoc: locs[0] };
+
+    if (1 in locs) {
+      entry.catchLoc = locs[1];
+    }
+
+    if (2 in locs) {
+      entry.finallyLoc = locs[2];
+      entry.afterLoc = locs[3];
+    }
+
+    this.tryEntries.push(entry);
+  }
+
+  function resetTryEntry(entry) {
+    var record = entry.completion || {};
+    record.type = "normal";
+    delete record.arg;
+    entry.completion = record;
+  }
+
+  function Context(tryLocsList) {
+    // The root entry object (effectively a try statement without a catch
+    // or a finally block) gives us a place to store values thrown from
+    // locations where there is no enclosing try statement.
+    this.tryEntries = [{ tryLoc: "root" }];
+    tryLocsList.forEach(pushTryEntry, this);
+    this.reset(true);
+  }
+
+  runtime.keys = function(object) {
+    var keys = [];
+    for (var key in object) {
+      keys.push(key);
+    }
+    keys.reverse();
+
+    // Rather than returning an object with a next method, we keep
+    // things simple and return the next function itself.
+    return function next() {
+      while (keys.length) {
+        var key = keys.pop();
+        if (key in object) {
+          next.value = key;
+          next.done = false;
+          return next;
+        }
+      }
+
+      // To avoid creating an additional object, we just hang the .value
+      // and .done properties off the next function object itself. This
+      // also ensures that the minifier will not anonymize the function.
+      next.done = true;
+      return next;
+    };
+  };
+
+  function values(iterable) {
+    if (iterable) {
+      var iteratorMethod = iterable[iteratorSymbol];
+      if (iteratorMethod) {
+        return iteratorMethod.call(iterable);
+      }
+
+      if (typeof iterable.next === "function") {
+        return iterable;
+      }
+
+      if (!isNaN(iterable.length)) {
+        var i = -1, next = function next() {
+          while (++i < iterable.length) {
+            if (hasOwn.call(iterable, i)) {
+              next.value = iterable[i];
+              next.done = false;
+              return next;
+            }
+          }
+
+          next.value = undefined;
+          next.done = true;
+
+          return next;
+        };
+
+        return next.next = next;
+      }
+    }
+
+    // Return an iterator with no values.
+    return { next: doneResult };
+  }
+  runtime.values = values;
+
+  function doneResult() {
+    return { value: undefined, done: true };
+  }
+
+  Context.prototype = {
+    constructor: Context,
+
+    reset: function(skipTempReset) {
+      this.prev = 0;
+      this.next = 0;
+      // Resetting context._sent for legacy support of Babel's
+      // function.sent implementation.
+      this.sent = this._sent = undefined;
+      this.done = false;
+      this.delegate = null;
+
+      this.method = "next";
+      this.arg = undefined;
+
+      this.tryEntries.forEach(resetTryEntry);
+
+      if (!skipTempReset) {
+        for (var name in this) {
+          // Not sure about the optimal order of these conditions:
+          if (name.charAt(0) === "t" &&
+              hasOwn.call(this, name) &&
+              !isNaN(+name.slice(1))) {
+            this[name] = undefined;
+          }
+        }
+      }
+    },
+
+    stop: function() {
+      this.done = true;
+
+      var rootEntry = this.tryEntries[0];
+      var rootRecord = rootEntry.completion;
+      if (rootRecord.type === "throw") {
+        throw rootRecord.arg;
+      }
+
+      return this.rval;
+    },
+
+    dispatchException: function(exception) {
+      if (this.done) {
+        throw exception;
+      }
+
+      var context = this;
+      function handle(loc, caught) {
+        record.type = "throw";
+        record.arg = exception;
+        context.next = loc;
+
+        if (caught) {
+          // If the dispatched exception was caught by a catch block,
+          // then let that catch block handle the exception normally.
+          context.method = "next";
+          context.arg = undefined;
+        }
+
+        return !! caught;
+      }
+
+      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+        var entry = this.tryEntries[i];
+        var record = entry.completion;
+
+        if (entry.tryLoc === "root") {
+          // Exception thrown outside of any try block that could handle
+          // it, so set the completion value of the entire function to
+          // throw the exception.
+          return handle("end");
+        }
+
+        if (entry.tryLoc <= this.prev) {
+          var hasCatch = hasOwn.call(entry, "catchLoc");
+          var hasFinally = hasOwn.call(entry, "finallyLoc");
+
+          if (hasCatch && hasFinally) {
+            if (this.prev < entry.catchLoc) {
+              return handle(entry.catchLoc, true);
+            } else if (this.prev < entry.finallyLoc) {
+              return handle(entry.finallyLoc);
+            }
+
+          } else if (hasCatch) {
+            if (this.prev < entry.catchLoc) {
+              return handle(entry.catchLoc, true);
+            }
+
+          } else if (hasFinally) {
+            if (this.prev < entry.finallyLoc) {
+              return handle(entry.finallyLoc);
+            }
+
+          } else {
+            throw new Error("try statement without catch or finally");
+          }
+        }
+      }
+    },
+
+    abrupt: function(type, arg) {
+      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+        var entry = this.tryEntries[i];
+        if (entry.tryLoc <= this.prev &&
+            hasOwn.call(entry, "finallyLoc") &&
+            this.prev < entry.finallyLoc) {
+          var finallyEntry = entry;
+          break;
+        }
+      }
+
+      if (finallyEntry &&
+          (type === "break" ||
+           type === "continue") &&
+          finallyEntry.tryLoc <= arg &&
+          arg <= finallyEntry.finallyLoc) {
+        // Ignore the finally entry if control is not jumping to a
+        // location outside the try/catch block.
+        finallyEntry = null;
+      }
+
+      var record = finallyEntry ? finallyEntry.completion : {};
+      record.type = type;
+      record.arg = arg;
+
+      if (finallyEntry) {
+        this.method = "next";
+        this.next = finallyEntry.finallyLoc;
+        return ContinueSentinel;
+      }
+
+      return this.complete(record);
+    },
+
+    complete: function(record, afterLoc) {
+      if (record.type === "throw") {
+        throw record.arg;
+      }
+
+      if (record.type === "break" ||
+          record.type === "continue") {
+        this.next = record.arg;
+      } else if (record.type === "return") {
+        this.rval = this.arg = record.arg;
+        this.method = "return";
+        this.next = "end";
+      } else if (record.type === "normal" && afterLoc) {
+        this.next = afterLoc;
+      }
+
+      return ContinueSentinel;
+    },
+
+    finish: function(finallyLoc) {
+      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+        var entry = this.tryEntries[i];
+        if (entry.finallyLoc === finallyLoc) {
+          this.complete(entry.completion, entry.afterLoc);
+          resetTryEntry(entry);
+          return ContinueSentinel;
+        }
+      }
+    },
+
+    "catch": function(tryLoc) {
+      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+        var entry = this.tryEntries[i];
+        if (entry.tryLoc === tryLoc) {
+          var record = entry.completion;
+          if (record.type === "throw") {
+            var thrown = record.arg;
+            resetTryEntry(entry);
+          }
+          return thrown;
+        }
+      }
+
+      // The context.catch method must only be called with a location
+      // argument that corresponds to a known catch block.
+      throw new Error("illegal catch attempt");
+    },
+
+    delegateYield: function(iterable, resultName, nextLoc) {
+      this.delegate = {
+        iterator: values(iterable),
+        resultName: resultName,
+        nextLoc: nextLoc
+      };
+
+      if (this.method === "next") {
+        // Deliberately forget the last sent value so that we don't
+        // accidentally pass it on to the delegate.
+        this.arg = undefined;
+      }
+
+      return ContinueSentinel;
+    }
+  };
+})(
+  // In sloppy mode, unbound `this` refers to the global object, fallback to
+  // Function constructor if we're in global strict mode. That is sadly a form
+  // of indirect eval which violates Content Security Policy.
+  (function() {
+    return this || (typeof self === "object" && self);
+  })() || Function("return this")()
+);
+
+
+/***/ }),
+
+/***/ 47:
+/*!***************************************************************************************!*\
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/static/js/chat.js ***!
+  \***************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _api_reference = _interopRequireDefault(__webpack_require__(/*! ./api_reference.js */ 15));
+var _http_commons = _interopRequireDefault(__webpack_require__(/*! ./http_commons.js */ 18));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var _default =
+
+{
+
+  /**
+   * @param {Number} uId
+   * @param {Number} offset
+   * @param {Number} count
+   */
+  getMessages: function getMessages(uId, offset, count) {
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: _api_reference.default.CHAT + '?uId=' + uId + '&offset=' + offset + '&count=' + count,
+        header: _http_commons.default.getAuthenticationHeader(),
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+          reject(err);
+        } });
+
+    });
+  },
+
+
+  /**
+      * @param {Number} receiverId
+      * @param {String} content
+      */
+  sendMessage: function sendMessage(receiverId, content) {
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: _api_reference.default.CHAT,
+        method: "POST",
+        header: _http_commons.default.getAuthenticationHeader(),
+        data: {
+          receiverId: receiverId,
+          content: content },
+
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+          reject(err);
+        } });
+
+    });
+  },
+
+  /**
+      * 获得最近的聊天pair
+      * 
+      * @param {Number} offset
+      * @param {Number} count
+      */
+  getLatestChats: function getLatestChats(offset, count) {
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: _api_reference.default.LATEST_CHAT_PAIR + '?offset=' + offset + '&count=' + count,
+        header: _http_commons.default.getAuthenticationHeader(),
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+          reject(err);
+        } });
+
+    });
+  } };exports.default = _default;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
+
+/***/ }),
+
+/***/ 48:
 /*!***********************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/static/js/notification.js ***!
   \***********************************************************************************************/
@@ -25558,7 +25637,19 @@ module.exports = {"_from":"@dcloudio/uni-stat@next","_id":"@dcloudio/uni-stat@2.
 
 /***/ }),
 
-/***/ 66:
+/***/ 7:
+/*!*************************************************************************************************!*\
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/pages.json?{"type":"style"} ***!
+  \*************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _default = { "pages": { "pages/index/index": { "navigationBarTitleText": "讨论区" }, "pages/message/message": {}, "pages/login/login": {}, "pages/me/me": {}, "pages/favorite/favorite": {}, "pages/conurse_ware/course_ware": {}, "pages/contest/contest": {}, "pages/helpme/helpme": {}, "pages/course/course": {}, "pages/course_settings/course_settings": {}, "pages/topics/topics": {}, "pages/create_topic/create_topic": {}, "pages/topic/topic": {}, "pages/sub_comments/sub_comments": {}, "pages/member_list/member_list": {}, "pages/chat/chat": {}, "pages/create_contest/create_contest": {}, "pages/revise/revise": {}, "pages/contest_list/contest_list": {}, "pages/create_notification/create_notification": {}, "pages/course_wares/course_wares": {}, "pages/create_class/create_class": {}, "pages/class/class": {}, "pages/score_calculate/score_calculate": {} }, "globalStyle": { "navigationBarTextStyle": "black", "navigationBarTitleText": "小课堂", "navigationBarBackgroundColor": "#F8F8F8", "backgroundColor": "#F2F2F2" } };exports.default = _default;
+
+/***/ }),
+
+/***/ 71:
 /*!*******************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/static/js/favorite.js ***!
   \*******************************************************************************************/
@@ -25675,19 +25766,19 @@ var _http_commons = _interopRequireDefault(__webpack_require__(/*! ./http_common
 
 /***/ }),
 
-/***/ 7:
-/*!*************************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/pages.json?{"type":"style"} ***!
-  \*************************************************************************************************/
+/***/ 8:
+/*!************************************************************************************************!*\
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/pages.json?{"type":"stat"} ***!
+  \************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _default = { "pages": { "pages/score_calculate/score_calculate": { "usingComponents": { "van-notify": "/wxcomponents/vant/dist/notify/index", "van-button": "/wxcomponents/vant/dist/button/index" }, "usingAutoImportComponents": {} }, "pages/message/message": { "usingComponents": { "notification": "/components/Notification", "s-tabs": "/components/s-tabs/index", "s-tab": "/components/s-tab/index", "van-tag": "/wxcomponents/vant/dist/tag/index", "van-image": "/wxcomponents/vant/dist/image/index", "uni-load-more": "/components/uni-load-more/uni-load-more" }, "usingAutoImportComponents": { "uni-load-more": "/components/uni-load-more/uni-load-more" } }, "pages/login/login": { "usingComponents": { "update-user-info": "/components/UpdateUserInfo", "van-popup": "/wxcomponents/vant/dist/popup/index" }, "usingAutoImportComponents": {} }, "pages/me/me": { "usingComponents": { "update-user-info": "/components/UpdateUserInfo", "van-button": "/wxcomponents/vant/dist/button/index", "van-notify": "/wxcomponents/vant/dist/notify/index", "van-image": "/wxcomponents/vant/dist/image/index" }, "usingAutoImportComponents": {} }, "pages/favorite/favorite": { "usingComponents": { "van-tag": "/wxcomponents/vant/dist/tag/index", "uni-load-more": "/components/uni-load-more/uni-load-more", "s-tabs": "/components/s-tabs/index", "s-tab": "/components/s-tab/index" }, "usingAutoImportComponents": { "uni-load-more": "/components/uni-load-more/uni-load-more" } }, "pages/conurse_ware/course_ware": { "usingComponents": { "l-file": "/components/l-file/l-file", "read-course-ware-page": "/components/ReadCourseWarePage", "van-notify": "/wxcomponents/vant/dist/notify/index", "van-button": "/wxcomponents/vant/dist/button/index", "van-icon": "/wxcomponents/vant/dist/icon/index" }, "usingAutoImportComponents": { "l-file": "/components/l-file/l-file" } }, "pages/contest/contest": { "usingComponents": { "uni-countdown": "/components/uni-countdown/uni-countdown", "create-answer": "/components/CreateAnswer", "w-picker": "/components/w-picker/w-picker", "van-button": "/wxcomponents/vant/dist/button/index", "van-icon": "/wxcomponents/vant/dist/icon/index", "van-dialog": "/wxcomponents/vant/dist/dialog/index", "van-divider": "/wxcomponents/vant/dist/divider/index", "van-notify": "/wxcomponents/vant/dist/notify/index" }, "usingAutoImportComponents": { "uni-countdown": "/components/uni-countdown/uni-countdown" } }, "pages/helpme/helpme": { "usingComponents": {}, "usingAutoImportComponents": {} }, "pages/course/course": { "usingComponents": { "l-file": "/components/l-file/l-file", "single-submit-popup": "/components/SingleSubmitPopup", "uni-load-more": "/components/uni-load-more/uni-load-more", "s-tabs": "/components/s-tabs/index", "s-tab": "/components/s-tab/index", "van-tag": "/wxcomponents/vant/dist/tag/index", "van-grid": "/wxcomponents/vant/dist/grid/index", "van-grid-item": "/wxcomponents/vant/dist/grid-item/index", "van-notify": "/wxcomponents/vant/dist/notify/index", "van-icon": "/wxcomponents/vant/dist/icon/index", "van-button": "/wxcomponents/vant/dist/button/index", "van-steps": "/wxcomponents/vant/dist/steps/index" }, "usingAutoImportComponents": { "l-file": "/components/l-file/l-file", "uni-load-more": "/components/uni-load-more/uni-load-more" } }, "pages/course_settings/course_settings": { "usingComponents": { "van-notify": "/wxcomponents/vant/dist/notify/index", "van-button": "/wxcomponents/vant/dist/button/index" }, "usingAutoImportComponents": {} }, "pages/topics/topics": { "usingComponents": { "ms-dropdown-menu": "/components/ms-dropdown/dropdown-menu", "ms-dropdown-item": "/components/ms-dropdown/dropdown-item", "s-tabs": "/components/s-tabs/index", "s-tab": "/components/s-tab/index", "van-notify": "/wxcomponents/vant/dist/notify/index", "uni-load-more": "/components/uni-load-more/uni-load-more", "van-icon": "/wxcomponents/vant/dist/icon/index", "van-image": "/wxcomponents/vant/dist/image/index" }, "usingAutoImportComponents": { "uni-load-more": "/components/uni-load-more/uni-load-more" } }, "pages/create_topic/create_topic": { "usingComponents": { "van-notify": "/wxcomponents/vant/dist/notify/index", "van-button": "/wxcomponents/vant/dist/button/index" }, "usingAutoImportComponents": {} }, "pages/topic/topic": { "usingComponents": { "s-tabs": "/components/s-tabs/index", "s-tab": "/components/s-tab/index", "single-submit-popup": "/components/SingleSubmitPopup", "van-notify": "/wxcomponents/vant/dist/notify/index", "uni-load-more": "/components/uni-load-more/uni-load-more", "van-icon": "/wxcomponents/vant/dist/icon/index", "van-image": "/wxcomponents/vant/dist/image/index" }, "usingAutoImportComponents": { "uni-load-more": "/components/uni-load-more/uni-load-more" } }, "pages/sub_comments/sub_comments": { "usingComponents": { "single-submit-popup": "/components/SingleSubmitPopup", "van-notify": "/wxcomponents/vant/dist/notify/index", "uni-load-more": "/components/uni-load-more/uni-load-more", "van-icon": "/wxcomponents/vant/dist/icon/index", "van-image": "/wxcomponents/vant/dist/image/index" }, "usingAutoImportComponents": { "uni-load-more": "/components/uni-load-more/uni-load-more" } }, "pages/member_list/member_list": { "usingComponents": { "van-index-bar": "/wxcomponents/vant/dist/index-bar/index", "van-index-anchor": "/wxcomponents/vant/dist/index-anchor/index", "van-cell": "/wxcomponents/vant/dist/cell/index", "van-notify": "/wxcomponents/vant/dist/notify/index", "van-cell-group": "/wxcomponents/vant/dist/cell-group/index", "van-swipe-cell": "/wxcomponents/vant/dist/swipe-cell/index" }, "usingAutoImportComponents": {} }, "pages/chat/chat": { "usingComponents": { "van-notify": "/wxcomponents/vant/dist/notify/index", "uni-load-more": "/components/uni-load-more/uni-load-more", "van-icon": "/wxcomponents/vant/dist/icon/index", "van-image": "/wxcomponents/vant/dist/image/index" }, "usingAutoImportComponents": { "uni-load-more": "/components/uni-load-more/uni-load-more" } }, "pages/create_contest/create_contest": { "usingComponents": { "create-question": "/components/CreateQuestion", "w-picker": "/components/w-picker/w-picker", "van-button": "/wxcomponents/vant/dist/button/index", "van-icon": "/wxcomponents/vant/dist/icon/index", "van-dialog": "/wxcomponents/vant/dist/dialog/index", "van-divider": "/wxcomponents/vant/dist/divider/index", "van-notify": "/wxcomponents/vant/dist/notify/index" }, "usingAutoImportComponents": { "w-picker": "/components/w-picker/w-picker" } }, "pages/revise/revise": { "usingComponents": { "create-revise": "/components/CreateRevise", "van-index-bar": "/wxcomponents/vant/dist/index-bar/index", "van-index-anchor": "/wxcomponents/vant/dist/index-anchor/index", "van-notify": "/wxcomponents/vant/dist/notify/index" }, "usingAutoImportComponents": {} }, "pages/contest_list/contest_list": { "usingComponents": { "uni-load-more": "/components/uni-load-more/uni-load-more", "s-tabs": "/components/s-tabs/index", "s-tab": "/components/s-tab/index" }, "usingAutoImportComponents": { "uni-load-more": "/components/uni-load-more/uni-load-more" } }, "pages/create_notification/create_notification": { "usingComponents": { "w-picker": "/components/w-picker/w-picker", "van-notify": "/wxcomponents/vant/dist/notify/index", "van-button": "/wxcomponents/vant/dist/button/index" }, "usingAutoImportComponents": { "w-picker": "/components/w-picker/w-picker" } }, "pages/course_wares/course_wares": { "usingComponents": { "uni-load-more": "/components/uni-load-more/uni-load-more", "s-tabs": "/components/s-tabs/index", "s-tab": "/components/s-tab/index" }, "usingAutoImportComponents": { "uni-load-more": "/components/uni-load-more/uni-load-more" } }, "pages/create_class/create_class": { "usingComponents": { "single-submit-popup": "/components/SingleSubmitPopup", "l-file": "/components/l-file/l-file", "create-quiz": "/components/CreateQuiz", "van-swipe-cell": "/wxcomponents/vant/dist/swipe-cell/index", "van-button": "/wxcomponents/vant/dist/button/index", "van-notify": "/wxcomponents/vant/dist/notify/index" }, "usingAutoImportComponents": { "l-file": "/components/l-file/l-file" } }, "pages/class/class": { "usingComponents": { "van-button": "/wxcomponents/vant/dist/button/index", "van-notify": "/wxcomponents/vant/dist/notify/index" }, "usingAutoImportComponents": {} }, "pages/index/index": { "navigationBarTitleText": "讨论区", "usingComponents": { "create-course-modal": "/components/CreateCourse", "join-course-modal": "/components/JoinCourse", "van-grid": "/wxcomponents/vant/dist/grid/index", "van-grid-item": "/wxcomponents/vant/dist/grid-item/index", "van-tab": "/wxcomponents/vant/dist/tab/index", "van-tabs": "/wxcomponents/vant/dist/tabs/index", "van-notify": "/wxcomponents/vant/dist/notify/index", "van-icon": "/wxcomponents/vant/dist/icon/index", "van-button": "/wxcomponents/vant/dist/button/index", "van-swipe-cell": "/wxcomponents/vant/dist/swipe-cell/index", "van-dialog": "/wxcomponents/vant/dist/dialog/index", "van-divider": "/wxcomponents/vant/dist/divider/index" }, "usingAutoImportComponents": {} } }, "globalStyle": { "navigationBarTextStyle": "black", "navigationBarTitleText": "小课堂", "navigationBarBackgroundColor": "#F8F8F8", "backgroundColor": "#F2F2F2" } };exports.default = _default;
+Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _default = { "appid": "" };exports.default = _default;
 
 /***/ }),
 
-/***/ 75:
+/***/ 80:
 /*!**********************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/static/js/course_ware.js ***!
   \**********************************************************************************************/
@@ -25891,93 +25982,7 @@ var _http_commons = _interopRequireDefault(__webpack_require__(/*! @/static/js/h
 
 /***/ }),
 
-/***/ 8:
-/*!************************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/pages.json?{"type":"stat"} ***!
-  \************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _default = { "appid": "" };exports.default = _default;
-
-/***/ }),
-
-/***/ 84:
-/*!*************************************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/dialog/dialog.js ***!
-  \*************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var queue = [];
-function getContext() {
-  var pages = getCurrentPages();
-  return pages[pages.length - 1];
-}
-var Dialog = function Dialog(options) {
-  options = Object.assign(Object.assign({}, Dialog.currentOptions), options);
-  return new Promise(function (resolve, reject) {
-    var context = options.context || getContext();
-    var dialog = context.selectComponent(options.selector);
-    delete options.context;
-    delete options.selector;
-    if (dialog) {
-      dialog.setData(Object.assign({ onCancel: reject, onConfirm: resolve }, options));
-      queue.push(dialog);
-    } else
-    {
-      console.warn('未找到 van-dialog 节点，请确认 selector 及 context 是否正确');
-    }
-  });
-};
-Dialog.defaultOptions = {
-  show: true,
-  title: '',
-  width: null,
-  message: '',
-  zIndex: 100,
-  overlay: true,
-  selector: '#van-dialog',
-  className: '',
-  asyncClose: false,
-  transition: 'scale',
-  customStyle: '',
-  messageAlign: '',
-  overlayStyle: '',
-  confirmButtonText: '确认',
-  cancelButtonText: '取消',
-  showConfirmButton: true,
-  showCancelButton: false,
-  closeOnClickOverlay: false,
-  confirmButtonOpenType: '' };
-
-Dialog.alert = Dialog;
-Dialog.confirm = function (options) {return Dialog(Object.assign({ showCancelButton: true }, options));};
-Dialog.close = function () {
-  queue.forEach(function (dialog) {
-    dialog.close();
-  });
-  queue = [];
-};
-Dialog.stopLoading = function () {
-  queue.forEach(function (dialog) {
-    dialog.stopLoading();
-  });
-};
-Dialog.setDefaultOptions = function (options) {
-  Object.assign(Dialog.currentOptions, options);
-};
-Dialog.resetDefaultOptions = function () {
-  Dialog.currentOptions = Object.assign({}, Dialog.defaultOptions);
-};
-Dialog.resetDefaultOptions();var _default =
-Dialog;exports.default = _default;
-
-/***/ }),
-
-/***/ 85:
+/***/ 89:
 /*!******************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/static/js/contest.js ***!
   \******************************************************************************************/

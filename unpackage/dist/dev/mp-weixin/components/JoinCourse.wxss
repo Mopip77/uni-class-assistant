@@ -37,31 +37,22 @@
   top: 0;
   bottom: 0;
 }
+.join-course-box text {
+    font-size: 28rpx;
+    color: gray;
+    margin-left: 10rpx;
+}
+.join-course-box input {
+    font-size: 30rpx;
+    background-color: #fafafa;
+    padding: 20rpx 14rpx;
+    margin-top: 6rpx;
+}
 .join-course-box .class-number-field {
     margin: 60rpx 0;
 }
-.join-course-box .class-number-field text {
-      font-size: 28rpx;
-      color: gray;
-}
-.join-course-box .class-number-field input {
-      font-size: 30rpx;
-      background-color: #fafafa;
-      padding: 20rpx 14rpx;
-      margin-top: 6rpx;
-}
-.join-course-box .class-info-field {
+.join-course-box .class-password-field {
     margin-bottom: 54rpx;
-}
-.join-course-box .class-info-field text {
-      font-size: 28rpx;
-      color: gray;
-}
-.join-course-box .class-info-field input {
-      font-size: 30rpx;
-      background-color: #fafafa;
-      padding: 20rpx 14rpx;
-      margin-top: 6rpx;
 }
 .join-course-box .button-group {
     display: -webkit-box;

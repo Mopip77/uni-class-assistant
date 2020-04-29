@@ -72,7 +72,8 @@
 										</view>
 
 										<view class="course-id">
-											课程号: {{course.id}}
+											<text>课程号: {{course.id}}</text>
+											<text>暗号: {{course.password}}</text>
 										</view>
 									</view>
 									<view class="footer">
@@ -369,6 +370,9 @@
 						font-size: 29rpx;
 						margin: 10rpx 15rpx;
 						color: #455A64;
+						display: flex;
+						flex-direction: column;
+						align-items: flex-end;
 					}
 				}
 
