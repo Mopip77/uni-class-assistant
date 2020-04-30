@@ -13,6 +13,7 @@ export default {
 	// course
 	GET_TEACHED_COURSE: API_SERVER + 'course/teach',
 	GET_JOINED_COURSE: API_SERVER + 'course/study',
+	GET_CREATED_COURSE: API_SERVER + 'course/creator',
 	GET_COURSE: API_SERVER + 'course',
 	CREATE_COURSE: API_SERVER + 'course/create',
 	UPDATE_COURSE: API_SERVER + 'course/update',
@@ -79,6 +80,7 @@ export default {
 	
 	// favorite
 	FAVORITE: API_SERVER + 'favorite',
+	FAVORITE_BY_ID: API_SERVER + 'favorite/id',
 	FAVORITE_LIST: API_SERVER + 'favorite/list',
 	FAVORITE_EXIST: API_SERVER + 'favorite/exist',
 	FAVORITE_BY_TYPE: API_SERVER + 'favorite/type',

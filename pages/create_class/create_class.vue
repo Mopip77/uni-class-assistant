@@ -246,8 +246,7 @@
 		},
 
 		onLoad(option) {
-			// this.courseId = option.courseId
-			this.courseId = 7
+			this.courseId = Number(option.courseId)
 
 			if (!this.courseId) {
 				Notify({
@@ -347,7 +346,7 @@
 			height: auto;
 			display: flex;
 			flex-direction: column;
-			background-image: url(~@/static/img/course-card-background.png);
+			background-image: $card-background-url;
 
 			.swipe-cell-field {
 				font-size: 40rpx;

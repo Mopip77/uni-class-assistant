@@ -2,90 +2,90 @@
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
 		{
 			"path": "pages/index/index",
-			// "path": "pages/member_list/member_list",
-			// "path": "pages/course/course",
-			// "path" : "pages/topics/topics",
-			// "path" : "pages/topic/topic",
-			// "path" : "pages/sub_comments/sub_comments",
-			// "path": "pages/chat/chat",
-			// "path":"pages/message/message",
-			// "path":"pages/me/me",
-			// "path": "pages/create_contest/create_contest",
-			// "path": "pages/contest/contest",
-			// "path":"pages/revise/revise",
-			// "path" : "pages/create_class/create_class",
-			// "path" : "pages/class/class",
-			// "path" : "pages/score_calculate/score_calculate",
+			"style": {}
+		},
+		{
+			"path": "pages/message/message",
 			"style": {
-				"navigationBarTitleText": "讨论区"
+				"navigationBarTitleText": "消息"
 			}
 		},
 		{
-			"path": "pages/message/message"
-			// "path": "pages/index/index"
-		},
-		{
-			"path": "pages/login/login"
-		},
-		{
-			"path": "pages/me/me"
-			// "path":"pages/index/index"
+			"path": "pages/me/me",
+			"style": {
+				"navigationBarTitleText": "个人信息"
+			}
 		}, {
 			"path": "pages/favorite/favorite",
-			"style": {}
+			"style": {
+				"navigationBarTitleText": "收藏夹",
+				"enablePullDownRefresh": true
+			}
 		}, {
 			"path": "pages/conurse_ware/course_ware",
-			"style": {}
+			"style": {
+				"navigationBarTitleText": "课件"
+			}
 		}, {
 			"path": "pages/contest/contest",
-			// "path": "pages/index/index",
-			"style": {}
+			"style": {
+				"navigationBarTitleText": "测试"
+			}
 		}, {
 			"path": "pages/helpme/helpme",
-			"style": {}
+			"style": {
+				"navigationBarTitleText": "帮助中心"
+			}
 		}, {
-			// "path": "pages/index/index",
 			"path": "pages/course/course",
-			"style": {}
+			"style": {
+				"enablePullDownRefresh": true
+			}
 		}, {
 			"path": "pages/course_settings/course_settings",
-			"style": {}
+			"style": {
+				"navigationBarTitleText": "课程信息"
+			}
 		}, {
 			"path": "pages/topics/topics",
-			// "path": "pages/index/index",
-			"style": {}
+			"style": {
+				"enablePullDownRefresh": true,
+				"navigationBarTitleText": "讨论区"
+			}
 		}, {
 			"path": "pages/create_topic/create_topic",
 			"style": {}
 		}, {
 			"path": "pages/topic/topic",
-			// "path" : "pages/topics/topics",
-			"style": {}
+			"style": {
+				"enablePullDownRefresh": true
+			}
 		}, {
 			"path": "pages/sub_comments/sub_comments",
-			// "path" : "pages/topic/topic",
 			"style": {}
 		}, {
 			"path": "pages/member_list/member_list",
-			// "path" : "pages/index/index",
-			"style": {}
+			"style": {
+				"navigationBarTitleText": "成员列表"
+			}
 		}, {
 			"path": "pages/chat/chat",
-			// "path": "pages/index/index",
 			"style": {}
 		}, {
 			"path" : "pages/create_contest/create_contest",
-			// "path": "pages/index/index",
 			"style": {}
 		}
         ,{
             "path" : "pages/revise/revise",
-            // "path" : "pages/index/index",
-            "style" : {}
+            "style" : {
+				"navigationBarTitleText": "批改列表"
+			}
         }
         ,{
             "path" : "pages/contest_list/contest_list",
-            "style" : {}
+            "style" : {
+				"navigationBarTitleText": "试卷库"
+			}
         }
         ,{
             "path" : "pages/create_notification/create_notification",
@@ -93,27 +93,26 @@
         }
         ,{
             "path" : "pages/course_wares/course_wares",
-            "style" : {}
+            "style" : {
+				"navigationBarTitleText": "课件库"
+			}
         }
         ,{
             "path" : "pages/create_class/create_class",
-            // "path" : "pages/index/index",
             "style" : {}
         }
         ,{
             "path" : "pages/class/class",
-            // "path" : "pages/index/index",
             "style" : {}
         },
 		{
 		    "path" : "pages/score_calculate/score_calculate",
-		    // "path" : "pages/index/index",
 		    "style" : {}
 		}
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "小课堂",
+		"navigationBarTitleText": "课堂助手",
 		"navigationBarBackgroundColor": "#F8F8F8",
 		"backgroundColor": "#F2F2F2"
 	},
@@ -121,20 +120,20 @@
 		"list": [{
 				"text": "首页",
 				"pagePath": "pages/index/index",
-				"iconPath": "static/img/home.png",
-				"selectedIconPath": "static/img/homeHL.png"
+				"iconPath": "static/img/home1.png",
+				"selectedIconPath": "static/img/home1HL.png"
 			},
 			{
 				"text": "消息",
 				"pagePath": "pages/message/message",
-				"iconPath": "static/img/user.png",
-				"selectedIconPath": "static/img/userHL.png"
+				"iconPath": "static/img/notification1.png",
+				"selectedIconPath": "static/img/notification1HL.png"
 			},
 			{
 				"text": "我的",
 				"pagePath": "pages/me/me",
-				"iconPath": "static/img/user.png",
-				"selectedIconPath": "static/img/userHL.png"
+				"iconPath": "static/img/me1.png",
+				"selectedIconPath": "static/img/me1HL.png"
 			}
 		]
 	}

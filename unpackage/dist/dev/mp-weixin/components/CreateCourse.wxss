@@ -37,6 +37,9 @@
   top: 0;
   bottom: 0;
 }
+.create-course-box text {
+    margin-left: 10rpx;
+}
 .create-course-box .name-field {
     margin: 60rpx 0;
 }

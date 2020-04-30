@@ -6,11 +6,11 @@
 		</view>
 
 		<view class="on-top">
-			<CreateCourseModal v-if="showCreateCourseModal" @closeCreateCourseModal="closeCreateCourseModal" @successCallBack="getCourseList(0)"></CreateCourseModal>
+			<CreateCourseModal v-if="showCreateCourseModal" @closeCreateCourseModal="closeCreateCourseModal" @successCallBack="resetTab"></CreateCourseModal>
 		</view>
 
 		<view class="on-top">
-			<JoinCourseModal v-if="showJoinCourseModal" @closeJoinCourseModal="closeJoinCourseModal" @successCallBack="getCourseList(1)"></JoinCourseModal>
+			<JoinCourseModal v-if="showJoinCourseModal" @closeJoinCourseModal="closeJoinCourseModal" @successCallBack="resetTab"></JoinCourseModal>
 		</view>
 
 		<view class="uni-padding-wrap">
@@ -56,13 +56,11 @@
 			</van-grid>
 		</view>
 
-		<view class="course-select-root">
-			<van-tabs class-class="course-select-box" animated sticky :active="courseSelectIndex" @change="changeCourseSelect">
-				<van-tab z-index="-1" tab-class="course-select-item" title="我发布的">
-					<van-button custom-style="width: 750rpx;height: 70rpx;" color="#4DD0E1" @tap="showCreateCourseModalTroggle">新建课程</van-button>
-					<van-divider v-if="teachedCourseList.length === 0" contentPosition="center">暂无课程，新建一个吧</van-divider>
-					<view class="course-list" v-else>
-						<view class="course-item" v-for="(course, idx) in teachedCourseList" :key="idx">
+		<view class="course-box">
+			<STabs effect="true" :navPerView="4" v-model="tabIdx" @change="changeTab">
+				<STab title="创建的">
+					<view class="course-list">
+						<view class="course-item" v-for="(course, idx) in datas[0]" :key="idx">
 							<van-swipe-cell right-width="65" async-close>
 								<view class="swipe-cell-field" slot="right" @tap="deleteCourse(course.id)">删除</view>
 								<view class="course-card" @tap="goToCoursePage(course.id)">
@@ -87,13 +85,45 @@
 								</view>
 							</van-swipe-cell>
 						</view>
+						<van-divider v-if="datas[0].length === 0" contentPosition="center">暂无课程，新建一个吧</van-divider>
+						<uni-load-more v-else :status="onloadingStatus" @clickLoadMore="loadMore()" :contentText="onloadingText"></uni-load-more>
 					</view>
-				</van-tab>
-				<van-tab tab-class="course-select-item" title="我参与的">
-					<van-button custom-style="width: 750rpx;height: 70rpx;" color="#4DD0E1" @tap="showJoinCourseModalTroggle">加入课程</van-button>
-					<van-divider v-if="joinedCourseList.length === 0" contentPosition="center">暂无课程，加入一个吧</van-divider>
-					<view class="course-list" v-else>
-						<view class="course-item" v-for="(course, idx) in joinedCourseList" :key="idx">
+				</STab>
+
+				<STab title="教授的">
+					<view class="course-list">
+						<view class="course-item" v-for="(course, idx) in datas[1]" :key="idx">
+							<van-swipe-cell right-width="65" async-close>
+								<view class="swipe-cell-field" slot="right" @tap="exitCourse(course.id)">退出</view>
+								<view class="course-card" @tap="goToCoursePage(course.id)">
+									<view class="header">
+										<view class="title">
+											{{course.courseName}}
+										</view>
+
+										<view class="course-id">
+											<text>课程号: {{course.id}}</text>
+											<text>暗号: {{course.password}}</text>
+										</view>
+									</view>
+									<view class="footer">
+										<view class="info">
+											{{course.classInfo}}
+										</view>
+										<view class="user-count">
+											<van-icon name="friends-o" custom-style="font-size: 44rpx;margin-right: 10rpx;" />{{course.memberCount}} 人
+										</view>
+									</view>
+								</view>
+							</van-swipe-cell>
+						</view>
+						<uni-load-more :status="onloadingStatus" @clickLoadMore="loadMore()" :contentText="onloadingText"></uni-load-more>
+					</view>
+				</STab>
+
+				<STab title="学习的">
+					<view class="course-list">
+						<view class="course-item" v-for="(course, idx) in datas[2]" :key="idx">
 							<van-swipe-cell right-width="65" async-close>
 								<view class="swipe-cell-field" slot="right" @tap="exitCourse(course.id)">退出</view>
 								<view class="course-card" @tap="goToCoursePage(course.id)">
@@ -114,9 +144,15 @@
 								</view>
 							</van-swipe-cell>
 						</view>
+						<van-divider v-if="datas[2].length === 0" contentPosition="center">暂无课程，加入一个吧</van-divider>
+						<uni-load-more v-else :status="onloadingStatus" @clickLoadMore="loadMore()" :contentText="onloadingText"></uni-load-more>
 					</view>
-				</van-tab>
-			</van-tabs>
+				</STab>
+			</STabs>
+			<view class="new-course-btn">
+				<text @tap="showJoinCourseModalTroggle" v-if="tabIdx === 2">加入</text>
+				<text @tap="showCreateCourseModalTroggle" v-else>新建</text>
+			</view>
 		</view>
 	</view>
 </template>
@@ -130,22 +166,27 @@
 	import Notify from '@/wxcomponents/vant/dist/notify/notify.js'
 	import Icon from '@/wxcomponents/vant/dist/icon/index.js'
 	import Button from '@/wxcomponents/vant/dist/button/index.js'
-	import Card from '@/wxcomponents/vant/dist/card/index.js'
 	import SwipeCell from '@/wxcomponents/vant/dist/swipe-cell/index.js'
 	import VanDialog from '@/wxcomponents/vant/dist/dialog/index.js'
 	import Dialog from '@/wxcomponents/vant/dist/dialog/dialog.js'
 	import Divider from '@/wxcomponents/vant/dist/divider/index.js'
 
-	import CourseUtils from '@/static/js/course.js'
-
+	import UniLoadMore from "@/components/uni-load-more/uni-load-more.vue";
+	import STabs from "@/components/s-tabs";
+	import STab from "@/components/s-tab";
 	import CreateCourseModal from '@/components/CreateCourse.vue'
 	import JoinCourseModal from '@/components/JoinCourse.vue'
+
+	import CourseUtils from '@/static/js/course.js'
 
 	export default {
 		components: {
 			CreateCourseModal,
 			JoinCourseModal,
 
+			STabs,
+			STab,
+			"uni-load-more": UniLoadMore,
 			'van-grid': Grid,
 			'van-grid-item': GridItem,
 			'van-tab': Tab,
@@ -160,24 +201,36 @@
 		},
 		data() {
 			return {
-				courseSelectIndex: 0,
+				tabIdx: 0,
 				showCreateCourseModal: false,
 				showJoinCourseModal: false,
-				createJoinCourseModal: true,
-				teachedCourseList: [],
-				joinedCourseList: []
+
+				datas: [
+					[],
+					[],
+					[],
+				],
+				offsets: [0, 0, 0],
+				counts: [10, 10, 10],
+				onloadingStatuses: ["more", "more", "more"],
+				onloadingText: {
+					contentdown: "点击加载更多课程",
+					contentrefresh: "加载中...",
+					contentnomore: "没有更多课程了"
+				},
 			}
 		},
 		onShow() {
 			// 为了解决在me页面登录后，再返回到index能自动刷新，所以写成onShow，再通过list是否为0判断是否需要刷新
 			let tout = setInterval(() => {
-				if (this.$store.state.checkLogin) {
+				let that = this
+
+				if (that.$store.state.checkLogin) {
 					clearInterval(tout)
-					if (this.$store.state.hasLogin) {
-						if (this.courseSelectIndex === 0 && this.teachedCourseList.length === 0) {
-							this.getCourseList(this.courseSelectIndex)
-						} else if (this.courseSelectIndex === 1 && this.joinedCourseList.length === 0) {
-							this.getCourseList(this.courseSelectIndex)
+					if (that.$store.state.hasLogin) {
+						let idx = that.tabIdx
+						if (that.datas[idx].length === 0) {
+							that.loadMore()
 						}
 					}
 				}
@@ -197,28 +250,58 @@
 				this.showJoinCourseModal = false;
 			},
 
-			changeCourseSelect() {
-				this.courseSelectIndex = (this.courseSelectIndex + 1) % 2;
-				// 只有没有数据才加载
-				if (this.courseSelectIndex === 0 && this.teachedCourseList.length === 0 ||
-					this.courseSelectIndex === 1 && this.joinedCourseList.length === 0) {
-					this.getCourseList(this.courseSelectIndex)
-				}
-			},
-			getCourseList(type) {
-				console.log("获取课程列表");
-				let promise = CourseUtils.listCourse(type);
+			async loadMore() {
+				let IDX = this.tabIdx
 
-				promise
-					.then(list => {
-						if (0 === type) {
-							console.log("teached", list);
-							this.teachedCourseList = list === null ? [] : list;
-						} else {
-							console.log("joined", list);
-							this.joinedCourseList = list === null ? [] : list;
-						}
+				if (this.offsets[IDX] > this.datas[IDX].length) {
+					return;
+				}
+
+				this.onloadingStatuses[IDX] = "loading";
+
+				let data = await this.getCourses(IDX, this.offsets[IDX], this.counts[IDX])
+				this.datas[IDX].push(...data)
+
+				// 更新offset 和 onLoading 类型（是否有更多加载）
+				this.offsets[IDX] += this.counts[IDX];
+				this.onloadingStatuses[IDX] = this.offsets[IDX] === this.datas[IDX].length ? "more" : "noMore";
+			},
+
+			changeTab() {
+				this.loadMore()
+			},
+			
+			resetTab() {
+				let IDX = this.tabIdx
+				this.offsets[IDX] = 0
+				this.datas[IDX].splice(0)
+				this.loadMore()
+			},
+
+			/**
+			 * @param {Number} type  0 - 创建的, 1 - 教授的, 2 - 学习的
+			 * @param {Number} offset
+			 * @param {Number} count
+			 */
+			getCourses(type, offset, count) {
+				if (type < 0 || type > 2) {
+					return;
+				}
+
+				return new Promise((resolve, reject) => {
+					let p = null;
+					if (0 === type) {
+						p = CourseUtils.listCoursesAsCreator(offset, count)
+					} else if (1 === type) {
+						p = CourseUtils.listCoursesAsTeacher(offset, count)
+					} else if (2 === type) {
+						p = CourseUtils.listCoursesAsStudent(offset, count)
+					}
+
+					p.then(data => {
+						resolve(data)
 					});
+				});
 			},
 
 			deleteCourse(courseId) {
@@ -233,7 +316,7 @@
 								type: 'success',
 								message: '删除课程成功'
 							})
-							this.getCourseList(0)
+							this.resetTab()
 						});
 				}).catch(() => {});
 			},
@@ -250,20 +333,18 @@
 								type: 'success',
 								message: '退出课程成功'
 							})
-							this.getCourseList(1)
+							this.resetTab()
 						});
 				}).catch(() => {});
 
 			},
 
 			goToCoursePage(courseId) {
-				console.log("走你", courseId);
 				uni.navigateTo({
-					url: '../course/course?id=' + courseId
+					url: '../course/course?courseId=' + courseId
 				})
 			}
 		},
-		computed: {},
 	}
 </script>
 
@@ -329,8 +410,29 @@
 		}
 	}
 
-	.course-select-root {
+	.course-box {
 		margin-top: 10rpx;
+		display: flex;
+		justify-content: space-between;
+		background-color: white;
+		
+		s-tabs {
+			width: 100%;
+		
+			s-tab {
+				background-color: $global-background-color;
+			}
+		}
+		
+		.new-course-btn {
+			position: absolute;
+			margin-right: 10rpx;
+			right: 22rpx;
+			margin-top: 22rpx;
+			font-size: 30rpx;
+			color: #1E88E5;
+			font-weight: 500;
+		}
 
 		.course-list {
 			margin-bottom: 40rpx;
@@ -340,8 +442,7 @@
 				width: 680rpx;
 				margin: 20rpx auto 0 auto;
 				border-radius: 14rpx;
-				// background-color: #CDDC39;
-				background-image: url(~@/static/img/course-card-background.png);
+				background-image: $card-background-url;
 				box-shadow: 10rpx 10rpx 8rpx #9E9E9E;
 
 				.swipe-cell-field {
@@ -389,7 +490,7 @@
 						font-size: 30rpx;
 						display: flex;
 						align-content: center;
-						
+
 						image {
 							width: 44rpx;
 							height: 44rpx;

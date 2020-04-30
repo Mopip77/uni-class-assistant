@@ -1,1 +1,0 @@
-<view><van-popup vue-id="35a7246c-1" show="{{firstLogin}}" bind:__l="__l" vue-slots="{{['default']}}"><update-user-info vue-id="{{('35a7246c-2')+','+('35a7246c-1')}}" loginUser="loginUser" bind:__l="__l"></update-user-info></van-popup></view>

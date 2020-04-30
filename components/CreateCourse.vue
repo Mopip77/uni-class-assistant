@@ -25,15 +25,14 @@
 	</view>
 </template>
 <script>
-	import LoginUtils from '../static/js/login.js'
-	import CourseUtils from '../static/js/course.js'
+	import LoginUtils from '@/static/js/login.js'
+	import CourseUtils from '@/static/js/course.js'
 	
-	import Notify from '../wxcomponents/vant/dist/notify/notify.js'
-	// import VanNotify from '../wxcomponents/vant/dist/notify/index.js'
-	import Buttonuu from '../wxcomponents/vant/dist/button'
-	import Image from '../wxcomponents/vant/dist/image'
-	import Overlay from '../wxcomponents/vant/dist/overlay/index.js'
-	import CellGroup from '../wxcomponents/vant/dist/cell-group/index.js'
+	import Notify from '@/wxcomponents/vant/dist/notify/notify.js'
+	import Buttonuu from '@/wxcomponents/vant/dist/button/index.js'
+	import Image from '@/wxcomponents/vant/dist/image/index.js'
+	import Overlay from '@/wxcomponents/vant/dist/overlay/index.js'
+	import CellGroup from '@/wxcomponents/vant/dist/cell-group/index.js'
 
 	export default {
 		components: {
@@ -105,6 +104,10 @@
 		right: 0;
 		top: 0;
 		bottom: 0;
+		
+		text {
+			margin-left: 10rpx;
+		}
 
 		.name-field {
 			margin: 60rpx 0;

@@ -1,6 +1,10 @@
 <template>
 	<view>
-		<van-notify class="on-top" id="van-notify" />
+		<view class="on-top">
+			<van-notify class="on-top" id="van-notify" />
+			<van-dialog id="van-dialog" />
+		</view>
+
 		<view class="on-top" v-if="showNewCommentModal">
 			<SingleSubmitPopup type="textarea" :title="popupTitle" fieldName="评论内容" submitText="评论" @closeModal="closeModal"
 			 @successCallBack="popupCallBack" />
@@ -9,18 +13,24 @@
 
 		<view class="topic-box">
 			<view class="header">
-				<van-image round :src="topic.creatorAvatar"></van-image>
+				<van-image round :src="topic.creator.avatarUrl"></van-image>
 				<view class="user-info">
-					<view class="creator-name">{{topic.creatorName}}</view>
+					<view class="creator-name">{{topic.creator.nickname}}</view>
 					<view class="create-time">{{topic.createGmt}}</view>
 				</view>
 
-				<!-- 使用懒加载，即like后不刷新页面，直接修改对应值 -->
-				<view v-if="!topic.like" class="like-count" @tap="likeTopic">
-					<van-icon name="good-job-o" /> <text>{{topic.likeCount}}</text>
-				</view>
-				<view v-else class="like-count" @tap="unlikeTopic">
-					<van-icon name="good-job" color="red" /> <text>{{topic.likeCount}}</text>
+				<view class="operation-box">
+					<view v-if="topic.isTeacher || topic.creator.id === loginUserId" @tap="deleteTopic()" class="delete">
+						删除
+					</view>
+
+					<!-- 使用懒加载，即like后不刷新页面，直接修改对应值 -->
+					<view v-if="!topic.like" class="like-count" @tap="likeTopic">
+						<van-icon name="good-job-o" /> <text>{{topic.likeCount}}</text>
+					</view>
+					<view v-else class="like-count" @tap="unlikeTopic">
+						<van-icon name="good-job" color="red" /> <text>{{topic.likeCount}}</text>
+					</view>
 				</view>
 			</view>
 			<view class="topic-body">
@@ -40,11 +50,17 @@
 						<view class="creator-name">{{comment.creator.nickname}}</view>
 						<view class="create-time">{{comment.createGmt}}</view>
 					</view>
-					<view v-if="!comment.like" class="like-count" @tap="likeComment(idx)">
-						<van-icon name="good-job-o" /> <text>{{comment.likeCount}}</text>
-					</view>
-					<view v-else class="like-count" @tap="unlikeComment(idx)">
-						<van-icon name="good-job" color="red" /> <text>{{comment.likeCount}}</text>
+
+					<view class="operation-box">
+						<view v-if="topic.isTeacher || comment.creator.id === loginUserId" @tap="deleteComment(comment.id)" class="delete">
+							删除
+						</view>
+						<view v-if="!comment.like" class="like-count" @tap="likeComment(idx)">
+							<van-icon name="good-job-o" /> <text>{{comment.likeCount}}</text>
+						</view>
+						<view v-else class="like-count" @tap="unlikeComment(idx)">
+							<van-icon name="good-job" color="red" /> <text>{{comment.likeCount}}</text>
+						</view>
 					</view>
 				</view>
 				<view class="comment-body">
@@ -75,12 +91,15 @@
 	import Notify from "@/wxcomponents/vant/dist/notify/notify.js";
 	import Icon from "@/wxcomponents/vant/dist/icon/index.js";
 	import Image from "@/wxcomponents/vant/dist/image/index.js";
+	import VanDialog from '@/wxcomponents/vant/dist/dialog/index.js'
+	import Dialog from '@/wxcomponents/vant/dist/dialog/dialog.js'
 
 	import UniLoadMore from "@/components/uni-load-more/uni-load-more.vue";
 	import STabs from "@/components/s-tabs";
 	import STab from "@/components/s-tab";
 	import SingleSubmitPopup from '@/components/SingleSubmitPopup.vue'
 
+	import LSReference from '@/static/js/local_storage_reference.js'
 	import FavoriteUtils from '@/static/js/favorite.js'
 	import TopicUtils from '@/static/js/topic.js'
 	import CommonUtils from '@/static/js/utils.js'
@@ -94,7 +113,8 @@
 			"van-notify": VanNotify,
 			"uni-load-more": UniLoadMore,
 			"van-icon": Icon,
-			"van-image": Image
+			"van-image": Image,
+			'van-dialog': VanDialog,
 		},
 
 		data() {
@@ -105,7 +125,7 @@
 				showNewCommentModal: false,
 				popupTitle: '',
 				newSubCommentIdx: 0, // 由于一级评论和子评论公用一个Popup，所以需要一个标志位，如果是评论子评论，那么把该位置为评论id，使用完恢复0
-				
+
 				favorited: false,
 				topic: {},
 
@@ -120,6 +140,12 @@
 					contentnomore: "没有更多评论了"
 				},
 			};
+		},
+
+		computed: {
+			loginUserId() {
+				return parseInt(uni.getStorageSync(LSReference.ID))
+			}
 		},
 
 		methods: {
@@ -171,8 +197,7 @@
 
 						this.topic = data
 
-						this.offset = 0
-						this.getComments()
+						this.reLoadComments()
 					})
 			},
 			likeTopic() {
@@ -244,9 +269,50 @@
 				return promise;
 			},
 
+			deleteTopic() {
+				Dialog.confirm({
+					title: '删除帖子',
+					message: '确认删除吗？'
+				}).then(() => {
+					let p = TopicUtils.deleteTopic(this.topic.id)
+					p.then(data => {
+						Notify({
+							type: "success",
+							message: "删除帖子成功"
+						});
+						
+						setTimeout(() => {
+							// 通知前一页需要刷新
+							let pages = getCurrentPages()
+							let prevPage = pages[pages.length - 2];
+							prevPage.$vm.refreshOnShow = true;
+							uni.navigateBack()
+						}, 1500);
+					});
+				}).catch(() => {});
+			},
+			
+			deleteComment(commentId) {
+				Dialog.confirm({
+					title: '删除评论',
+					message: '确认删除吗？'
+				}).then(() => {
+					let p = TopicUtils.deleteComment(commentId)
+					p.then(data => {
+						Notify({
+							type: "success",
+							message: "删除评论成功"
+						});
+						
+						this.getPageInfo(this.topic.id)
+					});
+				}).catch(() => {});
+			},
+
 			// popup的回调，用于创建评论（一级或子评论）
 			popupCallBack(content) {
 				let promise = null
+				
 				if (this.newSubCommentIdx) {
 					// 子评论
 					promise = this.createComment(content, this.newSubCommentIdx, 1)
@@ -257,9 +323,14 @@
 
 				promise
 					.then(() => {
-						this.offset = 0
-						this.getComments()
+						this.reLoadComments()
 					})
+			},
+			
+			reLoadComments() {
+				this.offset = 0
+				this.comments.splice(0)
+				this.getComments()
 			},
 
 			getComments() {
@@ -272,56 +343,60 @@
 				let promise = TopicUtils.getComments(this.topic.id, 0, this.offset, this.count)
 				promise
 					.then(data => {
-						console.log("获得一级评论", data);
 						data.forEach(e => {
-							let dateObj = CommonUtils.dateConverter(e.createGmt);
-							if (null !== dateObj) {
-								e.createGmt = dateObj.defaultDatetime;
-							}
+							CommonUtils.dateConverterBatchFormatted(e, 'createGmt');
 						});
-						
-						if (this.offset === 0) {
-							this.comments.splice(0)
-						}
+
 						this.comments.push(...data);
 
 						// 更新offset 和 onLoading 类型（是否有更多加载）
 						this.offset += this.count;
 						this.onloadingStatus =
 							this.offset === this.comments.length ? "more" : "noMore";
-						console.log("更新状态", this.offset, this.onloadingStatus);
 					})
 			},
-			
+
 			favorite() {
 				let p = FavoriteUtils.favorite(FavoriteUtils.TOPIC_TYPE, this.topic.id)
 				p.then(data => {
 					this.favorited = true
 				})
 			},
-			
+
 			unFavorite() {
 				let p = FavoriteUtils.unFavorite(FavoriteUtils.TOPIC_TYPE, this.topic.id)
 				p.then(data => {
 					this.favorited = false
 				})
+			},
+			
+			getPageInfo(topicId, closePullDownRefresh = false) {
+				if (topicId) {
+					this.getTopic(topicId)
+					let p = FavoriteUtils.exist(FavoriteUtils.TOPIC_TYPE, topicId)
+					p.then(data => {
+						this.favorited = data
+					})
+				} else {
+					Notify({
+						type: "danger",
+						message: "未传入帖子号，请刷新重试"
+					});
+				}
+				
+				if (closePullDownRefresh) {
+					uni.closePullDownRefresh()
+				}
 			}
 		},
 
 		onLoad(option) {
 			let topicId = option.topicId
-			if (topicId) {
-				this.getTopic(topicId)
-				let p = FavoriteUtils.exist(FavoriteUtils.TOPIC_TYPE, topicId)
-				p.then(data => {
-					this.favorited = data
-				})
-			} else {
-				Notify({
-					type: "danger",
-					message: "未传入帖子号，请刷新重试"
-				});
-			}
+			this.getPageInfo(topicId)
+		},
+		
+		onPullDownRefresh() {
+			this.getPageInfo(this.topic.id, true)
 		}
 	}
 </script>
@@ -355,15 +430,27 @@
 			}
 		}
 
-		.like-count {
+		.operation-box {
 			display: flex;
-			flex-direction: column;
 			margin-left: auto;
 			align-items: center;
-			margin-right: 20rpx;
 
-			text {
-				font-size: 22rpx;
+			.delete {
+				margin-right: 40rpx;
+				font-size: 26rpx;
+				color: #757575;
+				text-decoration: underline;
+			}
+
+			.like-count {
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				margin-right: 20rpx;
+
+				text {
+					font-size: 22rpx;
+				}
 			}
 		}
 	}

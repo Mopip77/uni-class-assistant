@@ -25,7 +25,7 @@
 			</view>
 		</view>
 		<view class="select-box">
-			<navigator url="../conurse_ware/course_ware">
+			<navigator url="../course_wares/course_wares">
 				<view class="list select-item">
 					<view class="list-info">
 						<image src="../../static/img/icon/book.png" /><text>课件</text></view>
@@ -33,7 +33,7 @@
 				</view>
 			</navigator>
 
-			<navigator url="../contest/contest">
+			<navigator url="../contest_list/contest_list">
 				<view class="list select-item">
 					<view class="list-info">
 						<image src="../../static/img/icon/paper.png" /><text>试卷</text></view>

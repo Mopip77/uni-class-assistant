@@ -1,10 +1,14 @@
 <template>
 	<view>
+		<view class="on-top">
+			<van-dialog id="van-dialog" />
+			<van-notify class="on-top" id="van-notify" />
+		</view>
 
 		<STabs effect="true" navPerView="3" v-model="tabIdx" @change="changeTab">
 			<STab title="题目">
 				<view class="list">
-					<view class="item" v-for="(fav, idx) in datas[0]" :key="idx" @tap="goToQuestion(fav)">
+					<view class="item" v-for="(fav, idx) in datas[0]" :key="idx" @tap="goToQuestion(fav)" @longpress="tryDeleteFav(fav.id)">
 						<view class="title">
 							<text>{{fav.data.question}}</text>
 						</view>
@@ -19,11 +23,11 @@
 
 					</view>
 				</view>
-				<uni-load-more :status="onloadingStatuses[1]" @clickLoadMore="loadMore" :contentText="onloadingText"></uni-load-more>
+				<uni-load-more :status="onloadingStatuses[0]" @clickLoadMore="loadMore" :contentText="onloadingText"></uni-load-more>
 			</STab>
 			<STab title="课件">
 				<view class="list">
-					<view class="item" v-for="(fav, idx) in datas[1]" :key="idx" @tap="goToCourseWare(fav)">
+					<view class="item" v-for="(fav, idx) in datas[1]" :key="idx" @tap="goToCourseWare(fav)" @longpress="tryDeleteFav(fav.id)">
 						<view class="title">
 							<text>{{fav.data.displayName}}</text>
 						</view>
@@ -37,7 +41,7 @@
 			</STab>
 			<STab title="帖子">
 				<view class="list">
-					<view class="item" v-for="(fav, idx) in datas[2]" :key="idx" @tap="goToTopic(fav)">
+					<view class="item" v-for="(fav, idx) in datas[2]" :key="idx" @tap="goToTopic(fav)" @longpress="tryDeleteFav(fav.id)">
 						<view class="title">
 							<text>{{fav.data.title}}</text>
 						</view>
@@ -56,7 +60,11 @@
 
 <script>
 	import VanTag from '@/wxcomponents/vant/dist/tag/index.js'
-
+	import VanDialog from '@/wxcomponents/vant/dist/dialog/index.js'
+	import Dialog from '@/wxcomponents/vant/dist/dialog/dialog.js'
+	import VanNotify from "@/wxcomponents/vant/dist/notify/index.js";
+	import Notify from "@/wxcomponents/vant/dist/notify/notify.js";
+	
 	import UniLoadMore from "@/components/uni-load-more/uni-load-more.vue";
 	import STabs from "@/components/s-tabs/index.vue";
 	import STab from "@/components/s-tab/index.vue";
@@ -70,6 +78,8 @@
 			UniLoadMore,
 			STabs,
 			STab,
+			"van-notify": VanNotify,
+			'van-dialog': VanDialog,
 		},
 
 		data() {
@@ -95,6 +105,15 @@
 			changeTab() {
 				this.loadMore()
 			},
+			
+			resetTab() {
+				let IDX = this.tabIdx
+				this.offsets[IDX] = 0
+				this.datas[IDX].splice(0)
+				
+				this.loadMore()
+			},
+			
 			goToQuestion(favorite) {
 				if (favorite.data.isObjectiveQuestion) {
 					uni.navigateTo({
@@ -118,11 +137,27 @@
 					url: '../topic/topic?topicId=' + fav.data.id
 				})
 			},
+			
+			tryDeleteFav(favId) {
+				Dialog.confirm({
+					title: '取消收藏',
+					message: '确认取消收藏吗？'
+				}).then(() => {
+					let p = FavoriteUtils.deleteFavorite(favId)
+					p.then(() => {
+						Notify({
+							type: "success",
+							message: "收藏已取消"
+						});
+					
+						this.resetTab();
+					})
+				}).catch(() => {});
+			},
 
 			async loadMore() {
 				// 处理当前tab的loadmore, tab顺序为 题目，课件，评论
 				let IDX = this.tabIdx
-				console.log("load more offset:", this.offsets[IDX]);
 
 				if (this.offsets[IDX] > this.datas[IDX].length) {
 					return;
@@ -133,16 +168,13 @@
 				let data = []
 				if (IDX === 0) {
 					// 加载题目
-					data = await this.getFavoriteQuestions(this.offsets[IDX], this.counts[IDX]);
-					console.log("获得题目", data);
+					data = await this.getFavoriteQuestions(this.offsets[IDX], this.counts[IDX])
 				} else if (IDX === 1) {
 					// 加载课件
 					data = await this.getFavoriteCourseWares(this.offsets[IDX], this.counts[IDX])
-					console.log("获得课件", data);
 				} else if (IDX === 2) {
 					// 加载评论
 					data = await this.getFavoriteTopics(this.offsets[IDX], this.counts[IDX])
-					console.log("获得评论", data);
 				}
 
 				this.datas[IDX].push(...data)
@@ -158,7 +190,7 @@
 						offset, count)
 					p.then(data => {
 						data.forEach(e => {
-							CommonUtils.dateConverterBatch(e, false, 'createGmt')
+							CommonUtils.dateConverterBatch(e, 'createGmt')
 						});
 
 						resolve(data);
@@ -172,7 +204,7 @@
 						offset, count)
 					p.then(data => {
 						data.forEach(e => {
-							CommonUtils.dateConverterBatch(e, false, 'createGmt')
+							CommonUtils.dateConverterBatch(e, 'createGmt')
 						});
 
 						resolve(data);
@@ -186,17 +218,29 @@
 						offset, count)
 					p.then(data => {
 						data.forEach(e => {
-							CommonUtils.dateConverterBatch(e, false, 'createGmt')
+							CommonUtils.dateConverterBatch(e, 'createGmt')
 						});
 
 						resolve(data);
 					});
 				})
 			},
+			
+			getPageInfo(closePullDownRefresh = false) {
+				this.resetTab()
+				
+				if (closePullDownRefresh) {
+					uni.stopPullDownRefresh()
+				}
+			}
 		},
 
 		onLoad() {
-			this.loadMore()
+			this.resetTab()
+		},
+		
+		onPullDownRefresh() {
+			this.getPageInfo(true)
 		}
 	}
 </script>

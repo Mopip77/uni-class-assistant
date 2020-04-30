@@ -1,4 +1,5 @@
 {
+  "enablePullDownRefresh": true,
   "usingComponents": {
     "l-file": "/components/l-file/l-file",
     "uni-load-more": "/components/uni-load-more/uni-load-more",
@@ -11,6 +12,7 @@
     "van-notify": "/wxcomponents/vant/dist/notify/index",
     "van-icon": "/wxcomponents/vant/dist/icon/index",
     "van-button": "/wxcomponents/vant/dist/button/index",
-    "van-steps": "/wxcomponents/vant/dist/steps/index"
+    "van-steps": "/wxcomponents/vant/dist/steps/index",
+    "van-dialog": "/wxcomponents/vant/dist/dialog/index"
   }
 }

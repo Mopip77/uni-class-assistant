@@ -265,11 +265,7 @@
 			let promise = ContestUtils.getContestDetail(this.contestId)
 			promise
 				.then(async function(data) {
-					let dateObj = CommonUtils.dateConverter(data.publishDate, false)
-					that.publishDate = dateObj === null ? null : dateObj.defaultDatetime
-
-					dateObj = CommonUtils.dateConverter(data.deadline, false)
-					that.deadline = dateObj === null ? null : dateObj.defaultDatetime
+					CommonUtils.dateConverterBatch(data, 'publishDate', 'deadline')
 
 					that.isTeacher = data.isTeacher
 					that.isCreator = data.isCreator
@@ -279,6 +275,8 @@
 					that.fullScore = data.fullScore
 					that.contestType = data.type
 					that.published = data.published
+					that.publishDate = data.publishDate
+					that.deadline = data.deadline 
 
 					// getAllAnswers
 					if (that.isTeacher) {
@@ -311,7 +309,7 @@
 							that.gotScore = answerData.score
 							
 							// 设置倒计时时间
-							dateObj = CommonUtils.dateConverter(answerData.startGmt, false)
+							let dateObj = CommonUtils.dateConverter(answerData.startGmt)
 							that.leftSecond = Math.floor(ContestUtils.getLeftDate(dateObj.defaultDatetime, that.publishDate, that.deadline,
 								that.limitMinutes) / 1000)
 						} else {
@@ -361,7 +359,6 @@
 					}
 				
 					// redirect
-					console.log("看看内容", qId, type);
 					if (qId && type) {
 						let questionList = []
 						if (type === 'objective') {
@@ -377,8 +374,6 @@
 								return -1
 							}
 						}).filter(i => i >= 0)
-						
-						console.log("看看result", result);
 						
 						if (result.length > 0) {
 							that.gotoQuestion(result[0], type)

@@ -128,10 +128,7 @@
 				let promise = TopicUtils.getComment(commentId)
 				promise
 					.then(data => {
-						let dateObj = CommonUtils.dateConverter(data.createGmt);
-						if (null !== dateObj) {
-							data.createGmt = dateObj.defaultDatetime;
-						}
+						CommonUtils.dateConverterBatchFormatted(data, 'createGmt')
 
 						this.comment = data
 
@@ -226,12 +223,8 @@
 				let promise = TopicUtils.getComments(this.comment.id, 1, this.offset, this.count)
 				promise
 					.then(data => {
-						console.log("获得子评论", data);
 						data.forEach(e => {
-							let dateObj = CommonUtils.dateConverter(e.createGmt);
-							if (null !== dateObj) {
-								e.createGmt = dateObj.defaultDatetime;
-							}
+							CommonUtils.dateConverterBatchFormatted(e, 'createGmt')
 						});
 						
 						this.subComments.push(...data)
@@ -240,7 +233,6 @@
 						this.offset += this.count;
 						this.onloadingStatus =
 							this.offset === this.subComments.length ? "more" : "noMore";
-						console.log("更新状态", this.offset, this.onloadingStatus);
 					})
 			}
 		},

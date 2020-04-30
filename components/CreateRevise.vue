@@ -177,13 +177,13 @@
 			let that = this
 			let p = ContestUtils.getContestDetail(this.contestId)
 			p.then(data => {
-				CommonUtils.dateConverterBatch(data, false, 'createGmt', 'deadline', 'publishDate')
+				CommonUtils.dateConverterBatch(data, 'createGmt', 'deadline', 'publishDate')
 				that.contest = data
 
 				let pr = ContestUtils.getReviseAnswer(that.userId, that.contestId)
 				pr
 				.then(answer => {
-					CommonUtils.dateConverterBatch(answer, false, 'startGmt', 'updateGmt')
+					CommonUtils.dateConverterBatch(answer, 'startGmt', 'updateGmt')
 					that.answer = answer
 					that.subjectiveAnswerRevised = that.contest.subjectiveQuestions.map(e => false)
 				})

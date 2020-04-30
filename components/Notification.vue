@@ -52,7 +52,7 @@
 			let that = this
 			let p = NotificationUtils.getNotification(this.notificationId)
 			p.then(data => {
-				CommonUtils.dateConverterBatch(data, true, 'publishGmt')
+				CommonUtils.dateConverterBatch(data, 'publishGmt')
 				that.notification = data
 			})
 		}

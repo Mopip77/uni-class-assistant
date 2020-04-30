@@ -1555,241 +1555,10 @@ uni$1;exports.default = _default;
 
 /***/ }),
 
-/***/ 104:
+/***/ 112:
 /*!****************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/static/js/class.js ***!
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/static/js/topic.js ***!
   \****************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _api_reference = _interopRequireDefault(__webpack_require__(/*! @/static/js/api_reference.js */ 15));
-var _http_commons = _interopRequireDefault(__webpack_require__(/*! @/static/js/http_commons.js */ 18));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var _default =
-
-{
-
-  /**
-   * @param {Object} classObj
-   */
-  createClass: function createClass(classObj) {
-    return new Promise(function (resolve, reject) {
-      uni.request({
-        url: _api_reference.default.CLASS,
-        method: "POST",
-        header: _http_commons.default.getAuthenticationHeader(),
-        data: classObj,
-        success: function success(resp) {
-          if (_http_commons.default.successCheck(resp)) {
-            resolve(resp.data.data);
-          }
-        },
-        fail: function fail(err) {
-          _http_commons.default.commonFailHanlder(err);
-          reject(err);
-        } });
-
-    });
-  },
-
-  /**
-      * @param {Number} courseId
-      */
-  getClassByCourseId: function getClassByCourseId(courseId) {
-    return new Promise(function (resolve, reject) {
-      uni.request({
-        url: _api_reference.default.GET_CLASS_BY_COURSE_ID + '?courseId=' + courseId,
-        header: _http_commons.default.getAuthenticationHeader(),
-        success: function success(resp) {
-          if (_http_commons.default.successCheck(resp)) {
-            resolve(resp.data.data);
-          }
-        },
-        fail: function fail(err) {
-          _http_commons.default.commonFailHanlder(err);
-          reject(err);
-        } });
-
-    });
-  },
-
-  /**
-      * @param {Number} classId
-      */
-  getClassById: function getClassById(classId) {
-    return new Promise(function (resolve, reject) {
-      uni.request({
-        url: _api_reference.default.CLASS + '?classId=' + classId,
-        header: _http_commons.default.getAuthenticationHeader(),
-        success: function success(resp) {
-          if (_http_commons.default.successCheck(resp)) {
-            resolve(resp.data.data);
-          }
-        },
-        fail: function fail(err) {
-          _http_commons.default.commonFailHanlder(err);
-          reject(err);
-        } });
-
-    });
-  },
-
-  getClassInfoAsTeacher: function getClassInfoAsTeacher(classId) {
-    return new Promise(function (resolve, reject) {
-      uni.request({
-        url: _api_reference.default.GET_CLASS_INFO_AS_TEACHER + '?classId=' + classId,
-        header: _http_commons.default.getAuthenticationHeader(),
-        success: function success(resp) {
-          if (_http_commons.default.successCheck(resp)) {
-            resolve(resp.data.data);
-          }
-        },
-        fail: function fail(err) {
-          _http_commons.default.commonFailHanlder(err);
-          reject(err);
-        } });
-
-    });
-  },
-
-  getClassInfoAsStudent: function getClassInfoAsStudent(classId) {
-    return new Promise(function (resolve, reject) {
-      uni.request({
-        url: _api_reference.default.GET_CLASS_INFO_AS_STUDENT + '?classId=' + classId,
-        header: _http_commons.default.getAuthenticationHeader(),
-        success: function success(resp) {
-          if (_http_commons.default.successCheck(resp)) {
-            resolve(resp.data.data);
-          }
-        },
-        fail: function fail(err) {
-          _http_commons.default.commonFailHanlder(err);
-          reject(err);
-        } });
-
-    });
-  },
-
-  publishClass: function publishClass(classId) {
-    return new Promise(function (resolve, reject) {
-      uni.request({
-        url: _api_reference.default.PUBLISH_CLASS + '?classId=' + classId,
-        method: "POST",
-        header: _http_commons.default.getAuthenticationHeader(),
-        success: function success(resp) {
-          if (_http_commons.default.successCheck(resp)) {
-            resolve(resp.data.data);
-          }
-        },
-        fail: function fail(err) {
-          _http_commons.default.commonFailHanlder(err);
-          reject(err);
-        } });
-
-    });
-  },
-
-  finishClass: function finishClass(classId) {
-    return new Promise(function (resolve, reject) {
-      uni.request({
-        url: _api_reference.default.FINISH_CLASS + '?classId=' + classId,
-        method: "POST",
-        header: _http_commons.default.getAuthenticationHeader(),
-        success: function success(resp) {
-          if (_http_commons.default.successCheck(resp)) {
-            resolve(resp.data.data);
-          }
-        },
-        fail: function fail(err) {
-          _http_commons.default.commonFailHanlder(err);
-          reject(err);
-        } });
-
-    });
-  },
-
-  startSignIn: function startSignIn(classId) {
-    return new Promise(function (resolve, reject) {
-      uni.request({
-        url: _api_reference.default.START_SIGN_IN + '?classId=' + classId,
-        method: "POST",
-        header: _http_commons.default.getAuthenticationHeader(),
-        success: function success(resp) {
-          if (_http_commons.default.successCheck(resp)) {
-            resolve(resp.data.data);
-          }
-        },
-        fail: function fail(err) {
-          _http_commons.default.commonFailHanlder(err);
-          reject(err);
-        } });
-
-    });
-  },
-
-  getSignInCount: function getSignInCount(classId) {
-    return new Promise(function (resolve, reject) {
-      uni.request({
-        url: _api_reference.default.SIGN_IN_COUNT + '?classId=' + classId,
-        header: _http_commons.default.getAuthenticationHeader(),
-        success: function success(resp) {
-          if (_http_commons.default.successCheck(resp)) {
-            resolve(resp.data.data);
-          }
-        },
-        fail: function fail(err) {
-          _http_commons.default.commonFailHanlder(err);
-          reject(err);
-        } });
-
-    });
-  },
-
-  signIn: function signIn(classId) {
-    return new Promise(function (resolve, reject) {
-      uni.request({
-        url: _api_reference.default.SIGN_IN + '?classId=' + classId,
-        method: "PUT",
-        header: _http_commons.default.getAuthenticationHeader(),
-        success: function success(resp) {
-          if (_http_commons.default.successCheck(resp)) {
-            resolve(resp.data.data);
-          }
-        },
-        fail: function fail(err) {
-          _http_commons.default.commonFailHanlder(err);
-          reject(err);
-        } });
-
-    });
-  },
-
-  updateNote: function updateNote(classId, note) {
-    return new Promise(function (resolve, reject) {
-      uni.request({
-        url: _api_reference.default.CLASS_NOTE + '?classId=' + classId,
-        method: "PUT",
-        header: _http_commons.default.getAuthenticationHeader(),
-        data: note,
-        success: function success(resp) {
-          if (_http_commons.default.successCheck(resp)) {
-            resolve(resp.data.data);
-          }
-        },
-        fail: function fail(err) {
-          _http_commons.default.commonFailHanlder(err);
-          reject(err);
-        } });
-
-    });
-  } };exports.default = _default;
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
-
-/***/ }),
-
-/***/ 105:
-/*!*******************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/static/js/bulletin.js ***!
-  \*******************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1798,20 +1567,159 @@ var _http_commons = _interopRequireDefault(__webpack_require__(/*! @/static/js/h
 var _http_commons = _interopRequireDefault(__webpack_require__(/*! ./http_commons.js */ 18));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var _default =
 
 {
-
   /**
    * @param {Number} courseId
-   * @param {Object} bulletinContent
+   * @param {String} title
+   * @param {String} content
+   * @return {Promise}
    */
-  createBulletin: function createBulletin(courseId, bulletinContent) {
+  createTopic: function createTopic(courseId, title, content) {
     return new Promise(function (resolve, reject) {
       uni.request({
-        url: _api_reference.default.CREATE_BULLETIN + '?courseId=' + courseId,
+        url: _api_reference.default.TOPIC + '?courseId=' + courseId,
         method: "POST",
         header: _http_commons.default.getAuthenticationHeader(),
         data: {
-          content: bulletinContent },
+          title: title,
+          content: content },
 
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+          reject(err);
+        } });
+
+    });
+  },
+
+  deleteTopic: function deleteTopic(topicId) {
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: _api_reference.default.TOPIC + '?topicId=' + topicId,
+        method: "DELETE",
+        header: _http_commons.default.getAuthenticationHeader(),
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+          reject(err);
+        } });
+
+    });
+  },
+
+  /**
+      * @param {String} courseId
+      * @param {String} sortBy {createTime, updateTime, like, comment}
+      */
+  getTopics: function getTopics(courseId, sortBy, offset, count) {
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: _api_reference.default.GET_TOPICS_BY_COURSE + '?courseId=' + courseId + '&sortBy=' + sortBy + '&offset=' + offset +
+        '&count=' + count,
+        method: "GET",
+        header: _http_commons.default.getAuthenticationHeader(),
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+          reject(err);
+        } });
+
+    });
+  },
+
+  getTopic: function getTopic(topicId) {
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: _api_reference.default.GET_TOPIC + '?topicId=' + topicId,
+        header: _http_commons.default.getAuthenticationHeader(),
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+          reject(err);
+        } });
+
+    });
+  },
+
+  likeTopic: function likeTopic(topicId) {
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: _api_reference.default.LIKE + '?targetId=' + topicId + '&type=0',
+        method: "POST",
+        header: _http_commons.default.getAuthenticationHeader(),
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+          reject(err);
+        } });
+
+    });
+  },
+
+  unlikeTopic: function unlikeTopic(topicId) {
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: _api_reference.default.LIKE + '?targetId=' + topicId + '&type=0',
+        method: "DELETE",
+        header: _http_commons.default.getAuthenticationHeader(),
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+          reject(err);
+        } });
+
+    });
+  },
+
+  likeComment: function likeComment(commentId) {
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: _api_reference.default.LIKE + '?targetId=' + commentId + '&type=1',
+        method: "POST",
+        header: _http_commons.default.getAuthenticationHeader(),
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+          reject(err);
+        } });
+
+    });
+  },
+
+  unlikeComment: function unlikeComment(commentId) {
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: _api_reference.default.LIKE + '?targetId=' + commentId + '&type=1',
+        method: "DELETE",
+        header: _http_commons.default.getAuthenticationHeader(),
         success: function success(resp) {
           if (_http_commons.default.successCheck(resp)) {
             resolve(resp.data.data);
@@ -1827,11 +1735,85 @@ var _http_commons = _interopRequireDefault(__webpack_require__(/*! ./http_common
 
   /**
       * 
+      * @param {String} content
+      * @param {Number} parentId 根据type不同,传入topicId 或者 parentCommentId
+      * @param {Number} type 0 === 帖子评论  1 === 子评论
       */
-  listBulletin: function listBulletin(courseId) {var offset = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;var count = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 10;
+  createComment: function createComment(content, parentId, type) {
     return new Promise(function (resolve, reject) {
       uni.request({
-        url: _api_reference.default.GET_BULLETIN + '?courseId=' + courseId + '&offset=' + offset + '&count=' + count,
+        url: _api_reference.default.COMMENT,
+        method: "POST",
+        header: _http_commons.default.getAuthenticationHeader(),
+        data: {
+          content: content,
+          parentId: parentId,
+          type: type },
+
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+          reject(err);
+        } });
+
+    });
+  },
+
+  deleteComment: function deleteComment(commentId) {
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: _api_reference.default.COMMENT + '?id=' + commentId,
+        method: "DELETE",
+        header: _http_commons.default.getAuthenticationHeader(),
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+          reject(err);
+        } });
+
+    });
+  },
+
+  /**
+      * @param {Number} commentId
+      */
+  getComment: function getComment(commentId) {
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: _api_reference.default.COMMENT + '?id=' + commentId,
+        header: _http_commons.default.getAuthenticationHeader(),
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+          reject(err);
+        } });
+
+    });
+  },
+
+  /**
+      * @param {Number} parentId  type == 0 topicId,    type == 1 topTopicCommentId
+      * @param {Number} type  0 --- 帖子评论   1 --- 子评论
+      * @param {Number} offset
+      * @param {Number} count
+      */
+  getComments: function getComments(parentId, type, offset, count) {
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: _api_reference.default.GET_COMMENT_LIST + '?parentId=' + parentId + '&type=' + type + '&offset=' + offset +
+        '&count=' + count,
         header: _http_commons.default.getAuthenticationHeader(),
         success: function success(resp) {
           if (_http_commons.default.successCheck(resp)) {
@@ -2082,244 +2064,6 @@ var _notify = _interopRequireDefault(__webpack_require__(/*! ../../wxcomponents/
     console.log("本地token失效");
     return new Promise(function (resolve, reject) {
       reject();
-    });
-  } };exports.default = _default;
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
-
-/***/ }),
-
-/***/ 122:
-/*!****************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/static/js/topic.js ***!
-  \****************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _api_reference = _interopRequireDefault(__webpack_require__(/*! ./api_reference.js */ 15));
-var _http_commons = _interopRequireDefault(__webpack_require__(/*! ./http_commons.js */ 18));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var _default =
-
-{
-  /**
-   * @param {Number} courseId
-   * @param {String} title
-   * @param {String} content
-   * @return {Promise}
-   */
-  createTopic: function createTopic(courseId, title, content) {
-    return new Promise(function (resolve, reject) {
-      uni.request({
-        url: _api_reference.default.TOPIC + '?courseId=' + courseId,
-        method: "POST",
-        header: _http_commons.default.getAuthenticationHeader(),
-        data: {
-          title: title,
-          content: content },
-
-        success: function success(resp) {
-          if (_http_commons.default.successCheck(resp)) {
-            resolve(resp.data.data);
-          }
-        },
-        fail: function fail(err) {
-          _http_commons.default.commonFailHanlder(err);
-          reject(err);
-        } });
-
-    });
-  },
-
-  /**
-      * @param {String} courseId
-      * @param {String} sortBy {createTime, updateTime, like, comment}
-      */
-  getTopics: function getTopics(courseId, sortBy, offset, count) {
-    return new Promise(function (resolve, reject) {
-      uni.request({
-        url: _api_reference.default.GET_TOPICS_BY_COURSE + '?courseId=' + courseId + '&sortBy=' + sortBy + '&offset=' + offset +
-        '&count=' + count,
-        method: "GET",
-        header: _http_commons.default.getAuthenticationHeader(),
-        success: function success(resp) {
-          if (_http_commons.default.successCheck(resp)) {
-            resolve(resp.data.data);
-          }
-        },
-        fail: function fail(err) {
-          _http_commons.default.commonFailHanlder(err);
-          reject(err);
-        } });
-
-    });
-  },
-
-  getTopic: function getTopic(topicId) {
-    return new Promise(function (resolve, reject) {
-      uni.request({
-        url: _api_reference.default.GET_TOPIC + '?topicId=' + topicId,
-        header: _http_commons.default.getAuthenticationHeader(),
-        success: function success(resp) {
-          if (_http_commons.default.successCheck(resp)) {
-            resolve(resp.data.data);
-          }
-        },
-        fail: function fail(err) {
-          _http_commons.default.commonFailHanlder(err);
-          reject(err);
-        } });
-
-    });
-  },
-
-  likeTopic: function likeTopic(topicId) {
-    return new Promise(function (resolve, reject) {
-      uni.request({
-        url: _api_reference.default.LIKE + '?targetId=' + topicId + '&type=0',
-        method: "POST",
-        header: _http_commons.default.getAuthenticationHeader(),
-        success: function success(resp) {
-          if (_http_commons.default.successCheck(resp)) {
-            resolve(resp.data.data);
-          }
-        },
-        fail: function fail(err) {
-          _http_commons.default.commonFailHanlder(err);
-          reject(err);
-        } });
-
-    });
-  },
-
-  unlikeTopic: function unlikeTopic(topicId) {
-    return new Promise(function (resolve, reject) {
-      uni.request({
-        url: _api_reference.default.LIKE + '?targetId=' + topicId + '&type=0',
-        method: "DELETE",
-        header: _http_commons.default.getAuthenticationHeader(),
-        success: function success(resp) {
-          if (_http_commons.default.successCheck(resp)) {
-            resolve(resp.data.data);
-          }
-        },
-        fail: function fail(err) {
-          _http_commons.default.commonFailHanlder(err);
-          reject(err);
-        } });
-
-    });
-  },
-
-  likeComment: function likeComment(commentId) {
-    return new Promise(function (resolve, reject) {
-      uni.request({
-        url: _api_reference.default.LIKE + '?targetId=' + commentId + '&type=1',
-        method: "POST",
-        header: _http_commons.default.getAuthenticationHeader(),
-        success: function success(resp) {
-          if (_http_commons.default.successCheck(resp)) {
-            resolve(resp.data.data);
-          }
-        },
-        fail: function fail(err) {
-          _http_commons.default.commonFailHanlder(err);
-          reject(err);
-        } });
-
-    });
-  },
-
-  unlikeComment: function unlikeComment(commentId) {
-    return new Promise(function (resolve, reject) {
-      uni.request({
-        url: _api_reference.default.LIKE + '?targetId=' + commentId + '&type=1',
-        method: "DELETE",
-        header: _http_commons.default.getAuthenticationHeader(),
-        success: function success(resp) {
-          if (_http_commons.default.successCheck(resp)) {
-            resolve(resp.data.data);
-          }
-        },
-        fail: function fail(err) {
-          _http_commons.default.commonFailHanlder(err);
-          reject(err);
-        } });
-
-    });
-  },
-
-  /**
-      * 
-      * @param {String} content
-      * @param {Number} parentId 根据type不同,传入topicId 或者 parentCommentId
-      * @param {Number} type 0 === 帖子评论  1 === 子评论
-      */
-  createComment: function createComment(content, parentId, type) {
-    return new Promise(function (resolve, reject) {
-      uni.request({
-        url: _api_reference.default.COMMENT,
-        method: "POST",
-        header: _http_commons.default.getAuthenticationHeader(),
-        data: {
-          content: content,
-          parentId: parentId,
-          type: type },
-
-        success: function success(resp) {
-          if (_http_commons.default.successCheck(resp)) {
-            resolve(resp.data.data);
-          }
-        },
-        fail: function fail(err) {
-          _http_commons.default.commonFailHanlder(err);
-          reject(err);
-        } });
-
-    });
-  },
-
-  /**
-      * @param {Number} commentId
-      */
-  getComment: function getComment(commentId) {
-    return new Promise(function (resolve, reject) {
-      uni.request({
-        url: _api_reference.default.COMMENT + '?id=' + commentId,
-        header: _http_commons.default.getAuthenticationHeader(),
-        success: function success(resp) {
-          if (_http_commons.default.successCheck(resp)) {
-            resolve(resp.data.data);
-          }
-        },
-        fail: function fail(err) {
-          _http_commons.default.commonFailHanlder(err);
-          reject(err);
-        } });
-
-    });
-  },
-
-  /**
-      * @param {Number} parentId  type == 0 topicId,    type == 1 topTopicCommentId
-      * @param {Number} type  0 --- 帖子评论   1 --- 子评论
-      * @param {Number} offset
-      * @param {Number} count
-      */
-  getComments: function getComments(parentId, type, offset, count) {
-    return new Promise(function (resolve, reject) {
-      uni.request({
-        url: _api_reference.default.GET_COMMENT_LIST + '?parentId=' + parentId + '&type=' + type + '&offset=' + offset +
-        '&count=' + count,
-        header: _http_commons.default.getAuthenticationHeader(),
-        success: function success(resp) {
-          if (_http_commons.default.successCheck(resp)) {
-            resolve(resp.data.data);
-          }
-        },
-        fail: function fail(err) {
-          _http_commons.default.commonFailHanlder(err);
-          reject(err);
-        } });
-
     });
   } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
@@ -3355,6 +3099,7 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
   // course
   GET_TEACHED_COURSE: API_SERVER + 'course/teach',
   GET_JOINED_COURSE: API_SERVER + 'course/study',
+  GET_CREATED_COURSE: API_SERVER + 'course/creator',
   GET_COURSE: API_SERVER + 'course',
   CREATE_COURSE: API_SERVER + 'course/create',
   UPDATE_COURSE: API_SERVER + 'course/update',
@@ -3421,6 +3166,7 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
   // favorite
   FAVORITE: API_SERVER + 'favorite',
+  FAVORITE_BY_ID: API_SERVER + 'favorite/id',
   FAVORITE_LIST: API_SERVER + 'favorite/list',
   FAVORITE_EXIST: API_SERVER + 'favorite/exist',
   FAVORITE_BY_TYPE: API_SERVER + 'favorite/type',
@@ -3498,20 +3244,16 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
       * @param {String} serverDate
       * @return {Object}
       */
-  dateConverter: function dateConverter(serverDate) {var withTimezone = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+  dateConverter: function dateConverter(serverDate) {
     if (!serverDate) {
       return null;
     }
 
     // console.log("解析时间", serverDate);
     var ts = Date.parse(serverDate);
-    var date = {};
-    if (withTimezone) {
-      date = new Date(ts - 13 * 3600 * 1000); // spring序列化后的时间有13小时时差
-    } else {
-      date = new Date(ts);
-    }var _ref =
-    [date.getFullYear(), this.dateDigitToString(date.getMonth() + 1), this.dateDigitToString(date.getDate()), this.dateDigitToString(date.getHours()),
+    var date = new Date(ts);
+    // console.log("解析后", date);
+    var _ref = [date.getFullYear(), this.dateDigitToString(date.getMonth() + 1), this.dateDigitToString(date.getDate()), this.dateDigitToString(date.getHours()),
     this.dateDigitToString(date.getMinutes()), this.dateDigitToString(date.getSeconds())],year = _ref[0],month = _ref[1],day = _ref[2],hour = _ref[3],minute = _ref[4],second = _ref[5];
 
 
@@ -3526,18 +3268,6 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
       defaultTime: hour + ':' + minute + ':' + second,
       defaultDatetime: year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second };
 
-  },
-
-  /**
-      * 批量转换日期(datetime)，传入对象和所需转换的字段名
-      */
-  dateConverterBatch: function dateConverterBatch(obj, withTimezone) {for (var _len = arguments.length, args = new Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {args[_key - 2] = arguments[_key];}
-    for (var _i = 0, _args = args; _i < _args.length; _i++) {var arg = _args[_i];
-      if (obj[arg]) {
-        var dateObj = this.dateConverter(obj[arg], withTimezone);
-        obj[arg] = dateObj ? dateObj.defaultDatetime : null;
-      }
-    }
   },
 
   /**
@@ -3565,6 +3295,67 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
       defaultTime: hour + ':' + minute + ':' + second,
       defaultDatetime: year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second };
 
+  },
+
+  /**
+      * 批量转换日期(datetime)，传入对象和所需转换的字段名
+      */
+  dateConverterBatch: function dateConverterBatch(obj) {for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {args[_key - 1] = arguments[_key];}
+    for (var _i = 0, _args = args; _i < _args.length; _i++) {var arg = _args[_i];
+      if (obj[arg]) {
+        var dateObj = this.dateConverter(obj[arg]);
+        obj[arg] = dateObj ? dateObj.defaultDatetime : null;
+      }
+    }
+  },
+
+  /**
+      * 批量转换日期(datetime)，传入对象和所需转换的字段名，只不过返回的是格式化后的字符串
+      */
+  dateConverterBatchFormatted: function dateConverterBatchFormatted(obj) {for (var _len2 = arguments.length, args = new Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {args[_key2 - 1] = arguments[_key2];}
+    for (var _i2 = 0, _args2 = args; _i2 < _args2.length; _i2++) {var arg = _args2[_i2];
+      if (obj[arg]) {
+
+        var ts = Date.parse(obj[arg]);
+        var date = new Date(ts);
+        var result = this.formatDateString(date);
+        obj[arg] = result;
+      }
+    }
+  },
+
+  /**
+      * 假设传入2020-04-01 12:23:22
+      * 
+      * 返回格式化的日期时间显示
+      *   如果是当天则返回时间 12:23:22
+      *   如果是前天或昨天则返回 前天/昨天 12:23:22
+      *   否则只返回日期 2020-04-01
+      * 
+      * @param {Date} date
+      */
+  formatDateString: function formatDateString(date) {
+    date = new Date(date);
+    var dateTs = date.getTime();
+    if (!dateTs) {
+      return '';
+    }
+
+    var todayTs = new Date(new Date().toLocaleDateString()).getTime();
+    var yestodayTs = todayTs - 3600 * 1000 * 24 * 1;
+    var tbfyTs = todayTs - 3600 * 1000 * 24 * 2;
+
+    var dateObj = this.jsDateConverter(date);
+
+    if (dateTs >= todayTs) {
+      return dateObj.defaultTime;
+    } else if (dateTs >= yestodayTs) {
+      return '昨天 ' + dateObj.defaultTime;
+    } else if (dateTs >= tbfyTs) {
+      return '前天 ' + dateObj.defaultTime;
+    } else {
+      return dateObj.defaultDate;
+    }
   } };exports.default = _default;
 
 /***/ }),
@@ -9786,7 +9577,7 @@ var GRAY_DARK = '#969799';exports.GRAY_DARK = GRAY_DARK;
 
 /***/ }),
 
-/***/ 229:
+/***/ 226:
 /*!**********************************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/grid/index.js ***!
   \**********************************************************************************************************/
@@ -9794,8 +9585,8 @@ var GRAY_DARK = '#969799';exports.GRAY_DARK = GRAY_DARK;
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-var _component = __webpack_require__(/*! ../common/component */ 32);
-var _utils = __webpack_require__(/*! ../common/utils */ 230);
+var _component = __webpack_require__(/*! ../common/component */ 227);
+var _utils = __webpack_require__(/*! ../common/utils */ 229);
 (0, _component.VantComponent)({
   relation: {
     name: 'grid-item',
@@ -9849,6 +9640,187 @@ var _utils = __webpack_require__(/*! ../common/utils */ 230);
         child.updateStyle();
       });
     } } });
+
+/***/ }),
+
+/***/ 227:
+/*!****************************************************************************************************************!*\
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/common/component.js ***!
+  \****************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });exports.VantComponent = VantComponent;var _basic = __webpack_require__(/*! ../mixins/basic */ 228);function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
+var relationFunctions = {
+  ancestor: {
+    linked: function linked(parent) {
+      this.parent = parent;
+    },
+    unlinked: function unlinked() {
+      this.parent = null;
+    } },
+
+  descendant: {
+    linked: function linked(child) {
+      this.children = this.children || [];
+      this.children.push(child);
+    },
+    unlinked: function unlinked(child) {
+      this.children = (this.children || []).filter(function (it) {return it !== child;});
+    } } };
+
+
+function mapKeys(source, target, map) {
+  Object.keys(map).forEach(function (key) {
+    if (source[key]) {
+      target[map[key]] = source[key];
+    }
+  });
+}
+function makeRelation(options, vantOptions, relation) {var
+  type = relation.type,name = relation.name,_linked = relation.linked,_unlinked = relation.unlinked,_linkChanged = relation.linkChanged;var
+  beforeCreate = vantOptions.beforeCreate,destroyed = vantOptions.destroyed;
+  if (type === 'descendant') {
+    options.created = function () {
+      beforeCreate && beforeCreate.bind(this)();
+      this.children = this.children || [];
+    };
+    options.detached = function () {
+      this.children = [];
+      destroyed && destroyed.bind(this)();
+    };
+  }
+  options.relations = Object.assign(options.relations || {}, _defineProperty({}, "../".concat(
+  name, "/index"), {
+    type: type,
+    linked: function linked(node) {
+      relationFunctions[type].linked.bind(this)(node);
+      _linked && _linked.bind(this)(node);
+    },
+    linkChanged: function linkChanged(node) {
+      _linkChanged && _linkChanged.bind(this)(node);
+    },
+    unlinked: function unlinked(node) {
+      relationFunctions[type].unlinked.bind(this)(node);
+      _unlinked && _unlinked.bind(this)(node);
+    } }));
+
+
+}
+function VantComponent() {var vantOptions = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var options = {};
+  mapKeys(vantOptions, options, {
+    data: 'data',
+    props: 'properties',
+    mixins: 'behaviors',
+    methods: 'methods',
+    beforeCreate: 'created',
+    created: 'attached',
+    mounted: 'ready',
+    relations: 'relations',
+    destroyed: 'detached',
+    classes: 'externalClasses' });var
+
+  relation = vantOptions.relation;
+  if (relation) {
+    makeRelation(options, vantOptions, relation);
+  }
+  // add default externalClasses
+  options.externalClasses = options.externalClasses || [];
+  options.externalClasses.push('custom-class');
+  // add default behaviors
+  options.behaviors = options.behaviors || [];
+  options.behaviors.push(_basic.basic);
+  // map field to form-field behavior
+  if (vantOptions.field) {
+    options.behaviors.push('wx://form-field');
+  }
+  // add default options
+  options.options = {
+    multipleSlots: true,
+    addGlobalClass: true };
+
+  Component(options);
+}
+
+/***/ }),
+
+/***/ 228:
+/*!************************************************************************************************************!*\
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/mixins/basic.js ***!
+  \************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });exports.basic = void 0;var basic = Behavior({
+  methods: {
+    $emit: function $emit() {
+      this.triggerEvent.apply(this, arguments);
+    },
+    set: function set(data, callback) {
+      this.setData(data, callback);
+      return new Promise(function (resolve) {return wx.nextTick(resolve);});
+    },
+    getRect: function getRect(selector, all) {var _this = this;
+      return new Promise(function (resolve) {
+        wx.createSelectorQuery().
+        in(_this)[all ? 'selectAll' : 'select'](selector).
+        boundingClientRect(function (rect) {
+          if (all && Array.isArray(rect) && rect.length) {
+            resolve(rect);
+          }
+          if (!all && rect) {
+            resolve(rect);
+          }
+        }).
+        exec();
+      });
+    } } });exports.basic = basic;
+
+/***/ }),
+
+/***/ 229:
+/*!************************************************************************************************************!*\
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/common/utils.js ***!
+  \************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });exports.isDef = isDef;exports.isObj = isObj;exports.isNumber = isNumber;exports.range = range;exports.nextTick = nextTick;exports.getSystemInfoSync = getSystemInfoSync;exports.addUnit = addUnit;function isDef(value) {
+  return value !== undefined && value !== null;
+}
+function isObj(x) {
+  var type = typeof x;
+  return x !== null && (type === 'object' || type === 'function');
+}
+function isNumber(value) {
+  return /^\d+(\.\d+)?$/.test(value);
+}
+function range(num, min, max) {
+  return Math.min(Math.max(num, min), max);
+}
+function nextTick(fn) {
+  setTimeout(function () {
+    fn();
+  }, 1000 / 30);
+}
+var systemInfo = null;
+function getSystemInfoSync() {
+  if (systemInfo == null) {
+    systemInfo = wx.getSystemInfoSync();
+  }
+  return systemInfo;
+}
+function addUnit(value) {
+  if (!isDef(value)) {
+    return undefined;
+  }
+  value = String(value);
+  return isNumber(value) ? "".concat(value, "px") : value;
+}
 
 /***/ }),
 
@@ -9982,49 +9954,6 @@ function normalizeComponent (
 /***/ }),
 
 /***/ 230:
-/*!************************************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/common/utils.js ***!
-  \************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.isDef = isDef;exports.isObj = isObj;exports.isNumber = isNumber;exports.range = range;exports.nextTick = nextTick;exports.getSystemInfoSync = getSystemInfoSync;exports.addUnit = addUnit;function isDef(value) {
-  return value !== undefined && value !== null;
-}
-function isObj(x) {
-  var type = typeof x;
-  return x !== null && (type === 'object' || type === 'function');
-}
-function isNumber(value) {
-  return /^\d+(\.\d+)?$/.test(value);
-}
-function range(num, min, max) {
-  return Math.min(Math.max(num, min), max);
-}
-function nextTick(fn) {
-  setTimeout(function () {
-    fn();
-  }, 1000 / 30);
-}
-var systemInfo = null;
-function getSystemInfoSync() {
-  if (systemInfo == null) {
-    systemInfo = wx.getSystemInfoSync();
-  }
-  return systemInfo;
-}
-function addUnit(value) {
-  if (!isDef(value)) {
-    return undefined;
-  }
-  value = String(value);
-  return isNumber(value) ? "".concat(value, "px") : value;
-}
-
-/***/ }),
-
-/***/ 231:
 /*!***************************************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/grid-item/index.js ***!
   \***************************************************************************************************************/
@@ -10032,9 +9961,9 @@ function addUnit(value) {
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-var _link = __webpack_require__(/*! ../mixins/link */ 31);
-var _component = __webpack_require__(/*! ../common/component */ 32);
-var _utils = __webpack_require__(/*! ../common/utils */ 230);
+var _link = __webpack_require__(/*! ../mixins/link */ 231);
+var _component = __webpack_require__(/*! ../common/component */ 227);
+var _utils = __webpack_require__(/*! ../common/utils */ 229);
 (0, _component.VantComponent)({
   relation: {
     name: 'grid',
@@ -10102,6 +10031,32 @@ var _utils = __webpack_require__(/*! ../common/utils */ 230);
 
 /***/ }),
 
+/***/ 231:
+/*!***********************************************************************************************************!*\
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/mixins/link.js ***!
+  \***********************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });exports.link = void 0;var link = Behavior({
+  properties: {
+    url: String,
+    linkType: {
+      type: String,
+      value: 'navigateTo' } },
+
+
+  methods: {
+    jumpLink: function jumpLink() {var urlKey = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'url';
+      var url = this.data[urlKey];
+      if (url) {
+        wx[this.data.linkType]({ url: url });
+      }
+    } } });exports.link = link;
+
+/***/ }),
+
 /***/ 232:
 /*!*********************************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/tab/index.js ***!
@@ -10110,7 +10065,7 @@ var _utils = __webpack_require__(/*! ../common/utils */ 230);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-var _component = __webpack_require__(/*! ../common/component */ 32);
+var _component = __webpack_require__(/*! ../common/component */ 227);
 (0, _component.VantComponent)({
   relation: {
     name: 'tabs',
@@ -10178,9 +10133,9 @@ var _component = __webpack_require__(/*! ../common/component */ 32);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-var _component = __webpack_require__(/*! ../common/component */ 32);
+var _component = __webpack_require__(/*! ../common/component */ 227);
 var _touch = __webpack_require__(/*! ../mixins/touch */ 234);
-var _utils = __webpack_require__(/*! ../common/utils */ 230);function _slicedToArray(arr, i) {return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest();}function _nonIterableRest() {throw new TypeError("Invalid attempt to destructure non-iterable instance");}function _iterableToArrayLimit(arr, i) {if (!(Symbol.iterator in Object(arr) || Object.prototype.toString.call(arr) === "[object Arguments]")) {return;}var _arr = [];var _n = true;var _d = false;var _e = undefined;try {for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {_arr.push(_s.value);if (i && _arr.length === i) break;}} catch (err) {_d = true;_e = err;} finally {try {if (!_n && _i["return"] != null) _i["return"]();} finally {if (_d) throw _e;}}return _arr;}function _arrayWithHoles(arr) {if (Array.isArray(arr)) return arr;}
+var _utils = __webpack_require__(/*! ../common/utils */ 229);function _slicedToArray(arr, i) {return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest();}function _nonIterableRest() {throw new TypeError("Invalid attempt to destructure non-iterable instance");}function _iterableToArrayLimit(arr, i) {if (!(Symbol.iterator in Object(arr) || Object.prototype.toString.call(arr) === "[object Arguments]")) {return;}var _arr = [];var _n = true;var _d = false;var _e = undefined;try {for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {_arr.push(_s.value);if (i && _arr.length === i) break;}} catch (err) {_d = true;_e = err;} finally {try {if (!_n && _i["return"] != null) _i["return"]();} finally {if (_d) throw _e;}}return _arr;}function _arrayWithHoles(arr) {if (Array.isArray(arr)) return arr;}
 (0, _component.VantComponent)({
   mixins: [_touch.touch],
   classes: ['nav-class', 'tab-class', 'tab-active-class', 'line-class'],
@@ -10505,7 +10460,7 @@ var touch = Behavior({
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-var _component = __webpack_require__(/*! ../common/component */ 32);
+var _component = __webpack_require__(/*! ../common/component */ 227);
 var _color = __webpack_require__(/*! ../common/color */ 20);
 (0, _component.VantComponent)({
   props: {
@@ -10574,7 +10529,7 @@ var _color = __webpack_require__(/*! ../common/color */ 20);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-var _component = __webpack_require__(/*! ../common/component */ 32);
+var _component = __webpack_require__(/*! ../common/component */ 227);
 (0, _component.VantComponent)({
   props: {
     dot: Boolean,
@@ -10610,7 +10565,7 @@ var _component = __webpack_require__(/*! ../common/component */ 32);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-var _component = __webpack_require__(/*! ../common/component */ 32);
+var _component = __webpack_require__(/*! ../common/component */ 227);
 var _button = __webpack_require__(/*! ../mixins/button */ 238);
 var _openType = __webpack_require__(/*! ../mixins/open-type */ 239);
 (0, _component.VantComponent)({
@@ -10748,9 +10703,9 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.openType =
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-var _component = __webpack_require__(/*! ../common/component */ 32);
+var _component = __webpack_require__(/*! ../common/component */ 227);
 var _touch = __webpack_require__(/*! ../mixins/touch */ 234);
-var _utils = __webpack_require__(/*! ../common/utils */ 230);
+var _utils = __webpack_require__(/*! ../common/utils */ 229);
 var THRESHOLD = 0.3;
 var ARRAY = [];
 (0, _component.VantComponent)({
@@ -10889,7 +10844,7 @@ var ARRAY = [];
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-var _component = __webpack_require__(/*! ../common/component */ 32);
+var _component = __webpack_require__(/*! ../common/component */ 227);
 var _button = __webpack_require__(/*! ../mixins/button */ 238);
 var _openType = __webpack_require__(/*! ../mixins/open-type */ 239);
 var _color = __webpack_require__(/*! ../common/color */ 20);function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
@@ -11008,7 +10963,7 @@ var _color = __webpack_require__(/*! ../common/color */ 20);function _defineProp
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-var _component = __webpack_require__(/*! ../common/component */ 32);
+var _component = __webpack_require__(/*! ../common/component */ 227);
 (0, _component.VantComponent)({
   props: {
     dashed: {
@@ -11041,7 +10996,7 @@ var _component = __webpack_require__(/*! ../common/component */ 32);
 
 /***/ }),
 
-/***/ 278:
+/***/ 271:
 /*!***********************************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/image/index.js ***!
   \***********************************************************************************************************/
@@ -11049,8 +11004,8 @@ var _component = __webpack_require__(/*! ../common/component */ 32);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-var _utils = __webpack_require__(/*! ../common/utils */ 230);
-var _component = __webpack_require__(/*! ../common/component */ 32);
+var _utils = __webpack_require__(/*! ../common/utils */ 229);
+var _component = __webpack_require__(/*! ../common/component */ 227);
 var _button = __webpack_require__(/*! ../mixins/button */ 238);
 var _openType = __webpack_require__(/*! ../mixins/open-type */ 239);
 var FIT_MODE_MAP = {
@@ -11149,7 +11104,7 @@ var FIT_MODE_MAP = {
 
 /***/ }),
 
-/***/ 279:
+/***/ 272:
 /*!*********************************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/tag/index.js ***!
   \*********************************************************************************************************/
@@ -11157,7 +11112,7 @@ var FIT_MODE_MAP = {
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-var _component = __webpack_require__(/*! ../common/component */ 32);
+var _component = __webpack_require__(/*! ../common/component */ 227);
 (0, _component.VantComponent)({
   props: {
     size: String,
@@ -11176,224 +11131,6 @@ var _component = __webpack_require__(/*! ../common/component */ 32);
     onClose: function onClose() {
       this.$emit('close');
     } } });
-
-/***/ }),
-
-/***/ 294:
-/*!***********************************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/popup/index.js ***!
-  \***********************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-var _component = __webpack_require__(/*! ../common/component */ 32);
-var _transition = __webpack_require__(/*! ../mixins/transition */ 295);
-(0, _component.VantComponent)({
-  classes: [
-  'enter-class',
-  'enter-active-class',
-  'enter-to-class',
-  'leave-class',
-  'leave-active-class',
-  'leave-to-class'],
-
-  mixins: [(0, _transition.transition)(false)],
-  props: {
-    round: Boolean,
-    closeable: Boolean,
-    customStyle: String,
-    overlayStyle: String,
-    transition: {
-      type: String,
-      observer: 'observeClass' },
-
-    zIndex: {
-      type: Number,
-      value: 100 },
-
-    overlay: {
-      type: Boolean,
-      value: true },
-
-    closeIcon: {
-      type: String,
-      value: 'cross' },
-
-    closeIconPosition: {
-      type: String,
-      value: 'top-right' },
-
-    closeOnClickOverlay: {
-      type: Boolean,
-      value: true },
-
-    position: {
-      type: String,
-      value: 'center',
-      observer: 'observeClass' },
-
-    safeAreaInsetBottom: {
-      type: Boolean,
-      value: true },
-
-    safeAreaInsetTop: {
-      type: Boolean,
-      value: false } },
-
-
-  created: function created() {
-    this.observeClass();
-  },
-  methods: {
-    onClickCloseIcon: function onClickCloseIcon() {
-      this.$emit('close');
-    },
-    onClickOverlay: function onClickOverlay() {
-      this.$emit('click-overlay');
-      if (this.data.closeOnClickOverlay) {
-        this.$emit('close');
-      }
-    },
-    observeClass: function observeClass() {var _this$data =
-      this.data,transition = _this$data.transition,position = _this$data.position;
-      var updateData = {
-        name: transition || position };
-
-      if (transition === 'none') {
-        updateData.duration = 0;
-      }
-      this.setData(updateData);
-    } } });
-
-/***/ }),
-
-/***/ 295:
-/*!*****************************************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/mixins/transition.js ***!
-  \*****************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.transition = void 0;var _utils = __webpack_require__(/*! ../common/utils */ 230);
-var getClassNames = function getClassNames(name) {return {
-    enter: "van-".concat(name, "-enter van-").concat(name, "-enter-active enter-class enter-active-class"),
-    'enter-to': "van-".concat(name, "-enter-to van-").concat(name, "-enter-active enter-to-class enter-active-class"),
-    leave: "van-".concat(name, "-leave van-").concat(name, "-leave-active leave-class leave-active-class"),
-    'leave-to': "van-".concat(name, "-leave-to van-").concat(name, "-leave-active leave-to-class leave-active-class") };};
-
-var nextTick = function nextTick() {return new Promise(function (resolve) {return setTimeout(resolve, 1000 / 30);});};
-var transition = function transition(showDefaultValue) {
-  return Behavior({
-    properties: {
-      customStyle: String,
-      // @ts-ignore
-      show: {
-        type: Boolean,
-        value: showDefaultValue,
-        observer: 'observeShow' },
-
-      // @ts-ignore
-      duration: {
-        type: null,
-        value: 300,
-        observer: 'observeDuration' },
-
-      name: {
-        type: String,
-        value: 'fade' } },
-
-
-    data: {
-      type: '',
-      inited: false,
-      display: false },
-
-    methods: {
-      observeShow: function observeShow(value, old) {
-        if (value === old) {
-          return;
-        }
-        value ? this.enter() : this.leave();
-      },
-      enter: function enter() {var _this = this;var _this$data =
-        this.data,duration = _this$data.duration,name = _this$data.name;
-        var classNames = getClassNames(name);
-        var currentDuration = (0, _utils.isObj)(duration) ? duration.enter : duration;
-        this.status = 'enter';
-        this.$emit('before-enter');
-        Promise.resolve().
-        then(nextTick).
-        then(function () {
-          _this.checkStatus('enter');
-          _this.$emit('enter');
-          _this.setData({
-            inited: true,
-            display: true,
-            classes: classNames.enter,
-            currentDuration: currentDuration });
-
-        }).
-        then(nextTick).
-        then(function () {
-          _this.checkStatus('enter');
-          _this.transitionEnded = false;
-          _this.setData({
-            classes: classNames['enter-to'] });
-
-        }).
-        catch(function () {});
-      },
-      leave: function leave() {var _this2 = this;
-        if (!this.data.display) {
-          return;
-        }var _this$data2 =
-        this.data,duration = _this$data2.duration,name = _this$data2.name;
-        var classNames = getClassNames(name);
-        var currentDuration = (0, _utils.isObj)(duration) ? duration.leave : duration;
-        this.status = 'leave';
-        this.$emit('before-leave');
-        Promise.resolve().
-        then(nextTick).
-        then(function () {
-          _this2.checkStatus('leave');
-          _this2.$emit('leave');
-          _this2.setData({
-            classes: classNames.leave,
-            currentDuration: currentDuration });
-
-        }).
-        then(nextTick).
-        then(function () {
-          _this2.checkStatus('leave');
-          _this2.transitionEnded = false;
-          setTimeout(function () {return _this2.onTransitionEnd();}, currentDuration);
-          _this2.setData({
-            classes: classNames['leave-to'] });
-
-        }).
-        catch(function () {});
-      },
-      checkStatus: function checkStatus(status) {
-        if (status !== this.status) {
-          throw new Error("incongruent status: ".concat(status));
-        }
-      },
-      onTransitionEnd: function onTransitionEnd() {
-        if (this.transitionEnded) {
-          return;
-        }
-        this.transitionEnded = true;
-        this.$emit("after-".concat(this.status));var _this$data3 =
-        this.data,show = _this$data3.show,display = _this$data3.display;
-        if (!show && display) {
-          this.setData({ display: false });
-        }
-      } } });
-
-
-};exports.transition = transition;
 
 /***/ }),
 
@@ -11429,228 +11166,798 @@ module.exports = g;
 /***/ }),
 
 /***/ 30:
-/*!**********************************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/card/index.js ***!
-  \**********************************************************************************************************/
+/*!**********************************************************!*\
+  !*** ./node_modules/@babel/runtime/regenerator/index.js ***!
+  \**********************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-var _link = __webpack_require__(/*! ../mixins/link */ 31);
-var _component = __webpack_require__(/*! ../common/component */ 32);
-(0, _component.VantComponent)({
-  classes: [
-  'num-class',
-  'desc-class',
-  'thumb-class',
-  'title-class',
-  'price-class',
-  'origin-price-class'],
+module.exports = __webpack_require__(/*! regenerator-runtime */ 31);
 
-  mixins: [_link.link],
-  props: {
-    tag: String,
-    num: String,
-    desc: String,
-    thumb: String,
-    title: String,
-    price: {
-      type: String,
-      observer: 'updatePrice' },
-
-    centered: Boolean,
-    lazyLoad: Boolean,
-    thumbLink: String,
-    originPrice: String,
-    thumbMode: {
-      type: String,
-      value: 'aspectFit' },
-
-    currency: {
-      type: String,
-      value: '¥' } },
-
-
-  methods: {
-    updatePrice: function updatePrice() {var
-      price = this.data.price;
-      var priceArr = price.toString().split('.');
-      this.setData({
-        integerStr: priceArr[0],
-        decimalStr: priceArr[1] ? ".".concat(priceArr[1]) : '' });
-
-    },
-    onClickThumb: function onClickThumb() {
-      this.jumpLink('thumbLink');
-    } } });
 
 /***/ }),
 
 /***/ 31:
-/*!***********************************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/mixins/link.js ***!
-  \***********************************************************************************************************/
+/*!************************************************************!*\
+  !*** ./node_modules/regenerator-runtime/runtime-module.js ***!
+  \************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.link = void 0;var link = Behavior({
-  properties: {
-    url: String,
-    linkType: {
-      type: String,
-      value: 'navigateTo' } },
+/**
+ * Copyright (c) 2014-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
 
+// This method of obtaining a reference to the global object needs to be
+// kept identical to the way it is obtained in runtime.js
+var g = (function() {
+  return this || (typeof self === "object" && self);
+})() || Function("return this")();
 
-  methods: {
-    jumpLink: function jumpLink() {var urlKey = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'url';
-      var url = this.data[urlKey];
-      if (url) {
-        wx[this.data.linkType]({ url: url });
-      }
-    } } });exports.link = link;
+// Use `getOwnPropertyNames` because not all browsers support calling
+// `hasOwnProperty` on the global `self` object in a worker. See #183.
+var hadRuntime = g.regeneratorRuntime &&
+  Object.getOwnPropertyNames(g).indexOf("regeneratorRuntime") >= 0;
+
+// Save the old regeneratorRuntime in case it needs to be restored later.
+var oldRuntime = hadRuntime && g.regeneratorRuntime;
+
+// Force reevalutation of runtime.js.
+g.regeneratorRuntime = undefined;
+
+module.exports = __webpack_require__(/*! ./runtime */ 32);
+
+if (hadRuntime) {
+  // Restore the original runtime.
+  g.regeneratorRuntime = oldRuntime;
+} else {
+  // Remove the global property added by runtime.js.
+  try {
+    delete g.regeneratorRuntime;
+  } catch(e) {
+    g.regeneratorRuntime = undefined;
+  }
+}
+
 
 /***/ }),
 
 /***/ 32:
-/*!****************************************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/common/component.js ***!
-  \****************************************************************************************************************/
+/*!*****************************************************!*\
+  !*** ./node_modules/regenerator-runtime/runtime.js ***!
+  \*****************************************************/
 /*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.VantComponent = VantComponent;var _basic = __webpack_require__(/*! ../mixins/basic */ 33);function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
-var relationFunctions = {
-  ancestor: {
-    linked: function linked(parent) {
-      this.parent = parent;
-    },
-    unlinked: function unlinked() {
-      this.parent = null;
-    } },
+/**
+ * Copyright (c) 2014-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
 
-  descendant: {
-    linked: function linked(child) {
-      this.children = this.children || [];
-      this.children.push(child);
-    },
-    unlinked: function unlinked(child) {
-      this.children = (this.children || []).filter(function (it) {return it !== child;});
-    } } };
+!(function(global) {
+  "use strict";
 
+  var Op = Object.prototype;
+  var hasOwn = Op.hasOwnProperty;
+  var undefined; // More compressible than void 0.
+  var $Symbol = typeof Symbol === "function" ? Symbol : {};
+  var iteratorSymbol = $Symbol.iterator || "@@iterator";
+  var asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator";
+  var toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag";
 
-function mapKeys(source, target, map) {
-  Object.keys(map).forEach(function (key) {
-    if (source[key]) {
-      target[map[key]] = source[key];
+  var inModule = typeof module === "object";
+  var runtime = global.regeneratorRuntime;
+  if (runtime) {
+    if (inModule) {
+      // If regeneratorRuntime is defined globally and we're in a module,
+      // make the exports object identical to regeneratorRuntime.
+      module.exports = runtime;
     }
-  });
-}
-function makeRelation(options, vantOptions, relation) {var
-  type = relation.type,name = relation.name,_linked = relation.linked,_unlinked = relation.unlinked,_linkChanged = relation.linkChanged;var
-  beforeCreate = vantOptions.beforeCreate,destroyed = vantOptions.destroyed;
-  if (type === 'descendant') {
-    options.created = function () {
-      beforeCreate && beforeCreate.bind(this)();
-      this.children = this.children || [];
+    // Don't bother evaluating the rest of this file if the runtime was
+    // already defined globally.
+    return;
+  }
+
+  // Define the runtime globally (as expected by generated code) as either
+  // module.exports (if we're in a module) or a new, empty object.
+  runtime = global.regeneratorRuntime = inModule ? module.exports : {};
+
+  function wrap(innerFn, outerFn, self, tryLocsList) {
+    // If outerFn provided and outerFn.prototype is a Generator, then outerFn.prototype instanceof Generator.
+    var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator;
+    var generator = Object.create(protoGenerator.prototype);
+    var context = new Context(tryLocsList || []);
+
+    // The ._invoke method unifies the implementations of the .next,
+    // .throw, and .return methods.
+    generator._invoke = makeInvokeMethod(innerFn, self, context);
+
+    return generator;
+  }
+  runtime.wrap = wrap;
+
+  // Try/catch helper to minimize deoptimizations. Returns a completion
+  // record like context.tryEntries[i].completion. This interface could
+  // have been (and was previously) designed to take a closure to be
+  // invoked without arguments, but in all the cases we care about we
+  // already have an existing method we want to call, so there's no need
+  // to create a new function object. We can even get away with assuming
+  // the method takes exactly one argument, since that happens to be true
+  // in every case, so we don't have to touch the arguments object. The
+  // only additional allocation required is the completion record, which
+  // has a stable shape and so hopefully should be cheap to allocate.
+  function tryCatch(fn, obj, arg) {
+    try {
+      return { type: "normal", arg: fn.call(obj, arg) };
+    } catch (err) {
+      return { type: "throw", arg: err };
+    }
+  }
+
+  var GenStateSuspendedStart = "suspendedStart";
+  var GenStateSuspendedYield = "suspendedYield";
+  var GenStateExecuting = "executing";
+  var GenStateCompleted = "completed";
+
+  // Returning this object from the innerFn has the same effect as
+  // breaking out of the dispatch switch statement.
+  var ContinueSentinel = {};
+
+  // Dummy constructor functions that we use as the .constructor and
+  // .constructor.prototype properties for functions that return Generator
+  // objects. For full spec compliance, you may wish to configure your
+  // minifier not to mangle the names of these two functions.
+  function Generator() {}
+  function GeneratorFunction() {}
+  function GeneratorFunctionPrototype() {}
+
+  // This is a polyfill for %IteratorPrototype% for environments that
+  // don't natively support it.
+  var IteratorPrototype = {};
+  IteratorPrototype[iteratorSymbol] = function () {
+    return this;
+  };
+
+  var getProto = Object.getPrototypeOf;
+  var NativeIteratorPrototype = getProto && getProto(getProto(values([])));
+  if (NativeIteratorPrototype &&
+      NativeIteratorPrototype !== Op &&
+      hasOwn.call(NativeIteratorPrototype, iteratorSymbol)) {
+    // This environment has a native %IteratorPrototype%; use it instead
+    // of the polyfill.
+    IteratorPrototype = NativeIteratorPrototype;
+  }
+
+  var Gp = GeneratorFunctionPrototype.prototype =
+    Generator.prototype = Object.create(IteratorPrototype);
+  GeneratorFunction.prototype = Gp.constructor = GeneratorFunctionPrototype;
+  GeneratorFunctionPrototype.constructor = GeneratorFunction;
+  GeneratorFunctionPrototype[toStringTagSymbol] =
+    GeneratorFunction.displayName = "GeneratorFunction";
+
+  // Helper for defining the .next, .throw, and .return methods of the
+  // Iterator interface in terms of a single ._invoke method.
+  function defineIteratorMethods(prototype) {
+    ["next", "throw", "return"].forEach(function(method) {
+      prototype[method] = function(arg) {
+        return this._invoke(method, arg);
+      };
+    });
+  }
+
+  runtime.isGeneratorFunction = function(genFun) {
+    var ctor = typeof genFun === "function" && genFun.constructor;
+    return ctor
+      ? ctor === GeneratorFunction ||
+        // For the native GeneratorFunction constructor, the best we can
+        // do is to check its .name property.
+        (ctor.displayName || ctor.name) === "GeneratorFunction"
+      : false;
+  };
+
+  runtime.mark = function(genFun) {
+    if (Object.setPrototypeOf) {
+      Object.setPrototypeOf(genFun, GeneratorFunctionPrototype);
+    } else {
+      genFun.__proto__ = GeneratorFunctionPrototype;
+      if (!(toStringTagSymbol in genFun)) {
+        genFun[toStringTagSymbol] = "GeneratorFunction";
+      }
+    }
+    genFun.prototype = Object.create(Gp);
+    return genFun;
+  };
+
+  // Within the body of any async function, `await x` is transformed to
+  // `yield regeneratorRuntime.awrap(x)`, so that the runtime can test
+  // `hasOwn.call(value, "__await")` to determine if the yielded value is
+  // meant to be awaited.
+  runtime.awrap = function(arg) {
+    return { __await: arg };
+  };
+
+  function AsyncIterator(generator) {
+    function invoke(method, arg, resolve, reject) {
+      var record = tryCatch(generator[method], generator, arg);
+      if (record.type === "throw") {
+        reject(record.arg);
+      } else {
+        var result = record.arg;
+        var value = result.value;
+        if (value &&
+            typeof value === "object" &&
+            hasOwn.call(value, "__await")) {
+          return Promise.resolve(value.__await).then(function(value) {
+            invoke("next", value, resolve, reject);
+          }, function(err) {
+            invoke("throw", err, resolve, reject);
+          });
+        }
+
+        return Promise.resolve(value).then(function(unwrapped) {
+          // When a yielded Promise is resolved, its final value becomes
+          // the .value of the Promise<{value,done}> result for the
+          // current iteration.
+          result.value = unwrapped;
+          resolve(result);
+        }, function(error) {
+          // If a rejected Promise was yielded, throw the rejection back
+          // into the async generator function so it can be handled there.
+          return invoke("throw", error, resolve, reject);
+        });
+      }
+    }
+
+    var previousPromise;
+
+    function enqueue(method, arg) {
+      function callInvokeWithMethodAndArg() {
+        return new Promise(function(resolve, reject) {
+          invoke(method, arg, resolve, reject);
+        });
+      }
+
+      return previousPromise =
+        // If enqueue has been called before, then we want to wait until
+        // all previous Promises have been resolved before calling invoke,
+        // so that results are always delivered in the correct order. If
+        // enqueue has not been called before, then it is important to
+        // call invoke immediately, without waiting on a callback to fire,
+        // so that the async generator function has the opportunity to do
+        // any necessary setup in a predictable way. This predictability
+        // is why the Promise constructor synchronously invokes its
+        // executor callback, and why async functions synchronously
+        // execute code before the first await. Since we implement simple
+        // async functions in terms of async generators, it is especially
+        // important to get this right, even though it requires care.
+        previousPromise ? previousPromise.then(
+          callInvokeWithMethodAndArg,
+          // Avoid propagating failures to Promises returned by later
+          // invocations of the iterator.
+          callInvokeWithMethodAndArg
+        ) : callInvokeWithMethodAndArg();
+    }
+
+    // Define the unified helper method that is used to implement .next,
+    // .throw, and .return (see defineIteratorMethods).
+    this._invoke = enqueue;
+  }
+
+  defineIteratorMethods(AsyncIterator.prototype);
+  AsyncIterator.prototype[asyncIteratorSymbol] = function () {
+    return this;
+  };
+  runtime.AsyncIterator = AsyncIterator;
+
+  // Note that simple async functions are implemented on top of
+  // AsyncIterator objects; they just return a Promise for the value of
+  // the final result produced by the iterator.
+  runtime.async = function(innerFn, outerFn, self, tryLocsList) {
+    var iter = new AsyncIterator(
+      wrap(innerFn, outerFn, self, tryLocsList)
+    );
+
+    return runtime.isGeneratorFunction(outerFn)
+      ? iter // If outerFn is a generator, return the full iterator.
+      : iter.next().then(function(result) {
+          return result.done ? result.value : iter.next();
+        });
+  };
+
+  function makeInvokeMethod(innerFn, self, context) {
+    var state = GenStateSuspendedStart;
+
+    return function invoke(method, arg) {
+      if (state === GenStateExecuting) {
+        throw new Error("Generator is already running");
+      }
+
+      if (state === GenStateCompleted) {
+        if (method === "throw") {
+          throw arg;
+        }
+
+        // Be forgiving, per 25.3.3.3.3 of the spec:
+        // https://people.mozilla.org/~jorendorff/es6-draft.html#sec-generatorresume
+        return doneResult();
+      }
+
+      context.method = method;
+      context.arg = arg;
+
+      while (true) {
+        var delegate = context.delegate;
+        if (delegate) {
+          var delegateResult = maybeInvokeDelegate(delegate, context);
+          if (delegateResult) {
+            if (delegateResult === ContinueSentinel) continue;
+            return delegateResult;
+          }
+        }
+
+        if (context.method === "next") {
+          // Setting context._sent for legacy support of Babel's
+          // function.sent implementation.
+          context.sent = context._sent = context.arg;
+
+        } else if (context.method === "throw") {
+          if (state === GenStateSuspendedStart) {
+            state = GenStateCompleted;
+            throw context.arg;
+          }
+
+          context.dispatchException(context.arg);
+
+        } else if (context.method === "return") {
+          context.abrupt("return", context.arg);
+        }
+
+        state = GenStateExecuting;
+
+        var record = tryCatch(innerFn, self, context);
+        if (record.type === "normal") {
+          // If an exception is thrown from innerFn, we leave state ===
+          // GenStateExecuting and loop back for another invocation.
+          state = context.done
+            ? GenStateCompleted
+            : GenStateSuspendedYield;
+
+          if (record.arg === ContinueSentinel) {
+            continue;
+          }
+
+          return {
+            value: record.arg,
+            done: context.done
+          };
+
+        } else if (record.type === "throw") {
+          state = GenStateCompleted;
+          // Dispatch the exception by looping back around to the
+          // context.dispatchException(context.arg) call above.
+          context.method = "throw";
+          context.arg = record.arg;
+        }
+      }
     };
-    options.detached = function () {
-      this.children = [];
-      destroyed && destroyed.bind(this)();
+  }
+
+  // Call delegate.iterator[context.method](context.arg) and handle the
+  // result, either by returning a { value, done } result from the
+  // delegate iterator, or by modifying context.method and context.arg,
+  // setting context.delegate to null, and returning the ContinueSentinel.
+  function maybeInvokeDelegate(delegate, context) {
+    var method = delegate.iterator[context.method];
+    if (method === undefined) {
+      // A .throw or .return when the delegate iterator has no .throw
+      // method always terminates the yield* loop.
+      context.delegate = null;
+
+      if (context.method === "throw") {
+        if (delegate.iterator.return) {
+          // If the delegate iterator has a return method, give it a
+          // chance to clean up.
+          context.method = "return";
+          context.arg = undefined;
+          maybeInvokeDelegate(delegate, context);
+
+          if (context.method === "throw") {
+            // If maybeInvokeDelegate(context) changed context.method from
+            // "return" to "throw", let that override the TypeError below.
+            return ContinueSentinel;
+          }
+        }
+
+        context.method = "throw";
+        context.arg = new TypeError(
+          "The iterator does not provide a 'throw' method");
+      }
+
+      return ContinueSentinel;
+    }
+
+    var record = tryCatch(method, delegate.iterator, context.arg);
+
+    if (record.type === "throw") {
+      context.method = "throw";
+      context.arg = record.arg;
+      context.delegate = null;
+      return ContinueSentinel;
+    }
+
+    var info = record.arg;
+
+    if (! info) {
+      context.method = "throw";
+      context.arg = new TypeError("iterator result is not an object");
+      context.delegate = null;
+      return ContinueSentinel;
+    }
+
+    if (info.done) {
+      // Assign the result of the finished delegate to the temporary
+      // variable specified by delegate.resultName (see delegateYield).
+      context[delegate.resultName] = info.value;
+
+      // Resume execution at the desired location (see delegateYield).
+      context.next = delegate.nextLoc;
+
+      // If context.method was "throw" but the delegate handled the
+      // exception, let the outer generator proceed normally. If
+      // context.method was "next", forget context.arg since it has been
+      // "consumed" by the delegate iterator. If context.method was
+      // "return", allow the original .return call to continue in the
+      // outer generator.
+      if (context.method !== "return") {
+        context.method = "next";
+        context.arg = undefined;
+      }
+
+    } else {
+      // Re-yield the result returned by the delegate method.
+      return info;
+    }
+
+    // The delegate iterator is finished, so forget it and continue with
+    // the outer generator.
+    context.delegate = null;
+    return ContinueSentinel;
+  }
+
+  // Define Generator.prototype.{next,throw,return} in terms of the
+  // unified ._invoke helper method.
+  defineIteratorMethods(Gp);
+
+  Gp[toStringTagSymbol] = "Generator";
+
+  // A Generator should always return itself as the iterator object when the
+  // @@iterator function is called on it. Some browsers' implementations of the
+  // iterator prototype chain incorrectly implement this, causing the Generator
+  // object to not be returned from this call. This ensures that doesn't happen.
+  // See https://github.com/facebook/regenerator/issues/274 for more details.
+  Gp[iteratorSymbol] = function() {
+    return this;
+  };
+
+  Gp.toString = function() {
+    return "[object Generator]";
+  };
+
+  function pushTryEntry(locs) {
+    var entry = { tryLoc: locs[0] };
+
+    if (1 in locs) {
+      entry.catchLoc = locs[1];
+    }
+
+    if (2 in locs) {
+      entry.finallyLoc = locs[2];
+      entry.afterLoc = locs[3];
+    }
+
+    this.tryEntries.push(entry);
+  }
+
+  function resetTryEntry(entry) {
+    var record = entry.completion || {};
+    record.type = "normal";
+    delete record.arg;
+    entry.completion = record;
+  }
+
+  function Context(tryLocsList) {
+    // The root entry object (effectively a try statement without a catch
+    // or a finally block) gives us a place to store values thrown from
+    // locations where there is no enclosing try statement.
+    this.tryEntries = [{ tryLoc: "root" }];
+    tryLocsList.forEach(pushTryEntry, this);
+    this.reset(true);
+  }
+
+  runtime.keys = function(object) {
+    var keys = [];
+    for (var key in object) {
+      keys.push(key);
+    }
+    keys.reverse();
+
+    // Rather than returning an object with a next method, we keep
+    // things simple and return the next function itself.
+    return function next() {
+      while (keys.length) {
+        var key = keys.pop();
+        if (key in object) {
+          next.value = key;
+          next.done = false;
+          return next;
+        }
+      }
+
+      // To avoid creating an additional object, we just hang the .value
+      // and .done properties off the next function object itself. This
+      // also ensures that the minifier will not anonymize the function.
+      next.done = true;
+      return next;
     };
+  };
+
+  function values(iterable) {
+    if (iterable) {
+      var iteratorMethod = iterable[iteratorSymbol];
+      if (iteratorMethod) {
+        return iteratorMethod.call(iterable);
+      }
+
+      if (typeof iterable.next === "function") {
+        return iterable;
+      }
+
+      if (!isNaN(iterable.length)) {
+        var i = -1, next = function next() {
+          while (++i < iterable.length) {
+            if (hasOwn.call(iterable, i)) {
+              next.value = iterable[i];
+              next.done = false;
+              return next;
+            }
+          }
+
+          next.value = undefined;
+          next.done = true;
+
+          return next;
+        };
+
+        return next.next = next;
+      }
+    }
+
+    // Return an iterator with no values.
+    return { next: doneResult };
   }
-  options.relations = Object.assign(options.relations || {}, _defineProperty({}, "../".concat(
-  name, "/index"), {
-    type: type,
-    linked: function linked(node) {
-      relationFunctions[type].linked.bind(this)(node);
-      _linked && _linked.bind(this)(node);
+  runtime.values = values;
+
+  function doneResult() {
+    return { value: undefined, done: true };
+  }
+
+  Context.prototype = {
+    constructor: Context,
+
+    reset: function(skipTempReset) {
+      this.prev = 0;
+      this.next = 0;
+      // Resetting context._sent for legacy support of Babel's
+      // function.sent implementation.
+      this.sent = this._sent = undefined;
+      this.done = false;
+      this.delegate = null;
+
+      this.method = "next";
+      this.arg = undefined;
+
+      this.tryEntries.forEach(resetTryEntry);
+
+      if (!skipTempReset) {
+        for (var name in this) {
+          // Not sure about the optimal order of these conditions:
+          if (name.charAt(0) === "t" &&
+              hasOwn.call(this, name) &&
+              !isNaN(+name.slice(1))) {
+            this[name] = undefined;
+          }
+        }
+      }
     },
-    linkChanged: function linkChanged(node) {
-      _linkChanged && _linkChanged.bind(this)(node);
+
+    stop: function() {
+      this.done = true;
+
+      var rootEntry = this.tryEntries[0];
+      var rootRecord = rootEntry.completion;
+      if (rootRecord.type === "throw") {
+        throw rootRecord.arg;
+      }
+
+      return this.rval;
     },
-    unlinked: function unlinked(node) {
-      relationFunctions[type].unlinked.bind(this)(node);
-      _unlinked && _unlinked.bind(this)(node);
-    } }));
 
+    dispatchException: function(exception) {
+      if (this.done) {
+        throw exception;
+      }
 
-}
-function VantComponent() {var vantOptions = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  var options = {};
-  mapKeys(vantOptions, options, {
-    data: 'data',
-    props: 'properties',
-    mixins: 'behaviors',
-    methods: 'methods',
-    beforeCreate: 'created',
-    created: 'attached',
-    mounted: 'ready',
-    relations: 'relations',
-    destroyed: 'detached',
-    classes: 'externalClasses' });var
+      var context = this;
+      function handle(loc, caught) {
+        record.type = "throw";
+        record.arg = exception;
+        context.next = loc;
 
-  relation = vantOptions.relation;
-  if (relation) {
-    makeRelation(options, vantOptions, relation);
-  }
-  // add default externalClasses
-  options.externalClasses = options.externalClasses || [];
-  options.externalClasses.push('custom-class');
-  // add default behaviors
-  options.behaviors = options.behaviors || [];
-  options.behaviors.push(_basic.basic);
-  // map field to form-field behavior
-  if (vantOptions.field) {
-    options.behaviors.push('wx://form-field');
-  }
-  // add default options
-  options.options = {
-    multipleSlots: true,
-    addGlobalClass: true };
+        if (caught) {
+          // If the dispatched exception was caught by a catch block,
+          // then let that catch block handle the exception normally.
+          context.method = "next";
+          context.arg = undefined;
+        }
 
-  Component(options);
-}
+        return !! caught;
+      }
+
+      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+        var entry = this.tryEntries[i];
+        var record = entry.completion;
+
+        if (entry.tryLoc === "root") {
+          // Exception thrown outside of any try block that could handle
+          // it, so set the completion value of the entire function to
+          // throw the exception.
+          return handle("end");
+        }
+
+        if (entry.tryLoc <= this.prev) {
+          var hasCatch = hasOwn.call(entry, "catchLoc");
+          var hasFinally = hasOwn.call(entry, "finallyLoc");
+
+          if (hasCatch && hasFinally) {
+            if (this.prev < entry.catchLoc) {
+              return handle(entry.catchLoc, true);
+            } else if (this.prev < entry.finallyLoc) {
+              return handle(entry.finallyLoc);
+            }
+
+          } else if (hasCatch) {
+            if (this.prev < entry.catchLoc) {
+              return handle(entry.catchLoc, true);
+            }
+
+          } else if (hasFinally) {
+            if (this.prev < entry.finallyLoc) {
+              return handle(entry.finallyLoc);
+            }
+
+          } else {
+            throw new Error("try statement without catch or finally");
+          }
+        }
+      }
+    },
+
+    abrupt: function(type, arg) {
+      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+        var entry = this.tryEntries[i];
+        if (entry.tryLoc <= this.prev &&
+            hasOwn.call(entry, "finallyLoc") &&
+            this.prev < entry.finallyLoc) {
+          var finallyEntry = entry;
+          break;
+        }
+      }
+
+      if (finallyEntry &&
+          (type === "break" ||
+           type === "continue") &&
+          finallyEntry.tryLoc <= arg &&
+          arg <= finallyEntry.finallyLoc) {
+        // Ignore the finally entry if control is not jumping to a
+        // location outside the try/catch block.
+        finallyEntry = null;
+      }
+
+      var record = finallyEntry ? finallyEntry.completion : {};
+      record.type = type;
+      record.arg = arg;
+
+      if (finallyEntry) {
+        this.method = "next";
+        this.next = finallyEntry.finallyLoc;
+        return ContinueSentinel;
+      }
+
+      return this.complete(record);
+    },
+
+    complete: function(record, afterLoc) {
+      if (record.type === "throw") {
+        throw record.arg;
+      }
+
+      if (record.type === "break" ||
+          record.type === "continue") {
+        this.next = record.arg;
+      } else if (record.type === "return") {
+        this.rval = this.arg = record.arg;
+        this.method = "return";
+        this.next = "end";
+      } else if (record.type === "normal" && afterLoc) {
+        this.next = afterLoc;
+      }
+
+      return ContinueSentinel;
+    },
+
+    finish: function(finallyLoc) {
+      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+        var entry = this.tryEntries[i];
+        if (entry.finallyLoc === finallyLoc) {
+          this.complete(entry.completion, entry.afterLoc);
+          resetTryEntry(entry);
+          return ContinueSentinel;
+        }
+      }
+    },
+
+    "catch": function(tryLoc) {
+      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+        var entry = this.tryEntries[i];
+        if (entry.tryLoc === tryLoc) {
+          var record = entry.completion;
+          if (record.type === "throw") {
+            var thrown = record.arg;
+            resetTryEntry(entry);
+          }
+          return thrown;
+        }
+      }
+
+      // The context.catch method must only be called with a location
+      // argument that corresponds to a known catch block.
+      throw new Error("illegal catch attempt");
+    },
+
+    delegateYield: function(iterable, resultName, nextLoc) {
+      this.delegate = {
+        iterator: values(iterable),
+        resultName: resultName,
+        nextLoc: nextLoc
+      };
+
+      if (this.method === "next") {
+        // Deliberately forget the last sent value so that we don't
+        // accidentally pass it on to the delegate.
+        this.arg = undefined;
+      }
+
+      return ContinueSentinel;
+    }
+  };
+})(
+  // In sloppy mode, unbound `this` refers to the global object, fallback to
+  // Function constructor if we're in global strict mode. That is sadly a form
+  // of indirect eval which violates Content Security Policy.
+  (function() {
+    return this || (typeof self === "object" && self);
+  })() || Function("return this")()
+);
+
 
 /***/ }),
 
-/***/ 33:
-/*!************************************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/mixins/basic.js ***!
-  \************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.basic = void 0;var basic = Behavior({
-  methods: {
-    $emit: function $emit() {
-      this.triggerEvent.apply(this, arguments);
-    },
-    set: function set(data, callback) {
-      this.setData(data, callback);
-      return new Promise(function (resolve) {return wx.nextTick(resolve);});
-    },
-    getRect: function getRect(selector, all) {var _this = this;
-      return new Promise(function (resolve) {
-        wx.createSelectorQuery().
-        in(_this)[all ? 'selectAll' : 'select'](selector).
-        boundingClientRect(function (rect) {
-          if (all && Array.isArray(rect) && rect.length) {
-            resolve(rect);
-          }
-          if (!all && rect) {
-            resolve(rect);
-          }
-        }).
-        exec();
-      });
-    } } });exports.basic = basic;
-
-/***/ }),
-
-/***/ 331:
+/***/ 322:
 /*!***********************************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/steps/index.js ***!
   \***********************************************************************************************************/
@@ -11658,7 +11965,7 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.basic = vo
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-var _component = __webpack_require__(/*! ../common/component */ 32);
+var _component = __webpack_require__(/*! ../common/component */ 227);
 var _color = __webpack_require__(/*! ../common/color */ 20);
 (0, _component.VantComponent)({
   classes: ['desc-class'],
@@ -11686,7 +11993,7 @@ var _color = __webpack_require__(/*! ../common/color */ 20);
 
 /***/ }),
 
-/***/ 34:
+/***/ 33:
 /*!*************************************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/dialog/dialog.js ***!
   \*************************************************************************************************************/
@@ -11760,7 +12067,7 @@ Dialog;exports.default = _default;
 
 /***/ }),
 
-/***/ 35:
+/***/ 34:
 /*!*****************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/static/js/course.js ***!
   \*****************************************************************************************/
@@ -11791,18 +12098,12 @@ var _http_commons = _interopRequireDefault(__webpack_require__(/*! ./http_common
   },
 
   /**
-      * 获取我的课程列表
-      * 
-      * @param {Number} type  0:我教的课  1:我参与的课
-      * @return {Object} 课程列表
+      * 获取创建的课程
       */
-  listCourse: function listCourse(type) {var offset = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;var count = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 10;
-    var url = type === 0 ? _api_reference.default.GET_TEACHED_COURSE : _api_reference.default.GET_JOINED_COURSE;
-
+  listCoursesAsCreator: function listCoursesAsCreator() {var offset = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;var count = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 10;
     return new Promise(function (resolve, reject) {
-      console.log("请求");
       uni.request({
-        url: url + '?offset=' + offset + '&count=' + count,
+        url: _api_reference.default.GET_CREATED_COURSE + '?offset=' + offset + '&count=' + count,
         header: _http_commons.default.getAuthenticationHeader(),
         success: function success(resp) {
           if (_http_commons.default.successCheck(resp)) {
@@ -11815,6 +12116,47 @@ var _http_commons = _interopRequireDefault(__webpack_require__(/*! ./http_common
 
     });
   },
+
+  /**
+      * 获取教授的课程
+      */
+  listCoursesAsTeacher: function listCoursesAsTeacher() {var offset = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;var count = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 10;
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: _api_reference.default.GET_TEACHED_COURSE + '?offset=' + offset + '&count=' + count,
+        header: _http_commons.default.getAuthenticationHeader(),
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+        } });
+
+    });
+  },
+
+  /**
+      * 获取学习的课程
+      */
+  listCoursesAsStudent: function listCoursesAsStudent() {var offset = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;var count = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 10;
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: _api_reference.default.GET_JOINED_COURSE + '?offset=' + offset + '&count=' + count,
+        header: _http_commons.default.getAuthenticationHeader(),
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+        } });
+
+    });
+  },
+
 
   /**
       * @param {String} courseName
@@ -12004,6 +12346,9 @@ assignedUserId, courseId) {
   });
 }), _defineProperty(_getCourse$listCourse, "getScoreRule", function getScoreRule(
 
+
+
+
 courseId) {
   return new Promise(function (resolve, reject) {
     uni.request({
@@ -12042,6 +12387,9 @@ rule) {
   });
 }), _defineProperty(_getCourse$listCourse, "scoreCal", function scoreCal(
 
+
+
+
 courseId) {
   return new Promise(function (resolve, reject) {
     uni.request({
@@ -12060,6 +12408,9 @@ courseId) {
 
   });
 }), _defineProperty(_getCourse$listCourse, "getStudentScoreList", function getStudentScoreList(
+
+
+
 
 courseId) {
   return new Promise(function (resolve, reject) {
@@ -12082,7 +12433,7 @@ courseId) {
 
 /***/ }),
 
-/***/ 353:
+/***/ 344:
 /*!***************************************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/index-bar/index.js ***!
   \***************************************************************************************************************/
@@ -12090,7 +12441,7 @@ courseId) {
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-var _component = __webpack_require__(/*! ../common/component */ 32);
+var _component = __webpack_require__(/*! ../common/component */ 227);
 var _color = __webpack_require__(/*! ../common/color */ 20);
 var indexList = function indexList() {
   var indexList = [];
@@ -12339,7 +12690,7 @@ var indexList = function indexList() {
 
 /***/ }),
 
-/***/ 354:
+/***/ 345:
 /*!******************************************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/index-anchor/index.js ***!
   \******************************************************************************************************************/
@@ -12347,7 +12698,7 @@ var indexList = function indexList() {
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-var _component = __webpack_require__(/*! ../common/component */ 32);
+var _component = __webpack_require__(/*! ../common/component */ 227);
 (0, _component.VantComponent)({
   relation: {
     name: 'index-bar',
@@ -12365,7 +12716,7 @@ var _component = __webpack_require__(/*! ../common/component */ 32);
 
 /***/ }),
 
-/***/ 355:
+/***/ 346:
 /*!**********************************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/cell/index.js ***!
   \**********************************************************************************************************/
@@ -12373,8 +12724,8 @@ var _component = __webpack_require__(/*! ../common/component */ 32);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-var _link = __webpack_require__(/*! ../mixins/link */ 31);
-var _component = __webpack_require__(/*! ../common/component */ 32);
+var _link = __webpack_require__(/*! ../mixins/link */ 231);
+var _component = __webpack_require__(/*! ../common/component */ 227);
 (0, _component.VantComponent)({
   classes: [
   'title-class',
@@ -12411,7 +12762,7 @@ var _component = __webpack_require__(/*! ../common/component */ 32);
 
 /***/ }),
 
-/***/ 356:
+/***/ 347:
 /*!****************************************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/cell-group/index.js ***!
   \****************************************************************************************************************/
@@ -12419,7 +12770,7 @@ var _component = __webpack_require__(/*! ../common/component */ 32);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-var _component = __webpack_require__(/*! ../common/component */ 32);
+var _component = __webpack_require__(/*! ../common/component */ 227);
 (0, _component.VantComponent)({
   props: {
     title: String,
@@ -12429,7 +12780,7 @@ var _component = __webpack_require__(/*! ../common/component */ 32);
 
 /***/ }),
 
-/***/ 378:
+/***/ 369:
 /*!*************************************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/overlay/index.js ***!
   \*************************************************************************************************************/
@@ -12437,7 +12788,7 @@ var _component = __webpack_require__(/*! ../common/component */ 32);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-var _component = __webpack_require__(/*! ../common/component */ 32);
+var _component = __webpack_require__(/*! ../common/component */ 227);
 (0, _component.VantComponent)({
   props: {
     show: Boolean,
@@ -12472,7 +12823,7 @@ var _component = __webpack_require__(/*! ../common/component */ 32);
 
 /***/ }),
 
-/***/ 426:
+/***/ 417:
 /*!**************************************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/components/w-picker/areadata/areadata.js ***!
   \**************************************************************************************************************/
@@ -23765,799 +24116,7 @@ cityData;exports.default = _default;
 
 /***/ }),
 
-/***/ 44:
-/*!**********************************************************!*\
-  !*** ./node_modules/@babel/runtime/regenerator/index.js ***!
-  \**********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__(/*! regenerator-runtime */ 45);
-
-
-/***/ }),
-
-/***/ 45:
-/*!************************************************************!*\
-  !*** ./node_modules/regenerator-runtime/runtime-module.js ***!
-  \************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-/**
- * Copyright (c) 2014-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
-
-// This method of obtaining a reference to the global object needs to be
-// kept identical to the way it is obtained in runtime.js
-var g = (function() {
-  return this || (typeof self === "object" && self);
-})() || Function("return this")();
-
-// Use `getOwnPropertyNames` because not all browsers support calling
-// `hasOwnProperty` on the global `self` object in a worker. See #183.
-var hadRuntime = g.regeneratorRuntime &&
-  Object.getOwnPropertyNames(g).indexOf("regeneratorRuntime") >= 0;
-
-// Save the old regeneratorRuntime in case it needs to be restored later.
-var oldRuntime = hadRuntime && g.regeneratorRuntime;
-
-// Force reevalutation of runtime.js.
-g.regeneratorRuntime = undefined;
-
-module.exports = __webpack_require__(/*! ./runtime */ 46);
-
-if (hadRuntime) {
-  // Restore the original runtime.
-  g.regeneratorRuntime = oldRuntime;
-} else {
-  // Remove the global property added by runtime.js.
-  try {
-    delete g.regeneratorRuntime;
-  } catch(e) {
-    g.regeneratorRuntime = undefined;
-  }
-}
-
-
-/***/ }),
-
-/***/ 46:
-/*!*****************************************************!*\
-  !*** ./node_modules/regenerator-runtime/runtime.js ***!
-  \*****************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-/**
- * Copyright (c) 2014-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
-
-!(function(global) {
-  "use strict";
-
-  var Op = Object.prototype;
-  var hasOwn = Op.hasOwnProperty;
-  var undefined; // More compressible than void 0.
-  var $Symbol = typeof Symbol === "function" ? Symbol : {};
-  var iteratorSymbol = $Symbol.iterator || "@@iterator";
-  var asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator";
-  var toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag";
-
-  var inModule = typeof module === "object";
-  var runtime = global.regeneratorRuntime;
-  if (runtime) {
-    if (inModule) {
-      // If regeneratorRuntime is defined globally and we're in a module,
-      // make the exports object identical to regeneratorRuntime.
-      module.exports = runtime;
-    }
-    // Don't bother evaluating the rest of this file if the runtime was
-    // already defined globally.
-    return;
-  }
-
-  // Define the runtime globally (as expected by generated code) as either
-  // module.exports (if we're in a module) or a new, empty object.
-  runtime = global.regeneratorRuntime = inModule ? module.exports : {};
-
-  function wrap(innerFn, outerFn, self, tryLocsList) {
-    // If outerFn provided and outerFn.prototype is a Generator, then outerFn.prototype instanceof Generator.
-    var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator;
-    var generator = Object.create(protoGenerator.prototype);
-    var context = new Context(tryLocsList || []);
-
-    // The ._invoke method unifies the implementations of the .next,
-    // .throw, and .return methods.
-    generator._invoke = makeInvokeMethod(innerFn, self, context);
-
-    return generator;
-  }
-  runtime.wrap = wrap;
-
-  // Try/catch helper to minimize deoptimizations. Returns a completion
-  // record like context.tryEntries[i].completion. This interface could
-  // have been (and was previously) designed to take a closure to be
-  // invoked without arguments, but in all the cases we care about we
-  // already have an existing method we want to call, so there's no need
-  // to create a new function object. We can even get away with assuming
-  // the method takes exactly one argument, since that happens to be true
-  // in every case, so we don't have to touch the arguments object. The
-  // only additional allocation required is the completion record, which
-  // has a stable shape and so hopefully should be cheap to allocate.
-  function tryCatch(fn, obj, arg) {
-    try {
-      return { type: "normal", arg: fn.call(obj, arg) };
-    } catch (err) {
-      return { type: "throw", arg: err };
-    }
-  }
-
-  var GenStateSuspendedStart = "suspendedStart";
-  var GenStateSuspendedYield = "suspendedYield";
-  var GenStateExecuting = "executing";
-  var GenStateCompleted = "completed";
-
-  // Returning this object from the innerFn has the same effect as
-  // breaking out of the dispatch switch statement.
-  var ContinueSentinel = {};
-
-  // Dummy constructor functions that we use as the .constructor and
-  // .constructor.prototype properties for functions that return Generator
-  // objects. For full spec compliance, you may wish to configure your
-  // minifier not to mangle the names of these two functions.
-  function Generator() {}
-  function GeneratorFunction() {}
-  function GeneratorFunctionPrototype() {}
-
-  // This is a polyfill for %IteratorPrototype% for environments that
-  // don't natively support it.
-  var IteratorPrototype = {};
-  IteratorPrototype[iteratorSymbol] = function () {
-    return this;
-  };
-
-  var getProto = Object.getPrototypeOf;
-  var NativeIteratorPrototype = getProto && getProto(getProto(values([])));
-  if (NativeIteratorPrototype &&
-      NativeIteratorPrototype !== Op &&
-      hasOwn.call(NativeIteratorPrototype, iteratorSymbol)) {
-    // This environment has a native %IteratorPrototype%; use it instead
-    // of the polyfill.
-    IteratorPrototype = NativeIteratorPrototype;
-  }
-
-  var Gp = GeneratorFunctionPrototype.prototype =
-    Generator.prototype = Object.create(IteratorPrototype);
-  GeneratorFunction.prototype = Gp.constructor = GeneratorFunctionPrototype;
-  GeneratorFunctionPrototype.constructor = GeneratorFunction;
-  GeneratorFunctionPrototype[toStringTagSymbol] =
-    GeneratorFunction.displayName = "GeneratorFunction";
-
-  // Helper for defining the .next, .throw, and .return methods of the
-  // Iterator interface in terms of a single ._invoke method.
-  function defineIteratorMethods(prototype) {
-    ["next", "throw", "return"].forEach(function(method) {
-      prototype[method] = function(arg) {
-        return this._invoke(method, arg);
-      };
-    });
-  }
-
-  runtime.isGeneratorFunction = function(genFun) {
-    var ctor = typeof genFun === "function" && genFun.constructor;
-    return ctor
-      ? ctor === GeneratorFunction ||
-        // For the native GeneratorFunction constructor, the best we can
-        // do is to check its .name property.
-        (ctor.displayName || ctor.name) === "GeneratorFunction"
-      : false;
-  };
-
-  runtime.mark = function(genFun) {
-    if (Object.setPrototypeOf) {
-      Object.setPrototypeOf(genFun, GeneratorFunctionPrototype);
-    } else {
-      genFun.__proto__ = GeneratorFunctionPrototype;
-      if (!(toStringTagSymbol in genFun)) {
-        genFun[toStringTagSymbol] = "GeneratorFunction";
-      }
-    }
-    genFun.prototype = Object.create(Gp);
-    return genFun;
-  };
-
-  // Within the body of any async function, `await x` is transformed to
-  // `yield regeneratorRuntime.awrap(x)`, so that the runtime can test
-  // `hasOwn.call(value, "__await")` to determine if the yielded value is
-  // meant to be awaited.
-  runtime.awrap = function(arg) {
-    return { __await: arg };
-  };
-
-  function AsyncIterator(generator) {
-    function invoke(method, arg, resolve, reject) {
-      var record = tryCatch(generator[method], generator, arg);
-      if (record.type === "throw") {
-        reject(record.arg);
-      } else {
-        var result = record.arg;
-        var value = result.value;
-        if (value &&
-            typeof value === "object" &&
-            hasOwn.call(value, "__await")) {
-          return Promise.resolve(value.__await).then(function(value) {
-            invoke("next", value, resolve, reject);
-          }, function(err) {
-            invoke("throw", err, resolve, reject);
-          });
-        }
-
-        return Promise.resolve(value).then(function(unwrapped) {
-          // When a yielded Promise is resolved, its final value becomes
-          // the .value of the Promise<{value,done}> result for the
-          // current iteration.
-          result.value = unwrapped;
-          resolve(result);
-        }, function(error) {
-          // If a rejected Promise was yielded, throw the rejection back
-          // into the async generator function so it can be handled there.
-          return invoke("throw", error, resolve, reject);
-        });
-      }
-    }
-
-    var previousPromise;
-
-    function enqueue(method, arg) {
-      function callInvokeWithMethodAndArg() {
-        return new Promise(function(resolve, reject) {
-          invoke(method, arg, resolve, reject);
-        });
-      }
-
-      return previousPromise =
-        // If enqueue has been called before, then we want to wait until
-        // all previous Promises have been resolved before calling invoke,
-        // so that results are always delivered in the correct order. If
-        // enqueue has not been called before, then it is important to
-        // call invoke immediately, without waiting on a callback to fire,
-        // so that the async generator function has the opportunity to do
-        // any necessary setup in a predictable way. This predictability
-        // is why the Promise constructor synchronously invokes its
-        // executor callback, and why async functions synchronously
-        // execute code before the first await. Since we implement simple
-        // async functions in terms of async generators, it is especially
-        // important to get this right, even though it requires care.
-        previousPromise ? previousPromise.then(
-          callInvokeWithMethodAndArg,
-          // Avoid propagating failures to Promises returned by later
-          // invocations of the iterator.
-          callInvokeWithMethodAndArg
-        ) : callInvokeWithMethodAndArg();
-    }
-
-    // Define the unified helper method that is used to implement .next,
-    // .throw, and .return (see defineIteratorMethods).
-    this._invoke = enqueue;
-  }
-
-  defineIteratorMethods(AsyncIterator.prototype);
-  AsyncIterator.prototype[asyncIteratorSymbol] = function () {
-    return this;
-  };
-  runtime.AsyncIterator = AsyncIterator;
-
-  // Note that simple async functions are implemented on top of
-  // AsyncIterator objects; they just return a Promise for the value of
-  // the final result produced by the iterator.
-  runtime.async = function(innerFn, outerFn, self, tryLocsList) {
-    var iter = new AsyncIterator(
-      wrap(innerFn, outerFn, self, tryLocsList)
-    );
-
-    return runtime.isGeneratorFunction(outerFn)
-      ? iter // If outerFn is a generator, return the full iterator.
-      : iter.next().then(function(result) {
-          return result.done ? result.value : iter.next();
-        });
-  };
-
-  function makeInvokeMethod(innerFn, self, context) {
-    var state = GenStateSuspendedStart;
-
-    return function invoke(method, arg) {
-      if (state === GenStateExecuting) {
-        throw new Error("Generator is already running");
-      }
-
-      if (state === GenStateCompleted) {
-        if (method === "throw") {
-          throw arg;
-        }
-
-        // Be forgiving, per 25.3.3.3.3 of the spec:
-        // https://people.mozilla.org/~jorendorff/es6-draft.html#sec-generatorresume
-        return doneResult();
-      }
-
-      context.method = method;
-      context.arg = arg;
-
-      while (true) {
-        var delegate = context.delegate;
-        if (delegate) {
-          var delegateResult = maybeInvokeDelegate(delegate, context);
-          if (delegateResult) {
-            if (delegateResult === ContinueSentinel) continue;
-            return delegateResult;
-          }
-        }
-
-        if (context.method === "next") {
-          // Setting context._sent for legacy support of Babel's
-          // function.sent implementation.
-          context.sent = context._sent = context.arg;
-
-        } else if (context.method === "throw") {
-          if (state === GenStateSuspendedStart) {
-            state = GenStateCompleted;
-            throw context.arg;
-          }
-
-          context.dispatchException(context.arg);
-
-        } else if (context.method === "return") {
-          context.abrupt("return", context.arg);
-        }
-
-        state = GenStateExecuting;
-
-        var record = tryCatch(innerFn, self, context);
-        if (record.type === "normal") {
-          // If an exception is thrown from innerFn, we leave state ===
-          // GenStateExecuting and loop back for another invocation.
-          state = context.done
-            ? GenStateCompleted
-            : GenStateSuspendedYield;
-
-          if (record.arg === ContinueSentinel) {
-            continue;
-          }
-
-          return {
-            value: record.arg,
-            done: context.done
-          };
-
-        } else if (record.type === "throw") {
-          state = GenStateCompleted;
-          // Dispatch the exception by looping back around to the
-          // context.dispatchException(context.arg) call above.
-          context.method = "throw";
-          context.arg = record.arg;
-        }
-      }
-    };
-  }
-
-  // Call delegate.iterator[context.method](context.arg) and handle the
-  // result, either by returning a { value, done } result from the
-  // delegate iterator, or by modifying context.method and context.arg,
-  // setting context.delegate to null, and returning the ContinueSentinel.
-  function maybeInvokeDelegate(delegate, context) {
-    var method = delegate.iterator[context.method];
-    if (method === undefined) {
-      // A .throw or .return when the delegate iterator has no .throw
-      // method always terminates the yield* loop.
-      context.delegate = null;
-
-      if (context.method === "throw") {
-        if (delegate.iterator.return) {
-          // If the delegate iterator has a return method, give it a
-          // chance to clean up.
-          context.method = "return";
-          context.arg = undefined;
-          maybeInvokeDelegate(delegate, context);
-
-          if (context.method === "throw") {
-            // If maybeInvokeDelegate(context) changed context.method from
-            // "return" to "throw", let that override the TypeError below.
-            return ContinueSentinel;
-          }
-        }
-
-        context.method = "throw";
-        context.arg = new TypeError(
-          "The iterator does not provide a 'throw' method");
-      }
-
-      return ContinueSentinel;
-    }
-
-    var record = tryCatch(method, delegate.iterator, context.arg);
-
-    if (record.type === "throw") {
-      context.method = "throw";
-      context.arg = record.arg;
-      context.delegate = null;
-      return ContinueSentinel;
-    }
-
-    var info = record.arg;
-
-    if (! info) {
-      context.method = "throw";
-      context.arg = new TypeError("iterator result is not an object");
-      context.delegate = null;
-      return ContinueSentinel;
-    }
-
-    if (info.done) {
-      // Assign the result of the finished delegate to the temporary
-      // variable specified by delegate.resultName (see delegateYield).
-      context[delegate.resultName] = info.value;
-
-      // Resume execution at the desired location (see delegateYield).
-      context.next = delegate.nextLoc;
-
-      // If context.method was "throw" but the delegate handled the
-      // exception, let the outer generator proceed normally. If
-      // context.method was "next", forget context.arg since it has been
-      // "consumed" by the delegate iterator. If context.method was
-      // "return", allow the original .return call to continue in the
-      // outer generator.
-      if (context.method !== "return") {
-        context.method = "next";
-        context.arg = undefined;
-      }
-
-    } else {
-      // Re-yield the result returned by the delegate method.
-      return info;
-    }
-
-    // The delegate iterator is finished, so forget it and continue with
-    // the outer generator.
-    context.delegate = null;
-    return ContinueSentinel;
-  }
-
-  // Define Generator.prototype.{next,throw,return} in terms of the
-  // unified ._invoke helper method.
-  defineIteratorMethods(Gp);
-
-  Gp[toStringTagSymbol] = "Generator";
-
-  // A Generator should always return itself as the iterator object when the
-  // @@iterator function is called on it. Some browsers' implementations of the
-  // iterator prototype chain incorrectly implement this, causing the Generator
-  // object to not be returned from this call. This ensures that doesn't happen.
-  // See https://github.com/facebook/regenerator/issues/274 for more details.
-  Gp[iteratorSymbol] = function() {
-    return this;
-  };
-
-  Gp.toString = function() {
-    return "[object Generator]";
-  };
-
-  function pushTryEntry(locs) {
-    var entry = { tryLoc: locs[0] };
-
-    if (1 in locs) {
-      entry.catchLoc = locs[1];
-    }
-
-    if (2 in locs) {
-      entry.finallyLoc = locs[2];
-      entry.afterLoc = locs[3];
-    }
-
-    this.tryEntries.push(entry);
-  }
-
-  function resetTryEntry(entry) {
-    var record = entry.completion || {};
-    record.type = "normal";
-    delete record.arg;
-    entry.completion = record;
-  }
-
-  function Context(tryLocsList) {
-    // The root entry object (effectively a try statement without a catch
-    // or a finally block) gives us a place to store values thrown from
-    // locations where there is no enclosing try statement.
-    this.tryEntries = [{ tryLoc: "root" }];
-    tryLocsList.forEach(pushTryEntry, this);
-    this.reset(true);
-  }
-
-  runtime.keys = function(object) {
-    var keys = [];
-    for (var key in object) {
-      keys.push(key);
-    }
-    keys.reverse();
-
-    // Rather than returning an object with a next method, we keep
-    // things simple and return the next function itself.
-    return function next() {
-      while (keys.length) {
-        var key = keys.pop();
-        if (key in object) {
-          next.value = key;
-          next.done = false;
-          return next;
-        }
-      }
-
-      // To avoid creating an additional object, we just hang the .value
-      // and .done properties off the next function object itself. This
-      // also ensures that the minifier will not anonymize the function.
-      next.done = true;
-      return next;
-    };
-  };
-
-  function values(iterable) {
-    if (iterable) {
-      var iteratorMethod = iterable[iteratorSymbol];
-      if (iteratorMethod) {
-        return iteratorMethod.call(iterable);
-      }
-
-      if (typeof iterable.next === "function") {
-        return iterable;
-      }
-
-      if (!isNaN(iterable.length)) {
-        var i = -1, next = function next() {
-          while (++i < iterable.length) {
-            if (hasOwn.call(iterable, i)) {
-              next.value = iterable[i];
-              next.done = false;
-              return next;
-            }
-          }
-
-          next.value = undefined;
-          next.done = true;
-
-          return next;
-        };
-
-        return next.next = next;
-      }
-    }
-
-    // Return an iterator with no values.
-    return { next: doneResult };
-  }
-  runtime.values = values;
-
-  function doneResult() {
-    return { value: undefined, done: true };
-  }
-
-  Context.prototype = {
-    constructor: Context,
-
-    reset: function(skipTempReset) {
-      this.prev = 0;
-      this.next = 0;
-      // Resetting context._sent for legacy support of Babel's
-      // function.sent implementation.
-      this.sent = this._sent = undefined;
-      this.done = false;
-      this.delegate = null;
-
-      this.method = "next";
-      this.arg = undefined;
-
-      this.tryEntries.forEach(resetTryEntry);
-
-      if (!skipTempReset) {
-        for (var name in this) {
-          // Not sure about the optimal order of these conditions:
-          if (name.charAt(0) === "t" &&
-              hasOwn.call(this, name) &&
-              !isNaN(+name.slice(1))) {
-            this[name] = undefined;
-          }
-        }
-      }
-    },
-
-    stop: function() {
-      this.done = true;
-
-      var rootEntry = this.tryEntries[0];
-      var rootRecord = rootEntry.completion;
-      if (rootRecord.type === "throw") {
-        throw rootRecord.arg;
-      }
-
-      return this.rval;
-    },
-
-    dispatchException: function(exception) {
-      if (this.done) {
-        throw exception;
-      }
-
-      var context = this;
-      function handle(loc, caught) {
-        record.type = "throw";
-        record.arg = exception;
-        context.next = loc;
-
-        if (caught) {
-          // If the dispatched exception was caught by a catch block,
-          // then let that catch block handle the exception normally.
-          context.method = "next";
-          context.arg = undefined;
-        }
-
-        return !! caught;
-      }
-
-      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
-        var entry = this.tryEntries[i];
-        var record = entry.completion;
-
-        if (entry.tryLoc === "root") {
-          // Exception thrown outside of any try block that could handle
-          // it, so set the completion value of the entire function to
-          // throw the exception.
-          return handle("end");
-        }
-
-        if (entry.tryLoc <= this.prev) {
-          var hasCatch = hasOwn.call(entry, "catchLoc");
-          var hasFinally = hasOwn.call(entry, "finallyLoc");
-
-          if (hasCatch && hasFinally) {
-            if (this.prev < entry.catchLoc) {
-              return handle(entry.catchLoc, true);
-            } else if (this.prev < entry.finallyLoc) {
-              return handle(entry.finallyLoc);
-            }
-
-          } else if (hasCatch) {
-            if (this.prev < entry.catchLoc) {
-              return handle(entry.catchLoc, true);
-            }
-
-          } else if (hasFinally) {
-            if (this.prev < entry.finallyLoc) {
-              return handle(entry.finallyLoc);
-            }
-
-          } else {
-            throw new Error("try statement without catch or finally");
-          }
-        }
-      }
-    },
-
-    abrupt: function(type, arg) {
-      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
-        var entry = this.tryEntries[i];
-        if (entry.tryLoc <= this.prev &&
-            hasOwn.call(entry, "finallyLoc") &&
-            this.prev < entry.finallyLoc) {
-          var finallyEntry = entry;
-          break;
-        }
-      }
-
-      if (finallyEntry &&
-          (type === "break" ||
-           type === "continue") &&
-          finallyEntry.tryLoc <= arg &&
-          arg <= finallyEntry.finallyLoc) {
-        // Ignore the finally entry if control is not jumping to a
-        // location outside the try/catch block.
-        finallyEntry = null;
-      }
-
-      var record = finallyEntry ? finallyEntry.completion : {};
-      record.type = type;
-      record.arg = arg;
-
-      if (finallyEntry) {
-        this.method = "next";
-        this.next = finallyEntry.finallyLoc;
-        return ContinueSentinel;
-      }
-
-      return this.complete(record);
-    },
-
-    complete: function(record, afterLoc) {
-      if (record.type === "throw") {
-        throw record.arg;
-      }
-
-      if (record.type === "break" ||
-          record.type === "continue") {
-        this.next = record.arg;
-      } else if (record.type === "return") {
-        this.rval = this.arg = record.arg;
-        this.method = "return";
-        this.next = "end";
-      } else if (record.type === "normal" && afterLoc) {
-        this.next = afterLoc;
-      }
-
-      return ContinueSentinel;
-    },
-
-    finish: function(finallyLoc) {
-      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
-        var entry = this.tryEntries[i];
-        if (entry.finallyLoc === finallyLoc) {
-          this.complete(entry.completion, entry.afterLoc);
-          resetTryEntry(entry);
-          return ContinueSentinel;
-        }
-      }
-    },
-
-    "catch": function(tryLoc) {
-      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
-        var entry = this.tryEntries[i];
-        if (entry.tryLoc === tryLoc) {
-          var record = entry.completion;
-          if (record.type === "throw") {
-            var thrown = record.arg;
-            resetTryEntry(entry);
-          }
-          return thrown;
-        }
-      }
-
-      // The context.catch method must only be called with a location
-      // argument that corresponds to a known catch block.
-      throw new Error("illegal catch attempt");
-    },
-
-    delegateYield: function(iterable, resultName, nextLoc) {
-      this.delegate = {
-        iterator: values(iterable),
-        resultName: resultName,
-        nextLoc: nextLoc
-      };
-
-      if (this.method === "next") {
-        // Deliberately forget the last sent value so that we don't
-        // accidentally pass it on to the delegate.
-        this.arg = undefined;
-      }
-
-      return ContinueSentinel;
-    }
-  };
-})(
-  // In sloppy mode, unbound `this` refers to the global object, fallback to
-  // Function constructor if we're in global strict mode. That is sadly a form
-  // of indirect eval which violates Content Security Policy.
-  (function() {
-    return this || (typeof self === "object" && self);
-  })() || Function("return this")()
-);
-
-
-/***/ }),
-
-/***/ 47:
+/***/ 43:
 /*!***************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/static/js/chat.js ***!
   \***************************************************************************************/
@@ -24648,7 +24207,7 @@ var _http_commons = _interopRequireDefault(__webpack_require__(/*! ./http_common
 
 /***/ }),
 
-/***/ 48:
+/***/ 44:
 /*!***********************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/static/js/notification.js ***!
   \***********************************************************************************************/
@@ -25637,19 +25196,7 @@ module.exports = {"_from":"@dcloudio/uni-stat@next","_id":"@dcloudio/uni-stat@2.
 
 /***/ }),
 
-/***/ 7:
-/*!*************************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/pages.json?{"type":"style"} ***!
-  \*************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _default = { "pages": { "pages/index/index": { "navigationBarTitleText": "讨论区" }, "pages/message/message": {}, "pages/login/login": {}, "pages/me/me": {}, "pages/favorite/favorite": {}, "pages/conurse_ware/course_ware": {}, "pages/contest/contest": {}, "pages/helpme/helpme": {}, "pages/course/course": {}, "pages/course_settings/course_settings": {}, "pages/topics/topics": {}, "pages/create_topic/create_topic": {}, "pages/topic/topic": {}, "pages/sub_comments/sub_comments": {}, "pages/member_list/member_list": {}, "pages/chat/chat": {}, "pages/create_contest/create_contest": {}, "pages/revise/revise": {}, "pages/contest_list/contest_list": {}, "pages/create_notification/create_notification": {}, "pages/course_wares/course_wares": {}, "pages/create_class/create_class": {}, "pages/class/class": {}, "pages/score_calculate/score_calculate": {} }, "globalStyle": { "navigationBarTextStyle": "black", "navigationBarTitleText": "小课堂", "navigationBarBackgroundColor": "#F8F8F8", "backgroundColor": "#F2F2F2" } };exports.default = _default;
-
-/***/ }),
-
-/***/ 71:
+/***/ 61:
 /*!*******************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/static/js/favorite.js ***!
   \*******************************************************************************************/
@@ -25761,24 +25308,43 @@ var _http_commons = _interopRequireDefault(__webpack_require__(/*! ./http_common
         } });
 
     });
+  },
+
+  deleteFavorite: function deleteFavorite(favoriteId) {
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: _api_reference.default.FAVORITE_BY_ID + '?favoriteId=' + favoriteId,
+        method: "DELETE",
+        header: _http_commons.default.getAuthenticationHeader(),
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+          reject(err);
+        } });
+
+    });
   } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 
 /***/ }),
 
-/***/ 8:
-/*!************************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/pages.json?{"type":"stat"} ***!
-  \************************************************************************************************/
+/***/ 7:
+/*!*************************************************************************************************!*\
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/pages.json?{"type":"style"} ***!
+  \*************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _default = { "appid": "" };exports.default = _default;
+Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _default = { "pages": { "pages/index/index": { "usingComponents": { "create-course-modal": "/components/CreateCourse", "join-course-modal": "/components/JoinCourse", "s-tabs": "/components/s-tabs/index", "s-tab": "/components/s-tab/index", "uni-load-more": "/components/uni-load-more/uni-load-more", "van-grid": "/wxcomponents/vant/dist/grid/index", "van-grid-item": "/wxcomponents/vant/dist/grid-item/index", "van-tab": "/wxcomponents/vant/dist/tab/index", "van-tabs": "/wxcomponents/vant/dist/tabs/index", "van-notify": "/wxcomponents/vant/dist/notify/index", "van-icon": "/wxcomponents/vant/dist/icon/index", "van-button": "/wxcomponents/vant/dist/button/index", "van-swipe-cell": "/wxcomponents/vant/dist/swipe-cell/index", "van-dialog": "/wxcomponents/vant/dist/dialog/index", "van-divider": "/wxcomponents/vant/dist/divider/index" }, "usingAutoImportComponents": { "uni-load-more": "/components/uni-load-more/uni-load-more" } }, "pages/message/message": { "navigationBarTitleText": "消息", "usingComponents": { "notification": "/components/Notification", "s-tabs": "/components/s-tabs/index", "s-tab": "/components/s-tab/index", "van-tag": "/wxcomponents/vant/dist/tag/index", "van-image": "/wxcomponents/vant/dist/image/index", "uni-load-more": "/components/uni-load-more/uni-load-more" }, "usingAutoImportComponents": { "uni-load-more": "/components/uni-load-more/uni-load-more" } }, "pages/me/me": { "navigationBarTitleText": "个人信息", "usingComponents": { "update-user-info": "/components/UpdateUserInfo", "van-button": "/wxcomponents/vant/dist/button/index", "van-notify": "/wxcomponents/vant/dist/notify/index", "van-image": "/wxcomponents/vant/dist/image/index" }, "usingAutoImportComponents": {} }, "pages/favorite/favorite": { "navigationBarTitleText": "收藏夹", "enablePullDownRefresh": true, "usingComponents": { "van-tag": "/wxcomponents/vant/dist/tag/index", "uni-load-more": "/components/uni-load-more/uni-load-more", "s-tabs": "/components/s-tabs/index", "s-tab": "/components/s-tab/index" }, "usingAutoImportComponents": { "uni-load-more": "/components/uni-load-more/uni-load-more" } }, "pages/conurse_ware/course_ware": { "navigationBarTitleText": "课件", "usingComponents": { "l-file": "/components/l-file/l-file", "read-course-ware-page": "/components/ReadCourseWarePage", "van-notify": "/wxcomponents/vant/dist/notify/index", "van-button": "/wxcomponents/vant/dist/button/index", "van-icon": "/wxcomponents/vant/dist/icon/index" }, "usingAutoImportComponents": { "l-file": "/components/l-file/l-file" } }, "pages/contest/contest": { "navigationBarTitleText": "测试", "usingComponents": { "uni-countdown": "/components/uni-countdown/uni-countdown", "create-answer": "/components/CreateAnswer", "w-picker": "/components/w-picker/w-picker", "van-button": "/wxcomponents/vant/dist/button/index", "van-icon": "/wxcomponents/vant/dist/icon/index", "van-dialog": "/wxcomponents/vant/dist/dialog/index", "van-divider": "/wxcomponents/vant/dist/divider/index", "van-notify": "/wxcomponents/vant/dist/notify/index" }, "usingAutoImportComponents": { "uni-countdown": "/components/uni-countdown/uni-countdown" } }, "pages/helpme/helpme": { "navigationBarTitleText": "帮助中心", "usingComponents": {}, "usingAutoImportComponents": {} }, "pages/course/course": { "enablePullDownRefresh": true, "usingComponents": { "l-file": "/components/l-file/l-file", "single-submit-popup": "/components/SingleSubmitPopup", "uni-load-more": "/components/uni-load-more/uni-load-more", "s-tabs": "/components/s-tabs/index", "s-tab": "/components/s-tab/index", "van-tag": "/wxcomponents/vant/dist/tag/index", "van-grid": "/wxcomponents/vant/dist/grid/index", "van-grid-item": "/wxcomponents/vant/dist/grid-item/index", "van-notify": "/wxcomponents/vant/dist/notify/index", "van-icon": "/wxcomponents/vant/dist/icon/index", "van-button": "/wxcomponents/vant/dist/button/index", "van-steps": "/wxcomponents/vant/dist/steps/index", "van-dialog": "/wxcomponents/vant/dist/dialog/index" }, "usingAutoImportComponents": { "l-file": "/components/l-file/l-file", "uni-load-more": "/components/uni-load-more/uni-load-more" } }, "pages/course_settings/course_settings": { "navigationBarTitleText": "课程信息", "usingComponents": { "van-notify": "/wxcomponents/vant/dist/notify/index", "van-button": "/wxcomponents/vant/dist/button/index" }, "usingAutoImportComponents": {} }, "pages/topics/topics": { "enablePullDownRefresh": true, "navigationBarTitleText": "讨论区", "usingComponents": { "ms-dropdown-menu": "/components/ms-dropdown/dropdown-menu", "ms-dropdown-item": "/components/ms-dropdown/dropdown-item", "s-tabs": "/components/s-tabs/index", "s-tab": "/components/s-tab/index", "van-notify": "/wxcomponents/vant/dist/notify/index", "uni-load-more": "/components/uni-load-more/uni-load-more", "van-icon": "/wxcomponents/vant/dist/icon/index", "van-image": "/wxcomponents/vant/dist/image/index" }, "usingAutoImportComponents": { "uni-load-more": "/components/uni-load-more/uni-load-more" } }, "pages/create_topic/create_topic": { "usingComponents": { "van-notify": "/wxcomponents/vant/dist/notify/index", "van-button": "/wxcomponents/vant/dist/button/index" }, "usingAutoImportComponents": {} }, "pages/topic/topic": { "enablePullDownRefresh": true, "usingComponents": { "s-tabs": "/components/s-tabs/index", "s-tab": "/components/s-tab/index", "single-submit-popup": "/components/SingleSubmitPopup", "van-notify": "/wxcomponents/vant/dist/notify/index", "uni-load-more": "/components/uni-load-more/uni-load-more", "van-icon": "/wxcomponents/vant/dist/icon/index", "van-image": "/wxcomponents/vant/dist/image/index", "van-dialog": "/wxcomponents/vant/dist/dialog/index" }, "usingAutoImportComponents": { "uni-load-more": "/components/uni-load-more/uni-load-more" } }, "pages/sub_comments/sub_comments": { "usingComponents": { "single-submit-popup": "/components/SingleSubmitPopup", "van-notify": "/wxcomponents/vant/dist/notify/index", "uni-load-more": "/components/uni-load-more/uni-load-more", "van-icon": "/wxcomponents/vant/dist/icon/index", "van-image": "/wxcomponents/vant/dist/image/index" }, "usingAutoImportComponents": { "uni-load-more": "/components/uni-load-more/uni-load-more" } }, "pages/member_list/member_list": { "navigationBarTitleText": "成员列表", "usingComponents": { "van-index-bar": "/wxcomponents/vant/dist/index-bar/index", "van-index-anchor": "/wxcomponents/vant/dist/index-anchor/index", "van-cell": "/wxcomponents/vant/dist/cell/index", "van-notify": "/wxcomponents/vant/dist/notify/index", "van-cell-group": "/wxcomponents/vant/dist/cell-group/index", "van-swipe-cell": "/wxcomponents/vant/dist/swipe-cell/index" }, "usingAutoImportComponents": {} }, "pages/chat/chat": { "usingComponents": { "van-notify": "/wxcomponents/vant/dist/notify/index", "uni-load-more": "/components/uni-load-more/uni-load-more", "van-icon": "/wxcomponents/vant/dist/icon/index", "van-image": "/wxcomponents/vant/dist/image/index" }, "usingAutoImportComponents": { "uni-load-more": "/components/uni-load-more/uni-load-more" } }, "pages/create_contest/create_contest": { "usingComponents": { "create-question": "/components/CreateQuestion", "w-picker": "/components/w-picker/w-picker", "van-button": "/wxcomponents/vant/dist/button/index", "van-icon": "/wxcomponents/vant/dist/icon/index", "van-dialog": "/wxcomponents/vant/dist/dialog/index", "van-divider": "/wxcomponents/vant/dist/divider/index", "van-notify": "/wxcomponents/vant/dist/notify/index" }, "usingAutoImportComponents": { "w-picker": "/components/w-picker/w-picker" } }, "pages/revise/revise": { "navigationBarTitleText": "批改列表", "usingComponents": { "create-revise": "/components/CreateRevise", "van-index-bar": "/wxcomponents/vant/dist/index-bar/index", "van-index-anchor": "/wxcomponents/vant/dist/index-anchor/index", "van-notify": "/wxcomponents/vant/dist/notify/index" }, "usingAutoImportComponents": {} }, "pages/contest_list/contest_list": { "navigationBarTitleText": "试卷库", "usingComponents": { "uni-load-more": "/components/uni-load-more/uni-load-more", "s-tabs": "/components/s-tabs/index", "s-tab": "/components/s-tab/index" }, "usingAutoImportComponents": { "uni-load-more": "/components/uni-load-more/uni-load-more" } }, "pages/create_notification/create_notification": { "usingComponents": { "w-picker": "/components/w-picker/w-picker", "van-notify": "/wxcomponents/vant/dist/notify/index", "van-button": "/wxcomponents/vant/dist/button/index" }, "usingAutoImportComponents": { "w-picker": "/components/w-picker/w-picker" } }, "pages/course_wares/course_wares": { "navigationBarTitleText": "课件库", "usingComponents": { "uni-load-more": "/components/uni-load-more/uni-load-more", "s-tabs": "/components/s-tabs/index", "s-tab": "/components/s-tab/index" }, "usingAutoImportComponents": { "uni-load-more": "/components/uni-load-more/uni-load-more" } }, "pages/create_class/create_class": { "usingComponents": { "single-submit-popup": "/components/SingleSubmitPopup", "l-file": "/components/l-file/l-file", "create-quiz": "/components/CreateQuiz", "van-swipe-cell": "/wxcomponents/vant/dist/swipe-cell/index", "van-button": "/wxcomponents/vant/dist/button/index", "van-notify": "/wxcomponents/vant/dist/notify/index" }, "usingAutoImportComponents": { "l-file": "/components/l-file/l-file" } }, "pages/class/class": { "usingComponents": { "van-button": "/wxcomponents/vant/dist/button/index", "van-notify": "/wxcomponents/vant/dist/notify/index" }, "usingAutoImportComponents": {} }, "pages/score_calculate/score_calculate": { "usingComponents": { "van-notify": "/wxcomponents/vant/dist/notify/index", "van-button": "/wxcomponents/vant/dist/button/index" }, "usingAutoImportComponents": {} } }, "globalStyle": { "navigationBarTextStyle": "black", "navigationBarTitleText": "课堂助手", "navigationBarBackgroundColor": "#F8F8F8", "backgroundColor": "#F2F2F2" } };exports.default = _default;
 
 /***/ }),
 
-/***/ 80:
+/***/ 70:
 /*!**********************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/static/js/course_ware.js ***!
   \**********************************************************************************************/
@@ -25787,17 +25353,36 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _api_reference = _interopRequireDefault(__webpack_require__(/*! @/static/js/api_reference.js */ 15));
-var _http_commons = _interopRequireDefault(__webpack_require__(/*! @/static/js/http_commons.js */ 18));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var _default =
+var _http_commons = _interopRequireDefault(__webpack_require__(/*! @/static/js/http_commons.js */ 18));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}var _default = _defineProperty({
 
-{
+
 
   /**
-   * @param {String} courseWareId
-   */
+                                                                                                                                                                                                                                                                                                                                                                                                                            * @param {String} courseWareId
+                                                                                                                                                                                                                                                                                                                                                                                                                            */
   getCourseWare: function getCourseWare(courseWareId) {
     return new Promise(function (resolve, reject) {
       uni.request({
         url: _api_reference.default.COURSE_WARE + '?courseWareId=' + courseWareId,
+        header: _http_commons.default.getAuthenticationHeader(),
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+          reject(err);
+        } });
+
+    });
+  },
+
+  deleteCourseWare: function deleteCourseWare(courseWareId) {
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: _api_reference.default.COURSE_WARE + '?courseWareId=' + courseWareId,
+        method: "DELETE",
         header: _http_commons.default.getAuthenticationHeader(),
         success: function success(resp) {
           if (_http_commons.default.successCheck(resp)) {
@@ -25908,8 +25493,9 @@ var _http_commons = _interopRequireDefault(__webpack_require__(/*! @/static/js/h
   updateComment: function updateComment(courseWareId, comment) {
     return new Promise(function (resolve, reject) {
       uni.request({
-        url: _api_reference.default.COURSE_WARE_COMMENT + '?courseWareId=' + courseWareId + '&comment=' + comment,
+        url: _api_reference.default.COURSE_WARE_COMMENT + '?courseWareId=' + courseWareId,
         method: "POST",
+        data: comment,
         header: _http_commons.default.getAuthenticationHeader(),
         success: function success(resp) {
           if (_http_commons.default.successCheck(resp)) {
@@ -25958,31 +25544,31 @@ var _http_commons = _interopRequireDefault(__webpack_require__(/*! @/static/js/h
         } });
 
     });
-  },
+  } }, "deleteCourseWare",
 
-  deleteCourseWare: function deleteCourseWare(courseWareId) {
-    return new Promise(function (resolve, reject) {
-      uni.request({
-        url: _api_reference.default.COURSE_WARE + '?courseWareId=' + courseWareId,
-        method: "DELETE",
-        header: _http_commons.default.getAuthenticationHeader(),
-        success: function success(resp) {
-          if (_http_commons.default.successCheck(resp)) {
-            resolve(resp.data.data);
-          }
-        },
-        fail: function fail(err) {
-          _http_commons.default.commonFailHanlder(err);
-          reject(err);
-        } });
+function deleteCourseWare(courseWareId) {
+  return new Promise(function (resolve, reject) {
+    uni.request({
+      url: _api_reference.default.COURSE_WARE + '?courseWareId=' + courseWareId,
+      method: "DELETE",
+      header: _http_commons.default.getAuthenticationHeader(),
+      success: function success(resp) {
+        if (_http_commons.default.successCheck(resp)) {
+          resolve(resp.data.data);
+        }
+      },
+      fail: function fail(err) {
+        _http_commons.default.commonFailHanlder(err);
+        reject(err);
+      } });
 
-    });
-  } };exports.default = _default;
+  });
+});exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 
 /***/ }),
 
-/***/ 89:
+/***/ 79:
 /*!******************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/static/js/contest.js ***!
   \******************************************************************************************/
@@ -26377,6 +25963,312 @@ var _http_commons = _interopRequireDefault(__webpack_require__(/*! ./http_common
       uni.request({
         url: _api_reference.default.PUBLISH_CONTEST + '?contestId=' + contestId,
         method: "POST",
+        header: _http_commons.default.getAuthenticationHeader(),
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+          reject(err);
+        } });
+
+    });
+  } };exports.default = _default;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
+
+/***/ }),
+
+/***/ 8:
+/*!************************************************************************************************!*\
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/pages.json?{"type":"stat"} ***!
+  \************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _default = { "appid": "" };exports.default = _default;
+
+/***/ }),
+
+/***/ 94:
+/*!****************************************************************************************!*\
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/static/js/class.js ***!
+  \****************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _api_reference = _interopRequireDefault(__webpack_require__(/*! @/static/js/api_reference.js */ 15));
+var _http_commons = _interopRequireDefault(__webpack_require__(/*! @/static/js/http_commons.js */ 18));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var _default =
+
+{
+
+  /**
+   * @param {Object} classObj
+   */
+  createClass: function createClass(classObj) {
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: _api_reference.default.CLASS,
+        method: "POST",
+        header: _http_commons.default.getAuthenticationHeader(),
+        data: classObj,
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+          reject(err);
+        } });
+
+    });
+  },
+
+  /**
+      * @param {Number} courseId
+      */
+  getClassByCourseId: function getClassByCourseId(courseId) {
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: _api_reference.default.GET_CLASS_BY_COURSE_ID + '?courseId=' + courseId,
+        header: _http_commons.default.getAuthenticationHeader(),
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+          reject(err);
+        } });
+
+    });
+  },
+
+  /**
+      * @param {Number} classId
+      */
+  getClassById: function getClassById(classId) {
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: _api_reference.default.CLASS + '?classId=' + classId,
+        header: _http_commons.default.getAuthenticationHeader(),
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+          reject(err);
+        } });
+
+    });
+  },
+
+  getClassInfoAsTeacher: function getClassInfoAsTeacher(classId) {
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: _api_reference.default.GET_CLASS_INFO_AS_TEACHER + '?classId=' + classId,
+        header: _http_commons.default.getAuthenticationHeader(),
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+          reject(err);
+        } });
+
+    });
+  },
+
+  getClassInfoAsStudent: function getClassInfoAsStudent(classId) {
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: _api_reference.default.GET_CLASS_INFO_AS_STUDENT + '?classId=' + classId,
+        header: _http_commons.default.getAuthenticationHeader(),
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+          reject(err);
+        } });
+
+    });
+  },
+
+  publishClass: function publishClass(classId) {
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: _api_reference.default.PUBLISH_CLASS + '?classId=' + classId,
+        method: "POST",
+        header: _http_commons.default.getAuthenticationHeader(),
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+          reject(err);
+        } });
+
+    });
+  },
+
+  finishClass: function finishClass(classId) {
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: _api_reference.default.FINISH_CLASS + '?classId=' + classId,
+        method: "POST",
+        header: _http_commons.default.getAuthenticationHeader(),
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+          reject(err);
+        } });
+
+    });
+  },
+
+  startSignIn: function startSignIn(classId) {
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: _api_reference.default.START_SIGN_IN + '?classId=' + classId,
+        method: "POST",
+        header: _http_commons.default.getAuthenticationHeader(),
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+          reject(err);
+        } });
+
+    });
+  },
+
+  getSignInCount: function getSignInCount(classId) {
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: _api_reference.default.SIGN_IN_COUNT + '?classId=' + classId,
+        header: _http_commons.default.getAuthenticationHeader(),
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+          reject(err);
+        } });
+
+    });
+  },
+
+  signIn: function signIn(classId) {
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: _api_reference.default.SIGN_IN + '?classId=' + classId,
+        method: "PUT",
+        header: _http_commons.default.getAuthenticationHeader(),
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+          reject(err);
+        } });
+
+    });
+  },
+
+  updateNote: function updateNote(classId, note) {
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: _api_reference.default.CLASS_NOTE + '?classId=' + classId,
+        method: "PUT",
+        header: _http_commons.default.getAuthenticationHeader(),
+        data: note,
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+          reject(err);
+        } });
+
+    });
+  } };exports.default = _default;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
+
+/***/ }),
+
+/***/ 95:
+/*!*******************************************************************************************!*\
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/static/js/bulletin.js ***!
+  \*******************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _api_reference = _interopRequireDefault(__webpack_require__(/*! ./api_reference.js */ 15));
+var _http_commons = _interopRequireDefault(__webpack_require__(/*! ./http_commons.js */ 18));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var _default =
+
+{
+
+  /**
+   * @param {Number} courseId
+   * @param {Object} bulletinContent
+   */
+  createBulletin: function createBulletin(courseId, bulletinContent) {
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: _api_reference.default.CREATE_BULLETIN + '?courseId=' + courseId,
+        method: "POST",
+        header: _http_commons.default.getAuthenticationHeader(),
+        data: {
+          content: bulletinContent },
+
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+          reject(err);
+        } });
+
+    });
+  },
+
+  /**
+      * 
+      */
+  listBulletin: function listBulletin(courseId) {var offset = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;var count = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 10;
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: _api_reference.default.GET_BULLETIN + '?courseId=' + courseId + '&offset=' + offset + '&count=' + count,
         header: _http_commons.default.getAuthenticationHeader(),
         success: function success(resp) {
           if (_http_commons.default.successCheck(resp)) {

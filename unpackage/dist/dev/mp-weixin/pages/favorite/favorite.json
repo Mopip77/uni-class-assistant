@@ -1,8 +1,12 @@
 {
+  "navigationBarTitleText": "收藏夹",
+  "enablePullDownRefresh": true,
   "usingComponents": {
     "uni-load-more": "/components/uni-load-more/uni-load-more",
     "van-tag": "/wxcomponents/vant/dist/tag/index",
     "s-tabs": "/components/s-tabs/index",
-    "s-tab": "/components/s-tab/index"
+    "s-tab": "/components/s-tab/index",
+    "van-notify": "/wxcomponents/vant/dist/notify/index",
+    "van-dialog": "/wxcomponents/vant/dist/dialog/index"
   }
 }

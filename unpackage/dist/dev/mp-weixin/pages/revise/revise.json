@@ -1,4 +1,5 @@
 {
+  "navigationBarTitleText": "批改列表",
   "usingComponents": {
     "create-revise": "/components/CreateRevise",
     "van-index-bar": "/wxcomponents/vant/dist/index-bar/index",

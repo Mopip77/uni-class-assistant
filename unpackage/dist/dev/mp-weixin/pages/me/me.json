@@ -1,4 +1,5 @@
 {
+  "navigationBarTitleText": "个人信息",
   "usingComponents": {
     "update-user-info": "/components/UpdateUserInfo",
     "van-button": "/wxcomponents/vant/dist/button/index",

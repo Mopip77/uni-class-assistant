@@ -1,8 +1,10 @@
 {
-  "navigationBarTitleText": "讨论区",
   "usingComponents": {
+    "uni-load-more": "/components/uni-load-more/uni-load-more",
     "create-course-modal": "/components/CreateCourse",
     "join-course-modal": "/components/JoinCourse",
+    "s-tabs": "/components/s-tabs/index",
+    "s-tab": "/components/s-tab/index",
     "van-grid": "/wxcomponents/vant/dist/grid/index",
     "van-grid-item": "/wxcomponents/vant/dist/grid-item/index",
     "van-tab": "/wxcomponents/vant/dist/tab/index",

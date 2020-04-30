@@ -1,4 +1,5 @@
 {
+  "navigationBarTitleText": "课程信息",
   "usingComponents": {
     "van-notify": "/wxcomponents/vant/dist/notify/index",
     "van-button": "/wxcomponents/vant/dist/button/index"

@@ -1,6 +1,7 @@
 <template>
 	<view>
 		<view class="on-top">
+			<van-dialog id="van-dialog" />
 			<van-notify class="on-top" id="van-notify" />
 		</view>
 
@@ -19,8 +20,8 @@
 					{{ course.courseName }}
 					<view class="course-id"> 课程号: {{ course.id }} </view>
 				</view>
-				
-				<van-button v-if="course.isTeacher" custom-class="score-cal" square type="danger" @tap="scoreCalculate">分数结算</van-button>
+
+				<van-button v-if="course.isTeacher" custom-class="score-cal" square type="danger" @tap="goToScoreCal">分数结算</van-button>
 			</view>
 			<view class="footer">
 				<view class="info">
@@ -38,13 +39,13 @@
 			<van-grid column-num="3">
 				<navigator :url="'../member_list/member_list?courseId=' + course.id">
 					<van-grid-item use-slot>
-						<image src="../../static/img/icon/book.png" />
+						<image src="../../static/img/members.png" />
 						<text>成员列表</text>
 					</van-grid-item>
 				</navigator>
 				<navigator :url="'../topics/topics?courseId=' + course.id">
 					<van-grid-item use-slot>
-						<image src="../../static/img/icon/paper.png" />
+						<image src="../../static/img/chats.png" />
 						<text>讨论区</text>
 					</van-grid-item>
 				</navigator>
@@ -64,7 +65,7 @@
 					<van-button custom-class="button" square type="primary" @tap="createNewResourceBtn">+</van-button>
 				</view>
 			</view>
-			
+
 			<STabs effect="true" navPerView="4" v-model="resourceSelectIndex" @change="changeResourceTab">
 				<STab title="公告">
 					<view class="list bulletin-list">
@@ -74,7 +75,7 @@
 				</STab>
 				<STab title="课件">
 					<view class="list course-ware-list">
-						<view class="item course-ware-item" v-for="(courseWare, idx) in datas[1]" :key="idx" @tap="goToCourseWare(idx)">
+						<view class="item course-ware-item" v-for="(courseWare, idx) in datas[1]" :key="idx" @tap="goToCourseWare(idx)" @longpress="tryDeleteCourseWare(courseWare.id)">
 							<view class="header">
 								<view class="display-name">{{courseWare.displayName}}</view>
 								<view class="time-box">
@@ -94,28 +95,28 @@
 				</STab>
 				<STab title="试卷">
 					<view class="list contest-list">
-						<view class="item contest-item" v-for="(contest, idx) in datas[2]" :key="idx" @tap="goToContest(idx)">
-							<view class="header">
-								<view v-if="!contest.published" class="status" style="font-style: italic;color: #E65100;">未发布</view>
-								<view v-else-if="contest.status === '未开始'" class="status" style="color: #607D8B;">未开始</view>
-								<view v-else-if="contest.status === '已结束'" class="status" style="font-style: italic;">已结束</view>
-								<view v-else-if="contest.status === '进行中'" class="status" style="color: red;">进行中</view>
-								<view v-else-if="contest.status === '可进行'" class="status" style="color: #e57373;">可进行</view>
-								
-								<view v-if="contest.published" class="time-box">
-									<view v-if="contest.publishDate" class="publish-date">开始时间:{{contest.publishDate}}</view>
-									<view v-if="contest.deadline" class="publish-date">截止时间:{{contest.deadline}}</view>
-								</view>
-								<view v-else class="class-name">{{contest.className}}</view>
-							</view>
-							<view class="footer">
-								<view class="user-box">
-									<image :src="contest.creator.avatarUrl"></image>
-									<text>{{contest.creator.nickname}}</text>
-								</view>
+						<view class="item contest-item" v-for="(contest, idx) in datas[2]" :key="idx" @tap="goToContest(idx)" @longpress="tryDeleteContest(contest.id)">
+								<view class="header">
+									<view v-if="!contest.published" class="status" style="font-style: italic;color: #E65100;">未发布</view>
+									<view v-else-if="contest.status === '未开始'" class="status" style="color: #607D8B;">未开始</view>
+									<view v-else-if="contest.status === '已结束'" class="status" style="font-style: italic;">已结束</view>
+									<view v-else-if="contest.status === '进行中'" class="status" style="color: red;">进行中</view>
+									<view v-else-if="contest.status === '可进行'" class="status" style="color: #e57373;">可进行</view>
 
-								<view v-if="contest.limitMinutes > 0" class="limit-time">限时: {{contest.limitMinutes}}分钟</view>
-							</view>
+									<view v-if="contest.published" class="time-box">
+										<view v-if="contest.publishDate" class="publish-date">开始时间:{{contest.publishDate}}</view>
+										<view v-if="contest.deadline" class="publish-date">截止时间:{{contest.deadline}}</view>
+									</view>
+									<view v-else class="class-name">{{contest.className}}</view>
+								</view>
+								<view class="footer">
+									<view class="user-box">
+										<image :src="contest.creator.avatarUrl"></image>
+										<text>{{contest.creator.nickname}}</text>
+									</view>
+
+									<view v-if="contest.limitMinutes > 0" class="limit-time">限时: {{contest.limitMinutes}}分钟</view>
+								</view>
 						</view>
 						<uni-load-more :status="onloadingStatuses[2]" @clickLoadMore="loadMore" :contentText="onloadingTexts[2]"></uni-load-more>
 					</view>
@@ -157,6 +158,8 @@
 	import Button from "@/wxcomponents/vant/dist/button/index.js";
 	import Steps from "@/wxcomponents/vant/dist/steps/index.js";
 	import Tag from '@/wxcomponents/vant/dist/tag/index.js'
+	import VanDialog from '@/wxcomponents/vant/dist/dialog/index.js'
+	import Dialog from '@/wxcomponents/vant/dist/dialog/dialog.js'
 
 	import ClassUtils from '@/static/js/class.js';
 	import CourseWareUtils from '@/static/js/course_ware.js'
@@ -187,7 +190,8 @@
 			"van-notify": VanNotify,
 			"van-icon": Icon,
 			"van-button": Button,
-			"van-steps": Steps
+			"van-steps": Steps,
+			'van-dialog': VanDialog,
 		},
 		data() {
 			return {
@@ -201,7 +205,6 @@
 				modalSubmitText: '',
 
 				// 该页面加载内容
-				userId: 0,
 				course: {},
 				resourceSelectIndex: 0,
 				datas: [
@@ -402,10 +405,24 @@
 				}
 			},
 
+			// 清空当前tab，重新加载
+			resetTab() {
+				this.offsets[this.resourceSelectIndex] = 0;
+				this.datas[this.resourceSelectIndex].splice(0);
+				this.changeResourceTab();
+			},
+			
+			// 进入分数结算页面
+			goToScoreCal() {
+				uni.navigateTo({
+					url: '../score_calculate/score_calculate?courseId=' + this.course.id
+				})
+			},
+
 			// 进入contest界面
 			goToContest(idx) {
 				let contest = this.datas[2][idx]
-				if (contest.status === '未开始') {
+				if (!this.course.isTeacher && contest.status === '未开始') {
 					// 可能时间已经到了，还是要判断一下发布时间
 					if (new Date() - new Date(contest.publishDate) < 0) {
 						Notify({
@@ -414,19 +431,13 @@
 						})
 						return;
 					}
-				} else if (!contest.published) {
-					Notify({
-						type: 'danger',
-						message: '测试还未发布'
-					})
-					return;
 				}
 
 				uni.navigateTo({
 					url: '../contest/contest?contestId=' + contest.id
 				})
 			},
-			
+
 			goToClass(idx) {
 				uni.navigateTo({
 					url: '../class/class?classId=' + this.datas[3][idx].id
@@ -455,7 +466,7 @@
 					);
 					promise.then(data => {
 						data.forEach(e => {
-							Utils.dateConverterBatch(e, true, 'createGmt')
+							Utils.dateConverterBatch(e, 'createGmt')
 						});
 
 						// 重置字段为van-steps所需的字段
@@ -483,7 +494,7 @@
 					);
 					promise.then(data => {
 						data.forEach(e => {
-							Utils.dateConverterBatch(e, false, 'publishDate', 'deadline')
+							Utils.dateConverterBatch(e, 'publishDate', 'deadline')
 						});
 						resolve(data);
 					});
@@ -502,7 +513,7 @@
 					);
 					promise.then(data => {
 						data.forEach(e => {
-							Utils.dateConverterBatch(e, false, 'createGmt')
+							Utils.dateConverterBatch(e, 'createGmt')
 						});
 
 						resolve(data);
@@ -518,40 +529,49 @@
 					let promise = ClassUtils.getClassByCourseId(that.course.id);
 					promise.then(data => {
 						data.forEach(e => {
-							Utils.dateConverterBatch(e, true, 'createGmt')
+							Utils.dateConverterBatch(e, 'createGmt')
 						});
 
 						resolve(data);
 					});
 				})
 			},
-		},
-		onLoad(option) {
-			// 传入id
-			// let courseId = 7;
-			this.userId = parseInt(uni.getStorageSync(LSReference.ID))
-			let courseId = option.id;
-			if (!courseId) {
-				Notify({
-					type: "danger",
-					message: "未传入课程号，请刷新重试"
-				});
-			} else {
-				let promise = CourseUtils.getCourse(courseId);
-				promise.then(data => {
-					console.log("获取到course", data);
-					this.course = data;
+			
+			tryDeleteCourseWare(courseWareId) {
+				Dialog.confirm({
+					title: '删除课件',
+					message: '确认删除吗？'
+				}).then(() => {
+					let p = CourseWareUtils.deleteCourseWare(courseWareId)
+					p.then(() => {
+						Notify({
+							type: "success",
+							message: "课件已删除"
+						});
+					
+						this.resetTab();
+					})
+				}).catch(() => {});
+			},
 
-					// 获取资源栏的内容
-					this.changeResourceTab();
-				});
-			}
-		},
-		onShow() {
-			if (this.refreshOnShow) {
-				let courseId = this.course.id;
+			tryDeleteContest(contestId) {
+				Dialog.confirm({
+					title: '删除试卷',
+					message: '确认删除吗？'
+				}).then(() => {
+					let p = ContestUtils.deleteContest(contestId)
+					p.then(() => {
+						Notify({
+							type: "success",
+							message: "试卷已删除"
+						});
+					
+						this.resetTab();
+					})
+				}).catch(() => {});
+			},
 
-				let that = this
+			getPageInfo(courseId, closePullDownRefresh = false) {
 				if (!courseId) {
 					Notify({
 						type: "danger",
@@ -560,18 +580,32 @@
 				} else {
 					let promise = CourseUtils.getCourse(courseId);
 					promise.then(data => {
-						console.log("获取到course", data);
-						that.course = data;
+						this.course = data;
 
 						// 获取资源栏的内容
-						that.offsets[that.resourceSelectIndex] = 0;
-						that.datas[that.resourceSelectIndex].splice(0);
-						console.log("refresh by page", that.resourceSelectIndex, that.offsets, that.datas);
-						that.changeResourceTab();
+						this.resetTab();
+
+						if (closePullDownRefresh) {
+							uni.stopPullDownRefresh()
+						}
 					});
 				}
-
-				this.refreshOnShow = false;
+			}
+		},
+		onLoad(option) {
+			this.getPageInfo(option.courseId)
+		},
+		onShow() {
+			if (this.refreshOnShow) {
+				this.getPageInfo(this.course.id)
+				this.refreshOnShow = false
+			}
+		},
+		onPullDownRefresh() {
+			if (this.course.id) {
+				this.getPageInfo(this.course.id, true)
+			} else {
+				uni.stopPullDownRefresh()
 			}
 		}
 	};
@@ -605,7 +639,7 @@
 					font-weight: normal;
 				}
 			}
-			
+
 			.score-cal {
 				width: 180rpx;
 				height: 70rpx;
@@ -694,7 +728,17 @@
 				display: flex;
 				flex-direction: column;
 				height: 180rpx;
-				background-image: url(~@/static/img/course-card-background.png);
+				background-image: $card-background-url;
+				
+				.swipe-cell-field {
+					font-size: 40rpx;
+					text-decoration: underline;
+					font-weight: bold;
+					color: #D84315;
+					top: 50%;
+					margin-top: 85rpx;
+					margin-left: 17rpx;
+				}
 
 				.header {
 					display: flex;
@@ -713,7 +757,7 @@
 						display: flex;
 						flex-direction: column;
 					}
-					
+
 					.class-name {
 						font-size: 32rpx;
 					}
@@ -740,7 +784,7 @@
 						text {
 							margin-left: 10rpx;
 						}
-						
+
 						.van-tag {
 							background-color: $global-background-color;
 						}
@@ -758,18 +802,18 @@
 					font-weight: 600;
 				}
 			}
-			
+
 			.footer {
 				.van-tag {
 					background-color: $global-background-color;
 				}
 			}
 		}
-		
+
 		.class-list {
 			.class-item {
 				height: 174rpx;
-				
+
 				.header {
 					display: flex;
 					justify-content: flex-start;
@@ -777,24 +821,24 @@
 					font-size: 32rpx;
 					font-weight: 500;
 					padding: 20rpx 10rpx;
-					
+
 					.title {
 						margin-left: 10rpx;
 						overflow: hidden;
 						text-overflow: ellipsis;
 						white-space: nowrap;
 					}
-					
+
 					van-tag {
 						display: flex;
 						align-items: center;
-						
+
 						.van-tag {
 							background-color: $global-background-color;
 						}
 					}
 				}
-				
+
 				.footer {
 					.create-date {
 						font-size: 24rpx;

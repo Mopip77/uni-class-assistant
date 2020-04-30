@@ -8,7 +8,7 @@
 		"es6": true
 	},
 	"compileType": "miniprogram",
-	"libVersion": "2.10.4",
+	"libVersion": "2.9.2",
 	"appid": "wxbd21241fb6e026b4",
 	"projectname": "graduation-proj",
 	"simulatorType": "wechat",

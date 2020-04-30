@@ -1,6 +1,0 @@
-{
-  "usingComponents": {
-    "update-user-info": "/components/UpdateUserInfo",
-    "van-popup": "/wxcomponents/vant/dist/popup/index"
-  }
-}

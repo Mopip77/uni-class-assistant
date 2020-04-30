@@ -138,18 +138,19 @@
 					this.count
 				);
 				promise.then(data => {
-					console.log("获得messages", data);
 					data.messages.forEach(e => {
-						let dateObj = CommonUtils.dateConverter(e.createGmt);
-						if (null !== dateObj) {
-							e.createGmt = dateObj.defaultDatetime;
-						}
+						CommonUtils.dateConverterBatch(e, 'createGmt')
 					});
 					
 					data.messages.forEach(e => this.messages.splice(0, 0, e))
 
 					this.oppositeUserInfo = data.oppositeUser
 					this.meUserInfo = data.me
+					
+					// 修改标题
+					uni.setNavigationBarTitle({
+						title: '与【' + this.oppositeUserInfo.nickname + '】的聊天'
+					})
 
 					// 更新offset 和 onLoading 类型（是否有更多加载）
 					this.offset += this.count;

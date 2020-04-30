@@ -1,4 +1,5 @@
 {
+  "navigationBarTitleText": "成员列表",
   "usingComponents": {
     "van-index-bar": "/wxcomponents/vant/dist/index-bar/index",
     "van-index-anchor": "/wxcomponents/vant/dist/index-anchor/index",

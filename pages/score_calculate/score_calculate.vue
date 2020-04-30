@@ -38,7 +38,7 @@
 		
 		<view v-if="showUpdateScoreForm" class="update-score-constitution-box">
 			<view class="title">
-				分数构成方式(总和为100%)
+				分数构成方式(总和为100分)
 			</view>
 			
 			<view class="item sign-in">
@@ -290,9 +290,8 @@
 		},
 
 		onLoad(option) {
-			let courseId = 7
 			let that = this
-			// let courseId = option.courseId
+			let courseId = option.courseId
 
 			if (!courseId) {
 				Notify({

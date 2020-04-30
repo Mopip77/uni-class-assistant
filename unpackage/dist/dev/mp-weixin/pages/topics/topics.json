@@ -1,4 +1,6 @@
 {
+  "enablePullDownRefresh": true,
+  "navigationBarTitleText": "讨论区",
   "usingComponents": {
     "uni-load-more": "/components/uni-load-more/uni-load-more",
     "ms-dropdown-menu": "/components/ms-dropdown/dropdown-menu",

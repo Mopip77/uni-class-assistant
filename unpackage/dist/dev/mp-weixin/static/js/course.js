@@ -21,18 +21,12 @@ export default {
 	},
 
 	/**
-	 * 获取我的课程列表
-	 * 
-	 * @param {Number} type  0:我教的课  1:我参与的课
-	 * @return {Object} 课程列表
+	 * 获取创建的课程
 	 */
-	listCourse: function(type, offset = 0, count = 10) {
-		let url = type === 0 ? ApiReference.GET_TEACHED_COURSE : ApiReference.GET_JOINED_COURSE;
-
+	listCoursesAsCreator: function(offset = 0, count = 10) {
 		return new Promise((resolve, reject) => {
-			console.log("请求");
 			uni.request({
-				url: url + '?offset=' + offset + '&count=' + count,
+				url: ApiReference.GET_CREATED_COURSE + '?offset=' + offset + '&count=' + count,
 				header: HttpCommons.getAuthenticationHeader(),
 				success: (resp) => {
 					if (HttpCommons.successCheck(resp)) {
@@ -45,6 +39,47 @@ export default {
 			})
 		});
 	},
+	
+	/**
+	 * 获取教授的课程
+	 */
+	listCoursesAsTeacher: function(offset = 0, count = 10) {
+		return new Promise((resolve, reject) => {
+			uni.request({
+				url: ApiReference.GET_TEACHED_COURSE + '?offset=' + offset + '&count=' + count,
+				header: HttpCommons.getAuthenticationHeader(),
+				success: (resp) => {
+					if (HttpCommons.successCheck(resp)) {
+						resolve(resp.data.data)
+					}
+				},
+				fail: (err) => {
+					HttpCommons.commonFailHanlder(err)
+				}
+			})
+		});
+	},
+	
+	/**
+	 * 获取学习的课程
+	 */
+	listCoursesAsStudent: function(offset = 0, count = 10) {
+		return new Promise((resolve, reject) => {
+			uni.request({
+				url: ApiReference.GET_JOINED_COURSE + '?offset=' + offset + '&count=' + count,
+				header: HttpCommons.getAuthenticationHeader(),
+				success: (resp) => {
+					if (HttpCommons.successCheck(resp)) {
+						resolve(resp.data.data)
+					}
+				},
+				fail: (err) => {
+					HttpCommons.commonFailHanlder(err)
+				}
+			})
+		});
+	},
+	
 
 	/**
 	 * @param {String} courseName
@@ -234,6 +269,9 @@ export default {
 		});
 	},
 	
+	/**
+	 * @param {Number} courseId
+	 */
 	getScoreRule(courseId) {
 		return new Promise((resolve, reject) => {
 			uni.request({
@@ -272,6 +310,9 @@ export default {
 		});
 	},
 	
+	/**
+	 * @param {Number} courseId
+	 */
 	scoreCal(courseId) {
 		return new Promise((resolve, reject) => {
 			uni.request({
@@ -291,6 +332,9 @@ export default {
 		});
 	},
 	
+	/**
+	 * @param {Number} courseId
+	 */
 	getStudentScoreList(courseId) {
 		return new Promise((resolve, reject) => {
 			uni.request({

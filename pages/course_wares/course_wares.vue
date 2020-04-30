@@ -139,7 +139,7 @@
 						offset, count
 					);
 					promise.then(data => {
-						data.forEach(e => CommonUtils.dateConverterBatch(e, false, 'createGmt'))
+						data.forEach(e => CommonUtils.dateConverterBatch(e, 'createGmt'))
 						resolve(data);
 					});
 				})
@@ -151,7 +151,7 @@
 						offset, count
 					);
 					promise.then(data => {
-						data.forEach(e => CommonUtils.dateConverterBatch(e, false, 'createGmt'))
+						data.forEach(e => CommonUtils.dateConverterBatch(e, 'createGmt'))
 						resolve(data);
 					});
 				})
@@ -173,7 +173,7 @@
 			display: flex;
 			flex-direction: column;
 			height: 200rpx;
-			background-image: url(~@/static/img/course-card-background.png);
+			background-image: $card-background-url;
 
 			.header {
 				display: flex;

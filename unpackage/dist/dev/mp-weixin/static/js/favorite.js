@@ -103,4 +103,23 @@ export default {
 			})
 		})
 	},
+	
+	deleteFavorite: function(favoriteId) {
+		return new Promise((resolve, reject) => {
+			uni.request({
+				url: ApiReference.FAVORITE_BY_ID + '?favoriteId=' + favoriteId,
+				method: "DELETE",
+				header: HttpCommons.getAuthenticationHeader(),
+				success: (resp) => {
+					if (HttpCommons.successCheck(resp)) {
+						resolve(resp.data.data)
+					}
+				},
+				fail: (err) => {
+					HttpCommons.commonFailHanlder(err)
+					reject(err)
+				}
+			})
+		})
+	},
 }

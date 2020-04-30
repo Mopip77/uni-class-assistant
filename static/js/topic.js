@@ -30,6 +30,25 @@ export default {
 			})
 		})
 	},
+	
+	deleteTopic: function(topicId) {
+		return new Promise((resolve, reject) => {
+			uni.request({
+				url: ApiReference.TOPIC + '?topicId=' + topicId,
+				method: "DELETE",
+				header: HttpCommons.getAuthenticationHeader(),
+				success: (resp) => {
+					if (HttpCommons.successCheck(resp)) {
+						resolve(resp.data.data)
+					}
+				},
+				fail: (err) => {
+					HttpCommons.commonFailHanlder(err)
+					reject(err)
+				}
+			})
+		})
+	},
 
 	/**
 	 * @param {String} courseId
@@ -166,6 +185,25 @@ export default {
 					parentId,
 					type
 				},
+				success: (resp) => {
+					if (HttpCommons.successCheck(resp)) {
+						resolve(resp.data.data)
+					}
+				},
+				fail: (err) => {
+					HttpCommons.commonFailHanlder(err)
+					reject(err)
+				}
+			})
+		})
+	},
+	
+	deleteComment: function(commentId) {
+		return new Promise((resolve, reject) => {
+			uni.request({
+				url: ApiReference.COMMENT + '?id=' + commentId,
+				method: "DELETE",
+				header: HttpCommons.getAuthenticationHeader(),
 				success: (resp) => {
 					if (HttpCommons.successCheck(resp)) {
 						resolve(resp.data.data)

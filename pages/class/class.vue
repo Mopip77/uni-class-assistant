@@ -9,7 +9,7 @@
 			</view>
 
 			<view v-if="classObj.finished !== 0" class="my-button-group">
-				<van-button disabled custom-class="my-button" square type="danger">已结课</van-button>
+				<van-button disabled custom-class="my-button-three-word" square type="danger">已结课</van-button>
 			</view>
 
 			<view v-else>
@@ -47,8 +47,7 @@
 			</view>
 		</view>
 		<view v-else-if="classObj.needSignIn !== 0" class="student-box">
-			<text v-if="userClass.signIn" style="color: green;">该课堂已签到</text>
-			<text v-else style="color: red;">该课堂未签到</text>
+			<text v-if="!userClass.signIn" style="color: red;">还未签到, 速速签到</text>
 		</view>
 
 		<view class="box course-ware-box">
@@ -264,8 +263,8 @@
 						// 如果是老师，则获取学生列表、课程以及发布内容
 						let p = ClassUtils.getClassInfoAsTeacher(that.classObj.id)
 						p.then(info => {
-							info.courseWares.forEach(e => CommonUtils.dateConverterBatch(e, false, 'createGmt'))
-							info.quizzes.forEach(e => CommonUtils.dateConverterBatch(e, false, 'createGmt'))
+							info.courseWares.forEach(e => CommonUtils.dateConverterBatch(e, 'createGmt'))
+							info.quizzes.forEach(e => CommonUtils.dateConverterBatch(e, 'createGmt'))
 							
 							that.courseWares = info.courseWares
 							that.quizzes = info.quizzes

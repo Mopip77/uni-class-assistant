@@ -32,7 +32,7 @@
 			</view>
 		</view>
 
-		<view v-if="!courseWare.isTeacher" class="read-time">已阅读时长: {{readTime}} 分</view>
+		<view v-if="!courseWare.isTeacher" class="read-time">{{readTimeStr}}</view>
 
 		<view v-if="courseWare.pages.length === 0" class="course-ware-warning">
 			课件正在后台解析中，请稍后再来...
@@ -87,8 +87,16 @@
 		},
 		
 		computed: {
-			readTime() {
-				return this.userCourseWare.readTime ? Math.floor(this.userCourseWare.readTime / 60) : 0
+			readTimeStr() {
+				
+				if (this.userCourseWare.readTime) {
+					let min = Math.floor(this.userCourseWare.readTime / 60)
+					let sec = this.userCourseWare.readTime % 60
+					
+					return '已阅读时长: ' + min + ' 分 ' + sec + ' 秒'
+				} else {
+					return '还未阅读, 开始阅读吧'
+				}
 			} 
 		},
 
@@ -178,7 +186,7 @@
 			} else {
 				let promise = CourseWareUtils.getCourseWare(courseWareId)
 				promise.then(data => {
-					CommonUtils.dateConverterBatch(data, false, 'createGmt')
+					CommonUtils.dateConverterBatch(data, 'createGmt')
 					this.courseWare = data;
 					
 					if (!data.isTeacher) {

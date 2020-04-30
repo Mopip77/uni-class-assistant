@@ -24,6 +24,25 @@ export default {
 		})
 	},
 	
+	deleteCourseWare: function(courseWareId) {
+		return new Promise((resolve, reject) => {
+			uni.request({
+				url: ApiReference.COURSE_WARE + '?courseWareId=' + courseWareId,
+				method: "DELETE",
+				header: HttpCommons.getAuthenticationHeader(),
+				success: (resp) => {
+					if (HttpCommons.successCheck(resp)) {
+						resolve(resp.data.data)
+					}
+				},
+				fail: (err) => {
+					HttpCommons.commonFailHanlder(err)
+					reject(err)
+				}
+			})
+		})
+	},
+	
 	/**
 	 * @param {String} courseWareId
 	 */
@@ -120,8 +139,9 @@ export default {
 	updateComment: function(courseWareId, comment) {
 		return new Promise((resolve, reject) => {
 			uni.request({
-				url: ApiReference.COURSE_WARE_COMMENT + '?courseWareId=' + courseWareId + '&comment=' + comment,
+				url: ApiReference.COURSE_WARE_COMMENT + '?courseWareId=' + courseWareId,
 				method: "POST",
+				data: comment,
 				header: HttpCommons.getAuthenticationHeader(),
 				success: (resp) => {
 					if (HttpCommons.successCheck(resp)) {

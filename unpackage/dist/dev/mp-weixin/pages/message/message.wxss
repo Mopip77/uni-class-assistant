@@ -108,7 +108,8 @@
       -webkit-box-align: center;
       -webkit-align-items: center;
               align-items: center;
-      margin-left: 10rpx;
+      margin-left: 0rpx;
+      margin-right: 10rpx;
       font-weight: 500;
 }
 .notification-list .content {

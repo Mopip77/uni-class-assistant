@@ -5,15 +5,15 @@
 		<van-notify class="on-top" id="van-notify" />
 
 		<view class="topic-box">
-			<STabs effect="true" v-model="tabIdx" @change="getTopicsByTab">
+			<STabs effect="true" v-model="tabIdx" @change="changeSortBy">
 				<STab title="最热">
 					<view class="topic-list">
 						<view class="topic-item" v-for="(topic, idx) in topics" :key="idx">
 							<view class="header">
 								<view class="title" @tap="openTopic(topic.id)">{{topic.title}}</view>
 								<view class="user-box">
-									<text>{{topic.creatorName}}</text>
-									<van-image round :src="topic.creatorAvatar"></van-image>
+									<text>{{topic.creator.nickname}}</text>
+									<van-image round :src="topic.creator.avatarUrl"></van-image>
 								</view>
 							</view>
 							<view class="content" @tap="openTopic(topic.id)">{{topic.content}}</view>
@@ -42,8 +42,8 @@
 							<view class="header">
 								<view class="title">{{topic.title}}</view>
 								<view class="user-box">
-									<text>{{topic.creatorName}}</text>
-									<van-image round :src="topic.creatorAvatar"></van-image>
+									<text>{{topic.creator.nickname}}</text>
+									<van-image round :src="topic.creator.avatarUrl"></van-image>
 								</view>
 							</view>
 							<view class="content">{{topic.content}}</view>
@@ -168,7 +168,6 @@
 					}
 				}
 
-				console.log("类型为", t);
 				return t;
 			},
 			/**
@@ -180,14 +179,10 @@
 				let promise = TopicUtils.getTopics(this.courseId, sortBy, this.offset, this.count)
 				promise
 					.then(data => {
-						console.log("获取到topics", data);
 						data.forEach(e => {
-							CommonUtils.dateConverterBatch(e, false, 'updateGmt', 'createGmt')
+							CommonUtils.dateConverterBatchFormatted(e, 'updateGmt', 'createGmt')
 						});
 
-						if (this.offset === 0) {
-							this.topics.splice(0)
-						}
 						this.topics.push(...data);
 
 						// 更新offset 和 onLoading 类型（是否有更多加载）
@@ -196,41 +191,51 @@
 							this.offset === this.topics.length ? "more" : "noMore";
 					})
 			},
-			getTopicsByTab() {
+			resetTab() {
 				// 重置offset
 				this.offset = 0;
+				this.topics.splice(0);
 				this.getTopics(this.getSortByText())
 			},
 			loadMore() {
 				// 判断还有没有更多
-				if (this.offset <= this.topics.length) {
-					this.getTopics(this.getSortByText())
-				} else {
-					console.log("没有更多了");
+				if (this.offset > this.topics.length) {
+					return;
 				}
+				
+				this.getTopics(this.getSortByText());
 			},
 			changeSortBy() {
-				this.getTopicsByTab()
+				this.resetTab()
 			},
+			
+			getPageInfo(courseId, closePullDownRefresh = false) {
+				if (courseId) {
+					this.resetTab()
+				} else {
+					Notify({
+						type: "danger",
+						message: "未传入课程号，请刷新重试"
+					});
+				}
+				
+				if (closePullDownRefresh) {
+					uni.stopPullDownRefresh()
+				}
+			}
 		},
 		onLoad(option) {
-			// let courseId = 7
-			let courseId = option.courseId
-			this.courseId = courseId
-			if (courseId) {
-				this.getTopicsByTab()
-			} else {
-				Notify({
-					type: "danger",
-					message: "未传入课程号，请刷新重试"
-				});
-			}
+			this.courseId = option.courseId
+			this.getPageInfo(this.courseId)
 		},
 		onShow() {
 			if (this.refreshOnShow) {
-				this.getTopicsByTab()
+				this.resetTab()
 				this.refreshOnShow = false
 			}
+		},
+		onPullDownRefresh() {
+			this.getPageInfo(this.courseId, true)
 		}
 	}
 </script>

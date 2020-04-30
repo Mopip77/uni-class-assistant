@@ -1,4 +1,5 @@
 {
+  "navigationBarTitleText": "课件",
   "usingComponents": {
     "l-file": "/components/l-file/l-file",
     "read-course-ware-page": "/components/ReadCourseWarePage",

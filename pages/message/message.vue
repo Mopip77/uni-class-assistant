@@ -33,7 +33,7 @@
 				<view class="list-box">
 					<view class="list notification-list" v-for="(notification, idx) in datas[1]" :key="idx" @tap="gotoNotification(notification.id)">
 						<view class="header">
-							<view :class="notification.readed ? 'readed' : ''"><van-tag v-if="!notification.readed" plain type="primary">未读</van-tag>{{notification.title}}</view>
+							<view :class="notification.readed ? 'readed' : ''"><van-tag v-if="!notification.readed" custom-class="read-tag" plain type="primary">未读</van-tag>{{notification.title}}</view>
 						</view>
 				
 						<view v-if="notification.content" :class="notification.readed ? 'readed' : ''" class="content"><text>{{notification.content}}</text></view>
@@ -181,7 +181,7 @@
 					);
 					promise.then(data => {
 						data.forEach(e => {
-							CommonUtils.dateConverterBatch(e, true, 'publishGmt')
+							CommonUtils.dateConverterBatch(e, 'publishGmt')
 						});
 					
 						resolve(data)
@@ -267,7 +267,8 @@
 			view {
 				display: flex;
 				align-items: center;
-				margin-left: 10rpx;
+				margin-left: 0rpx;
+				margin-right: 10rpx;
 				font-weight: 500;
 			}
 		}

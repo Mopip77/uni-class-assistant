@@ -29,19 +29,15 @@ export default {
 	 * @param {String} serverDate
 	 * @return {Object}
 	 */
-	dateConverter: function(serverDate, withTimezone = true) {
+	dateConverter: function(serverDate) {
 		if (!serverDate) {
 			return null
 		}
 
 		// console.log("解析时间", serverDate);
 		let ts = Date.parse(serverDate)
-		let date = {}
-		if (withTimezone) {
-			date = new Date(ts - 13 * 3600 * 1000) // spring序列化后的时间有13小时时差
-		} else {
-			date = new Date(ts)
-		}
+		let date = new Date(ts)
+		// console.log("解析后", date);
 		let [year, month, day, hour, minute, second] = [date.getFullYear(), this.dateDigitToString(date.getMonth() + 1), this.dateDigitToString(date.getDate()), this.dateDigitToString(date.getHours()),
 			this.dateDigitToString(date.getMinutes()), this.dateDigitToString(date.getSeconds()),
 		]
@@ -56,18 +52,6 @@ export default {
 			defaultDate: year + '-' + month + '-' + day,
 			defaultTime: hour + ':' + minute + ':' + second,
 			defaultDatetime: year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second
-		}
-	},
-	
-	/**
-	 * 批量转换日期(datetime)，传入对象和所需转换的字段名
-	 */
-	dateConverterBatch: function(obj, withTimezone, ...args) {
-		for (let arg of args) {
-			if (obj[arg]) {
-				let dateObj = this.dateConverter(obj[arg], withTimezone)
-				obj[arg] = dateObj ? dateObj.defaultDatetime : null;
-			}
 		}
 	},
 	
@@ -95,6 +79,67 @@ export default {
 			defaultDate: year + '-' + month + '-' + day,
 			defaultTime: hour + ':' + minute + ':' + second,
 			defaultDatetime: year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second
+		}
+	},
+	
+	/**
+	 * 批量转换日期(datetime)，传入对象和所需转换的字段名
+	 */
+	dateConverterBatch: function(obj, ...args) {
+		for (let arg of args) {
+			if (obj[arg]) {
+				let dateObj = this.dateConverter(obj[arg])
+				obj[arg] = dateObj ? dateObj.defaultDatetime : null;
+			}
+		}
+	},
+	
+	/**
+	 * 批量转换日期(datetime)，传入对象和所需转换的字段名，只不过返回的是格式化后的字符串
+	 */
+	dateConverterBatchFormatted: function(obj, ...args) {
+		for (let arg of args) {
+			if (obj[arg]) {
+				
+				let ts = Date.parse(obj[arg])
+				let date = new Date(ts)
+				let result = this.formatDateString(date)
+				obj[arg] = result
+			}
+		}
+	},
+	
+	/**
+	 * 假设传入2020-04-01 12:23:22
+	 * 
+	 * 返回格式化的日期时间显示
+	 *   如果是当天则返回时间 12:23:22
+	 *   如果是前天或昨天则返回 前天/昨天 12:23:22
+	 *   否则只返回日期 2020-04-01
+	 * 
+	 * @param {Date} date
+	 */
+	formatDateString(date) {
+		date = new Date(date)
+		let dateTs = date.getTime();
+		if (!dateTs) {
+			return '';
+		}
+		
+		let todayTs = new Date(new Date().toLocaleDateString()).getTime();
+		let yestodayTs = todayTs - 3600 * 1000 * 24 * 1;
+		let tbfyTs = todayTs - 3600 * 1000 * 24 * 2;
+		
+		let dateObj = this.jsDateConverter(date)
+		
+		if (dateTs >= todayTs) {
+			return dateObj.defaultTime;
+		} else if (dateTs >= yestodayTs) {
+			return '昨天 ' + dateObj.defaultTime;
+		} else if (dateTs >= tbfyTs) {
+			return '前天 ' + dateObj.defaultTime;
+		} else {
+			return dateObj.defaultDate;
 		}
 	}
 }

@@ -1,4 +1,5 @@
 {
+  "navigationBarTitleText": "课件库",
   "usingComponents": {
     "uni-load-more": "/components/uni-load-more/uni-load-more",
     "s-tabs": "/components/s-tabs/index",
