@@ -118,6 +118,12 @@
 		},
 		methods: {
 			onCancel() {
+				// 删除已创建的内容
+				let p = ClassUtils.deleteClassAttaches({
+					courseWareIds: this.courseWares,
+					contestIds: this.contests
+				})
+				
 				uni.navigateBack()
 			},
 
@@ -329,6 +335,7 @@
 				height: 50rpx;
 				margin-right: 10px;
 				padding: 4rpx 40rpx;
+				border-radius: 6rpx;
 			}
 		}
 

@@ -23,7 +23,7 @@
 			</view>
 			<view class="top-comment-body">
 				<view class="title">{{comment.title}}</view>
-				<view class="content">{{comment.content}}</view>
+				<view class="content"><text>{{comment.content}}</text></view>
 			</view>
 		</view>
 
@@ -43,7 +43,7 @@
 					</view>
 				</view>
 				<view class="sub-comment-body" @tap="showModal(subComment.id, subComment.creator.nickname)">
-					回复 <text class="parent-name">@{{subComment.parentCreator.nickname}}</text>: {{subComment.content}}
+					回复 <text class="parent-name">@{{subComment.parentCreator.nickname}}</text>: <text>{{subComment.content}}</text> 
 				</view>
 			</view>
 			<uni-load-more :status="onloadingStatus" @clickLoadMore="loadMore" :contentText="onloadingText"></uni-load-more>
@@ -339,11 +339,13 @@
 		.dock-row {
 			position: fixed;
 			bottom: 0;
+			bottom: constant(safe-area-inset-bottom);
+			bottom: env(safe-area-inset-bottom);
 			// border: 1rpx solid black;
 			width: 100%;
 			display: flex;
 			justify-content: space-around;
-			padding: 8rpx 4rpx;
+			padding: 10rpx 4rpx;
 			background-color: white;
 			align-items: center;
 			box-shadow: -1rpx -1rpx .8rpx #9E9E9E;
@@ -354,7 +356,7 @@
 				line-height: 1.5rem;
 				background-color: #E0E0E0;
 				border-radius: 25rpx;
-				padding: 2rpx 25rpx;
+				padding: 14rpx 25rpx;
 				color: #616161;
 			}
 		}

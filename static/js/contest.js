@@ -16,7 +16,7 @@ export default {
 	 * @return {Object} {"value": bool, "msg": 错误信息}
 	 */
 	isDateRelationValid(publishDate, deadlineDate, limitMinutes) {
-		console.log("params", publishDate, deadlineDate, limitMinutes);
+		// console.log("params", publishDate, deadlineDate, limitMinutes);
 		let now = new Date()
 		
 		// 两者必有一
@@ -235,8 +235,12 @@ export default {
 	 * @param {Number} limitMinutes
 	 */
 	getLeftDate(answerStartDate, publishDate, deadline, limitMinutes) {
+		if (answerStartDate) {answerStartDate = answerStartDate.replace(/-/g, '/')}
+		if (publishDate) {publishDate = publishDate.replace(/-/g, '/')}
+		if (deadline) {deadline = deadline.replace(/-/g, '/')}
+		
 		let now = new Date()
-		console.log("获取剩余时间", answerStartDate, publishDate, deadline, limitMinutes);
+		// console.log("获取剩余时间", answerStartDate, publishDate, deadline, limitMinutes);
 		
 		if (limitMinutes === 0) {
 			// 不限时
@@ -248,11 +252,11 @@ export default {
 				
 				// 用户开始答题时刻 + 限时的剩余时间
 				let leftTimeToBeginTime = new Date(answerStartDate).getTime() + limitMinutes * 60 * 1000 - now
-				console.log("leftTimeToBeginTime", leftTimeToBeginTime);
+				// console.log("leftTimeToBeginTime", leftTimeToBeginTime);
 				
 				// 截止时间（起始时间+限时或结束时间）的剩余时间
 				let leftTimeBeforeDeadline = new Date(deadline) - now
-				console.log("leftTimeBeforeDeadline", leftTimeBeforeDeadline);
+				// console.log("leftTimeBeforeDeadline", leftTimeBeforeDeadline);
 				// 返回小的
 				return leftTimeToBeginTime < leftTimeBeforeDeadline ? leftTimeToBeginTime : leftTimeBeforeDeadline
 			} else {
@@ -270,6 +274,9 @@ export default {
 	 * @param {Number} limitMinutes
 	 */
 	getLeftDateForTeacher(publishDate, deadline, limitMinutes) {
+		if (publishDate) {publishDate = publishDate.replace(/-/g, '/')}
+		if (deadline) {deadline = deadline.replace(/-/g, '/')}
+		
 		let now = new Date()
 		
 		if (deadline) {

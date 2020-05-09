@@ -1,10 +1,10 @@
-const API_SERVER = 'http://47.107.90.226:9106/wxma/'
+const API_SERVER = 'https://go.x3x.fun:9150/wxma/'
 
 export default {
 	SERVER_URL: API_SERVER,
 	// user
 	CHECK_TOKEN_URL: API_SERVER + 'user/check-token',
-	LOGIN_URL: 'http://47.107.90.226:9105/wxma/auth/login',
+	LOGIN_URL: API_SERVER + 'auth/login',
 	UPLOAD_USER_INFO: API_SERVER + 'user/upload-info',
 	GET_USERINFO_URL: API_SERVER + 'user/info',
 	UPDATE_USERINFO_URL: API_SERVER + 'user/update-info',
@@ -95,7 +95,9 @@ export default {
 	START_SIGN_IN: API_SERVER + 'class/start-sign-in',
 	SIGN_IN_COUNT: API_SERVER + 'class/sign-in-count',
 	SIGN_IN: API_SERVER + 'class/sign-in',
+	SIGN_IN_LIST: API_SERVER + 'class/sign-in-list',
 	CLASS_NOTE: API_SERVER + 'class/note',
+	CLASS_ATTACH: API_SERVER + 'class/attach',
 	
 	
 	

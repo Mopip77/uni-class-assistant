@@ -157,15 +157,15 @@
         border-width: 40rpx 24rpx;
         border-style: solid;
         border-color: #cdcdcd transparent transparent #cdcdcd;
-        right: 29px;
-        margin-top: -41rpx;
+        right: 1.8rem;
+        margin-top: -1.3rem;
 }
 .message-box .my-message .message-body .message-content .top {
         border-width: 14rpx 24rpx;
         border-style: solid;
         border-color: #f2f2f2 transparent transparent #f2f2f2;
-        right: 58rpx;
-        margin-top: -41rpx;
+        right: 1.8rem;
+        margin-top: -1.3rem;
 }
 .dock-row-box {
   height: 80rpx;
@@ -173,6 +173,8 @@
 .dock-row-box .dock-row {
     position: fixed;
     bottom: 0;
+    bottom: constant(safe-area-inset-bottom);
+    bottom: env(safe-area-inset-bottom);
     width: 100%;
     display: -webkit-box;
     display: -webkit-flex;
@@ -202,7 +204,7 @@
       line-height: 1.5rem;
       background-color: #E0E0E0;
       border-radius: 25rpx;
-      padding: 10rpx 25rpx;
+      padding: 16rpx 25rpx;
 }
 .dock-row-box .dock-row .favorite-column {
       font-size: 40rpx;

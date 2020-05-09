@@ -215,14 +215,16 @@
 			// w-picker选择时间后确定后的调用
 			onConfirm(e, type) {
 				// 传入有e有两种格式，一种是"今天 17:01:02"， 一种是"2020-12-12 17:01:02"
-				let selectDate = null
+				let selectDateStr = null
 				if (typeof e.obj.date === 'object') {
-					selectDate = new Date(e.obj.date.value + ' ' + e.obj.hour.value + ':' + e.obj.minute.value)
+					selectDateStr = e.obj.date.value + ' ' + e.obj.hour.value + ':' + e.obj.minute.value
 				} else {
-					selectDate = new Date(e.value)
+					selectDateStr = e.value
 				}
+				
+				selectDateStr = selectDateStr.replace(/-/g, '/')
+				let selectDate = new Date(selectDateStr)
 
-				console.log("change, ", type, e, selectDate);
 				if (type === 'publishDate') {
 					this.publishDate = selectDate
 				} else if (type === 'deadlineDate') {
@@ -259,18 +261,15 @@
 
 				if (question.index >= questions.length) {
 					// create
-					console.log("create");
 					questions.push(result)
 				} else {
 					// update
-					console.log("update");
 					questions[question.index] = result
 				}
 
 				console.log(questions);
 			},
 			deleteQuestion(e) {
-				console.log("删除question", e);
 				if (e.type === 'objective') {
 					this.objectiveQuestions.splice(e.index, 1)
 				} else {
@@ -362,7 +361,6 @@
 				let limitMinutes = this.useLimitTime ? this.limitMinutes : null;
 
 				let result = ContestUtils.isDateRelationValid(publishDate, deadlineDate, limitMinutes);
-				console.log("result", result);
 				if (!result.value) {
 					if (!slient) {
 						Notify({
@@ -572,7 +570,7 @@
 				height: 50rpx;
 				margin-right: 10px;
 				padding: 4rpx 40rpx;
-
+				border-radius: 6rpx;
 			}
 
 		}

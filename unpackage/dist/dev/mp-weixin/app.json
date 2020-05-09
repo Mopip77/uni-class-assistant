@@ -20,6 +20,7 @@
     "pages/contest_list/contest_list",
     "pages/create_notification/create_notification",
     "pages/course_wares/course_wares",
+    "pages/sign_in_list/sign_in_list",
     "pages/create_class/create_class",
     "pages/class/class",
     "pages/score_calculate/score_calculate"
@@ -53,5 +54,6 @@
       }
     ]
   },
-  "usingComponents": {}
+  "usingComponents": {},
+  "sitemapLocation": "sitemap52.json"
 }

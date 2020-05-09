@@ -18,7 +18,7 @@
 				<view v-else class="field textarea-field">
 					<text>{{fieldName}}</text>
 					<view>
-						<textarea maxlength="-1" :placeholder="realPlaceHolder" v-model="content" />
+						<textarea :placeholder="realPlaceHolder" v-model="content" />
 					</view>
 				</view>
 
@@ -132,7 +132,7 @@
 		box-shadow: 7px 7px 5px #888888;
 		width: 600rpx;
 		height: 80%;
-		position: fixed;
+		position: absolute;
 		margin: auto;
 		left: 0;
 		right: 0;
@@ -165,6 +165,7 @@
 				width: auto;
 				padding-top: 4rpx;
 				padding-left: 10rpx;
+				min-height: 500rpx;
 				
 				.placeholder {
 					color: gray;

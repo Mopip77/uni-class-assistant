@@ -26,6 +26,48 @@ export default {
 		})
 	},
 	
+	deleteClass: function(classId) {
+		return new Promise((resolve, reject) => {
+			uni.request({
+				url: ApiReference.CLASS + '?classId=' + classId,
+				method: "DELETE",
+				header: HttpCommons.getAuthenticationHeader(),
+				success: (resp) => {
+					if (HttpCommons.successCheck(resp)) {
+						resolve(resp.data.data)
+					}
+				},
+				fail: (err) => {
+					HttpCommons.commonFailHanlder(err)
+					reject(err)
+				}
+			})
+		})
+	},
+	
+	/**
+	 * @param {Object} data {courseWareIds: [], contestIds: []}
+	 */
+	deleteClassAttaches: function(data) {
+		return new Promise((resolve, reject) => {
+			uni.request({
+				url: ApiReference.CLASS_ATTACH,
+				method: "DELETE",
+				data,
+				header: HttpCommons.getAuthenticationHeader(),
+				success: (resp) => {
+					if (HttpCommons.successCheck(resp)) {
+						resolve(resp.data.data)
+					}
+				},
+				fail: (err) => {
+					HttpCommons.commonFailHanlder(err)
+					reject(err)
+				}
+			})
+		})
+	},
+	
 	/**
 	 * @param {Number} courseId
 	 */
@@ -165,6 +207,24 @@ export default {
 		return new Promise((resolve, reject) => {
 			uni.request({
 				url: ApiReference.SIGN_IN_COUNT + '?classId=' + classId,
+				header: HttpCommons.getAuthenticationHeader(),
+				success: (resp) => {
+					if (HttpCommons.successCheck(resp)) {
+						resolve(resp.data.data)
+					}
+				},
+				fail: (err) => {
+					HttpCommons.commonFailHanlder(err)
+					reject(err)
+				}
+			})
+		})
+	},
+	
+	getSignInList: function(classId) {
+		return new Promise((resolve, reject) => {
+			uni.request({
+				url: ApiReference.SIGN_IN_LIST + '?classId=' + classId,
 				header: HttpCommons.getAuthenticationHeader(),
 				success: (resp) => {
 					if (HttpCommons.successCheck(resp)) {

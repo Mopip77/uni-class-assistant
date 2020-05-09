@@ -33,10 +33,15 @@ export default {
 		if (!serverDate) {
 			return null
 		}
+		
+		// 小程序不支持js的日期解析，需要改成2020-04-04T20:36:56.000+0000 => 2020-04-04 20:36:56, 然后再加8小时
+		serverDate = serverDate.replace(/-/g, '/')
+		serverDate = serverDate.replace(/T/g, ' ')
+		serverDate = serverDate.split('.')[0]
 
 		// console.log("解析时间", serverDate);
 		let ts = Date.parse(serverDate)
-		let date = new Date(ts)
+		let date = new Date(ts + 8 * 3600 * 1000)
 		// console.log("解析后", date);
 		let [year, month, day, hour, minute, second] = [date.getFullYear(), this.dateDigitToString(date.getMonth() + 1), this.dateDigitToString(date.getDate()), this.dateDigitToString(date.getHours()),
 			this.dateDigitToString(date.getMinutes()), this.dateDigitToString(date.getSeconds()),
@@ -100,9 +105,12 @@ export default {
 	dateConverterBatchFormatted: function(obj, ...args) {
 		for (let arg of args) {
 			if (obj[arg]) {
+				obj[arg] = obj[arg].replace(/-/g, '/')
+				obj[arg] = obj[arg].replace(/T/g, ' ')
+				obj[arg] = obj[arg].split('.')[0]
 				
 				let ts = Date.parse(obj[arg])
-				let date = new Date(ts)
+				let date = new Date(ts + 8 * 3600 * 1000)
 				let result = this.formatDateString(date)
 				obj[arg] = result
 			}

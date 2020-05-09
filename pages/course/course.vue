@@ -36,7 +36,7 @@
 		</view>
 
 		<view class="func-select-box">
-			<van-grid column-num="3">
+			<van-grid :column-num="course.isTeacher ? 3 : 2">
 				<navigator :url="'../member_list/member_list?courseId=' + course.id">
 					<van-grid-item use-slot>
 						<image src="../../static/img/members.png" />
@@ -49,7 +49,7 @@
 						<text>讨论区</text>
 					</van-grid-item>
 				</navigator>
-				<navigator :url="'../course_settings/course_settings?courseId=' + course.id">
+				<navigator v-if="course.isTeacher" :url="'../course_settings/course_settings?courseId=' + course.id">
 					<van-grid-item use-slot>
 						<image src="../../static/img/icon/settings.png" />
 						<text>课程设置</text>
@@ -75,28 +75,33 @@
 				</STab>
 				<STab title="课件">
 					<view class="list course-ware-list">
-						<view class="item course-ware-item" v-for="(courseWare, idx) in datas[1]" :key="idx" @tap="goToCourseWare(idx)" @longpress="tryDeleteCourseWare(courseWare.id)">
-							<view class="header">
-								<view class="display-name">{{courseWare.displayName}}</view>
-								<view class="time-box">
-									{{courseWare.createGmt}}
+						<view class="item course-ware-item" v-for="(courseWare, idx) in datas[1]" :key="idx">
+							<van-swipe-cell right-width="65" async-close>
+								<view class="swipe-cell-field" slot="right" @tap="tryDeleteCourseWare(courseWare.id)">删除</view>
+								<view class="header" @tap="goToCourseWare(idx)">
+									<view class="display-name">{{courseWare.displayName}}</view>
+									<view class="time-box">
+										{{courseWare.createGmt}}
+									</view>
 								</view>
-							</view>
-							<view class="footer">
-								<view class="user-box">
-									<image :src="courseWare.creator.avatarUrl"></image>
-									<text>{{courseWare.creator.nickname}}</text>
+								<view class="footer" @tap="goToCourseWare(idx)">
+									<view class="user-box">
+										<image :src="courseWare.creator.avatarUrl"></image>
+										<text>{{courseWare.creator.nickname}}</text>
+									</view>
+									<van-tag v-if="!courseWare.published" plain type="primary">未发布</van-tag>
 								</view>
-								<van-tag v-if="!courseWare.published" plain type="primary">未发布</van-tag>
-							</view>
+							</van-swipe-cell>
 						</view>
 						<uni-load-more :status="onloadingStatuses[1]" @clickLoadMore="loadMore" :contentText="onloadingTexts[1]"></uni-load-more>
 					</view>
 				</STab>
 				<STab title="试卷">
 					<view class="list contest-list">
-						<view class="item contest-item" v-for="(contest, idx) in datas[2]" :key="idx" @tap="goToContest(idx)" @longpress="tryDeleteContest(contest.id)">
-								<view class="header">
+						<view class="item contest-item" v-for="(contest, idx) in datas[2]" :key="idx">
+							<van-swipe-cell right-width="65" async-close>
+								<view class="swipe-cell-field" slot="right" @tap="tryDeleteContest(contest.id)">删除</view>
+								<view class="header" @tap="goToContest(idx)">
 									<view v-if="!contest.published" class="status" style="font-style: italic;color: #E65100;">未发布</view>
 									<view v-else-if="contest.status === '未开始'" class="status" style="color: #607D8B;">未开始</view>
 									<view v-else-if="contest.status === '已结束'" class="status" style="font-style: italic;">已结束</view>
@@ -109,22 +114,28 @@
 									</view>
 									<view v-else class="class-name">{{contest.className}}</view>
 								</view>
-								<view class="footer">
+								<view class="footer" @tap="goToContest(idx)">
 									<view class="user-box">
 										<image :src="contest.creator.avatarUrl"></image>
 										<text>{{contest.creator.nickname}}</text>
+										
+										<van-tag v-if="course.isTeacher && contest.status === '已结束' && !contest.revisedAll" class="revised" plain type="danger">未批完</van-tag>
+									
 									</view>
 
 									<view v-if="contest.limitMinutes > 0" class="limit-time">限时: {{contest.limitMinutes}}分钟</view>
 								</view>
+							</van-swipe-cell>
 						</view>
 						<uni-load-more :status="onloadingStatuses[2]" @clickLoadMore="loadMore" :contentText="onloadingTexts[2]"></uni-load-more>
 					</view>
 				</STab>
 				<STab title="课堂">
 					<view class="list class-list">
-						<view class="item class-item" v-for="(classObj, idx) in datas[3]" :key="idx" @tap="goToClass(idx)">
-							<view class="header">
+						<view class="item class-item" v-for="(classObj, idx) in datas[3]" :key="idx">
+							<van-swipe-cell right-width="65" async-close>
+								<view class="swipe-cell-field" slot="right" @tap="tryDeleteClass(classObj.id)">删除</view>
+							<view class="header" @tap="goToClass(idx)">
 								<van-tag v-if="classObj.published === 0" plain type="primary">未发布</van-tag>
 								<van-tag v-else-if="classObj.finished === 0" plain type="success">进行中</van-tag>
 								<van-tag v-else plain type="danger">已结课</van-tag>
@@ -132,7 +143,7 @@
 									{{classObj.className}}
 								</view>
 							</view>
-							<view class="footer">
+							<view class="footer" @tap="goToClass(idx)">
 								<view class="user-box">
 									<image :src="classObj.creator.avatarUrl"></image>
 									<text>{{classObj.creator.nickname}}</text>
@@ -140,6 +151,7 @@
 
 								<view class="create-date">{{classObj.createGmt}}</view>
 							</view>
+							</van-swipe-cell>
 						</view>
 						<uni-load-more :status="onloadingStatuses[3]" @clickLoadMore="loadMore" :contentText="onloadingTexts[3]"></uni-load-more>
 					</view>
@@ -160,6 +172,7 @@
 	import Tag from '@/wxcomponents/vant/dist/tag/index.js'
 	import VanDialog from '@/wxcomponents/vant/dist/dialog/index.js'
 	import Dialog from '@/wxcomponents/vant/dist/dialog/dialog.js'
+	import SwipeCell from '@/wxcomponents/vant/dist/swipe-cell/index.js'
 
 	import ClassUtils from '@/static/js/class.js';
 	import CourseWareUtils from '@/static/js/course_ware.js'
@@ -184,6 +197,7 @@
 			UniLoadMore,
 			STabs,
 			STab,
+			'van-swipe-cell': SwipeCell,
 			"van-tag": Tag,
 			"van-grid": Grid,
 			"van-grid-item": GridItem,
@@ -262,7 +276,6 @@
 			async loadMore() {
 				// 处理当前tab的loadmore, tab顺序为 公告，课件，试卷，课堂
 				let idx = this.resourceSelectIndex
-				console.log("load more offset:", this.offsets[idx]);
 
 				if (this.offsets[idx] > this.datas[idx].length) {
 					return;
@@ -274,19 +287,15 @@
 				if (idx === 0) {
 					// 加载公告
 					data = await this.getBulletins();
-					console.log("获得公告", data);
 				} else if (idx === 1) {
 					// 加载课件
 					data = await this.getCourseWare()
-					console.log("获得课件", data);
 				} else if (idx === 2) {
 					// 加载试卷
 					data = await this.getContestsByCourseId()
-					console.log("获得试卷", data);
 				} else if (idx === 3) {
 					// 加载课堂
 					data = await this.getClass()
-					console.log("获得课堂", data);
 				}
 
 				this.datas[idx].push(...data)
@@ -411,7 +420,7 @@
 				this.datas[this.resourceSelectIndex].splice(0);
 				this.changeResourceTab();
 			},
-			
+
 			// 进入分数结算页面
 			goToScoreCal() {
 				uni.navigateTo({
@@ -424,7 +433,10 @@
 				let contest = this.datas[2][idx]
 				if (!this.course.isTeacher && contest.status === '未开始') {
 					// 可能时间已经到了，还是要判断一下发布时间
-					if (new Date() - new Date(contest.publishDate) < 0) {
+					// 小程序时间转换
+					let pD = contest.publishDate.replace(/-/g, '/')
+					
+					if (new Date() - new Date(pD) < 0) {
 						Notify({
 							type: 'danger',
 							message: '测试还未开始'
@@ -457,7 +469,6 @@
 			getBulletins() {
 				let that = this
 				let idx = this.resourceSelectIndex
-				console.log("getBulletins offset:", that.offsets[idx], " data:", that.datas[idx]);
 				return new Promise((resolve, reject) => {
 					let promise = BulletinUtils.listBulletin(
 						that.course.id,
@@ -536,7 +547,7 @@
 					});
 				})
 			},
-			
+
 			tryDeleteCourseWare(courseWareId) {
 				Dialog.confirm({
 					title: '删除课件',
@@ -548,7 +559,7 @@
 							type: "success",
 							message: "课件已删除"
 						});
-					
+
 						this.resetTab();
 					})
 				}).catch(() => {});
@@ -565,7 +576,24 @@
 							type: "success",
 							message: "试卷已删除"
 						});
-					
+
+						this.resetTab();
+					})
+				}).catch(() => {});
+			},
+			
+			tryDeleteClass(classId) {
+				Dialog.confirm({
+					title: '删除课堂',
+					message: '确认删除吗？'
+				}).then(() => {
+					let p = ClassUtils.deleteClass(classId)
+					p.then(() => {
+						Notify({
+							type: "success",
+							message: "课堂已删除"
+						});
+				
 						this.resetTab();
 					})
 				}).catch(() => {});
@@ -704,6 +732,7 @@
 				height: 47rpx;
 				padding: 0 40rpx;
 				margin-right: 10rpx;
+				border-radius: 6rpx;
 			}
 		}
 
@@ -729,15 +758,15 @@
 				flex-direction: column;
 				height: 180rpx;
 				background-image: $card-background-url;
-				
+
 				.swipe-cell-field {
 					font-size: 40rpx;
 					text-decoration: underline;
 					font-weight: bold;
 					color: #D84315;
 					top: 50%;
-					margin-top: 85rpx;
-					margin-left: 17rpx;
+					margin-top: 64rpx;
+					margin-left: 24rpx;
 				}
 
 				.header {
@@ -767,7 +796,7 @@
 					display: flex;
 					justify-content: space-between;
 					align-items: center;
-					margin-top: auto;
+					margin-top: 24rpx;
 					margin-bottom: 6rpx;
 					padding: 0 10rpx;
 
@@ -784,6 +813,10 @@
 						text {
 							margin-left: 10rpx;
 						}
+						
+						.revised {
+							margin-left: 20rpx;
+						}
 
 						.van-tag {
 							background-color: $global-background-color;
@@ -797,6 +830,23 @@
 			.course-ware-item {
 				height: 160rpx;
 
+				van-swipe-cell {
+					width: 100%;
+					height: 100%;
+					display: flex;
+					flex-direction: column;
+					justify-content: space-between;
+					
+					.van-swipe-cell {
+						width: 100%;
+						height: 100%;
+					}
+					
+					.swipe-cell-field {
+						margin-top: 54rpx;
+					}
+				}
+
 				.display-name {
 					font-size: 34rpx;
 					font-weight: 600;
@@ -804,6 +854,7 @@
 			}
 
 			.footer {
+				
 				.van-tag {
 					background-color: $global-background-color;
 				}

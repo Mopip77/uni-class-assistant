@@ -75,25 +75,36 @@
 				this.showModal = false
 			},
 			revise(userId) {
-				console.log("revise", userId);
 				this.revisingUserId = userId
 				this.showModal = true
+			},
+			
+			getPageInfo(closePullDownRefresh = false) {
+				let promise = ContestUtils.getAnswerList(this.contestId)
+				promise
+					.then(data => {
+						this.unSubmit = data.unSubmit
+						this.unRevised = data.unRevised
+						this.revised = data.revised.sort((x, y) => y.score - x.score)
+					})
+					
+				if (closePullDownRefresh) {
+					uni.stopPullDownRefresh()
+				}
 			}
 		},
 		onLoad(option) {
-			// this.contestId = '5e943c0505704513d99d2e0a';
 			this.contestId = option.contestId
 			this.fullScore = option.fullScore
-			let promise = ContestUtils.getAnswerList(this.contestId)
-			promise
-				.then(data => {
-					this.unSubmit = data.unSubmit
-					this.unRevised = data.unRevised
-					this.revised = data.revised.sort((x, y) => y.score - x.score)
-				})
+			
+			this.getPageInfo()
 		},
+		
+		onPullDownRefresh() {
+			this.getPageInfo(true)
+		},
+		
 		updated() {
-			console.log("onshow，看看", this.refreshOnShow);
 			if (this.refreshOnShow) {
 				let promise = ContestUtils.getAnswerList(this.contestId)
 				promise

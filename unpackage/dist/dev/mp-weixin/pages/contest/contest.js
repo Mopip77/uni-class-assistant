@@ -95,7 +95,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "components", function() { return components; });
 var components = {
   "uni-countdown": function() {
-    return __webpack_require__.e(/*! import() | components/uni-countdown/uni-countdown */ "components/uni-countdown/uni-countdown").then(__webpack_require__.bind(null, /*! @/components/uni-countdown/uni-countdown.vue */ 301))
+    return __webpack_require__.e(/*! import() | components/uni-countdown/uni-countdown */ "components/uni-countdown/uni-countdown").then(__webpack_require__.bind(null, /*! @/components/uni-countdown/uni-countdown.vue */ 311))
   }
 }
 var render = function() {
@@ -215,6 +215,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 var _dialog = _interopRequireDefault(__webpack_require__(/*! @/wxcomponents/vant/dist/dialog/dialog.js */ 33));
 
 
@@ -223,15 +224,13 @@ var _notify = _interopRequireDefault(__webpack_require__(/*! @/wxcomponents/vant
 
 
 
-
 var _utils = _interopRequireDefault(__webpack_require__(/*! @/static/js/utils.js */ 17));
-var _contest = _interopRequireDefault(__webpack_require__(/*! @/static/js/contest.js */ 79));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {try {var info = gen[key](arg);var value = info.value;} catch (error) {reject(error);return;}if (info.done) {resolve(value);} else {Promise.resolve(value).then(_next, _throw);}}function _asyncToGenerator(fn) {return function () {var self = this,args = arguments;return new Promise(function (resolve, reject) {var gen = fn.apply(self, args);function _next(value) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);}function _throw(err) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);}_next(undefined);});};}function _toConsumableArray(arr) {return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread();}function _nonIterableSpread() {throw new TypeError("Invalid attempt to spread non-iterable instance");}function _iterableToArray(iter) {if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter);}function _arrayWithoutHoles(arr) {if (Array.isArray(arr)) {for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) {arr2[i] = arr[i];}return arr2;}}var Button = function Button() {__webpack_require__.e(/*! require.ensure | wxcomponents/vant/dist/button/index */ "common/vendor").then((function () {return resolve(__webpack_require__(/*! @/wxcomponents/vant/dist/button/index.js */ 237));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var Icon = function Icon() {__webpack_require__.e(/*! require.ensure | wxcomponents/vant/dist/icon/index */ "common/vendor").then((function () {return resolve(__webpack_require__(/*! @/wxcomponents/vant/dist/icon/index.js */ 236));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var VanDialog = function VanDialog() {__webpack_require__.e(/*! require.ensure | wxcomponents/vant/dist/dialog/index */ "common/vendor").then((function () {return resolve(__webpack_require__(/*! @/wxcomponents/vant/dist/dialog/index.js */ 241));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var Divider = function Divider() {__webpack_require__.e(/*! require.ensure | wxcomponents/vant/dist/divider/index */ "common/vendor").then((function () {return resolve(__webpack_require__(/*! @/wxcomponents/vant/dist/divider/index.js */ 242));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var VanNotify = function VanNotify() {__webpack_require__.e(/*! require.ensure | wxcomponents/vant/dist/notify/index */ "common/vendor").then((function () {return resolve(__webpack_require__(/*! @/wxcomponents/vant/dist/notify/index.js */ 235));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var WPicker = function WPicker() {__webpack_require__.e(/*! require.ensure | components/w-picker/w-picker */ "components/w-picker/w-picker").then((function () {return resolve(__webpack_require__(/*! @/components/w-picker/w-picker.vue */ 308));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var CreateAnswer = function CreateAnswer() {Promise.all(/*! require.ensure | components/CreateAnswer */[__webpack_require__.e("common/vendor"), __webpack_require__.e("components/CreateAnswer")]).then((function () {return resolve(__webpack_require__(/*! @/components/CreateAnswer.vue */ 315));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var uniCountdown = function uniCountdown() {__webpack_require__.e(/*! require.ensure | components/uni-countdown/uni-countdown */ "components/uni-countdown/uni-countdown").then((function () {return resolve(__webpack_require__(/*! @/components/uni-countdown/uni-countdown.vue */ 301));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var _default =
+var _contest = _interopRequireDefault(__webpack_require__(/*! @/static/js/contest.js */ 79));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {try {var info = gen[key](arg);var value = info.value;} catch (error) {reject(error);return;}if (info.done) {resolve(value);} else {Promise.resolve(value).then(_next, _throw);}}function _asyncToGenerator(fn) {return function () {var self = this,args = arguments;return new Promise(function (resolve, reject) {var gen = fn.apply(self, args);function _next(value) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);}function _throw(err) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);}_next(undefined);});};}function _toConsumableArray(arr) {return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread();}function _nonIterableSpread() {throw new TypeError("Invalid attempt to spread non-iterable instance");}function _iterableToArray(iter) {if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter);}function _arrayWithoutHoles(arr) {if (Array.isArray(arr)) {for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) {arr2[i] = arr[i];}return arr2;}}var Button = function Button() {__webpack_require__.e(/*! require.ensure | wxcomponents/vant/dist/button/index */ "common/vendor").then((function () {return resolve(__webpack_require__(/*! @/wxcomponents/vant/dist/button/index.js */ 251));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var Icon = function Icon() {__webpack_require__.e(/*! require.ensure | wxcomponents/vant/dist/icon/index */ "common/vendor").then((function () {return resolve(__webpack_require__(/*! @/wxcomponents/vant/dist/icon/index.js */ 250));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var VanDialog = function VanDialog() {__webpack_require__.e(/*! require.ensure | wxcomponents/vant/dist/dialog/index */ "common/vendor").then((function () {return resolve(__webpack_require__(/*! @/wxcomponents/vant/dist/dialog/index.js */ 200));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var Divider = function Divider() {__webpack_require__.e(/*! require.ensure | wxcomponents/vant/dist/divider/index */ "common/vendor").then((function () {return resolve(__webpack_require__(/*! @/wxcomponents/vant/dist/divider/index.js */ 252));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var VanNotify = function VanNotify() {__webpack_require__.e(/*! require.ensure | wxcomponents/vant/dist/notify/index */ "common/vendor").then((function () {return resolve(__webpack_require__(/*! @/wxcomponents/vant/dist/notify/index.js */ 249));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var CreateAnswer = function CreateAnswer() {Promise.all(/*! require.ensure | components/CreateAnswer */[__webpack_require__.e("common/vendor"), __webpack_require__.e("components/CreateAnswer")]).then((function () {return resolve(__webpack_require__(/*! @/components/CreateAnswer.vue */ 318));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var uniCountdown = function uniCountdown() {__webpack_require__.e(/*! require.ensure | components/uni-countdown/uni-countdown */ "components/uni-countdown/uni-countdown").then((function () {return resolve(__webpack_require__(/*! @/components/uni-countdown/uni-countdown.vue */ 311));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var _default =
 
 {
   components: {
     uniCountdown: uniCountdown,
     CreateAnswer: CreateAnswer,
-    "w-picker": WPicker,
     "van-button": Button,
     "van-icon": Icon,
     "van-dialog": VanDialog,
@@ -270,6 +269,7 @@ var _contest = _interopRequireDefault(__webpack_require__(/*! @/static/js/contes
       subjectiveQuestions: [],
 
       // 回答的内容
+      submitted: true,
       gotScore: 0,
       answerId: '',
       objectiveAnswers: [], // [[...index: Number]]
@@ -303,12 +303,24 @@ var _contest = _interopRequireDefault(__webpack_require__(/*! @/static/js/contes
     },
     // 老师批改试卷
     goToRevise: function goToRevise() {
+      if (this.leftSecond > 0) {
+        return;
+      }
+
       uni.navigateTo({
         url: '../revise/revise?contestId=' + this.contestId + '&fullScore=' + this.fullScore });
 
     },
     // 提交试卷（检查）
     submitAnswer: function submitAnswer() {
+      if (this.leftSecond < 0) {
+        (0, _notify.default)({
+          type: 'danger',
+          message: '试卷已截止' });
+
+        return;
+      }
+
       var that = this;
       // 检查是否全部填写
       if (this.objectiveQuestions.filter(function (e) {return !e.answered;}).length > 0 || this.subjectiveQuestions.filter(function (e) {return !e.answered;}).
@@ -351,7 +363,6 @@ var _contest = _interopRequireDefault(__webpack_require__(/*! @/static/js/contes
         subjectiveAnswers: sA };
 
 
-      console.log("submit一哈", answer);
       var promise = _contest.default.updateAnswer(answer);
       promise.
       then(function (data) {
@@ -360,9 +371,6 @@ var _contest = _interopRequireDefault(__webpack_require__(/*! @/static/js/contes
       });
     },
     updateAnswers: function updateAnswers(index, questionType, answer) {
-      console.log("index", index);
-      console.log("questionType", questionType);
-      console.log("answer", answer);
 
       if (questionType === 'objective') {
         this.objectiveAnswers[index].options = _toConsumableArray(answer.optionAnswers);
@@ -452,6 +460,7 @@ var _contest = _interopRequireDefault(__webpack_require__(/*! @/static/js/contes
                 } else {
                   // 说明学生并没有提交过试卷
                   that.revised = true;
+                  that.submitted = false;
                   that.subjectiveAnswers = that.subjectiveQuestions.map(function (e) {
                     return {
                       score: 0,

@@ -119,7 +119,6 @@
 		},
 		methods: {
 			chatWith(id) {
-				console.log("chat with", id);
 				if (this.userId === id) {
 					Notify({
 						type: "danger",
@@ -138,7 +137,6 @@
 				let promise = CourseUtils.getCourseMembers(courseId)
 				promise
 					.then(data => {
-						console.log("data", data);
 						this.teachers = data.teacher
 						this.students = data.student
 						this.isTeacher = data.isTeacher

@@ -88,12 +88,18 @@
 			// w-picker选择时间后确定后的调用
 			onConfirm(e) {
 				// 传入有e有两种格式，一种是"今天 17:01:02"， 一种是"2020-12-12 17:01:02"
-				let selectDate = null
+				console.log(e);
+				let selectDateStr = null
 				if (typeof e.obj.date === 'object') {
-					selectDate = new Date(e.obj.date.value + ' ' + e.obj.hour.value + ':' + e.obj.minute.value)
+					// 其中e.obj.date.value为日期
+					selectDateStr = e.obj.date.value + ' ' + e.obj.hour.value + ':' + e.obj.minute.value
 				} else {
-					selectDate = new Date(e.value)
+					selectDateStr = e.value
 				}
+				
+				// 修改日期格式，为小程序识别
+				selectDateStr = selectDateStr.replace(/-/g, '/')
+				let selectDate = new Date(selectDateStr)
 			
 				this.publishDate = selectDate
 			},

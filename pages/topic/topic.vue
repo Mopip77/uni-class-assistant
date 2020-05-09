@@ -35,7 +35,7 @@
 			</view>
 			<view class="topic-body">
 				<view class="title">{{topic.title}}</view>
-				<view class="content">{{topic.content}}</view>
+				<view class="content"><text>{{topic.content}}</text></view>
 			</view>
 			<view class="footer">
 
@@ -64,7 +64,7 @@
 					</view>
 				</view>
 				<view class="comment-body">
-					{{comment.content}}
+					<text>{{comment.content}}</text>
 				</view>
 				<view class="sub-comment">
 					<text v-if="comment.commentCount === 0" @tap="showModal(comment.id, comment.creator.nickname)">回复</text>
@@ -385,7 +385,7 @@
 				}
 				
 				if (closePullDownRefresh) {
-					uni.closePullDownRefresh()
+					uni.stopPullDownRefresh()
 				}
 			}
 		},
@@ -507,11 +507,13 @@
 		.dock-row {
 			position: fixed;
 			bottom: 0;
+			bottom: constant(safe-area-inset-bottom);
+			bottom: env(safe-area-inset-bottom);
 			// border: 1rpx solid black;
 			width: 100%;
 			display: flex;
 			justify-content: space-between;
-			padding: 8rpx 4rpx;
+			padding: 10rpx 4rpx;
 			background-color: white;
 			align-items: center;
 			box-shadow: -1rpx -1rpx .8rpx #9E9E9E;
@@ -522,7 +524,7 @@
 				line-height: 1.5rem;
 				background-color: #E0E0E0;
 				border-radius: 25rpx;
-				padding: 2rpx 25rpx;
+				padding: 14rpx 25rpx;
 				color: #616161;
 			}
 

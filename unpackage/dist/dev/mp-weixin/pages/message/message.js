@@ -95,7 +95,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "components", function() { return components; });
 var components = {
   "uni-load-more": function() {
-    return __webpack_require__.e(/*! import() | components/uni-load-more/uni-load-more */ "components/uni-load-more/uni-load-more").then(__webpack_require__.bind(null, /*! @/components/uni-load-more/uni-load-more.vue */ 219))
+    return __webpack_require__.e(/*! import() | components/uni-load-more/uni-load-more */ "components/uni-load-more/uni-load-more").then(__webpack_require__.bind(null, /*! @/components/uni-load-more/uni-load-more.vue */ 237))
   }
 }
 var render = function() {
@@ -196,9 +196,21 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+
+
+
+
+
+
+var _notify = _interopRequireDefault(__webpack_require__(/*! @/wxcomponents/vant/dist/notify/notify.js */ 19));
+
+
+
+
 var _chat = _interopRequireDefault(__webpack_require__(/*! @/static/js/chat.js */ 43));
 var _utils = _interopRequireDefault(__webpack_require__(/*! @/static/js/utils.js */ 17));
-var _notification = _interopRequireDefault(__webpack_require__(/*! @/static/js/notification.js */ 44));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function _toConsumableArray(arr) {return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread();}function _nonIterableSpread() {throw new TypeError("Invalid attempt to spread non-iterable instance");}function _iterableToArray(iter) {if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter);}function _arrayWithoutHoles(arr) {if (Array.isArray(arr)) {for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) {arr2[i] = arr[i];}return arr2;}}function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {try {var info = gen[key](arg);var value = info.value;} catch (error) {reject(error);return;}if (info.done) {resolve(value);} else {Promise.resolve(value).then(_next, _throw);}}function _asyncToGenerator(fn) {return function () {var self = this,args = arguments;return new Promise(function (resolve, reject) {var gen = fn.apply(self, args);function _next(value) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);}function _throw(err) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);}_next(undefined);});};}var STabs = function STabs() {__webpack_require__.e(/*! require.ensure | components/s-tabs/index */ "components/s-tabs/index").then((function () {return resolve(__webpack_require__(/*! @/components/s-tabs/index.vue */ 243));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var STab = function STab() {__webpack_require__.e(/*! require.ensure | components/s-tab/index */ "components/s-tab/index").then((function () {return resolve(__webpack_require__(/*! @/components/s-tab/index.vue */ 250));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var Image = function Image() {__webpack_require__.e(/*! require.ensure | wxcomponents/vant/dist/image/index */ "common/vendor").then((function () {return resolve(__webpack_require__(/*! @/wxcomponents/vant/dist/image/index.js */ 271));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var Tag = function Tag() {__webpack_require__.e(/*! require.ensure | wxcomponents/vant/dist/tag/index */ "common/vendor").then((function () {return resolve(__webpack_require__(/*! @/wxcomponents/vant/dist/tag/index.js */ 272));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var Notification = function Notification() {__webpack_require__.e(/*! require.ensure | components/Notification */ "components/Notification").then((function () {return resolve(__webpack_require__(/*! @/components/Notification.vue */ 273));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var UniLoadMore = function UniLoadMore() {__webpack_require__.e(/*! require.ensure | components/uni-load-more/uni-load-more */ "components/uni-load-more/uni-load-more").then((function () {return resolve(__webpack_require__(/*! @/components/uni-load-more/uni-load-more.vue */ 219));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var _default =
+var _notification = _interopRequireDefault(__webpack_require__(/*! @/static/js/notification.js */ 44));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function _toConsumableArray(arr) {return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread();}function _nonIterableSpread() {throw new TypeError("Invalid attempt to spread non-iterable instance");}function _iterableToArray(iter) {if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter);}function _arrayWithoutHoles(arr) {if (Array.isArray(arr)) {for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) {arr2[i] = arr[i];}return arr2;}}function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {try {var info = gen[key](arg);var value = info.value;} catch (error) {reject(error);return;}if (info.done) {resolve(value);} else {Promise.resolve(value).then(_next, _throw);}}function _asyncToGenerator(fn) {return function () {var self = this,args = arguments;return new Promise(function (resolve, reject) {var gen = fn.apply(self, args);function _next(value) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);}function _throw(err) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);}_next(undefined);});};}var STabs = function STabs() {__webpack_require__.e(/*! require.ensure | components/s-tabs/index */ "components/s-tabs/index").then((function () {return resolve(__webpack_require__(/*! @/components/s-tabs/index.vue */ 253));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var STab = function STab() {__webpack_require__.e(/*! require.ensure | components/s-tab/index */ "components/s-tab/index").then((function () {return resolve(__webpack_require__(/*! @/components/s-tab/index.vue */ 260));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var Image = function Image() {__webpack_require__.e(/*! require.ensure | wxcomponents/vant/dist/image/index */ "common/vendor").then((function () {return resolve(__webpack_require__(/*! @/wxcomponents/vant/dist/image/index.js */ 281));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var Tag = function Tag() {__webpack_require__.e(/*! require.ensure | wxcomponents/vant/dist/tag/index */ "common/vendor").then((function () {return resolve(__webpack_require__(/*! @/wxcomponents/vant/dist/tag/index.js */ 282));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var SwipeCell = function SwipeCell() {__webpack_require__.e(/*! require.ensure | wxcomponents/vant/dist/swipe-cell/index */ "common/vendor").then((function () {return resolve(__webpack_require__(/*! @/wxcomponents/vant/dist/swipe-cell/index.js */ 195));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var VanNotify = function VanNotify() {__webpack_require__.e(/*! require.ensure | wxcomponents/vant/dist/notify/index */ "common/vendor").then((function () {return resolve(__webpack_require__(/*! @/wxcomponents/vant/dist/notify/index.js */ 249));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var Notification = function Notification() {__webpack_require__.e(/*! require.ensure | components/Notification */ "components/Notification").then((function () {return resolve(__webpack_require__(/*! @/components/Notification.vue */ 283));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var UniLoadMore = function UniLoadMore() {__webpack_require__.e(/*! require.ensure | components/uni-load-more/uni-load-more */ "components/uni-load-more/uni-load-more").then((function () {return resolve(__webpack_require__(/*! @/components/uni-load-more/uni-load-more.vue */ 237));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var _default =
 
 {
   components: {
@@ -207,7 +219,9 @@ var _notification = _interopRequireDefault(__webpack_require__(/*! @/static/js/n
     STab: STab,
     "van-tag": Tag,
     "van-image": Image,
-    "uni-load-more": UniLoadMore },
+    "uni-load-more": UniLoadMore,
+    'van-swipe-cell': SwipeCell,
+    'van-notify': VanNotify },
 
   data: function data() {
     return {
@@ -217,7 +231,10 @@ var _notification = _interopRequireDefault(__webpack_require__(/*! @/static/js/n
       tabIdx: 0,
 
       // data (chat, notification)
-      datas: [[], []],
+      datas: [
+      [],
+      []],
+
       offsets: [0, 0],
       counts: [10, 10],
       onloadingStatuses: ["more", "more"],
@@ -236,10 +253,7 @@ var _notification = _interopRequireDefault(__webpack_require__(/*! @/static/js/n
   },
   methods: {
     closeModal: function closeModal() {
-      var IDX = this.tabIdx;
-      this.offsets[IDX] = 0;
-      this.datas[IDX].splice(0);
-      this.loadMore();
+      this.resetTab();
 
       this.showModal = false;
     },
@@ -324,13 +338,42 @@ var _notification = _interopRequireDefault(__webpack_require__(/*! @/static/js/n
           resolve(data);
         });
       });
+    },
+
+    deleteNotification: function deleteNotification(idx) {var _this4 = this;
+      if (idx < 0 || idx >= this.datas[1].length) {
+        return;
+      }
+
+      var p = _notification.default.deleteNotifcation(this.datas[1][idx].id);
+      p.then(function () {
+        _this4.datas[1].splice(idx, 1);
+        _this4.offsets[1] -= 1;
+      });
+    },
+
+    resetTab: function resetTab() {
+      var IDX = this.tabIdx;
+      this.offsets[IDX] = 0;
+      this.datas[IDX].splice(0);
+
+      this.loadMore();
+    },
+
+    getPageInfo: function getPageInfo() {var closePullDownRefresh = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+      this.resetTab();
+
+      if (closePullDownRefresh) {
+        uni.stopPullDownRefresh();
+      }
     } },
 
   onShow: function onShow() {
-    var IDX = this.tabIdx;
-    this.offsets[IDX] = 0;
-    this.datas[IDX].splice(0);
-    this.loadMore();
+    this.getPageInfo();
+  },
+
+  onPullDownRefresh: function onPullDownRefresh() {
+    this.getPageInfo(true);
   } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 

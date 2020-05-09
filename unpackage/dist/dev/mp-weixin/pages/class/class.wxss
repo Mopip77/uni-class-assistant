@@ -90,7 +90,7 @@
       width: 180rpx;
 }
 .teacher-box .sign-in-box .already-sign-button {
-    width: 220rpx;
+    width: 180rpx;
 }
 .teacher-box .sign-in-box .sign-text {
     margin-left: 10rpx;

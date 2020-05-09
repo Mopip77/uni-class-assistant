@@ -1555,7 +1555,7 @@ uni$1;exports.default = _default;
 
 /***/ }),
 
-/***/ 112:
+/***/ 114:
 /*!****************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/static/js/topic.js ***!
   \****************************************************************************************/
@@ -1861,7 +1861,6 @@ var _notify = _interopRequireDefault(__webpack_require__(/*! ../../wxcomponents/
           method: 'POST',
           success: function success(infoRes) {
             if (infoRes.data.code !== 0) {
-              console.log('登录失败,请重试', infoRes);
               uni.showToast({
                 title: '登录失败,请重试' });
 
@@ -1874,8 +1873,6 @@ var _notify = _interopRequireDefault(__webpack_require__(/*! ../../wxcomponents/
             uni.setStorageSync(_local_storage_reference.default.JWT_TOKEN, infoRes.data.data['jwt_token']);
             uni.setStorageSync(_local_storage_reference.default.EXPIRE_TIMESTAMP, Number(infoRes.data.data['expiration_at']));
             var needUploadUserInfo = infoRes.data.data['need_user_info'] === "false" ? false : true; // js string bool 问题
-
-            console.log("needUserInfo", needUploadUserInfo);
 
             if (needUploadUserInfo) {
               console.log("上传用户信息");
@@ -3084,13 +3081,13 @@ var index_esm = {
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var API_SERVER = 'http://47.107.90.226:9106/wxma/';var _default =
+Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var API_SERVER = 'https://go.x3x.fun:9150/wxma/';var _default =
 
 {
   SERVER_URL: API_SERVER,
   // user
   CHECK_TOKEN_URL: API_SERVER + 'user/check-token',
-  LOGIN_URL: 'http://47.107.90.226:9105/wxma/auth/login',
+  LOGIN_URL: API_SERVER + 'auth/login',
   UPLOAD_USER_INFO: API_SERVER + 'user/upload-info',
   GET_USERINFO_URL: API_SERVER + 'user/info',
   UPDATE_USERINFO_URL: API_SERVER + 'user/update-info',
@@ -3181,7 +3178,9 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
   START_SIGN_IN: API_SERVER + 'class/start-sign-in',
   SIGN_IN_COUNT: API_SERVER + 'class/sign-in-count',
   SIGN_IN: API_SERVER + 'class/sign-in',
+  SIGN_IN_LIST: API_SERVER + 'class/sign-in-list',
   CLASS_NOTE: API_SERVER + 'class/note',
+  CLASS_ATTACH: API_SERVER + 'class/attach',
 
 
 
@@ -3249,9 +3248,14 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
       return null;
     }
 
+    // 小程序不支持js的日期解析，需要改成2020-04-04T20:36:56.000+0000 => 2020-04-04 20:36:56, 然后再加8小时
+    serverDate = serverDate.replace(/-/g, '/');
+    serverDate = serverDate.replace(/T/g, ' ');
+    serverDate = serverDate.split('.')[0];
+
     // console.log("解析时间", serverDate);
     var ts = Date.parse(serverDate);
-    var date = new Date(ts);
+    var date = new Date(ts + 8 * 3600 * 1000);
     // console.log("解析后", date);
     var _ref = [date.getFullYear(), this.dateDigitToString(date.getMonth() + 1), this.dateDigitToString(date.getDate()), this.dateDigitToString(date.getHours()),
     this.dateDigitToString(date.getMinutes()), this.dateDigitToString(date.getSeconds())],year = _ref[0],month = _ref[1],day = _ref[2],hour = _ref[3],minute = _ref[4],second = _ref[5];
@@ -3315,9 +3319,12 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
   dateConverterBatchFormatted: function dateConverterBatchFormatted(obj) {for (var _len2 = arguments.length, args = new Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {args[_key2 - 1] = arguments[_key2];}
     for (var _i2 = 0, _args2 = args; _i2 < _args2.length; _i2++) {var arg = _args2[_i2];
       if (obj[arg]) {
+        obj[arg] = obj[arg].replace(/-/g, '/');
+        obj[arg] = obj[arg].replace(/T/g, ' ');
+        obj[arg] = obj[arg].split('.')[0];
 
         var ts = Date.parse(obj[arg]);
-        var date = new Date(ts);
+        var date = new Date(ts + 8 * 3600 * 1000);
         var result = this.formatDateString(date);
         obj[arg] = result;
       }
@@ -3383,7 +3390,6 @@ var _notify = _interopRequireDefault(__webpack_require__(/*! ../../wxcomponents/
    */
   successCheck: function successCheck(resp) {
     console.log("successCheck resp", resp);
-    console.log("successCheck resp auth", resp.data.auth);
     if (undefined !== resp.data.auth && null !== resp.data.auth) {
       // 更新token
       console.log("更新token in httpSuccessCheck");
@@ -3526,6 +3532,372 @@ Notify.clear = function (options) {
     notify.hide();
   }
 };
+
+/***/ }),
+
+/***/ 195:
+/*!****************************************************************************************************************!*\
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/swipe-cell/index.js ***!
+  \****************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+var _component = __webpack_require__(/*! ../common/component */ 196);
+var _touch = __webpack_require__(/*! ../mixins/touch */ 198);
+var _utils = __webpack_require__(/*! ../common/utils */ 199);
+var THRESHOLD = 0.3;
+var ARRAY = [];
+(0, _component.VantComponent)({
+  props: {
+    disabled: Boolean,
+    leftWidth: {
+      type: Number,
+      value: 0,
+      observer: function observer() {var leftWidth = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
+        if (this.offset > 0) {
+          this.swipeMove(leftWidth);
+        }
+      } },
+
+    rightWidth: {
+      type: Number,
+      value: 0,
+      observer: function observer() {var rightWidth = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
+        if (this.offset < 0) {
+          this.swipeMove(-rightWidth);
+        }
+      } },
+
+    asyncClose: Boolean,
+    name: {
+      type: [Number, String],
+      value: '' } },
+
+
+  mixins: [_touch.touch],
+  data: {
+    catchMove: false },
+
+  created: function created() {
+    this.offset = 0;
+    ARRAY.push(this);
+  },
+  destroyed: function destroyed() {var _this = this;
+    ARRAY = ARRAY.filter(function (item) {return item !== _this;});
+  },
+  methods: {
+    open: function open(position) {var _this$data =
+      this.data,leftWidth = _this$data.leftWidth,rightWidth = _this$data.rightWidth;
+      var offset = position === 'left' ? leftWidth : -rightWidth;
+      this.swipeMove(offset);
+      this.$emit('open', {
+        position: position,
+        name: this.data.name });
+
+    },
+    close: function close() {
+      this.swipeMove(0);
+    },
+    swipeMove: function swipeMove() {var offset = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
+      this.offset = (0, _utils.range)(offset, -this.data.rightWidth, this.data.leftWidth);
+      var transform = "translate3d(".concat(this.offset, "px, 0, 0)");
+      var transition = this.dragging ?
+      'none' :
+      'transform .6s cubic-bezier(0.18, 0.89, 0.32, 1)';
+      this.setData({
+        wrapperStyle: "\n        -webkit-transform: ".concat(
+        transform, ";\n        -webkit-transition: ").concat(
+        transition, ";\n        transform: ").concat(
+        transform, ";\n        transition: ").concat(
+        transition, ";\n      ") });
+
+
+    },
+    swipeLeaveTransition: function swipeLeaveTransition() {var _this$data2 =
+      this.data,leftWidth = _this$data2.leftWidth,rightWidth = _this$data2.rightWidth;var
+      offset = this.offset;
+      if (rightWidth > 0 && -offset > rightWidth * THRESHOLD) {
+        this.open('right');
+      } else
+      if (leftWidth > 0 && offset > leftWidth * THRESHOLD) {
+        this.open('left');
+      } else
+      {
+        this.swipeMove(0);
+      }
+      this.setData({ catchMove: false });
+    },
+    startDrag: function startDrag(event) {
+      if (this.data.disabled) {
+        return;
+      }
+      this.startOffset = this.offset;
+      this.touchStart(event);
+    },
+    noop: function noop() {},
+    onDrag: function onDrag(event) {var _this2 = this;
+      if (this.data.disabled) {
+        return;
+      }
+      this.touchMove(event);
+      if (this.direction !== 'horizontal') {
+        return;
+      }
+      this.dragging = true;
+      ARRAY.filter(function (item) {return item !== _this2;}).forEach(function (item) {return item.close();});
+      this.setData({ catchMove: true });
+      this.swipeMove(this.startOffset + this.deltaX);
+    },
+    endDrag: function endDrag() {
+      if (this.data.disabled) {
+        return;
+      }
+      this.dragging = false;
+      this.swipeLeaveTransition();
+    },
+    onClick: function onClick(event) {var _event$currentTarget$ =
+      event.currentTarget.dataset.key,position = _event$currentTarget$ === void 0 ? 'outside' : _event$currentTarget$;
+      this.$emit('click', position);
+      if (!this.offset) {
+        return;
+      }
+      if (this.data.asyncClose) {
+        this.$emit('close', {
+          position: position,
+          instance: this,
+          name: this.data.name });
+
+      } else
+      {
+        this.swipeMove(0);
+      }
+    } } });
+
+/***/ }),
+
+/***/ 196:
+/*!****************************************************************************************************************!*\
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/common/component.js ***!
+  \****************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });exports.VantComponent = VantComponent;var _basic = __webpack_require__(/*! ../mixins/basic */ 197);function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
+var relationFunctions = {
+  ancestor: {
+    linked: function linked(parent) {
+      this.parent = parent;
+    },
+    unlinked: function unlinked() {
+      this.parent = null;
+    } },
+
+  descendant: {
+    linked: function linked(child) {
+      this.children = this.children || [];
+      this.children.push(child);
+    },
+    unlinked: function unlinked(child) {
+      this.children = (this.children || []).filter(function (it) {return it !== child;});
+    } } };
+
+
+function mapKeys(source, target, map) {
+  Object.keys(map).forEach(function (key) {
+    if (source[key]) {
+      target[map[key]] = source[key];
+    }
+  });
+}
+function makeRelation(options, vantOptions, relation) {var
+  type = relation.type,name = relation.name,_linked = relation.linked,_unlinked = relation.unlinked,_linkChanged = relation.linkChanged;var
+  beforeCreate = vantOptions.beforeCreate,destroyed = vantOptions.destroyed;
+  if (type === 'descendant') {
+    options.created = function () {
+      beforeCreate && beforeCreate.bind(this)();
+      this.children = this.children || [];
+    };
+    options.detached = function () {
+      this.children = [];
+      destroyed && destroyed.bind(this)();
+    };
+  }
+  options.relations = Object.assign(options.relations || {}, _defineProperty({}, "../".concat(
+  name, "/index"), {
+    type: type,
+    linked: function linked(node) {
+      relationFunctions[type].linked.bind(this)(node);
+      _linked && _linked.bind(this)(node);
+    },
+    linkChanged: function linkChanged(node) {
+      _linkChanged && _linkChanged.bind(this)(node);
+    },
+    unlinked: function unlinked(node) {
+      relationFunctions[type].unlinked.bind(this)(node);
+      _unlinked && _unlinked.bind(this)(node);
+    } }));
+
+
+}
+function VantComponent() {var vantOptions = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var options = {};
+  mapKeys(vantOptions, options, {
+    data: 'data',
+    props: 'properties',
+    mixins: 'behaviors',
+    methods: 'methods',
+    beforeCreate: 'created',
+    created: 'attached',
+    mounted: 'ready',
+    relations: 'relations',
+    destroyed: 'detached',
+    classes: 'externalClasses' });var
+
+  relation = vantOptions.relation;
+  if (relation) {
+    makeRelation(options, vantOptions, relation);
+  }
+  // add default externalClasses
+  options.externalClasses = options.externalClasses || [];
+  options.externalClasses.push('custom-class');
+  // add default behaviors
+  options.behaviors = options.behaviors || [];
+  options.behaviors.push(_basic.basic);
+  // map field to form-field behavior
+  if (vantOptions.field) {
+    options.behaviors.push('wx://form-field');
+  }
+  // add default options
+  options.options = {
+    multipleSlots: true,
+    addGlobalClass: true };
+
+  Component(options);
+}
+
+/***/ }),
+
+/***/ 197:
+/*!************************************************************************************************************!*\
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/mixins/basic.js ***!
+  \************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });exports.basic = void 0;var basic = Behavior({
+  methods: {
+    $emit: function $emit() {
+      this.triggerEvent.apply(this, arguments);
+    },
+    set: function set(data, callback) {
+      this.setData(data, callback);
+      return new Promise(function (resolve) {return wx.nextTick(resolve);});
+    },
+    getRect: function getRect(selector, all) {var _this = this;
+      return new Promise(function (resolve) {
+        wx.createSelectorQuery().
+        in(_this)[all ? 'selectAll' : 'select'](selector).
+        boundingClientRect(function (rect) {
+          if (all && Array.isArray(rect) && rect.length) {
+            resolve(rect);
+          }
+          if (!all && rect) {
+            resolve(rect);
+          }
+        }).
+        exec();
+      });
+    } } });exports.basic = basic;
+
+/***/ }),
+
+/***/ 198:
+/*!************************************************************************************************************!*\
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/mixins/touch.js ***!
+  \************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });exports.touch = void 0;var MIN_DISTANCE = 10;
+function getDirection(x, y) {
+  if (x > y && x > MIN_DISTANCE) {
+    return 'horizontal';
+  }
+  if (y > x && y > MIN_DISTANCE) {
+    return 'vertical';
+  }
+  return '';
+}
+var touch = Behavior({
+  methods: {
+    resetTouchStatus: function resetTouchStatus() {
+      this.direction = '';
+      this.deltaX = 0;
+      this.deltaY = 0;
+      this.offsetX = 0;
+      this.offsetY = 0;
+    },
+    touchStart: function touchStart(event) {
+      this.resetTouchStatus();
+      var touch = event.touches[0];
+      this.startX = touch.clientX;
+      this.startY = touch.clientY;
+    },
+    touchMove: function touchMove(event) {
+      var touch = event.touches[0];
+      this.deltaX = touch.clientX - this.startX;
+      this.deltaY = touch.clientY - this.startY;
+      this.offsetX = Math.abs(this.deltaX);
+      this.offsetY = Math.abs(this.deltaY);
+      this.direction = this.direction || getDirection(this.offsetX, this.offsetY);
+    } } });exports.touch = touch;
+
+/***/ }),
+
+/***/ 199:
+/*!************************************************************************************************************!*\
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/common/utils.js ***!
+  \************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });exports.isDef = isDef;exports.isObj = isObj;exports.isNumber = isNumber;exports.range = range;exports.nextTick = nextTick;exports.getSystemInfoSync = getSystemInfoSync;exports.addUnit = addUnit;function isDef(value) {
+  return value !== undefined && value !== null;
+}
+function isObj(x) {
+  var type = typeof x;
+  return x !== null && (type === 'object' || type === 'function');
+}
+function isNumber(value) {
+  return /^\d+(\.\d+)?$/.test(value);
+}
+function range(num, min, max) {
+  return Math.min(Math.max(num, min), max);
+}
+function nextTick(fn) {
+  setTimeout(function () {
+    fn();
+  }, 1000 / 30);
+}
+var systemInfo = null;
+function getSystemInfoSync() {
+  if (systemInfo == null) {
+    systemInfo = wx.getSystemInfoSync();
+  }
+  return systemInfo;
+}
+function addUnit(value) {
+  if (!isDef(value)) {
+    return undefined;
+  }
+  value = String(value);
+  return isNumber(value) ? "".concat(value, "px") : value;
+}
 
 /***/ }),
 
@@ -9577,250 +9949,183 @@ var GRAY_DARK = '#969799';exports.GRAY_DARK = GRAY_DARK;
 
 /***/ }),
 
-/***/ 226:
-/*!**********************************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/grid/index.js ***!
-  \**********************************************************************************************************/
+/***/ 200:
+/*!************************************************************************************************************!*\
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/dialog/index.js ***!
+  \************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-var _component = __webpack_require__(/*! ../common/component */ 227);
-var _utils = __webpack_require__(/*! ../common/utils */ 229);
+var _component = __webpack_require__(/*! ../common/component */ 196);
+var _button = __webpack_require__(/*! ../mixins/button */ 201);
+var _openType = __webpack_require__(/*! ../mixins/open-type */ 202);
+var _color = __webpack_require__(/*! ../common/color */ 20);function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 (0, _component.VantComponent)({
-  relation: {
-    name: 'grid-item',
-    type: 'descendant',
-    current: 'grid' },
-
+  mixins: [_button.button, _openType.openType],
   props: {
-    square: {
+    show: {
       type: Boolean,
-      observer: 'updateChildren' },
+      observer: function observer(show) {
+        !show && this.stopLoading();
+      } },
 
-    gutter: {
-      type: [Number, String],
-      value: 0,
-      observer: 'updateChildren' },
-
-    clickable: {
-      type: Boolean,
-      observer: 'updateChildren' },
-
-    columnNum: {
+    title: String,
+    message: String,
+    useSlot: Boolean,
+    className: String,
+    customStyle: String,
+    asyncClose: Boolean,
+    messageAlign: String,
+    overlayStyle: String,
+    useTitleSlot: Boolean,
+    showCancelButton: Boolean,
+    closeOnClickOverlay: Boolean,
+    confirmButtonOpenType: String,
+    width: null,
+    zIndex: {
       type: Number,
-      value: 4,
-      observer: 'updateChildren' },
+      value: 2000 },
 
-    center: {
-      type: Boolean,
-      value: true,
-      observer: 'updateChildren' },
+    confirmButtonText: {
+      type: String,
+      value: '确认' },
 
-    border: {
+    cancelButtonText: {
+      type: String,
+      value: '取消' },
+
+    confirmButtonColor: {
+      type: String,
+      value: _color.BLUE },
+
+    cancelButtonColor: {
+      type: String,
+      value: _color.GRAY },
+
+    showConfirmButton: {
       type: Boolean,
-      value: true,
-      observer: 'updateChildren' } },
+      value: true },
+
+    overlay: {
+      type: Boolean,
+      value: true },
+
+    transition: {
+      type: String,
+      value: 'scale' } },
 
 
   data: {
-    viewStyle: '' },
+    loading: {
+      confirm: false,
+      cancel: false } },
 
-  created: function created() {var
-    gutter = this.data.gutter;
-    if (gutter) {
-      this.setData({
-        viewStyle: "padding-left: ".concat((0, _utils.addUnit)(gutter)) });
 
-    }
-  },
   methods: {
-    updateChildren: function updateChildren() {
-      this.children.forEach(function (child) {
-        child.updateStyle();
-      });
+    onConfirm: function onConfirm() {
+      this.handleAction('confirm');
+    },
+    onCancel: function onCancel() {
+      this.handleAction('cancel');
+    },
+    onClickOverlay: function onClickOverlay() {
+      this.onClose('overlay');
+    },
+    handleAction: function handleAction(action) {
+      if (this.data.asyncClose) {
+        this.setData(_defineProperty({}, "loading.".concat(
+        action), true));
+
+      }
+      this.onClose(action);
+    },
+    close: function close() {
+      this.setData({
+        show: false });
+
+    },
+    stopLoading: function stopLoading() {
+      this.setData({
+        loading: {
+          confirm: false,
+          cancel: false } });
+
+
+    },
+    onClose: function onClose(action) {
+      if (!this.data.asyncClose) {
+        this.close();
+      }
+      this.$emit('close', action);
+      // 把 dialog 实例传递出去，可以通过 stopLoading() 在外部关闭按钮的 loading
+      this.$emit(action, { dialog: this });
+      var callback = this.data[action === 'confirm' ? 'onConfirm' : 'onCancel'];
+      if (callback) {
+        callback(this);
+      }
     } } });
 
 /***/ }),
 
-/***/ 227:
+/***/ 201:
+/*!*************************************************************************************************************!*\
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/mixins/button.js ***!
+  \*************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });exports.button = void 0;var button = Behavior({
+  externalClasses: ['hover-class'],
+  properties: {
+    id: String,
+    lang: {
+      type: String,
+      value: 'en' },
+
+    businessId: Number,
+    sessionFrom: String,
+    sendMessageTitle: String,
+    sendMessagePath: String,
+    sendMessageImg: String,
+    showMessageCard: Boolean,
+    appParameter: String,
+    ariaLabel: String } });exports.button = button;
+
+/***/ }),
+
+/***/ 202:
 /*!****************************************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/common/component.js ***!
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/mixins/open-type.js ***!
   \****************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.VantComponent = VantComponent;var _basic = __webpack_require__(/*! ../mixins/basic */ 228);function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
-var relationFunctions = {
-  ancestor: {
-    linked: function linked(parent) {
-      this.parent = parent;
-    },
-    unlinked: function unlinked() {
-      this.parent = null;
-    } },
+Object.defineProperty(exports, "__esModule", { value: true });exports.openType = void 0;var openType = Behavior({
+  properties: {
+    openType: String },
 
-  descendant: {
-    linked: function linked(child) {
-      this.children = this.children || [];
-      this.children.push(child);
-    },
-    unlinked: function unlinked(child) {
-      this.children = (this.children || []).filter(function (it) {return it !== child;});
-    } } };
-
-
-function mapKeys(source, target, map) {
-  Object.keys(map).forEach(function (key) {
-    if (source[key]) {
-      target[map[key]] = source[key];
-    }
-  });
-}
-function makeRelation(options, vantOptions, relation) {var
-  type = relation.type,name = relation.name,_linked = relation.linked,_unlinked = relation.unlinked,_linkChanged = relation.linkChanged;var
-  beforeCreate = vantOptions.beforeCreate,destroyed = vantOptions.destroyed;
-  if (type === 'descendant') {
-    options.created = function () {
-      beforeCreate && beforeCreate.bind(this)();
-      this.children = this.children || [];
-    };
-    options.detached = function () {
-      this.children = [];
-      destroyed && destroyed.bind(this)();
-    };
-  }
-  options.relations = Object.assign(options.relations || {}, _defineProperty({}, "../".concat(
-  name, "/index"), {
-    type: type,
-    linked: function linked(node) {
-      relationFunctions[type].linked.bind(this)(node);
-      _linked && _linked.bind(this)(node);
-    },
-    linkChanged: function linkChanged(node) {
-      _linkChanged && _linkChanged.bind(this)(node);
-    },
-    unlinked: function unlinked(node) {
-      relationFunctions[type].unlinked.bind(this)(node);
-      _unlinked && _unlinked.bind(this)(node);
-    } }));
-
-
-}
-function VantComponent() {var vantOptions = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  var options = {};
-  mapKeys(vantOptions, options, {
-    data: 'data',
-    props: 'properties',
-    mixins: 'behaviors',
-    methods: 'methods',
-    beforeCreate: 'created',
-    created: 'attached',
-    mounted: 'ready',
-    relations: 'relations',
-    destroyed: 'detached',
-    classes: 'externalClasses' });var
-
-  relation = vantOptions.relation;
-  if (relation) {
-    makeRelation(options, vantOptions, relation);
-  }
-  // add default externalClasses
-  options.externalClasses = options.externalClasses || [];
-  options.externalClasses.push('custom-class');
-  // add default behaviors
-  options.behaviors = options.behaviors || [];
-  options.behaviors.push(_basic.basic);
-  // map field to form-field behavior
-  if (vantOptions.field) {
-    options.behaviors.push('wx://form-field');
-  }
-  // add default options
-  options.options = {
-    multipleSlots: true,
-    addGlobalClass: true };
-
-  Component(options);
-}
-
-/***/ }),
-
-/***/ 228:
-/*!************************************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/mixins/basic.js ***!
-  \************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.basic = void 0;var basic = Behavior({
   methods: {
-    $emit: function $emit() {
-      this.triggerEvent.apply(this, arguments);
+    bindGetUserInfo: function bindGetUserInfo(event) {
+      this.$emit('getuserinfo', event.detail);
     },
-    set: function set(data, callback) {
-      this.setData(data, callback);
-      return new Promise(function (resolve) {return wx.nextTick(resolve);});
+    bindContact: function bindContact(event) {
+      this.$emit('contact', event.detail);
     },
-    getRect: function getRect(selector, all) {var _this = this;
-      return new Promise(function (resolve) {
-        wx.createSelectorQuery().
-        in(_this)[all ? 'selectAll' : 'select'](selector).
-        boundingClientRect(function (rect) {
-          if (all && Array.isArray(rect) && rect.length) {
-            resolve(rect);
-          }
-          if (!all && rect) {
-            resolve(rect);
-          }
-        }).
-        exec();
-      });
-    } } });exports.basic = basic;
-
-/***/ }),
-
-/***/ 229:
-/*!************************************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/common/utils.js ***!
-  \************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.isDef = isDef;exports.isObj = isObj;exports.isNumber = isNumber;exports.range = range;exports.nextTick = nextTick;exports.getSystemInfoSync = getSystemInfoSync;exports.addUnit = addUnit;function isDef(value) {
-  return value !== undefined && value !== null;
-}
-function isObj(x) {
-  var type = typeof x;
-  return x !== null && (type === 'object' || type === 'function');
-}
-function isNumber(value) {
-  return /^\d+(\.\d+)?$/.test(value);
-}
-function range(num, min, max) {
-  return Math.min(Math.max(num, min), max);
-}
-function nextTick(fn) {
-  setTimeout(function () {
-    fn();
-  }, 1000 / 30);
-}
-var systemInfo = null;
-function getSystemInfoSync() {
-  if (systemInfo == null) {
-    systemInfo = wx.getSystemInfoSync();
-  }
-  return systemInfo;
-}
-function addUnit(value) {
-  if (!isDef(value)) {
-    return undefined;
-  }
-  value = String(value);
-  return isNumber(value) ? "".concat(value, "px") : value;
-}
+    bindGetPhoneNumber: function bindGetPhoneNumber(event) {
+      this.$emit('getphonenumber', event.detail);
+    },
+    bindError: function bindError(event) {
+      this.$emit('error', event.detail);
+    },
+    bindLaunchApp: function bindLaunchApp(event) {
+      this.$emit('launchapp', event.detail);
+    },
+    bindOpenSetting: function bindOpenSetting(event) {
+      this.$emit('opensetting', event.detail);
+    } } });exports.openType = openType;
 
 /***/ }),
 
@@ -9953,7 +10258,73 @@ function normalizeComponent (
 
 /***/ }),
 
-/***/ 230:
+/***/ 244:
+/*!**********************************************************************************************************!*\
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/grid/index.js ***!
+  \**********************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+var _component = __webpack_require__(/*! ../common/component */ 196);
+var _utils = __webpack_require__(/*! ../common/utils */ 199);
+(0, _component.VantComponent)({
+  relation: {
+    name: 'grid-item',
+    type: 'descendant',
+    current: 'grid' },
+
+  props: {
+    square: {
+      type: Boolean,
+      observer: 'updateChildren' },
+
+    gutter: {
+      type: [Number, String],
+      value: 0,
+      observer: 'updateChildren' },
+
+    clickable: {
+      type: Boolean,
+      observer: 'updateChildren' },
+
+    columnNum: {
+      type: Number,
+      value: 4,
+      observer: 'updateChildren' },
+
+    center: {
+      type: Boolean,
+      value: true,
+      observer: 'updateChildren' },
+
+    border: {
+      type: Boolean,
+      value: true,
+      observer: 'updateChildren' } },
+
+
+  data: {
+    viewStyle: '' },
+
+  created: function created() {var
+    gutter = this.data.gutter;
+    if (gutter) {
+      this.setData({
+        viewStyle: "padding-left: ".concat((0, _utils.addUnit)(gutter)) });
+
+    }
+  },
+  methods: {
+    updateChildren: function updateChildren() {
+      this.children.forEach(function (child) {
+        child.updateStyle();
+      });
+    } } });
+
+/***/ }),
+
+/***/ 245:
 /*!***************************************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/grid-item/index.js ***!
   \***************************************************************************************************************/
@@ -9961,9 +10332,9 @@ function normalizeComponent (
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-var _link = __webpack_require__(/*! ../mixins/link */ 231);
-var _component = __webpack_require__(/*! ../common/component */ 227);
-var _utils = __webpack_require__(/*! ../common/utils */ 229);
+var _link = __webpack_require__(/*! ../mixins/link */ 246);
+var _component = __webpack_require__(/*! ../common/component */ 196);
+var _utils = __webpack_require__(/*! ../common/utils */ 199);
 (0, _component.VantComponent)({
   relation: {
     name: 'grid',
@@ -10031,7 +10402,7 @@ var _utils = __webpack_require__(/*! ../common/utils */ 229);
 
 /***/ }),
 
-/***/ 231:
+/***/ 246:
 /*!***********************************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/mixins/link.js ***!
   \***********************************************************************************************************/
@@ -10057,7 +10428,7 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.link = voi
 
 /***/ }),
 
-/***/ 232:
+/***/ 247:
 /*!*********************************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/tab/index.js ***!
   \*********************************************************************************************************/
@@ -10065,7 +10436,7 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.link = voi
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-var _component = __webpack_require__(/*! ../common/component */ 227);
+var _component = __webpack_require__(/*! ../common/component */ 196);
 (0, _component.VantComponent)({
   relation: {
     name: 'tabs',
@@ -10125,7 +10496,7 @@ var _component = __webpack_require__(/*! ../common/component */ 227);
 
 /***/ }),
 
-/***/ 233:
+/***/ 248:
 /*!**********************************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/tabs/index.js ***!
   \**********************************************************************************************************/
@@ -10133,9 +10504,9 @@ var _component = __webpack_require__(/*! ../common/component */ 227);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-var _component = __webpack_require__(/*! ../common/component */ 227);
-var _touch = __webpack_require__(/*! ../mixins/touch */ 234);
-var _utils = __webpack_require__(/*! ../common/utils */ 229);function _slicedToArray(arr, i) {return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest();}function _nonIterableRest() {throw new TypeError("Invalid attempt to destructure non-iterable instance");}function _iterableToArrayLimit(arr, i) {if (!(Symbol.iterator in Object(arr) || Object.prototype.toString.call(arr) === "[object Arguments]")) {return;}var _arr = [];var _n = true;var _d = false;var _e = undefined;try {for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {_arr.push(_s.value);if (i && _arr.length === i) break;}} catch (err) {_d = true;_e = err;} finally {try {if (!_n && _i["return"] != null) _i["return"]();} finally {if (_d) throw _e;}}return _arr;}function _arrayWithHoles(arr) {if (Array.isArray(arr)) return arr;}
+var _component = __webpack_require__(/*! ../common/component */ 196);
+var _touch = __webpack_require__(/*! ../mixins/touch */ 198);
+var _utils = __webpack_require__(/*! ../common/utils */ 199);function _slicedToArray(arr, i) {return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest();}function _nonIterableRest() {throw new TypeError("Invalid attempt to destructure non-iterable instance");}function _iterableToArrayLimit(arr, i) {if (!(Symbol.iterator in Object(arr) || Object.prototype.toString.call(arr) === "[object Arguments]")) {return;}var _arr = [];var _n = true;var _d = false;var _e = undefined;try {for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {_arr.push(_s.value);if (i && _arr.length === i) break;}} catch (err) {_d = true;_e = err;} finally {try {if (!_n && _i["return"] != null) _i["return"]();} finally {if (_d) throw _e;}}return _arr;}function _arrayWithHoles(arr) {if (Array.isArray(arr)) return arr;}
 (0, _component.VantComponent)({
   mixins: [_touch.touch],
   classes: ['nav-class', 'tab-class', 'tab-active-class', 'line-class'],
@@ -10408,51 +10779,7 @@ var _utils = __webpack_require__(/*! ../common/utils */ 229);function _slicedToA
 
 /***/ }),
 
-/***/ 234:
-/*!************************************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/mixins/touch.js ***!
-  \************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.touch = void 0;var MIN_DISTANCE = 10;
-function getDirection(x, y) {
-  if (x > y && x > MIN_DISTANCE) {
-    return 'horizontal';
-  }
-  if (y > x && y > MIN_DISTANCE) {
-    return 'vertical';
-  }
-  return '';
-}
-var touch = Behavior({
-  methods: {
-    resetTouchStatus: function resetTouchStatus() {
-      this.direction = '';
-      this.deltaX = 0;
-      this.deltaY = 0;
-      this.offsetX = 0;
-      this.offsetY = 0;
-    },
-    touchStart: function touchStart(event) {
-      this.resetTouchStatus();
-      var touch = event.touches[0];
-      this.startX = touch.clientX;
-      this.startY = touch.clientY;
-    },
-    touchMove: function touchMove(event) {
-      var touch = event.touches[0];
-      this.deltaX = touch.clientX - this.startX;
-      this.deltaY = touch.clientY - this.startY;
-      this.offsetX = Math.abs(this.deltaX);
-      this.offsetY = Math.abs(this.deltaY);
-      this.direction = this.direction || getDirection(this.offsetX, this.offsetY);
-    } } });exports.touch = touch;
-
-/***/ }),
-
-/***/ 235:
+/***/ 249:
 /*!************************************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/notify/index.js ***!
   \************************************************************************************************************/
@@ -10460,7 +10787,7 @@ var touch = Behavior({
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-var _component = __webpack_require__(/*! ../common/component */ 227);
+var _component = __webpack_require__(/*! ../common/component */ 196);
 var _color = __webpack_require__(/*! ../common/color */ 20);
 (0, _component.VantComponent)({
   props: {
@@ -10521,7 +10848,7 @@ var _color = __webpack_require__(/*! ../common/color */ 20);
 
 /***/ }),
 
-/***/ 236:
+/***/ 250:
 /*!**********************************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/icon/index.js ***!
   \**********************************************************************************************************/
@@ -10529,7 +10856,7 @@ var _color = __webpack_require__(/*! ../common/color */ 20);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-var _component = __webpack_require__(/*! ../common/component */ 227);
+var _component = __webpack_require__(/*! ../common/component */ 196);
 (0, _component.VantComponent)({
   props: {
     dot: Boolean,
@@ -10557,7 +10884,7 @@ var _component = __webpack_require__(/*! ../common/component */ 227);
 
 /***/ }),
 
-/***/ 237:
+/***/ 251:
 /*!************************************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/button/index.js ***!
   \************************************************************************************************************/
@@ -10565,9 +10892,9 @@ var _component = __webpack_require__(/*! ../common/component */ 227);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-var _component = __webpack_require__(/*! ../common/component */ 227);
-var _button = __webpack_require__(/*! ../mixins/button */ 238);
-var _openType = __webpack_require__(/*! ../mixins/open-type */ 239);
+var _component = __webpack_require__(/*! ../common/component */ 196);
+var _button = __webpack_require__(/*! ../mixins/button */ 201);
+var _openType = __webpack_require__(/*! ../mixins/open-type */ 202);
 (0, _component.VantComponent)({
   mixins: [_button.button, _openType.openType],
   classes: ['hover-class', 'loading-class'],
@@ -10634,328 +10961,7 @@ var _openType = __webpack_require__(/*! ../mixins/open-type */ 239);
 
 /***/ }),
 
-/***/ 238:
-/*!*************************************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/mixins/button.js ***!
-  \*************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.button = void 0;var button = Behavior({
-  externalClasses: ['hover-class'],
-  properties: {
-    id: String,
-    lang: {
-      type: String,
-      value: 'en' },
-
-    businessId: Number,
-    sessionFrom: String,
-    sendMessageTitle: String,
-    sendMessagePath: String,
-    sendMessageImg: String,
-    showMessageCard: Boolean,
-    appParameter: String,
-    ariaLabel: String } });exports.button = button;
-
-/***/ }),
-
-/***/ 239:
-/*!****************************************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/mixins/open-type.js ***!
-  \****************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.openType = void 0;var openType = Behavior({
-  properties: {
-    openType: String },
-
-  methods: {
-    bindGetUserInfo: function bindGetUserInfo(event) {
-      this.$emit('getuserinfo', event.detail);
-    },
-    bindContact: function bindContact(event) {
-      this.$emit('contact', event.detail);
-    },
-    bindGetPhoneNumber: function bindGetPhoneNumber(event) {
-      this.$emit('getphonenumber', event.detail);
-    },
-    bindError: function bindError(event) {
-      this.$emit('error', event.detail);
-    },
-    bindLaunchApp: function bindLaunchApp(event) {
-      this.$emit('launchapp', event.detail);
-    },
-    bindOpenSetting: function bindOpenSetting(event) {
-      this.$emit('opensetting', event.detail);
-    } } });exports.openType = openType;
-
-/***/ }),
-
-/***/ 240:
-/*!****************************************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/swipe-cell/index.js ***!
-  \****************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-var _component = __webpack_require__(/*! ../common/component */ 227);
-var _touch = __webpack_require__(/*! ../mixins/touch */ 234);
-var _utils = __webpack_require__(/*! ../common/utils */ 229);
-var THRESHOLD = 0.3;
-var ARRAY = [];
-(0, _component.VantComponent)({
-  props: {
-    disabled: Boolean,
-    leftWidth: {
-      type: Number,
-      value: 0,
-      observer: function observer() {var leftWidth = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
-        if (this.offset > 0) {
-          this.swipeMove(leftWidth);
-        }
-      } },
-
-    rightWidth: {
-      type: Number,
-      value: 0,
-      observer: function observer() {var rightWidth = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
-        if (this.offset < 0) {
-          this.swipeMove(-rightWidth);
-        }
-      } },
-
-    asyncClose: Boolean,
-    name: {
-      type: [Number, String],
-      value: '' } },
-
-
-  mixins: [_touch.touch],
-  data: {
-    catchMove: false },
-
-  created: function created() {
-    this.offset = 0;
-    ARRAY.push(this);
-  },
-  destroyed: function destroyed() {var _this = this;
-    ARRAY = ARRAY.filter(function (item) {return item !== _this;});
-  },
-  methods: {
-    open: function open(position) {var _this$data =
-      this.data,leftWidth = _this$data.leftWidth,rightWidth = _this$data.rightWidth;
-      var offset = position === 'left' ? leftWidth : -rightWidth;
-      this.swipeMove(offset);
-      this.$emit('open', {
-        position: position,
-        name: this.data.name });
-
-    },
-    close: function close() {
-      this.swipeMove(0);
-    },
-    swipeMove: function swipeMove() {var offset = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
-      this.offset = (0, _utils.range)(offset, -this.data.rightWidth, this.data.leftWidth);
-      var transform = "translate3d(".concat(this.offset, "px, 0, 0)");
-      var transition = this.dragging ?
-      'none' :
-      'transform .6s cubic-bezier(0.18, 0.89, 0.32, 1)';
-      this.setData({
-        wrapperStyle: "\n        -webkit-transform: ".concat(
-        transform, ";\n        -webkit-transition: ").concat(
-        transition, ";\n        transform: ").concat(
-        transform, ";\n        transition: ").concat(
-        transition, ";\n      ") });
-
-
-    },
-    swipeLeaveTransition: function swipeLeaveTransition() {var _this$data2 =
-      this.data,leftWidth = _this$data2.leftWidth,rightWidth = _this$data2.rightWidth;var
-      offset = this.offset;
-      if (rightWidth > 0 && -offset > rightWidth * THRESHOLD) {
-        this.open('right');
-      } else
-      if (leftWidth > 0 && offset > leftWidth * THRESHOLD) {
-        this.open('left');
-      } else
-      {
-        this.swipeMove(0);
-      }
-      this.setData({ catchMove: false });
-    },
-    startDrag: function startDrag(event) {
-      if (this.data.disabled) {
-        return;
-      }
-      this.startOffset = this.offset;
-      this.touchStart(event);
-    },
-    noop: function noop() {},
-    onDrag: function onDrag(event) {var _this2 = this;
-      if (this.data.disabled) {
-        return;
-      }
-      this.touchMove(event);
-      if (this.direction !== 'horizontal') {
-        return;
-      }
-      this.dragging = true;
-      ARRAY.filter(function (item) {return item !== _this2;}).forEach(function (item) {return item.close();});
-      this.setData({ catchMove: true });
-      this.swipeMove(this.startOffset + this.deltaX);
-    },
-    endDrag: function endDrag() {
-      if (this.data.disabled) {
-        return;
-      }
-      this.dragging = false;
-      this.swipeLeaveTransition();
-    },
-    onClick: function onClick(event) {var _event$currentTarget$ =
-      event.currentTarget.dataset.key,position = _event$currentTarget$ === void 0 ? 'outside' : _event$currentTarget$;
-      this.$emit('click', position);
-      if (!this.offset) {
-        return;
-      }
-      if (this.data.asyncClose) {
-        this.$emit('close', {
-          position: position,
-          instance: this,
-          name: this.data.name });
-
-      } else
-      {
-        this.swipeMove(0);
-      }
-    } } });
-
-/***/ }),
-
-/***/ 241:
-/*!************************************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/dialog/index.js ***!
-  \************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-var _component = __webpack_require__(/*! ../common/component */ 227);
-var _button = __webpack_require__(/*! ../mixins/button */ 238);
-var _openType = __webpack_require__(/*! ../mixins/open-type */ 239);
-var _color = __webpack_require__(/*! ../common/color */ 20);function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
-(0, _component.VantComponent)({
-  mixins: [_button.button, _openType.openType],
-  props: {
-    show: {
-      type: Boolean,
-      observer: function observer(show) {
-        !show && this.stopLoading();
-      } },
-
-    title: String,
-    message: String,
-    useSlot: Boolean,
-    className: String,
-    customStyle: String,
-    asyncClose: Boolean,
-    messageAlign: String,
-    overlayStyle: String,
-    useTitleSlot: Boolean,
-    showCancelButton: Boolean,
-    closeOnClickOverlay: Boolean,
-    confirmButtonOpenType: String,
-    width: null,
-    zIndex: {
-      type: Number,
-      value: 2000 },
-
-    confirmButtonText: {
-      type: String,
-      value: '确认' },
-
-    cancelButtonText: {
-      type: String,
-      value: '取消' },
-
-    confirmButtonColor: {
-      type: String,
-      value: _color.BLUE },
-
-    cancelButtonColor: {
-      type: String,
-      value: _color.GRAY },
-
-    showConfirmButton: {
-      type: Boolean,
-      value: true },
-
-    overlay: {
-      type: Boolean,
-      value: true },
-
-    transition: {
-      type: String,
-      value: 'scale' } },
-
-
-  data: {
-    loading: {
-      confirm: false,
-      cancel: false } },
-
-
-  methods: {
-    onConfirm: function onConfirm() {
-      this.handleAction('confirm');
-    },
-    onCancel: function onCancel() {
-      this.handleAction('cancel');
-    },
-    onClickOverlay: function onClickOverlay() {
-      this.onClose('overlay');
-    },
-    handleAction: function handleAction(action) {
-      if (this.data.asyncClose) {
-        this.setData(_defineProperty({}, "loading.".concat(
-        action), true));
-
-      }
-      this.onClose(action);
-    },
-    close: function close() {
-      this.setData({
-        show: false });
-
-    },
-    stopLoading: function stopLoading() {
-      this.setData({
-        loading: {
-          confirm: false,
-          cancel: false } });
-
-
-    },
-    onClose: function onClose(action) {
-      if (!this.data.asyncClose) {
-        this.close();
-      }
-      this.$emit('close', action);
-      // 把 dialog 实例传递出去，可以通过 stopLoading() 在外部关闭按钮的 loading
-      this.$emit(action, { dialog: this });
-      var callback = this.data[action === 'confirm' ? 'onConfirm' : 'onCancel'];
-      if (callback) {
-        callback(this);
-      }
-    } } });
-
-/***/ }),
-
-/***/ 242:
+/***/ 252:
 /*!*************************************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/divider/index.js ***!
   \*************************************************************************************************************/
@@ -10963,7 +10969,7 @@ var _color = __webpack_require__(/*! ../common/color */ 20);function _defineProp
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-var _component = __webpack_require__(/*! ../common/component */ 227);
+var _component = __webpack_require__(/*! ../common/component */ 196);
 (0, _component.VantComponent)({
   props: {
     dashed: {
@@ -10996,7 +11002,7 @@ var _component = __webpack_require__(/*! ../common/component */ 227);
 
 /***/ }),
 
-/***/ 271:
+/***/ 281:
 /*!***********************************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/image/index.js ***!
   \***********************************************************************************************************/
@@ -11004,10 +11010,10 @@ var _component = __webpack_require__(/*! ../common/component */ 227);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-var _utils = __webpack_require__(/*! ../common/utils */ 229);
-var _component = __webpack_require__(/*! ../common/component */ 227);
-var _button = __webpack_require__(/*! ../mixins/button */ 238);
-var _openType = __webpack_require__(/*! ../mixins/open-type */ 239);
+var _utils = __webpack_require__(/*! ../common/utils */ 199);
+var _component = __webpack_require__(/*! ../common/component */ 196);
+var _button = __webpack_require__(/*! ../mixins/button */ 201);
+var _openType = __webpack_require__(/*! ../mixins/open-type */ 202);
 var FIT_MODE_MAP = {
   none: 'center',
   fill: 'scaleToFill',
@@ -11104,7 +11110,7 @@ var FIT_MODE_MAP = {
 
 /***/ }),
 
-/***/ 272:
+/***/ 282:
 /*!*********************************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/tag/index.js ***!
   \*********************************************************************************************************/
@@ -11112,7 +11118,7 @@ var FIT_MODE_MAP = {
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-var _component = __webpack_require__(/*! ../common/component */ 227);
+var _component = __webpack_require__(/*! ../common/component */ 196);
 (0, _component.VantComponent)({
   props: {
     size: String,
@@ -11957,7 +11963,7 @@ if (hadRuntime) {
 
 /***/ }),
 
-/***/ 322:
+/***/ 325:
 /*!***********************************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/steps/index.js ***!
   \***********************************************************************************************************/
@@ -11965,7 +11971,7 @@ if (hadRuntime) {
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-var _component = __webpack_require__(/*! ../common/component */ 227);
+var _component = __webpack_require__(/*! ../common/component */ 196);
 var _color = __webpack_require__(/*! ../common/color */ 20);
 (0, _component.VantComponent)({
   classes: ['desc-class'],
@@ -12433,7 +12439,7 @@ courseId) {
 
 /***/ }),
 
-/***/ 344:
+/***/ 347:
 /*!***************************************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/index-bar/index.js ***!
   \***************************************************************************************************************/
@@ -12441,7 +12447,7 @@ courseId) {
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-var _component = __webpack_require__(/*! ../common/component */ 227);
+var _component = __webpack_require__(/*! ../common/component */ 196);
 var _color = __webpack_require__(/*! ../common/color */ 20);
 var indexList = function indexList() {
   var indexList = [];
@@ -12690,7 +12696,7 @@ var indexList = function indexList() {
 
 /***/ }),
 
-/***/ 345:
+/***/ 348:
 /*!******************************************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/index-anchor/index.js ***!
   \******************************************************************************************************************/
@@ -12698,7 +12704,7 @@ var indexList = function indexList() {
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-var _component = __webpack_require__(/*! ../common/component */ 227);
+var _component = __webpack_require__(/*! ../common/component */ 196);
 (0, _component.VantComponent)({
   relation: {
     name: 'index-bar',
@@ -12716,7 +12722,7 @@ var _component = __webpack_require__(/*! ../common/component */ 227);
 
 /***/ }),
 
-/***/ 346:
+/***/ 349:
 /*!**********************************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/cell/index.js ***!
   \**********************************************************************************************************/
@@ -12724,8 +12730,8 @@ var _component = __webpack_require__(/*! ../common/component */ 227);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-var _link = __webpack_require__(/*! ../mixins/link */ 231);
-var _component = __webpack_require__(/*! ../common/component */ 227);
+var _link = __webpack_require__(/*! ../mixins/link */ 246);
+var _component = __webpack_require__(/*! ../common/component */ 196);
 (0, _component.VantComponent)({
   classes: [
   'title-class',
@@ -12762,7 +12768,7 @@ var _component = __webpack_require__(/*! ../common/component */ 227);
 
 /***/ }),
 
-/***/ 347:
+/***/ 350:
 /*!****************************************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/cell-group/index.js ***!
   \****************************************************************************************************************/
@@ -12770,7 +12776,7 @@ var _component = __webpack_require__(/*! ../common/component */ 227);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-var _component = __webpack_require__(/*! ../common/component */ 227);
+var _component = __webpack_require__(/*! ../common/component */ 196);
 (0, _component.VantComponent)({
   props: {
     title: String,
@@ -12780,7 +12786,7 @@ var _component = __webpack_require__(/*! ../common/component */ 227);
 
 /***/ }),
 
-/***/ 369:
+/***/ 379:
 /*!*************************************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/wxcomponents/vant/dist/overlay/index.js ***!
   \*************************************************************************************************************/
@@ -12788,7 +12794,7 @@ var _component = __webpack_require__(/*! ../common/component */ 227);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-var _component = __webpack_require__(/*! ../common/component */ 227);
+var _component = __webpack_require__(/*! ../common/component */ 196);
 (0, _component.VantComponent)({
   props: {
     show: Boolean,
@@ -12823,7 +12829,98 @@ var _component = __webpack_require__(/*! ../common/component */ 227);
 
 /***/ }),
 
-/***/ 417:
+/***/ 43:
+/*!***************************************************************************************!*\
+  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/static/js/chat.js ***!
+  \***************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _api_reference = _interopRequireDefault(__webpack_require__(/*! ./api_reference.js */ 15));
+var _http_commons = _interopRequireDefault(__webpack_require__(/*! ./http_commons.js */ 18));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var _default =
+
+{
+
+  /**
+   * @param {Number} uId
+   * @param {Number} offset
+   * @param {Number} count
+   */
+  getMessages: function getMessages(uId, offset, count) {
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: _api_reference.default.CHAT + '?uId=' + uId + '&offset=' + offset + '&count=' + count,
+        header: _http_commons.default.getAuthenticationHeader(),
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+          reject(err);
+        } });
+
+    });
+  },
+
+
+  /**
+      * @param {Number} receiverId
+      * @param {String} content
+      */
+  sendMessage: function sendMessage(receiverId, content) {
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: _api_reference.default.CHAT,
+        method: "POST",
+        header: _http_commons.default.getAuthenticationHeader(),
+        data: {
+          receiverId: receiverId,
+          content: content },
+
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+          reject(err);
+        } });
+
+    });
+  },
+
+  /**
+      * 获得最近的聊天pair
+      * 
+      * @param {Number} offset
+      * @param {Number} count
+      */
+  getLatestChats: function getLatestChats(offset, count) {
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: _api_reference.default.LATEST_CHAT_PAIR + '?offset=' + offset + '&count=' + count,
+        header: _http_commons.default.getAuthenticationHeader(),
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+          reject(err);
+        } });
+
+    });
+  } };exports.default = _default;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
+
+/***/ }),
+
+/***/ 434:
 /*!**************************************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/components/w-picker/areadata/areadata.js ***!
   \**************************************************************************************************************/
@@ -24116,97 +24213,6 @@ cityData;exports.default = _default;
 
 /***/ }),
 
-/***/ 43:
-/*!***************************************************************************************!*\
-  !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/static/js/chat.js ***!
-  \***************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _api_reference = _interopRequireDefault(__webpack_require__(/*! ./api_reference.js */ 15));
-var _http_commons = _interopRequireDefault(__webpack_require__(/*! ./http_commons.js */ 18));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var _default =
-
-{
-
-  /**
-   * @param {Number} uId
-   * @param {Number} offset
-   * @param {Number} count
-   */
-  getMessages: function getMessages(uId, offset, count) {
-    return new Promise(function (resolve, reject) {
-      uni.request({
-        url: _api_reference.default.CHAT + '?uId=' + uId + '&offset=' + offset + '&count=' + count,
-        header: _http_commons.default.getAuthenticationHeader(),
-        success: function success(resp) {
-          if (_http_commons.default.successCheck(resp)) {
-            resolve(resp.data.data);
-          }
-        },
-        fail: function fail(err) {
-          _http_commons.default.commonFailHanlder(err);
-          reject(err);
-        } });
-
-    });
-  },
-
-
-  /**
-      * @param {Number} receiverId
-      * @param {String} content
-      */
-  sendMessage: function sendMessage(receiverId, content) {
-    return new Promise(function (resolve, reject) {
-      uni.request({
-        url: _api_reference.default.CHAT,
-        method: "POST",
-        header: _http_commons.default.getAuthenticationHeader(),
-        data: {
-          receiverId: receiverId,
-          content: content },
-
-        success: function success(resp) {
-          if (_http_commons.default.successCheck(resp)) {
-            resolve(resp.data.data);
-          }
-        },
-        fail: function fail(err) {
-          _http_commons.default.commonFailHanlder(err);
-          reject(err);
-        } });
-
-    });
-  },
-
-  /**
-      * 获得最近的聊天pair
-      * 
-      * @param {Number} offset
-      * @param {Number} count
-      */
-  getLatestChats: function getLatestChats(offset, count) {
-    return new Promise(function (resolve, reject) {
-      uni.request({
-        url: _api_reference.default.LATEST_CHAT_PAIR + '?offset=' + offset + '&count=' + count,
-        header: _http_commons.default.getAuthenticationHeader(),
-        success: function success(resp) {
-          if (_http_commons.default.successCheck(resp)) {
-            resolve(resp.data.data);
-          }
-        },
-        fail: function fail(err) {
-          _http_commons.default.commonFailHanlder(err);
-          reject(err);
-        } });
-
-    });
-  } };exports.default = _default;
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
-
-/***/ }),
-
 /***/ 44:
 /*!***********************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/static/js/notification.js ***!
@@ -24232,6 +24238,24 @@ var _http_commons = _interopRequireDefault(__webpack_require__(/*! ./http_common
           content: content,
           publishGmt: publishGmt },
 
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+        } });
+
+    });
+  },
+
+  deleteNotifcation: function deleteNotifcation(notificationId) {
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: _api_reference.default.NOTIFICATION + '?notificationId=' + notificationId,
+        method: "DELETE",
+        header: _http_commons.default.getAuthenticationHeader(),
         success: function success(resp) {
           if (_http_commons.default.successCheck(resp)) {
             resolve(resp.data.data);
@@ -25340,7 +25364,7 @@ var _http_commons = _interopRequireDefault(__webpack_require__(/*! ./http_common
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _default = { "pages": { "pages/index/index": { "usingComponents": { "create-course-modal": "/components/CreateCourse", "join-course-modal": "/components/JoinCourse", "s-tabs": "/components/s-tabs/index", "s-tab": "/components/s-tab/index", "uni-load-more": "/components/uni-load-more/uni-load-more", "van-grid": "/wxcomponents/vant/dist/grid/index", "van-grid-item": "/wxcomponents/vant/dist/grid-item/index", "van-tab": "/wxcomponents/vant/dist/tab/index", "van-tabs": "/wxcomponents/vant/dist/tabs/index", "van-notify": "/wxcomponents/vant/dist/notify/index", "van-icon": "/wxcomponents/vant/dist/icon/index", "van-button": "/wxcomponents/vant/dist/button/index", "van-swipe-cell": "/wxcomponents/vant/dist/swipe-cell/index", "van-dialog": "/wxcomponents/vant/dist/dialog/index", "van-divider": "/wxcomponents/vant/dist/divider/index" }, "usingAutoImportComponents": { "uni-load-more": "/components/uni-load-more/uni-load-more" } }, "pages/message/message": { "navigationBarTitleText": "消息", "usingComponents": { "notification": "/components/Notification", "s-tabs": "/components/s-tabs/index", "s-tab": "/components/s-tab/index", "van-tag": "/wxcomponents/vant/dist/tag/index", "van-image": "/wxcomponents/vant/dist/image/index", "uni-load-more": "/components/uni-load-more/uni-load-more" }, "usingAutoImportComponents": { "uni-load-more": "/components/uni-load-more/uni-load-more" } }, "pages/me/me": { "navigationBarTitleText": "个人信息", "usingComponents": { "update-user-info": "/components/UpdateUserInfo", "van-button": "/wxcomponents/vant/dist/button/index", "van-notify": "/wxcomponents/vant/dist/notify/index", "van-image": "/wxcomponents/vant/dist/image/index" }, "usingAutoImportComponents": {} }, "pages/favorite/favorite": { "navigationBarTitleText": "收藏夹", "enablePullDownRefresh": true, "usingComponents": { "van-tag": "/wxcomponents/vant/dist/tag/index", "uni-load-more": "/components/uni-load-more/uni-load-more", "s-tabs": "/components/s-tabs/index", "s-tab": "/components/s-tab/index" }, "usingAutoImportComponents": { "uni-load-more": "/components/uni-load-more/uni-load-more" } }, "pages/conurse_ware/course_ware": { "navigationBarTitleText": "课件", "usingComponents": { "l-file": "/components/l-file/l-file", "read-course-ware-page": "/components/ReadCourseWarePage", "van-notify": "/wxcomponents/vant/dist/notify/index", "van-button": "/wxcomponents/vant/dist/button/index", "van-icon": "/wxcomponents/vant/dist/icon/index" }, "usingAutoImportComponents": { "l-file": "/components/l-file/l-file" } }, "pages/contest/contest": { "navigationBarTitleText": "测试", "usingComponents": { "uni-countdown": "/components/uni-countdown/uni-countdown", "create-answer": "/components/CreateAnswer", "w-picker": "/components/w-picker/w-picker", "van-button": "/wxcomponents/vant/dist/button/index", "van-icon": "/wxcomponents/vant/dist/icon/index", "van-dialog": "/wxcomponents/vant/dist/dialog/index", "van-divider": "/wxcomponents/vant/dist/divider/index", "van-notify": "/wxcomponents/vant/dist/notify/index" }, "usingAutoImportComponents": { "uni-countdown": "/components/uni-countdown/uni-countdown" } }, "pages/helpme/helpme": { "navigationBarTitleText": "帮助中心", "usingComponents": {}, "usingAutoImportComponents": {} }, "pages/course/course": { "enablePullDownRefresh": true, "usingComponents": { "l-file": "/components/l-file/l-file", "single-submit-popup": "/components/SingleSubmitPopup", "uni-load-more": "/components/uni-load-more/uni-load-more", "s-tabs": "/components/s-tabs/index", "s-tab": "/components/s-tab/index", "van-tag": "/wxcomponents/vant/dist/tag/index", "van-grid": "/wxcomponents/vant/dist/grid/index", "van-grid-item": "/wxcomponents/vant/dist/grid-item/index", "van-notify": "/wxcomponents/vant/dist/notify/index", "van-icon": "/wxcomponents/vant/dist/icon/index", "van-button": "/wxcomponents/vant/dist/button/index", "van-steps": "/wxcomponents/vant/dist/steps/index", "van-dialog": "/wxcomponents/vant/dist/dialog/index" }, "usingAutoImportComponents": { "l-file": "/components/l-file/l-file", "uni-load-more": "/components/uni-load-more/uni-load-more" } }, "pages/course_settings/course_settings": { "navigationBarTitleText": "课程信息", "usingComponents": { "van-notify": "/wxcomponents/vant/dist/notify/index", "van-button": "/wxcomponents/vant/dist/button/index" }, "usingAutoImportComponents": {} }, "pages/topics/topics": { "enablePullDownRefresh": true, "navigationBarTitleText": "讨论区", "usingComponents": { "ms-dropdown-menu": "/components/ms-dropdown/dropdown-menu", "ms-dropdown-item": "/components/ms-dropdown/dropdown-item", "s-tabs": "/components/s-tabs/index", "s-tab": "/components/s-tab/index", "van-notify": "/wxcomponents/vant/dist/notify/index", "uni-load-more": "/components/uni-load-more/uni-load-more", "van-icon": "/wxcomponents/vant/dist/icon/index", "van-image": "/wxcomponents/vant/dist/image/index" }, "usingAutoImportComponents": { "uni-load-more": "/components/uni-load-more/uni-load-more" } }, "pages/create_topic/create_topic": { "usingComponents": { "van-notify": "/wxcomponents/vant/dist/notify/index", "van-button": "/wxcomponents/vant/dist/button/index" }, "usingAutoImportComponents": {} }, "pages/topic/topic": { "enablePullDownRefresh": true, "usingComponents": { "s-tabs": "/components/s-tabs/index", "s-tab": "/components/s-tab/index", "single-submit-popup": "/components/SingleSubmitPopup", "van-notify": "/wxcomponents/vant/dist/notify/index", "uni-load-more": "/components/uni-load-more/uni-load-more", "van-icon": "/wxcomponents/vant/dist/icon/index", "van-image": "/wxcomponents/vant/dist/image/index", "van-dialog": "/wxcomponents/vant/dist/dialog/index" }, "usingAutoImportComponents": { "uni-load-more": "/components/uni-load-more/uni-load-more" } }, "pages/sub_comments/sub_comments": { "usingComponents": { "single-submit-popup": "/components/SingleSubmitPopup", "van-notify": "/wxcomponents/vant/dist/notify/index", "uni-load-more": "/components/uni-load-more/uni-load-more", "van-icon": "/wxcomponents/vant/dist/icon/index", "van-image": "/wxcomponents/vant/dist/image/index" }, "usingAutoImportComponents": { "uni-load-more": "/components/uni-load-more/uni-load-more" } }, "pages/member_list/member_list": { "navigationBarTitleText": "成员列表", "usingComponents": { "van-index-bar": "/wxcomponents/vant/dist/index-bar/index", "van-index-anchor": "/wxcomponents/vant/dist/index-anchor/index", "van-cell": "/wxcomponents/vant/dist/cell/index", "van-notify": "/wxcomponents/vant/dist/notify/index", "van-cell-group": "/wxcomponents/vant/dist/cell-group/index", "van-swipe-cell": "/wxcomponents/vant/dist/swipe-cell/index" }, "usingAutoImportComponents": {} }, "pages/chat/chat": { "usingComponents": { "van-notify": "/wxcomponents/vant/dist/notify/index", "uni-load-more": "/components/uni-load-more/uni-load-more", "van-icon": "/wxcomponents/vant/dist/icon/index", "van-image": "/wxcomponents/vant/dist/image/index" }, "usingAutoImportComponents": { "uni-load-more": "/components/uni-load-more/uni-load-more" } }, "pages/create_contest/create_contest": { "usingComponents": { "create-question": "/components/CreateQuestion", "w-picker": "/components/w-picker/w-picker", "van-button": "/wxcomponents/vant/dist/button/index", "van-icon": "/wxcomponents/vant/dist/icon/index", "van-dialog": "/wxcomponents/vant/dist/dialog/index", "van-divider": "/wxcomponents/vant/dist/divider/index", "van-notify": "/wxcomponents/vant/dist/notify/index" }, "usingAutoImportComponents": { "w-picker": "/components/w-picker/w-picker" } }, "pages/revise/revise": { "navigationBarTitleText": "批改列表", "usingComponents": { "create-revise": "/components/CreateRevise", "van-index-bar": "/wxcomponents/vant/dist/index-bar/index", "van-index-anchor": "/wxcomponents/vant/dist/index-anchor/index", "van-notify": "/wxcomponents/vant/dist/notify/index" }, "usingAutoImportComponents": {} }, "pages/contest_list/contest_list": { "navigationBarTitleText": "试卷库", "usingComponents": { "uni-load-more": "/components/uni-load-more/uni-load-more", "s-tabs": "/components/s-tabs/index", "s-tab": "/components/s-tab/index" }, "usingAutoImportComponents": { "uni-load-more": "/components/uni-load-more/uni-load-more" } }, "pages/create_notification/create_notification": { "usingComponents": { "w-picker": "/components/w-picker/w-picker", "van-notify": "/wxcomponents/vant/dist/notify/index", "van-button": "/wxcomponents/vant/dist/button/index" }, "usingAutoImportComponents": { "w-picker": "/components/w-picker/w-picker" } }, "pages/course_wares/course_wares": { "navigationBarTitleText": "课件库", "usingComponents": { "uni-load-more": "/components/uni-load-more/uni-load-more", "s-tabs": "/components/s-tabs/index", "s-tab": "/components/s-tab/index" }, "usingAutoImportComponents": { "uni-load-more": "/components/uni-load-more/uni-load-more" } }, "pages/create_class/create_class": { "usingComponents": { "single-submit-popup": "/components/SingleSubmitPopup", "l-file": "/components/l-file/l-file", "create-quiz": "/components/CreateQuiz", "van-swipe-cell": "/wxcomponents/vant/dist/swipe-cell/index", "van-button": "/wxcomponents/vant/dist/button/index", "van-notify": "/wxcomponents/vant/dist/notify/index" }, "usingAutoImportComponents": { "l-file": "/components/l-file/l-file" } }, "pages/class/class": { "usingComponents": { "van-button": "/wxcomponents/vant/dist/button/index", "van-notify": "/wxcomponents/vant/dist/notify/index" }, "usingAutoImportComponents": {} }, "pages/score_calculate/score_calculate": { "usingComponents": { "van-notify": "/wxcomponents/vant/dist/notify/index", "van-button": "/wxcomponents/vant/dist/button/index" }, "usingAutoImportComponents": {} } }, "globalStyle": { "navigationBarTextStyle": "black", "navigationBarTitleText": "课堂助手", "navigationBarBackgroundColor": "#F8F8F8", "backgroundColor": "#F2F2F2" } };exports.default = _default;
+Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _default = { "pages": { "pages/index/index": { "enablePullDownRefresh": true }, "pages/message/message": { "navigationBarTitleText": "消息", "enablePullDownRefresh": true }, "pages/me/me": { "navigationBarTitleText": "个人信息" }, "pages/favorite/favorite": { "navigationBarTitleText": "收藏夹", "enablePullDownRefresh": true }, "pages/conurse_ware/course_ware": { "navigationBarTitleText": "课件" }, "pages/contest/contest": { "navigationBarTitleText": "测试" }, "pages/helpme/helpme": { "navigationBarTitleText": "帮助中心" }, "pages/course/course": { "enablePullDownRefresh": true }, "pages/course_settings/course_settings": { "navigationBarTitleText": "课程信息" }, "pages/topics/topics": { "enablePullDownRefresh": true, "navigationBarTitleText": "讨论区" }, "pages/create_topic/create_topic": {}, "pages/topic/topic": { "enablePullDownRefresh": true }, "pages/sub_comments/sub_comments": {}, "pages/member_list/member_list": { "navigationBarTitleText": "成员列表" }, "pages/chat/chat": {}, "pages/create_contest/create_contest": {}, "pages/revise/revise": { "navigationBarTitleText": "批改列表", "enablePullDownRefresh": true }, "pages/contest_list/contest_list": { "navigationBarTitleText": "试卷库", "enablePullDownRefresh": true }, "pages/create_notification/create_notification": {}, "pages/course_wares/course_wares": { "navigationBarTitleText": "课件库", "enablePullDownRefresh": true }, "pages/sign_in_list/sign_in_list": { "navigationBarTitleText": "签到列表", "enablePullDownRefresh": true }, "pages/create_class/create_class": {}, "pages/class/class": {}, "pages/score_calculate/score_calculate": {} }, "globalStyle": { "navigationBarTextStyle": "black", "navigationBarTitleText": "课堂助手", "navigationBarBackgroundColor": "#F8F8F8", "backgroundColor": "#F2F2F2" } };exports.default = _default;
 
 /***/ }),
 
@@ -25594,7 +25618,7 @@ var _http_commons = _interopRequireDefault(__webpack_require__(/*! ./http_common
    * @return {Object} {"value": bool, "msg": 错误信息}
    */
   isDateRelationValid: function isDateRelationValid(publishDate, deadlineDate, limitMinutes) {
-    console.log("params", publishDate, deadlineDate, limitMinutes);
+    // console.log("params", publishDate, deadlineDate, limitMinutes);
     var now = new Date();
 
     // 两者必有一
@@ -25813,8 +25837,12 @@ var _http_commons = _interopRequireDefault(__webpack_require__(/*! ./http_common
       * @param {Number} limitMinutes
       */
   getLeftDate: function getLeftDate(answerStartDate, publishDate, deadline, limitMinutes) {
+    if (answerStartDate) {answerStartDate = answerStartDate.replace(/-/g, '/');}
+    if (publishDate) {publishDate = publishDate.replace(/-/g, '/');}
+    if (deadline) {deadline = deadline.replace(/-/g, '/');}
+
     var now = new Date();
-    console.log("获取剩余时间", answerStartDate, publishDate, deadline, limitMinutes);
+    // console.log("获取剩余时间", answerStartDate, publishDate, deadline, limitMinutes);
 
     if (limitMinutes === 0) {
       // 不限时
@@ -25826,11 +25854,11 @@ var _http_commons = _interopRequireDefault(__webpack_require__(/*! ./http_common
 
         // 用户开始答题时刻 + 限时的剩余时间
         var leftTimeToBeginTime = new Date(answerStartDate).getTime() + limitMinutes * 60 * 1000 - now;
-        console.log("leftTimeToBeginTime", leftTimeToBeginTime);
+        // console.log("leftTimeToBeginTime", leftTimeToBeginTime);
 
         // 截止时间（起始时间+限时或结束时间）的剩余时间
         var leftTimeBeforeDeadline = new Date(deadline) - now;
-        console.log("leftTimeBeforeDeadline", leftTimeBeforeDeadline);
+        // console.log("leftTimeBeforeDeadline", leftTimeBeforeDeadline);
         // 返回小的
         return leftTimeToBeginTime < leftTimeBeforeDeadline ? leftTimeToBeginTime : leftTimeBeforeDeadline;
       } else {
@@ -25848,6 +25876,9 @@ var _http_commons = _interopRequireDefault(__webpack_require__(/*! ./http_common
       * @param {Number} limitMinutes
       */
   getLeftDateForTeacher: function getLeftDateForTeacher(publishDate, deadline, limitMinutes) {
+    if (publishDate) {publishDate = publishDate.replace(/-/g, '/');}
+    if (deadline) {deadline = deadline.replace(/-/g, '/');}
+
     var now = new Date();
 
     if (deadline) {
@@ -25992,7 +26023,7 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
 /***/ }),
 
-/***/ 94:
+/***/ 96:
 /*!****************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/static/js/class.js ***!
   \****************************************************************************************/
@@ -26015,6 +26046,48 @@ var _http_commons = _interopRequireDefault(__webpack_require__(/*! @/static/js/h
         method: "POST",
         header: _http_commons.default.getAuthenticationHeader(),
         data: classObj,
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+          reject(err);
+        } });
+
+    });
+  },
+
+  deleteClass: function deleteClass(classId) {
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: _api_reference.default.CLASS + '?classId=' + classId,
+        method: "DELETE",
+        header: _http_commons.default.getAuthenticationHeader(),
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+          reject(err);
+        } });
+
+    });
+  },
+
+  /**
+      * @param {Object} data {courseWareIds: [], contestIds: []}
+      */
+  deleteClassAttaches: function deleteClassAttaches(data) {
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: _api_reference.default.CLASS_ATTACH,
+        method: "DELETE",
+        data: data,
+        header: _http_commons.default.getAuthenticationHeader(),
         success: function success(resp) {
           if (_http_commons.default.successCheck(resp)) {
             resolve(resp.data.data);
@@ -26181,6 +26254,24 @@ var _http_commons = _interopRequireDefault(__webpack_require__(/*! @/static/js/h
     });
   },
 
+  getSignInList: function getSignInList(classId) {
+    return new Promise(function (resolve, reject) {
+      uni.request({
+        url: _api_reference.default.SIGN_IN_LIST + '?classId=' + classId,
+        header: _http_commons.default.getAuthenticationHeader(),
+        success: function success(resp) {
+          if (_http_commons.default.successCheck(resp)) {
+            resolve(resp.data.data);
+          }
+        },
+        fail: function fail(err) {
+          _http_commons.default.commonFailHanlder(err);
+          reject(err);
+        } });
+
+    });
+  },
+
   signIn: function signIn(classId) {
     return new Promise(function (resolve, reject) {
       uni.request({
@@ -26223,7 +26314,7 @@ var _http_commons = _interopRequireDefault(__webpack_require__(/*! @/static/js/h
 
 /***/ }),
 
-/***/ 95:
+/***/ 97:
 /*!*******************************************************************************************!*\
   !*** /Users/mopip77/project/uniapp/graduation-proj/graduation-proj/static/js/bulletin.js ***!
   \*******************************************************************************************/

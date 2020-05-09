@@ -58,7 +58,7 @@
 
 		<view class="course-box">
 			<STabs effect="true" :navPerView="4" v-model="tabIdx" @change="changeTab">
-				<STab title="创建的">
+				<STab title="我创建的">
 					<view class="course-list">
 						<view class="course-item" v-for="(course, idx) in datas[0]" :key="idx">
 							<van-swipe-cell right-width="65" async-close>
@@ -90,7 +90,7 @@
 					</view>
 				</STab>
 
-				<STab title="教授的">
+				<STab title="我教授的">
 					<view class="course-list">
 						<view class="course-item" v-for="(course, idx) in datas[1]" :key="idx">
 							<van-swipe-cell right-width="65" async-close>
@@ -121,7 +121,7 @@
 					</view>
 				</STab>
 
-				<STab title="学习的">
+				<STab title="我学习的">
 					<view class="course-list">
 						<view class="course-item" v-for="(course, idx) in datas[2]" :key="idx">
 							<van-swipe-cell right-width="65" async-close>
@@ -220,22 +220,7 @@
 				},
 			}
 		},
-		onShow() {
-			// 为了解决在me页面登录后，再返回到index能自动刷新，所以写成onShow，再通过list是否为0判断是否需要刷新
-			let tout = setInterval(() => {
-				let that = this
-
-				if (that.$store.state.checkLogin) {
-					clearInterval(tout)
-					if (that.$store.state.hasLogin) {
-						let idx = that.tabIdx
-						if (that.datas[idx].length === 0) {
-							that.loadMore()
-						}
-					}
-				}
-			}, 200);
-		},
+		
 		methods: {
 			showCreateCourseModalTroggle() {
 				this.showCreateCourseModal = true;
@@ -271,11 +256,15 @@
 				this.loadMore()
 			},
 			
-			resetTab() {
+			resetTab(closePullDownRefresh = false) {
 				let IDX = this.tabIdx
 				this.offsets[IDX] = 0
 				this.datas[IDX].splice(0)
 				this.loadMore()
+				
+				if (closePullDownRefresh) {
+					uni.stopPullDownRefresh()
+				}
 			},
 
 			/**
@@ -345,6 +334,27 @@
 				})
 			}
 		},
+		
+		onShow() {
+			// 为了解决在me页面登录后，再返回到index能自动刷新，所以写成onShow，再通过list是否为0判断是否需要刷新
+			let tout = setInterval(() => {
+				let that = this
+		
+				if (that.$store.state.checkLogin) {
+					clearInterval(tout)
+					if (that.$store.state.hasLogin) {
+						let idx = that.tabIdx
+						if (that.datas[idx].length === 0) {
+							that.loadMore()
+						}
+					}
+				}
+			}, 200);
+		},
+		
+		onPullDownRefresh() {
+			this.resetTab(true)
+		}
 	}
 </script>
 

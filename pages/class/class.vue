@@ -34,7 +34,7 @@
 				<view v-if="classObj.finished === 0" class="my-button-group">
 					<van-button v-if="classObj.needSignIn === 0" :disabled="classObj.published === 0" custom-class="my-button start-sign-in"
 					 square type="info" @tap="startSignIn">开启签到</van-button>
-					<van-button v-else custom-class="my-button already-sign-button" disabled plain square type="info" @tap="onCancel">已开启签到</van-button>
+					<van-button v-if="classObj.needSignIn !== 0" custom-class="my-button already-sign-button" square type="primary" @tap="goToSignInList">签到列表</van-button>
 					<van-button v-if="classObj.needSignIn !== 0" custom-class="my-button" square type="info" @tap="refreshSignInCount">刷新</van-button>
 				</view>
 
@@ -135,8 +135,12 @@
 		
 		methods: {
 			randomRoll() {
-				let n = Math.floor((Math.random() * this.studentNames.length))
-				this.randomStudent = this.studentNames[n]
+				if (0 === this.studentNames.length) {
+					this.randomStudent = '该课程还没有学生'
+				} else {
+					let n = Math.floor((Math.random() * this.studentNames.length))
+					this.randomStudent = this.studentNames[n]
+				}
 			},
 			
 			publishClass() {
@@ -163,6 +167,12 @@
 				})
 			},
 			
+			goToSignInList() {
+				uni.navigateTo({
+					url: '../sign_in_list/sign_in_list?classId=' + this.classObj.id
+				})
+			},
+			
 			refreshSignInCount() {
 				let p = ClassUtils.getSignInCount(this.classObj.id)
 				p.then((data) => {
@@ -183,6 +193,10 @@
 			},
 			
 			publishCourseWare(idx) {
+				if (this.classObj.published === 0 || this.classObj.finished !== 0) {
+					return;
+				}
+				
 				let courseWare = this.courseWares[idx]
 				if (courseWare.published) {
 					Notify({
@@ -199,6 +213,10 @@
 			},
 			
 			publishQuiz(idx) {
+				if (this.classObj.published === 0) {
+					return;
+				}
+				
 				let quiz = this.quizzes[idx]
 				if (quiz.published) {
 					Notify({
@@ -352,7 +370,7 @@
 			}
 			
 			.already-sign-button {
-				width: 220rpx;
+				width: 180rpx;
 			}
 			
 			.sign-text {

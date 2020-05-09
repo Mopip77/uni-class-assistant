@@ -1,8 +1,12 @@
 {
   "navigationBarTitleText": "课件库",
+  "enablePullDownRefresh": true,
   "usingComponents": {
     "uni-load-more": "/components/uni-load-more/uni-load-more",
     "s-tabs": "/components/s-tabs/index",
-    "s-tab": "/components/s-tab/index"
+    "s-tab": "/components/s-tab/index",
+    "van-swipe-cell": "/wxcomponents/vant/dist/swipe-cell/index",
+    "van-dialog": "/wxcomponents/vant/dist/dialog/index",
+    "van-notify": "/wxcomponents/vant/dist/notify/index"
   }
 }

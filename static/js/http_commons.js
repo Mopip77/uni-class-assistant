@@ -13,7 +13,6 @@ export default {
 	 */
 	successCheck: function(resp) {
 		console.log("successCheck resp", resp);
-		console.log("successCheck resp auth", resp.data.auth);
 		if (undefined !== resp.data.auth && null !== resp.data.auth) {
 			// 更新token
 			console.log("更新token in httpSuccessCheck");

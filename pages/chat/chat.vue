@@ -335,16 +335,22 @@
 						border-width: 40rpx 24rpx;
 						border-style: solid;
 						border-color: #cdcdcd transparent transparent #cdcdcd;
-						right: 29px;
-						margin-top: -41rpx;
+						right: 1.8rem;
+						margin-top: -1.3rem;
+						// margin-top: -39rpx;
+						// right: 29px;
+						// margin-top: -40rpx;
 					}
 
 					.top {
 						border-width: 14rpx 24rpx;
 						border-style: solid;
 						border-color: $global-background-color transparent transparent $global-background-color;
-						right: 58rpx;
-						margin-top: -41rpx;
+						right: 1.8rem;
+						margin-top: -1.3rem;
+						// margin-top: -42rpx;
+						// right: 58rpx;
+						// margin-top: -40rpx;
 					}
 				}
 			}
@@ -357,6 +363,8 @@
 		.dock-row {
 			position: fixed;
 			bottom: 0;
+			bottom: constant(safe-area-inset-bottom);
+			bottom: env(safe-area-inset-bottom);
 			// border: 1rpx solid black;
 			width: 100%;
 			display: flex;
@@ -382,7 +390,7 @@
 				line-height: 1.5rem;
 				background-color: #E0E0E0;
 				border-radius: 25rpx;
-				padding: 10rpx 25rpx;
+				padding: 16rpx 25rpx;
 			}
 
 			.favorite-column {

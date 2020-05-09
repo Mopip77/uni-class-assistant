@@ -95,7 +95,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "components", function() { return components; });
 var components = {
   "uni-load-more": function() {
-    return __webpack_require__.e(/*! import() | components/uni-load-more/uni-load-more */ "components/uni-load-more/uni-load-more").then(__webpack_require__.bind(null, /*! @/components/uni-load-more/uni-load-more.vue */ 219))
+    return __webpack_require__.e(/*! import() | components/uni-load-more/uni-load-more */ "components/uni-load-more/uni-load-more").then(__webpack_require__.bind(null, /*! @/components/uni-load-more/uni-load-more.vue */ 237))
   }
 }
 var render = function() {
@@ -314,7 +314,7 @@ var _dialog = _interopRequireDefault(__webpack_require__(/*! @/wxcomponents/vant
 
 
 
-var _course = _interopRequireDefault(__webpack_require__(/*! @/static/js/course.js */ 34));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function _toConsumableArray(arr) {return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread();}function _nonIterableSpread() {throw new TypeError("Invalid attempt to spread non-iterable instance");}function _iterableToArray(iter) {if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter);}function _arrayWithoutHoles(arr) {if (Array.isArray(arr)) {for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) {arr2[i] = arr[i];}return arr2;}}function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {try {var info = gen[key](arg);var value = info.value;} catch (error) {reject(error);return;}if (info.done) {resolve(value);} else {Promise.resolve(value).then(_next, _throw);}}function _asyncToGenerator(fn) {return function () {var self = this,args = arguments;return new Promise(function (resolve, reject) {var gen = fn.apply(self, args);function _next(value) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);}function _throw(err) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);}_next(undefined);});};}var Grid = function Grid() {__webpack_require__.e(/*! require.ensure | wxcomponents/vant/dist/grid/index */ "common/vendor").then((function () {return resolve(__webpack_require__(/*! @/wxcomponents/vant/dist/grid/index.js */ 226));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var GridItem = function GridItem() {__webpack_require__.e(/*! require.ensure | wxcomponents/vant/dist/grid-item/index */ "common/vendor").then((function () {return resolve(__webpack_require__(/*! @/wxcomponents/vant/dist/grid-item/index.js */ 230));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var Tab = function Tab() {__webpack_require__.e(/*! require.ensure | wxcomponents/vant/dist/tab/index */ "common/vendor").then((function () {return resolve(__webpack_require__(/*! @/wxcomponents/vant/dist/tab/index.js */ 232));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var Tabs = function Tabs() {__webpack_require__.e(/*! require.ensure | wxcomponents/vant/dist/tabs/index */ "common/vendor").then((function () {return resolve(__webpack_require__(/*! @/wxcomponents/vant/dist/tabs/index.js */ 233));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var VanNotify = function VanNotify() {__webpack_require__.e(/*! require.ensure | wxcomponents/vant/dist/notify/index */ "common/vendor").then((function () {return resolve(__webpack_require__(/*! @/wxcomponents/vant/dist/notify/index.js */ 235));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var Icon = function Icon() {__webpack_require__.e(/*! require.ensure | wxcomponents/vant/dist/icon/index */ "common/vendor").then((function () {return resolve(__webpack_require__(/*! @/wxcomponents/vant/dist/icon/index.js */ 236));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var Button = function Button() {__webpack_require__.e(/*! require.ensure | wxcomponents/vant/dist/button/index */ "common/vendor").then((function () {return resolve(__webpack_require__(/*! @/wxcomponents/vant/dist/button/index.js */ 237));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var SwipeCell = function SwipeCell() {__webpack_require__.e(/*! require.ensure | wxcomponents/vant/dist/swipe-cell/index */ "common/vendor").then((function () {return resolve(__webpack_require__(/*! @/wxcomponents/vant/dist/swipe-cell/index.js */ 240));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var VanDialog = function VanDialog() {__webpack_require__.e(/*! require.ensure | wxcomponents/vant/dist/dialog/index */ "common/vendor").then((function () {return resolve(__webpack_require__(/*! @/wxcomponents/vant/dist/dialog/index.js */ 241));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var Divider = function Divider() {__webpack_require__.e(/*! require.ensure | wxcomponents/vant/dist/divider/index */ "common/vendor").then((function () {return resolve(__webpack_require__(/*! @/wxcomponents/vant/dist/divider/index.js */ 242));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var UniLoadMore = function UniLoadMore() {__webpack_require__.e(/*! require.ensure | components/uni-load-more/uni-load-more */ "components/uni-load-more/uni-load-more").then((function () {return resolve(__webpack_require__(/*! @/components/uni-load-more/uni-load-more.vue */ 219));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var STabs = function STabs() {__webpack_require__.e(/*! require.ensure | components/s-tabs/index */ "components/s-tabs/index").then((function () {return resolve(__webpack_require__(/*! @/components/s-tabs */ 243));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var STab = function STab() {__webpack_require__.e(/*! require.ensure | components/s-tab/index */ "components/s-tab/index").then((function () {return resolve(__webpack_require__(/*! @/components/s-tab */ 250));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var CreateCourseModal = function CreateCourseModal() {__webpack_require__.e(/*! require.ensure | components/CreateCourse */ "components/CreateCourse").then((function () {return resolve(__webpack_require__(/*! @/components/CreateCourse.vue */ 257));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var JoinCourseModal = function JoinCourseModal() {__webpack_require__.e(/*! require.ensure | components/JoinCourse */ "components/JoinCourse").then((function () {return resolve(__webpack_require__(/*! @/components/JoinCourse.vue */ 264));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var _default =
+var _course = _interopRequireDefault(__webpack_require__(/*! @/static/js/course.js */ 34));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function _toConsumableArray(arr) {return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread();}function _nonIterableSpread() {throw new TypeError("Invalid attempt to spread non-iterable instance");}function _iterableToArray(iter) {if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter);}function _arrayWithoutHoles(arr) {if (Array.isArray(arr)) {for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) {arr2[i] = arr[i];}return arr2;}}function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {try {var info = gen[key](arg);var value = info.value;} catch (error) {reject(error);return;}if (info.done) {resolve(value);} else {Promise.resolve(value).then(_next, _throw);}}function _asyncToGenerator(fn) {return function () {var self = this,args = arguments;return new Promise(function (resolve, reject) {var gen = fn.apply(self, args);function _next(value) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);}function _throw(err) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);}_next(undefined);});};}var Grid = function Grid() {__webpack_require__.e(/*! require.ensure | wxcomponents/vant/dist/grid/index */ "common/vendor").then((function () {return resolve(__webpack_require__(/*! @/wxcomponents/vant/dist/grid/index.js */ 244));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var GridItem = function GridItem() {__webpack_require__.e(/*! require.ensure | wxcomponents/vant/dist/grid-item/index */ "common/vendor").then((function () {return resolve(__webpack_require__(/*! @/wxcomponents/vant/dist/grid-item/index.js */ 245));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var Tab = function Tab() {__webpack_require__.e(/*! require.ensure | wxcomponents/vant/dist/tab/index */ "common/vendor").then((function () {return resolve(__webpack_require__(/*! @/wxcomponents/vant/dist/tab/index.js */ 247));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var Tabs = function Tabs() {__webpack_require__.e(/*! require.ensure | wxcomponents/vant/dist/tabs/index */ "common/vendor").then((function () {return resolve(__webpack_require__(/*! @/wxcomponents/vant/dist/tabs/index.js */ 248));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var VanNotify = function VanNotify() {__webpack_require__.e(/*! require.ensure | wxcomponents/vant/dist/notify/index */ "common/vendor").then((function () {return resolve(__webpack_require__(/*! @/wxcomponents/vant/dist/notify/index.js */ 249));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var Icon = function Icon() {__webpack_require__.e(/*! require.ensure | wxcomponents/vant/dist/icon/index */ "common/vendor").then((function () {return resolve(__webpack_require__(/*! @/wxcomponents/vant/dist/icon/index.js */ 250));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var Button = function Button() {__webpack_require__.e(/*! require.ensure | wxcomponents/vant/dist/button/index */ "common/vendor").then((function () {return resolve(__webpack_require__(/*! @/wxcomponents/vant/dist/button/index.js */ 251));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var SwipeCell = function SwipeCell() {__webpack_require__.e(/*! require.ensure | wxcomponents/vant/dist/swipe-cell/index */ "common/vendor").then((function () {return resolve(__webpack_require__(/*! @/wxcomponents/vant/dist/swipe-cell/index.js */ 195));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var VanDialog = function VanDialog() {__webpack_require__.e(/*! require.ensure | wxcomponents/vant/dist/dialog/index */ "common/vendor").then((function () {return resolve(__webpack_require__(/*! @/wxcomponents/vant/dist/dialog/index.js */ 200));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var Divider = function Divider() {__webpack_require__.e(/*! require.ensure | wxcomponents/vant/dist/divider/index */ "common/vendor").then((function () {return resolve(__webpack_require__(/*! @/wxcomponents/vant/dist/divider/index.js */ 252));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var UniLoadMore = function UniLoadMore() {__webpack_require__.e(/*! require.ensure | components/uni-load-more/uni-load-more */ "components/uni-load-more/uni-load-more").then((function () {return resolve(__webpack_require__(/*! @/components/uni-load-more/uni-load-more.vue */ 237));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var STabs = function STabs() {__webpack_require__.e(/*! require.ensure | components/s-tabs/index */ "components/s-tabs/index").then((function () {return resolve(__webpack_require__(/*! @/components/s-tabs */ 253));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var STab = function STab() {__webpack_require__.e(/*! require.ensure | components/s-tab/index */ "components/s-tab/index").then((function () {return resolve(__webpack_require__(/*! @/components/s-tab */ 260));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var CreateCourseModal = function CreateCourseModal() {__webpack_require__.e(/*! require.ensure | components/CreateCourse */ "components/CreateCourse").then((function () {return resolve(__webpack_require__(/*! @/components/CreateCourse.vue */ 267));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var JoinCourseModal = function JoinCourseModal() {__webpack_require__.e(/*! require.ensure | components/JoinCourse */ "components/JoinCourse").then((function () {return resolve(__webpack_require__(/*! @/components/JoinCourse.vue */ 274));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var _default =
 
 {
   components: {
@@ -357,22 +357,7 @@ var _course = _interopRequireDefault(__webpack_require__(/*! @/static/js/course.
 
 
   },
-  onShow: function onShow() {var _this = this;
-    // 为了解决在me页面登录后，再返回到index能自动刷新，所以写成onShow，再通过list是否为0判断是否需要刷新
-    var tout = setInterval(function () {
-      var that = _this;
 
-      if (that.$store.state.checkLogin) {
-        clearInterval(tout);
-        if (that.$store.state.hasLogin) {
-          var idx = that.tabIdx;
-          if (that.datas[idx].length === 0) {
-            that.loadMore();
-          }
-        }
-      }
-    }, 200);
-  },
   methods: {
     showCreateCourseModalTroggle: function showCreateCourseModalTroggle() {
       this.showCreateCourseModal = true;
@@ -408,11 +393,15 @@ var _course = _interopRequireDefault(__webpack_require__(/*! @/static/js/course.
       this.loadMore();
     },
 
-    resetTab: function resetTab() {
+    resetTab: function resetTab() {var closePullDownRefresh = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
       var IDX = this.tabIdx;
       this.offsets[IDX] = 0;
       this.datas[IDX].splice(0);
       this.loadMore();
+
+      if (closePullDownRefresh) {
+        uni.stopPullDownRefresh();
+      }
     },
 
     /**
@@ -441,7 +430,7 @@ var _course = _interopRequireDefault(__webpack_require__(/*! @/static/js/course.
       });
     },
 
-    deleteCourse: function deleteCourse(courseId) {var _this2 = this;
+    deleteCourse: function deleteCourse(courseId) {var _this = this;
       _dialog.default.confirm({
         title: '删除课程',
         message: '确认删除吗？' }).
@@ -453,12 +442,12 @@ var _course = _interopRequireDefault(__webpack_require__(/*! @/static/js/course.
             type: 'success',
             message: '删除课程成功' });
 
-          _this2.resetTab();
+          _this.resetTab();
         });
       }).catch(function () {});
     },
 
-    exitCourse: function exitCourse(courseId) {var _this3 = this;
+    exitCourse: function exitCourse(courseId) {var _this2 = this;
       _dialog.default.confirm({
         title: '退出课程',
         message: '确认退出吗？' }).
@@ -470,7 +459,7 @@ var _course = _interopRequireDefault(__webpack_require__(/*! @/static/js/course.
             type: 'success',
             message: '退出课程成功' });
 
-          _this3.resetTab();
+          _this2.resetTab();
         });
       }).catch(function () {});
 
@@ -480,7 +469,29 @@ var _course = _interopRequireDefault(__webpack_require__(/*! @/static/js/course.
       uni.navigateTo({
         url: '../course/course?courseId=' + courseId });
 
-    } } };exports.default = _default;
+    } },
+
+
+  onShow: function onShow() {var _this3 = this;
+    // 为了解决在me页面登录后，再返回到index能自动刷新，所以写成onShow，再通过list是否为0判断是否需要刷新
+    var tout = setInterval(function () {
+      var that = _this3;
+
+      if (that.$store.state.checkLogin) {
+        clearInterval(tout);
+        if (that.$store.state.hasLogin) {
+          var idx = that.tabIdx;
+          if (that.datas[idx].length === 0) {
+            that.loadMore();
+          }
+        }
+      }
+    }, 200);
+  },
+
+  onPullDownRefresh: function onPullDownRefresh() {
+    this.resetTab(true);
+  } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 
 /***/ }),

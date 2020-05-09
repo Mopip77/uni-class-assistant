@@ -1,5 +1,6 @@
 {
   "navigationBarTitleText": "批改列表",
+  "enablePullDownRefresh": true,
   "usingComponents": {
     "create-revise": "/components/CreateRevise",
     "van-index-bar": "/wxcomponents/vant/dist/index-bar/index",

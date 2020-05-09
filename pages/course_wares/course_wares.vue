@@ -3,41 +3,47 @@
 
 		<view class="on-top">
 			<van-notify class="on-top" id="van-notify" />
+			<van-dialog id="van-dialog" />
 		</view>
 
 		<STabs effect="true" navPerView="2" v-model="tabIndex" @change="changeTab">
 			<STab title="我发布的">
 				<view class="list">
-					<view class="item" v-for="(courseWare, idx) in datas[0]" :key="idx" @tap="goToCourseWare(idx)">
-						<view class="header">
-							{{courseWare.displayName}}
+					<view class="item" v-for="(courseWare, idx) in datas[0]" :key="idx">
+						<van-swipe-cell right-width="65" async-close>
+							<view class="swipe-cell-field" slot="right" @tap="tryDeleteCourseWare(courseWare.id)">删除</view>
+							<view class="header" @tap="goToCourseWare(idx)">
+								<text class="course-ware-name">{{courseWare.displayName}}</text>
+								<text class="course-name">【{{courseWare.courseName}}】</text>
+							</view>
+							<view class="footer" @tap="goToCourseWare(idx)">
+								<view class="user-box">
+									<image :src="courseWare.creator.avatarUrl"></image>
+									<text>{{courseWare.creator.nickname}}</text>
+								</view>
+
+								<view class="time-box">
+									<view class="publish-date">{{courseWare.createGmt}}</view>
+								</view>
+							</view>
+						</van-swipe-cell>
+					</view>
+					<uni-load-more :status="onloadingStatuses[0]" @clickLoadMore="loadMore" :contentText="onloadingText"></uni-load-more>
+				</view>
+			</STab>
+			<STab title="我收到的">
+				<view class="list">
+					<view class="item" v-for="(courseWare, idx) in datas[1]" :key="idx">
+						<view class="header" @tap="goToCourseWare(idx)">
+							<text class="course-ware-name">{{courseWare.displayName}}</text>
+							<text class="course-name">【{{courseWare.courseName}}】</text>
 						</view>
-						<view class="footer">
+						<view class="footer" @tap="goToCourseWare(idx)">
 							<view class="user-box">
 								<image :src="courseWare.creator.avatarUrl"></image>
 								<text>{{courseWare.creator.nickname}}</text>
 							</view>
 
-							<view class="time-box">
-								<view class="publish-date">{{courseWare.createGmt}}</view>
-							</view>
-						</view>
-					</view>
-					<uni-load-more :status="onloadingStatuses[0]" @clickLoadMore="loadMore" :contentText="onloadingText"></uni-load-more>
-				</view>
-			</STab>
-			<STab title="我参与的">
-				<view class="list">
-					<view class="item" v-for="(courseWare, idx) in datas[1]" :key="idx" @tap="goToCourseWare(idx)">
-						<view class="header">
-							{{courseWare.displayName}}
-						</view>
-						<view class="footer">
-							<view class="user-box">
-								<image :src="courseWare.creator.avatarUrl"></image>
-								<text>{{courseWare.creator.nickname}}</text>
-							</view>
-				
 							<view class="time-box">
 								<view class="publish-date">{{courseWare.createGmt}}</view>
 							</view>
@@ -54,6 +60,11 @@
 	import UniLoadMore from "@/components/uni-load-more/uni-load-more.vue";
 	import STabs from "@/components/s-tabs/index.vue";
 	import STab from "@/components/s-tab/index.vue";
+	import SwipeCell from '@/wxcomponents/vant/dist/swipe-cell/index.js'
+	import VanDialog from '@/wxcomponents/vant/dist/dialog/index.js'
+	import Dialog from '@/wxcomponents/vant/dist/dialog/dialog.js'
+	import VanNotify from "@/wxcomponents/vant/dist/notify/index.js";
+	import Notify from "@/wxcomponents/vant/dist/notify/notify.js";
 
 	import CommonUtils from '@/static/js/utils.js'
 	import CourseWareUtils from '@/static/js/course_ware.js'
@@ -63,6 +74,9 @@
 			UniLoadMore,
 			STabs,
 			STab,
+			'van-swipe-cell': SwipeCell,
+			'van-dialog': VanDialog,
+			'van-notify': VanNotify
 		},
 
 		data() {
@@ -85,9 +99,6 @@
 		},
 
 		methods: {
-			/**
-			 * 四个tab公用一个loadMore加载函数
-			 */
 			async loadMore() {
 				let IDX = this.tabIndex
 
@@ -101,11 +112,9 @@
 				if (IDX === 0) {
 					// 加载发布的课件
 					data = await this.getCourseWaresAsCreator(this.offsets[IDX], this.counts[IDX])
-					console.log("获得发布的课件", data);
 				} else if (IDX === 1) {
 					// 加载写过的课件
 					data = await this.getCourseWaresAsReader(this.offsets[IDX], this.counts[IDX])
-					console.log("获得读过的课件", data);
 				}
 
 				this.datas[IDX].push(...data)
@@ -120,6 +129,23 @@
 				if (this.offsets[idx] === 0) {
 					this.loadMore()
 				}
+			},
+
+			tryDeleteCourseWare(courseWareId) {
+				Dialog.confirm({
+					title: '删除课件',
+					message: '确认删除吗？'
+				}).then(() => {
+					let p = CourseWareUtils.deleteCourseWare(courseWareId)
+					p.then(() => {
+						Notify({
+							type: "success",
+							message: "课件已删除"
+						});
+
+						this.resetTab();
+					})
+				}).catch(() => {});
 			},
 
 			// 进入courseWare界面
@@ -155,11 +181,30 @@
 						resolve(data);
 					});
 				})
+			},
+
+			resetTab() {
+				let IDX = this.tabIndex
+				this.offsets[IDX] = 0
+				this.datas[IDX].splice(0)
+				this.loadMore()
+			},
+
+			getPageInfo(closePullDownRefresh = false) {
+				this.resetTab()
+
+				if (closePullDownRefresh) {
+					uni.stopPullDownRefresh()
+				}
 			}
 		},
 
 		onLoad() {
-			this.loadMore()
+			this.getPageInfo()
+		},
+
+		onPullDownRefresh() {
+			this.getPageInfo(true)
 		}
 	}
 </script>
@@ -175,19 +220,57 @@
 			height: 200rpx;
 			background-image: $card-background-url;
 
+			van-swipe-cell {
+				width: 100%;
+				height: 100%;
+				display: flex;
+				flex-direction: column;
+				justify-content: space-between;
+
+				.van-swipe-cell {
+					width: 100%;
+					height: 100%;
+				}
+
+				.swipe-cell-field {
+					font-size: 40rpx;
+					text-decoration: underline;
+					font-weight: bold;
+					color: #D84315;
+					top: 50%;
+					margin-top: 64rpx;
+					margin-left: 24rpx;
+				}
+			}
+
 			.header {
 				display: flex;
 				justify-content: space-between;
+				align-items: center;
 				padding: 10rpx 10rpx;
 				font-size: 50rpx;
 				font-weight: 600;
+
+				.course-ware-name {
+					width: 13rem;
+					overflow: hidden;
+					text-overflow: ellipsis;
+					white-space: nowrap;
+				}
+
+				.course-name {
+					font-size: 32rpx;
+					font-weight: 500;
+					color: #546E7A;
+					margin-right: -10rpx;
+				}
 			}
 
 			.footer {
 				display: flex;
 				justify-content: space-between;
 				align-items: center;
-				margin-top: auto;
+				margin-top: 40rpx;
 				margin-bottom: 6rpx;
 				padding: 0 10rpx;
 

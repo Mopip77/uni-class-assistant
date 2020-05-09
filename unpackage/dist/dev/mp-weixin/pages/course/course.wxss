@@ -110,6 +110,7 @@
       height: 47rpx;
       padding: 0 40rpx;
       margin-right: 10rpx;
+      border-radius: 6rpx;
 }
 .resource-select-box .list .bulletin-body {
     background-color: #f2f2f2;
@@ -146,8 +147,8 @@
       font-weight: bold;
       color: #D84315;
       top: 50%;
-      margin-top: 85rpx;
-      margin-left: 17rpx;
+      margin-top: 64rpx;
+      margin-left: 24rpx;
 }
 .resource-select-box .list .item .header {
       display: -webkit-box;
@@ -189,7 +190,7 @@
       -webkit-box-align: center;
       -webkit-align-items: center;
               align-items: center;
-      margin-top: auto;
+      margin-top: 24rpx;
       margin-bottom: 6rpx;
       padding: 0 10rpx;
 }
@@ -209,11 +210,35 @@
 .resource-select-box .list .item .footer .user-box text {
           margin-left: 10rpx;
 }
+.resource-select-box .list .item .footer .user-box .revised {
+          margin-left: 20rpx;
+}
 .resource-select-box .list .item .footer .user-box .van-tag {
           background-color: #f2f2f2;
 }
 .resource-select-box .course-ware-list .course-ware-item {
     height: 160rpx;
+}
+.resource-select-box .course-ware-list .course-ware-item van-swipe-cell {
+      width: 100%;
+      height: 100%;
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: flex;
+      -webkit-box-orient: vertical;
+      -webkit-box-direction: normal;
+      -webkit-flex-direction: column;
+              flex-direction: column;
+      -webkit-box-pack: justify;
+      -webkit-justify-content: space-between;
+              justify-content: space-between;
+}
+.resource-select-box .course-ware-list .course-ware-item van-swipe-cell .van-swipe-cell {
+        width: 100%;
+        height: 100%;
+}
+.resource-select-box .course-ware-list .course-ware-item van-swipe-cell .swipe-cell-field {
+        margin-top: 54rpx;
 }
 .resource-select-box .course-ware-list .course-ware-item .display-name {
       font-size: 34rpx;

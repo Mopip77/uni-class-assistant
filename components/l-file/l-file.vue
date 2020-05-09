@@ -76,7 +76,6 @@ export default {
 			// #endif
 		},
 		wxChooseFile({url,name = 'file',header,...formData} = {}) {
-			console.log("爷看一下formdata", formData);
 			wx.chooseMessageFile({
 				count: 1,
 				type: 'file',

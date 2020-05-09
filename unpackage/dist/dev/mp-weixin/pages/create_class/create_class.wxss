@@ -90,6 +90,7 @@
       height: 50rpx;
       margin-right: 10px;
       padding: 4rpx 40rpx;
+      border-radius: 6rpx;
 }
 .box input {
     font-size: 30rpx;

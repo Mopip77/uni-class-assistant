@@ -95,7 +95,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "components", function() { return components; });
 var components = {
   "uni-load-more": function() {
-    return __webpack_require__.e(/*! import() | components/uni-load-more/uni-load-more */ "components/uni-load-more/uni-load-more").then(__webpack_require__.bind(null, /*! @/components/uni-load-more/uni-load-more.vue */ 219))
+    return __webpack_require__.e(/*! import() | components/uni-load-more/uni-load-more */ "components/uni-load-more/uni-load-more").then(__webpack_require__.bind(null, /*! @/components/uni-load-more/uni-load-more.vue */ 237))
   }
 }
 var render = function() {
@@ -198,6 +198,14 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+
+
+
+
+
+
+
 var _dialog = _interopRequireDefault(__webpack_require__(/*! @/wxcomponents/vant/dist/dialog/dialog.js */ 33));
 
 var _notify = _interopRequireDefault(__webpack_require__(/*! @/wxcomponents/vant/dist/notify/notify.js */ 19));
@@ -206,8 +214,9 @@ var _notify = _interopRequireDefault(__webpack_require__(/*! @/wxcomponents/vant
 
 
 
+
 var _utils = _interopRequireDefault(__webpack_require__(/*! @/static/js/utils.js */ 17));
-var _favorite = _interopRequireDefault(__webpack_require__(/*! @/static/js/favorite.js */ 61));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function _toConsumableArray(arr) {return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread();}function _nonIterableSpread() {throw new TypeError("Invalid attempt to spread non-iterable instance");}function _iterableToArray(iter) {if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter);}function _arrayWithoutHoles(arr) {if (Array.isArray(arr)) {for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) {arr2[i] = arr[i];}return arr2;}}function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {try {var info = gen[key](arg);var value = info.value;} catch (error) {reject(error);return;}if (info.done) {resolve(value);} else {Promise.resolve(value).then(_next, _throw);}}function _asyncToGenerator(fn) {return function () {var self = this,args = arguments;return new Promise(function (resolve, reject) {var gen = fn.apply(self, args);function _next(value) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);}function _throw(err) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);}_next(undefined);});};}var VanTag = function VanTag() {__webpack_require__.e(/*! require.ensure | wxcomponents/vant/dist/tag/index */ "common/vendor").then((function () {return resolve(__webpack_require__(/*! @/wxcomponents/vant/dist/tag/index.js */ 272));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var VanDialog = function VanDialog() {__webpack_require__.e(/*! require.ensure | wxcomponents/vant/dist/dialog/index */ "common/vendor").then((function () {return resolve(__webpack_require__(/*! @/wxcomponents/vant/dist/dialog/index.js */ 241));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var VanNotify = function VanNotify() {__webpack_require__.e(/*! require.ensure | wxcomponents/vant/dist/notify/index */ "common/vendor").then((function () {return resolve(__webpack_require__(/*! @/wxcomponents/vant/dist/notify/index.js */ 235));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var UniLoadMore = function UniLoadMore() {__webpack_require__.e(/*! require.ensure | components/uni-load-more/uni-load-more */ "components/uni-load-more/uni-load-more").then((function () {return resolve(__webpack_require__(/*! @/components/uni-load-more/uni-load-more.vue */ 219));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var STabs = function STabs() {__webpack_require__.e(/*! require.ensure | components/s-tabs/index */ "components/s-tabs/index").then((function () {return resolve(__webpack_require__(/*! @/components/s-tabs/index.vue */ 243));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var STab = function STab() {__webpack_require__.e(/*! require.ensure | components/s-tab/index */ "components/s-tab/index").then((function () {return resolve(__webpack_require__(/*! @/components/s-tab/index.vue */ 250));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var _default =
+var _favorite = _interopRequireDefault(__webpack_require__(/*! @/static/js/favorite.js */ 61));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function _toConsumableArray(arr) {return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread();}function _nonIterableSpread() {throw new TypeError("Invalid attempt to spread non-iterable instance");}function _iterableToArray(iter) {if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter);}function _arrayWithoutHoles(arr) {if (Array.isArray(arr)) {for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) {arr2[i] = arr[i];}return arr2;}}function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {try {var info = gen[key](arg);var value = info.value;} catch (error) {reject(error);return;}if (info.done) {resolve(value);} else {Promise.resolve(value).then(_next, _throw);}}function _asyncToGenerator(fn) {return function () {var self = this,args = arguments;return new Promise(function (resolve, reject) {var gen = fn.apply(self, args);function _next(value) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);}function _throw(err) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);}_next(undefined);});};}var VanTag = function VanTag() {__webpack_require__.e(/*! require.ensure | wxcomponents/vant/dist/tag/index */ "common/vendor").then((function () {return resolve(__webpack_require__(/*! @/wxcomponents/vant/dist/tag/index.js */ 282));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var VanDialog = function VanDialog() {__webpack_require__.e(/*! require.ensure | wxcomponents/vant/dist/dialog/index */ "common/vendor").then((function () {return resolve(__webpack_require__(/*! @/wxcomponents/vant/dist/dialog/index.js */ 200));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var VanNotify = function VanNotify() {__webpack_require__.e(/*! require.ensure | wxcomponents/vant/dist/notify/index */ "common/vendor").then((function () {return resolve(__webpack_require__(/*! @/wxcomponents/vant/dist/notify/index.js */ 249));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var SwipeCell = function SwipeCell() {__webpack_require__.e(/*! require.ensure | wxcomponents/vant/dist/swipe-cell/index */ "common/vendor").then((function () {return resolve(__webpack_require__(/*! @/wxcomponents/vant/dist/swipe-cell/index.js */ 195));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var UniLoadMore = function UniLoadMore() {__webpack_require__.e(/*! require.ensure | components/uni-load-more/uni-load-more */ "components/uni-load-more/uni-load-more").then((function () {return resolve(__webpack_require__(/*! @/components/uni-load-more/uni-load-more.vue */ 237));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var STabs = function STabs() {__webpack_require__.e(/*! require.ensure | components/s-tabs/index */ "components/s-tabs/index").then((function () {return resolve(__webpack_require__(/*! @/components/s-tabs/index.vue */ 253));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var STab = function STab() {__webpack_require__.e(/*! require.ensure | components/s-tab/index */ "components/s-tab/index").then((function () {return resolve(__webpack_require__(/*! @/components/s-tab/index.vue */ 260));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var _default =
 
 {
   components: {
@@ -216,7 +225,8 @@ var _favorite = _interopRequireDefault(__webpack_require__(/*! @/static/js/favor
     STabs: STabs,
     STab: STab,
     "van-notify": VanNotify,
-    'van-dialog': VanDialog },
+    'van-dialog': VanDialog,
+    'van-swipe-cell': SwipeCell },
 
 
   data: function data() {

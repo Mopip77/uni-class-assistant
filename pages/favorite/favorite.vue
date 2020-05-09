@@ -8,47 +8,55 @@
 		<STabs effect="true" navPerView="3" v-model="tabIdx" @change="changeTab">
 			<STab title="题目">
 				<view class="list">
-					<view class="item" v-for="(fav, idx) in datas[0]" :key="idx" @tap="goToQuestion(fav)" @longpress="tryDeleteFav(fav.id)">
-						<view class="title">
-							<text>{{fav.data.question}}</text>
-						</view>
-
-						<view class="footer">
-							<view class="date-box">
-								{{fav.createGmt}}
+					<view class="item" v-for="(fav, idx) in datas[0]" :key="idx">
+						<van-swipe-cell right-width="65" async-close>
+							<view class="swipe-cell-field" slot="right" @tap="tryDeleteFav(fav.id)">删除</view>
+							<view class="title" @tap="goToQuestion(fav)">
+								<text>{{fav.data.question}}</text>
 							</view>
-							<van-tag v-if="fav.data.isObjectiveQuestion" plain type="primary">客观题</van-tag>
-							<van-tag v-else plain type="success">主观题</van-tag>
-						</view>
 
+							<view class="footer" @tap="goToQuestion(fav)">
+								<view class="date-box">
+									{{fav.createGmt}}
+								</view>
+								<van-tag v-if="fav.data.isObjectiveQuestion" plain type="primary">客观题</van-tag>
+								<van-tag v-else plain type="success">主观题</van-tag>
+							</view>
+						</van-swipe-cell>
 					</view>
 				</view>
 				<uni-load-more :status="onloadingStatuses[0]" @clickLoadMore="loadMore" :contentText="onloadingText"></uni-load-more>
 			</STab>
 			<STab title="课件">
 				<view class="list">
-					<view class="item" v-for="(fav, idx) in datas[1]" :key="idx" @tap="goToCourseWare(fav)" @longpress="tryDeleteFav(fav.id)">
-						<view class="title">
-							<text>{{fav.data.displayName}}</text>
-						</view>
+					<view class="item" v-for="(fav, idx) in datas[1]" :key="idx">
+						<van-swipe-cell right-width="65" async-close>
+							<view class="swipe-cell-field" slot="right" @tap="tryDeleteFav(fav.id)">删除</view>
+							<view class="title" @tap="goToCourseWare(fav)">
+								<text>{{fav.data.displayName}}</text>
+							</view>
 
-						<view class="date-box2">
-							{{fav.createGmt}}
-						</view>
+							<view class="date-box2" @tap="goToCourseWare(fav)">
+								{{fav.createGmt}}
+							</view>
+						</van-swipe-cell>
 					</view>
 				</view>
 				<uni-load-more :status="onloadingStatuses[1]" @clickLoadMore="loadMore" :contentText="onloadingText"></uni-load-more>
 			</STab>
 			<STab title="帖子">
 				<view class="list">
-					<view class="item" v-for="(fav, idx) in datas[2]" :key="idx" @tap="goToTopic(fav)" @longpress="tryDeleteFav(fav.id)">
-						<view class="title">
-							<text>{{fav.data.title}}</text>
-						</view>
+					<view class="item" v-for="(fav, idx) in datas[2]" :key="idx">
+						<van-swipe-cell right-width="65" async-close>
+							<view class="swipe-cell-field" slot="right" @tap="tryDeleteFav(fav.id)">删除</view>
+							<view class="title" @tap="goToTopic(fav)">
+								<text>{{fav.data.title}}</text>
+							</view>
 
-						<view class="date-box2">
-							{{fav.createGmt}}
-						</view>
+							<view class="date-box2" @tap="goToTopic(fav)">
+								{{fav.createGmt}}
+							</view>
+						</van-swipe-cell>
 					</view>
 					<uni-load-more :status="onloadingStatuses[2]" @clickLoadMore="loadMore" :contentText="onloadingText"></uni-load-more>
 				</view>
@@ -64,7 +72,8 @@
 	import Dialog from '@/wxcomponents/vant/dist/dialog/dialog.js'
 	import VanNotify from "@/wxcomponents/vant/dist/notify/index.js";
 	import Notify from "@/wxcomponents/vant/dist/notify/notify.js";
-	
+	import SwipeCell from '@/wxcomponents/vant/dist/swipe-cell/index.js'
+
 	import UniLoadMore from "@/components/uni-load-more/uni-load-more.vue";
 	import STabs from "@/components/s-tabs/index.vue";
 	import STab from "@/components/s-tab/index.vue";
@@ -80,6 +89,7 @@
 			STab,
 			"van-notify": VanNotify,
 			'van-dialog': VanDialog,
+			'van-swipe-cell': SwipeCell,
 		},
 
 		data() {
@@ -105,15 +115,15 @@
 			changeTab() {
 				this.loadMore()
 			},
-			
+
 			resetTab() {
 				let IDX = this.tabIdx
 				this.offsets[IDX] = 0
 				this.datas[IDX].splice(0)
-				
+
 				this.loadMore()
 			},
-			
+
 			goToQuestion(favorite) {
 				if (favorite.data.isObjectiveQuestion) {
 					uni.navigateTo({
@@ -137,7 +147,7 @@
 					url: '../topic/topic?topicId=' + fav.data.id
 				})
 			},
-			
+
 			tryDeleteFav(favId) {
 				Dialog.confirm({
 					title: '取消收藏',
@@ -149,7 +159,7 @@
 							type: "success",
 							message: "收藏已取消"
 						});
-					
+
 						this.resetTab();
 					})
 				}).catch(() => {});
@@ -225,10 +235,10 @@
 					});
 				})
 			},
-			
+
 			getPageInfo(closePullDownRefresh = false) {
 				this.resetTab()
-				
+
 				if (closePullDownRefresh) {
 					uni.stopPullDownRefresh()
 				}
@@ -238,7 +248,7 @@
 		onLoad() {
 			this.resetTab()
 		},
-		
+
 		onPullDownRefresh() {
 			this.getPageInfo(true)
 		}
@@ -249,13 +259,14 @@
 	.item {
 		background-color: #fff;
 		margin: 4rpx 0;
-		padding: 14rpx;
 
 		.title {
 			font-size: 34rpx;
 			font-weight: 500;
 			word-break: break-all;
 			max-width: 98%;
+			padding-top: 14rpx;
+			padding-left: 10rpx;
 		}
 
 		.footer {
@@ -263,6 +274,7 @@
 			align-items: center;
 			justify-content: space-between;
 			margin-top: 20rpx;
+			padding: 0 10rpx 10rpx 10rpx;
 
 			.date-box {
 				font-size: 24rpx;
@@ -274,7 +286,29 @@
 			margin-top: 20rpx;
 			font-size: 24rpx;
 			color: gray;
+			padding: 0 10rpx 10rpx 10rpx;
 		}
 
+	}
+
+	van-swipe-cell {
+		width: 100%;
+
+		.van-swipe-cell {
+			width: 100%;
+		}
+	}
+
+	.van-swipe-cell__right {
+		display: flex;
+		align-items: center;
+		justify-content: space-around;
+		width: 65px;
+		height: 100%;
+		font-size: 15px;
+		line-height: 44px;
+		color: #fff;
+		text-align: center;
+		background-color: #f44;
 	}
 </style>

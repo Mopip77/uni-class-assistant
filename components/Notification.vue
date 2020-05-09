@@ -11,7 +11,7 @@
 		</view>
 		
 		<view class="notification-content">
-			{{notification.content}}
+			<text>{{notification.content}}</text>
 		</view>
 		
 	</view>

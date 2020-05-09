@@ -27,6 +27,24 @@ export default {
 		});
 	},
 	
+	deleteNotifcation: function(notificationId) {
+		return new Promise((resolve, reject) => {
+			uni.request({
+				url: ApiReference.NOTIFICATION + '?notificationId=' + notificationId,
+				method: "DELETE",
+				header: HttpCommons.getAuthenticationHeader(),
+				success: (resp) => {
+					if (HttpCommons.successCheck(resp)) {
+						resolve(resp.data.data)
+					}
+				},
+				fail: (err) => {
+					HttpCommons.commonFailHanlder(err)
+				}
+			})
+		});
+	},
+	
 	getNotification: function(notificationId) {
 		return new Promise((resolve, reject) => {
 			uni.request({

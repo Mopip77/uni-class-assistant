@@ -20,7 +20,6 @@ export default {
 					method: 'POST',
 					success: (infoRes) => {
 						if (infoRes.data.code !== 0) {
-							console.log('登录失败,请重试', infoRes);
 							uni.showToast({
 								title: '登录失败,请重试'
 							});
@@ -33,8 +32,6 @@ export default {
 						uni.setStorageSync(LSReference.JWT_TOKEN, infoRes.data.data['jwt_token'])
 						uni.setStorageSync(LSReference.EXPIRE_TIMESTAMP, Number(infoRes.data.data['expiration_at']))
 						let needUploadUserInfo = infoRes.data.data['need_user_info'] === "false" ? false : true; // js string bool 问题
-
-						console.log("needUserInfo", needUploadUserInfo);
 
 						if (needUploadUserInfo) {
 							console.log("上传用户信息")

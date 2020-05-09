@@ -1,10 +1,14 @@
 <template>
 	<view>
-		
+		<view class="on-top">
+			<van-notify class="on-top" id="van-notify" />
+			<van-dialog id="van-dialog" />
+		</view>
+
 		<view v-if="showModal" class="on-cover">
 			<Notification :notificationId="NnotificationId" @closeModal="closeModal"></Notification>
 		</view>
-		
+
 		<STabs effect="true" navPerView="2" v-model="tabIdx" @change="changeTab">
 			<STab title="聊天">
 				<view class="list-box">
@@ -31,16 +35,21 @@
 			</STab>
 			<STab title="通知">
 				<view class="list-box">
-					<view class="list notification-list" v-for="(notification, idx) in datas[1]" :key="idx" @tap="gotoNotification(notification.id)">
-						<view class="header">
-							<view :class="notification.readed ? 'readed' : ''"><van-tag v-if="!notification.readed" custom-class="read-tag" plain type="primary">未读</van-tag>{{notification.title}}</view>
-						</view>
-				
-						<view v-if="notification.content" :class="notification.readed ? 'readed' : ''" class="content"><text>{{notification.content}}</text></view>
-						
-						<view class="date-box">
-							<text>{{notification.publishGmt}}</text>
-						</view>
+					<view class="list notification-list" v-for="(notification, idx) in datas[1]" :key="idx">
+						<van-swipe-cell right-width="65">
+							<view class="swipe-cell-field" slot="right" @tap="deleteNotification(idx)">删除</view>
+							<view class="header" @tap="gotoNotification(notification.id)">
+								<view :class="notification.readed ? 'readed' : ''">
+									<van-tag v-if="!notification.readed" custom-class="read-tag" plain type="primary">未读</van-tag>{{notification.title}}
+								</view>
+							</view>
+
+							<view @tap="gotoNotification(notification.id)" v-if="notification.content" :class="notification.readed ? 'readed' : ''" class="content"><text>{{notification.content}}</text></view>
+
+							<view class="date-box" @tap="gotoNotification(notification.id)">
+								<text>{{notification.publishGmt}}</text>
+							</view>
+						</van-swipe-cell>
 					</view>
 				</view>
 				<uni-load-more :status="onloadingStatuses[1]" @clickLoadMore="loadMore" :contentText="onloadingTexts[1]"></uni-load-more>
@@ -55,6 +64,9 @@
 	import STab from "@/components/s-tab/index.vue";
 	import Image from "@/wxcomponents/vant/dist/image/index.js";
 	import Tag from '@/wxcomponents/vant/dist/tag/index.js'
+	import SwipeCell from '@/wxcomponents/vant/dist/swipe-cell/index.js'
+	import VanNotify from '@/wxcomponents/vant/dist/notify/index.js'
+	import Notify from '@/wxcomponents/vant/dist/notify/notify.js'
 
 	import Notification from '@/components/Notification.vue'
 	import UniLoadMore from "@/components/uni-load-more/uni-load-more.vue";
@@ -71,16 +83,21 @@
 			"van-tag": Tag,
 			"van-image": Image,
 			"uni-load-more": UniLoadMore,
+			'van-swipe-cell': SwipeCell,
+			'van-notify': VanNotify,
 		},
 		data() {
 			return {
 				showModal: false,
 				NnotificationId: 0,
-				
+
 				tabIdx: 0,
 
 				// data (chat, notification)
-				datas: [[], []],
+				datas: [
+					[],
+					[]
+				],
 				offsets: [0, 0],
 				counts: [10, 10],
 				onloadingStatuses: ["more", "more"],
@@ -99,11 +116,8 @@
 		},
 		methods: {
 			closeModal() {
-				let IDX = this.tabIdx
-				this.offsets[IDX] = 0
-				this.datas[IDX].splice(0)
-				this.loadMore()
-				
+				this.resetTab()
+
 				this.showModal = false
 			},
 			changeTab() {
@@ -114,9 +128,9 @@
 				if (this.offsets[IDX] > this.datas[IDX].length) {
 					return;
 				}
-				
+
 				this.onloadingStatuses[IDX] = "loading";
-				
+
 				let data = ''
 				if (IDX === 0) {
 					data = await this.getLatestChats()
@@ -126,9 +140,9 @@
 				} else {
 					return
 				}
-				
+
 				this.datas[IDX].push(...data)
-				
+
 				// 更新offset 和 onLoading 类型（是否有更多加载）
 				this.offsets[IDX] += this.counts[IDX];
 				this.onloadingStatuses[IDX] =
@@ -142,16 +156,16 @@
 			gotoNotification(notificationId) {
 				let promise = NotificationUtils.getCallbackUrl(notificationId)
 				promise
-				.then(data => {
-					if (data) {
-						uni.navigateTo({
-							url: data
-						})
-					} else {
-						this.NnotificationId = notificationId
-						this.showModal = true
-					}
-				})
+					.then(data => {
+						if (data) {
+							uni.navigateTo({
+								url: data
+							})
+						} else {
+							this.NnotificationId = notificationId
+							this.showModal = true
+						}
+					})
 			},
 			getLatestChats() {
 				return new Promise((resolve, reject) => {
@@ -168,7 +182,7 @@
 								e.updateTime = dateObj.defaultTime;
 							}
 						});
-						
+
 						resolve(data)
 					});
 				});
@@ -183,17 +197,46 @@
 						data.forEach(e => {
 							CommonUtils.dateConverterBatch(e, 'publishGmt')
 						});
-					
+
 						resolve(data)
 					});
 				});
+			},
+			
+			deleteNotification(idx) {
+				if (idx < 0 || idx >= this.datas[1].length) {
+					return;
+				}
+				
+				let p = NotificationUtils.deleteNotifcation(this.datas[1][idx].id)
+				p.then(() => {
+					this.datas[1].splice(idx, 1)
+					this.offsets[1] -= 1
+				})
+			},
+			
+			resetTab() {
+				let IDX = this.tabIdx
+				this.offsets[IDX] = 0
+				this.datas[IDX].splice(0)
+				
+				this.loadMore()
+			},
+			
+			getPageInfo(closePullDownRefresh = false) {
+				this.resetTab()
+				
+				if (closePullDownRefresh) {
+					uni.stopPullDownRefresh()
+				}
 			}
 		},
 		onShow() {
-			let IDX = this.tabIdx
-			this.offsets[IDX] = 0
-			this.datas[IDX].splice(0)
-			this.loadMore()
+			this.getPageInfo()
+		},
+		
+		onPullDownRefresh() {
+			this.getPageInfo(true)
 		}
 	}
 </script>
@@ -206,7 +249,7 @@
 		height: 100%;
 		background-color: $global-background-color;
 	}
-	
+
 	.list {
 		display: flex;
 		padding: 20rpx 10rpx;
@@ -252,18 +295,38 @@
 			}
 		}
 	}
-	
+
 	.notification-list {
-		display: flex;
-		flex-direction: column;
-		align-items: flex-start;
-		padding: 20rpx 10rpx 6rpx 10rpx;
+		padding: 0;
 		
+		van-swipe-cell {
+			width: 100%;
+			
+			.van-swipe-cell {
+				width: 100%;
+			}
+		}
+		
+		.van-swipe-cell__right {
+		  display: flex;
+		  align-items: center;
+		  justify-content: space-around;
+		  width: 65px;
+		  height: 100%;
+		  font-size: 15px;
+		  line-height: 44px;
+		  color: #fff;
+		  text-align: center;
+		  background-color: #f44;
+		}
+
 		.header {
 			font-size: 30rpx;
 			display: flex;
 			align-items: center;
-			
+			padding-top: 14rpx;
+			padding-left: 10rpx;
+
 			view {
 				display: flex;
 				align-items: center;
@@ -272,20 +335,31 @@
 				font-weight: 500;
 			}
 		}
-		
+
 		.content {
-			margin: 6rpx 10rpx;
+			margin: 10rpx 10rpx;
 		}
-		
+
 		.date-box {
 			margin-top: 20rpx;
+			margin-left: 10rpx;
 			display: flex;
 			font-size: 24rpx;
 			color: gray;
 		}
 	}
-	
+
 	.readed {
 		color: gray;
 	}
+	
+	// .swipe-cell-field {
+	// 	font-size: 40rpx;
+	// 	text-decoration: underline;
+	// 	font-weight: bold;
+	// 	color: #D84315;
+	// 	top: 50%;
+	// 	margin-top: 38rpx;
+	// 	margin-left: 17rpx;
+	// }
 </style>

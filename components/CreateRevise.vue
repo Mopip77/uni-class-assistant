@@ -140,6 +140,10 @@
 				this.$emit('closeModal')
 			},
 			submitRevise() {
+				if (this.subjectiveFullscore === 0) {
+					return;
+				}
+				
 				let that = this
 				
 				if (this.subjectiveAnswerRevised.filter(e => !e).length > 0) {
@@ -161,7 +165,6 @@
 				let promise = ContestUtils.updateRevise(this.answer.id, this.answer.subjectiveAnswers.map(e => e.score))
 				promise
 					.then(data => {
-						console.log("看看", data);
 						
 						// 通知前一页需要刷新 (由于这个是组件，所以是同一个page)
 						let pages = getCurrentPages()

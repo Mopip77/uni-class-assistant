@@ -30,7 +30,8 @@
 
 
 		<view class="title">
-			<text v-if="!revised">总分: {{ fullScore }} 分</text>
+			<text v-if="!submitted">未提交</text>
+			<text v-else-if="!revised">总分: {{ fullScore }} 分</text>
 			<text v-else>得分: {{ gotScore }} / {{ fullScore }} 分</text>
 
 			<view class="my-button-group">
@@ -60,7 +61,7 @@
 		<view v-if="subjectiveQuestions.length !== 0" class="question-box subjective-question-box">
 			<view class="header">
 				<view class="sub-title">
-					主观题
+					主观题<text v-if="!isTeacher && leftSecond < 0 && !revised">（尚未批改）</text>
 				</view>
 			</view>
 
@@ -83,7 +84,6 @@
 	import VanNotify from "@/wxcomponents/vant/dist/notify/index.js";
 	import Notify from "@/wxcomponents/vant/dist/notify/notify.js";
 
-	import WPicker from '@/components/w-picker/w-picker.vue'
 	import CreateAnswer from '@/components/CreateAnswer.vue'
 	import uniCountdown from '@/components/uni-countdown/uni-countdown.vue'
 
@@ -94,7 +94,6 @@
 		components: {
 			uniCountdown,
 			CreateAnswer,
-			"w-picker": WPicker,
 			"van-button": Button,
 			"van-icon": Icon,
 			"van-dialog": VanDialog,
@@ -133,6 +132,7 @@
 				subjectiveQuestions: [],
 
 				// 回答的内容
+				submitted: true,
 				gotScore: 0,
 				answerId: '',
 				objectiveAnswers: [], // [[...index: Number]]
@@ -166,12 +166,24 @@
 			},
 			// 老师批改试卷
 			goToRevise() {
+				if (this.leftSecond > 0) {
+					return;
+				}
+				
 				uni.navigateTo({
 					url: '../revise/revise?contestId=' + this.contestId + '&fullScore=' + this.fullScore
 				})
 			},
 			// 提交试卷（检查）
 			submitAnswer() {
+				if (this.leftSecond < 0) {
+					Notify({
+						type: 'danger',
+						message: '试卷已截止'
+					});
+					return;
+				}
+				
 				let that = this
 				// 检查是否全部填写
 				if (this.objectiveQuestions.filter(e => !e.answered).length > 0 || this.subjectiveQuestions.filter(e => !e.answered)
@@ -214,7 +226,6 @@
 					subjectiveAnswers: sA
 				}
 
-				console.log("submit一哈", answer);
 				let promise = ContestUtils.updateAnswer(answer)
 				promise
 					.then(data => {
@@ -223,9 +234,6 @@
 					});
 			},
 			updateAnswers(index, questionType, answer) {
-				console.log("index", index);
-				console.log("questionType", questionType);
-				console.log("answer", answer);
 
 				if (questionType === 'objective') {
 					this.objectiveAnswers[index].options = [...answer.optionAnswers]
@@ -315,6 +323,7 @@
 						} else {
 							// 说明学生并没有提交过试卷
 							that.revised = true
+							that.submitted = false
 							that.subjectiveAnswers = that.subjectiveQuestions.map(e => {
 								return {
 									score: 0,

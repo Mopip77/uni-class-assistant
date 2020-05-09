@@ -129,6 +129,8 @@
 .dock-row-box .dock-row {
     position: fixed;
     bottom: 0;
+    bottom: constant(safe-area-inset-bottom);
+    bottom: env(safe-area-inset-bottom);
     width: 100%;
     display: -webkit-box;
     display: -webkit-flex;
@@ -136,7 +138,7 @@
     -webkit-box-pack: justify;
     -webkit-justify-content: space-between;
             justify-content: space-between;
-    padding: 8rpx 4rpx;
+    padding: 10rpx 4rpx;
     background-color: white;
     -webkit-box-align: center;
     -webkit-align-items: center;
@@ -149,7 +151,7 @@
       line-height: 1.5rem;
       background-color: #E0E0E0;
       border-radius: 25rpx;
-      padding: 2rpx 25rpx;
+      padding: 14rpx 25rpx;
       color: #616161;
 }
 .dock-row-box .dock-row .favorite-column {

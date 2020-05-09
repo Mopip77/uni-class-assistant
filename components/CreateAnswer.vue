@@ -179,7 +179,7 @@
 					let that = this
 					return this.question.choices.map((e, idx) => {
 						return {
-							checked: that.answer.options.indexOf(idx) >= 0,
+							checked: that.answer.options && that.answer.options.indexOf(idx) >= 0,
 							correct: that.question.answerIndices ? that.question.answerIndices.indexOf(idx) >= 0 : false,
 							value: e
 						}
@@ -218,6 +218,10 @@
 				this.$emit('closeModal')
 			},
 			async submitAnswer() {
+				if (this.look) {
+					return;
+				}
+				
 				let result = {}
 				if (this.questionType === 'objective') {
 					let answers = []
@@ -281,12 +285,6 @@
 			}
 		},
 		created() {
-			console.log("Dindex", this.index);
-			console.log("questionType", this.questionType);
-			console.log("question", this.question);
-			console.log("look", this.look);
-			console.log("Doptions", this.Doptions);
-			console.log("answer", this.answer);
 			
 			if (this.look && this.leftSeconds <= 0) {
 				let type = this.questionType === 'objective' ? FavoriteUtils.OBJECTIVE_QUESTION_TYPE : FavoriteUtils.SUBJECTIVE_QUESTION_TYPE;
